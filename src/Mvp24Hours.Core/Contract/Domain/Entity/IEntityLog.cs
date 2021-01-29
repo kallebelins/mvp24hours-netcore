@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Mvp24Hours.Core.Contract.Domain.Entity
+﻿namespace Mvp24Hours.Core.Contract.Domain.Entity
 {
     public interface IEntityLog<T> : IEntityDateLog
     {

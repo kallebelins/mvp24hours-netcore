@@ -73,15 +73,15 @@ namespace Mvp24Hours.Infrastructure.Data
             // entity log and guid
             foreach (var entry in this.ChangeTracker
                 .Entries()
-                .Where(e => 
-                    (e.Entity.GetType().BaseType == typeof(IEntityLog<>) || e.Entity.GetType().BaseType == typeof(EntityBaseLog<,>))
+                .Where(e =>
+                    (e.Entity.GetType().BaseType.Name == typeof(IEntityLog<>).Name || e.Entity.GetType().BaseType.Name == typeof(EntityBaseLog<,>).Name)
                     && (e.State == EntityState.Added || e.State == EntityState.Modified || e.State == EntityState.Deleted)))
             {
-                var e = entry.Entity as IEntityLog<object>;
+                var e = (dynamic)entry.Entity;
                 if (entry.State == EntityState.Added)
                 {
                     e.Created = TimeZoneHelper.GetTimeZoneNow();
-                    e.CreatedBy = (int?)EntityLogBy;
+                    e.CreatedBy = (dynamic)EntityLogBy;
 
                     e.Modified = null;
                     e.ModifiedBy = null;
@@ -94,7 +94,7 @@ namespace Mvp24Hours.Infrastructure.Data
                     if (e.Removed == null)
                     {
                         e.Modified = TimeZoneHelper.GetTimeZoneNow();
-                        e.ModifiedBy = (int?)EntityLogBy;
+                        e.ModifiedBy = (dynamic)EntityLogBy;
                     }
                 }
                 else if (entry.State == EntityState.Deleted)
