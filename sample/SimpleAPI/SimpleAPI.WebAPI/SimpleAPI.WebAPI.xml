@@ -1,0 +1,381 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SimpleAPI.WebAPI</name>
+    </assembly>
+    <members>
+        <member name="T:SimpleAPI.API.Controllers.ProductCategoryWithGuidController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductCategoryWithGuidController.Get(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductCategoryWithGuidController.GetId(System.Guid)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductCategoryWithGuidController.Post(SimpleAPI.Core.Entity.GuidFeatures.ProductCategoryWithGuid)">
+            <summary>
+            
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductCategoryWithGuidController.Put(System.Guid,SimpleAPI.Core.Entity.GuidFeatures.ProductCategoryWithGuid)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductCategoryWithGuidController.Delete(System.Guid)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:SimpleAPI.API.Controllers.ProductWithGuidController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductWithGuidController.Get(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductWithGuidController.GetId(System.Guid)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductWithGuidController.Post(SimpleAPI.Core.Entity.GuidFeatures.ProductWithGuid)">
+            <summary>
+            
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductWithGuidController.Put(System.Guid,SimpleAPI.Core.Entity.GuidFeatures.ProductWithGuid)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductWithGuidController.Delete(System.Guid)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:SimpleAPI.API.Controllers.ProductCategoryWithLogController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductCategoryWithLogController.Get(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductCategoryWithLogController.GetId(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductCategoryWithLogController.Post(SimpleAPI.Core.Entity.LogFeatures.ProductCategoryWithLog)">
+            <summary>
+            
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductCategoryWithLogController.Put(System.Int32,SimpleAPI.Core.Entity.LogFeatures.ProductCategoryWithLog)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductCategoryWithLogController.Delete(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:SimpleAPI.API.Controllers.ProductWithLogController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductWithLogController.Get(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductWithLogController.GetId(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductWithLogController.Post(SimpleAPI.Core.Entity.LogFeatures.ProductWithLog)">
+            <summary>
+            
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductWithLogController.Put(System.Int32,SimpleAPI.Core.Entity.LogFeatures.ProductWithLog)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductWithLogController.Delete(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:SimpleAPI.API.Controllers.ProductCategoryWithPagingController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductCategoryWithPagingController.Get(System.String,Mvp24Hours.Core.DTO.Logic.PagingCriteria{SimpleAPI.Core.Entity.SimpleFeatures.ProductCategorySimple})">
+            <summary>
+            
+            </summary>
+            <param name="nome"></param>
+            <param name="clause"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductCategoryWithPagingController.GetId(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductCategoryWithPagingController.Post(SimpleAPI.Core.Entity.SimpleFeatures.ProductCategorySimple)">
+            <summary>
+            
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductCategoryWithPagingController.Put(System.Int32,SimpleAPI.Core.Entity.SimpleFeatures.ProductCategorySimple)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductCategoryWithPagingController.Delete(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:SimpleAPI.API.Controllers.ProductWithPagingController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductWithPagingController.Get(System.String,Mvp24Hours.Core.DTO.Logic.PagingCriteria{SimpleAPI.Core.Entity.SimpleFeatures.ProductSimple})">
+            <summary>
+            
+            </summary>
+            <param name="nome"></param>
+            <param name="clause"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductWithPagingController.GetId(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductWithPagingController.Post(SimpleAPI.Core.Entity.SimpleFeatures.ProductSimple)">
+            <summary>
+            
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductWithPagingController.Put(System.Int32,SimpleAPI.Core.Entity.SimpleFeatures.ProductSimple)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductWithPagingController.Delete(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:SimpleAPI.API.Controllers.ProductCategorySimpleController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductCategorySimpleController.Get(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductCategorySimpleController.GetId(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductCategorySimpleController.Post(SimpleAPI.Core.Entity.SimpleFeatures.ProductCategorySimple)">
+            <summary>
+            
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductCategorySimpleController.Put(System.Int32,SimpleAPI.Core.Entity.SimpleFeatures.ProductCategorySimple)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductCategorySimpleController.Delete(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:SimpleAPI.API.Controllers.ProductSimpleController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductSimpleController.Get(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductSimpleController.GetId(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductSimpleController.Post(SimpleAPI.Core.Entity.SimpleFeatures.ProductSimple)">
+            <summary>
+            
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductSimpleController.Put(System.Int32,SimpleAPI.Core.Entity.SimpleFeatures.ProductSimple)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SimpleAPI.API.Controllers.ProductSimpleController.Delete(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:SimpleAPI.WebAPI.Program">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:SimpleAPI.WebAPI.Program.Main(System.String[])">
+            <summary>
+            
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:SimpleAPI.WebAPI.Program.CreateHostBuilder(System.String[])">
+            <summary>
+            
+            </summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="T:SimpleAPI.WebAPI.Startup">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:SimpleAPI.WebAPI.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:SimpleAPI.WebAPI.Startup.Configuration">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:SimpleAPI.WebAPI.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            This method gets called by the runtime. Use this method to add services to the container.
+            </summary>
+        </member>
+        <member name="M:SimpleAPI.WebAPI.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment,SimpleAPI.Infrastructure.Data.SimpleAPIContext)">
+            <summary>
+            This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+            </summary>
+        </member>
+    </members>
+</doc>
