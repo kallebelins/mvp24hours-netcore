@@ -7,6 +7,7 @@
 //=====================================================================================
 using Microsoft.EntityFrameworkCore;
 using Mvp24Hours.Core.Contract.Domain.Entity;
+using Mvp24Hours.Core.Entities;
 using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;
 using System.Linq;
@@ -43,7 +44,7 @@ namespace Mvp24Hours.Infrastructure.Data
 
             if (CanApplyEntityLog)
             {
-                builder.ApplyGlobalFilters<IEntityLog<object>>(e => e.Removed == null);
+                builder.ApplyGlobalFilters<IEntityDateLog>(e => e.Removed == null);
             }
         }
 
@@ -67,10 +68,13 @@ namespace Mvp24Hours.Infrastructure.Data
 
         protected void ApplyLogRules()
         {
+            if (!CanApplyEntityLog) return;
+
             // entity log and guid
             foreach (var entry in this.ChangeTracker
                 .Entries()
-                .Where(e => e.Entity.GetType() == typeof(IEntityLog<>)
+                .Where(e => 
+                    (e.Entity.GetType().BaseType == typeof(IEntityLog<>) || e.Entity.GetType().BaseType == typeof(EntityBaseLog<,>))
                     && (e.State == EntityState.Added || e.State == EntityState.Modified || e.State == EntityState.Deleted)))
             {
                 var e = entry.Entity as IEntityLog<object>;
