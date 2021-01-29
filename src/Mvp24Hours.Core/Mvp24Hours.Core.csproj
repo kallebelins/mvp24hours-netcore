@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Kallebe Lins</Authors>
+    <Product>Mvp24Hours.Core</Product>
+    <Description>Series architectures for fast product construction.</Description>
+    <Copyright></Copyright>
+    <PackageProjectUrl>https://github.com/kallebelins</PackageProjectUrl>
+    <Company>Kallebe Lins</Company>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Contract\Domain\Entity\IEntityBaseGuid.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+</Project>

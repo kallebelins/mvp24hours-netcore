@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Authors>Kallebe Lins</Authors>
+    <Description>Series architectures for fast product construction.</Description>
+    <Copyright></Copyright>
+    <PackageProjectUrl>https://github.com/kallebelins</PackageProjectUrl>
+    <Company>Kallebe Lins</Company>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Logic\Base\BaseMapperBO.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Mvp24Hours.Core\Mvp24Hours.Core.csproj" />
+    <ProjectReference Include="..\Mvp24Hours.Infrastructure.Data\Mvp24Hours.Infrastructure.Data.csproj" />
+    <ProjectReference Include="..\Mvp24Hours.Infrastructure\Mvp24Hours.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

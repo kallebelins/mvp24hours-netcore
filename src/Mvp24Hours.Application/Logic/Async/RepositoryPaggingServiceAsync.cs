@@ -1,0 +1,136 @@
+//=====================================================================================
+// Developed by Kallebe Lins (kallebe.santos@outlook.com)
+// Teacher, Architect, Consultant and Project Leader
+// Virtual Card: https://www.linkedin.com/in/kallebelins
+//=====================================================================================
+// Reproduction or sharing is free!
+//=====================================================================================
+using Mvp24Hours.Application.Factory;
+using Mvp24Hours.Core.Contract.Data;
+using Mvp24Hours.Core.Contract.Domain.Entity;
+using Mvp24Hours.Core.Contract.Logic;
+using Mvp24Hours.Core.Contract.Logic.DTO;
+using Mvp24Hours.Core.DTO.Logic;
+using System;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+
+namespace Mvp24Hours.Business.Logic
+{
+    /// <summary>
+    /// Base business class
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class RepositoryPagingServiceAsync<T, U> : RepositoryServiceAsync<T, U>, IQueryServiceAsync<T>, ICommandServiceAsync<T>, IQueryPagingServiceAsync<T>
+        where T : class, IEntityBase
+        where U : IUnitOfWorkAsync
+    {
+        #region [ Implements IPagingBaseAsyncBO ]
+
+        /// <summary>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.GetByAsync(Expression{Func{T, bool}})"/>
+        /// </summary>
+        public Task<IPagingResult<T>> PagingGetByAsync(Expression<Func<T, bool>> clause)
+        {
+            return PagingGetByAsync(clause, null);
+        }
+
+        /// <summary>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.GetByAsync(Expression{Func{T, bool}}, IPagingCriteria{T})"/>
+        /// </summary>
+        public virtual async Task<IPagingResult<T>> PagingGetByAsync(Expression<Func<T, bool>> clause, IPagingCriteria<T> criteria)
+        {
+            try
+            {
+                int limit = MaxQtyByQueryPage;
+                int offset = 0;
+
+                if (criteria != null)
+                {
+                    limit = criteria.Limit > 0 ? criteria.Limit : limit;
+                    offset = criteria.Offset;
+                }
+
+                var repo = UnitOfWork.GetRepositoryAsync<T>();
+
+                var totalCount = await repo.GetByCountAsync(clause);
+                var totalPages = (int)Math.Ceiling((double)totalCount / limit);
+
+                var items = await repo.GetByAsync(clause, criteria);
+
+                var result = await PagingResultFactory<T>.TaskCreate(items,
+                    new PageResult()
+                    {
+                        Count = items.Count,
+                        Offset = offset,
+                        Limit = limit
+                    }, new SummaryResult()
+                    {
+                        TotalCount = totalCount,
+                        TotalPages = totalPages
+                    });
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Logging.Error(ex);
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.ListAsync()"/>
+        /// </summary>
+        public Task<IPagingResult<T>> PagingListAsync()
+        {
+            return this.PagingListAsync(null);
+        }
+
+        /// <summary>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.ListAsync(IPagingCriteria{T})"/>
+        /// </summary>
+        public async virtual Task<IPagingResult<T>> PagingListAsync(IPagingCriteria<T> criteria)
+        {
+            try
+            {
+                int limit = MaxQtyByQueryPage;
+                int offset = 0;
+
+                if (criteria != null)
+                {
+                    limit = criteria.Limit > 0 ? criteria.Limit : limit;
+                    offset = criteria.Offset;
+                }
+
+                var repo = UnitOfWork.GetRepositoryAsync<T>();
+
+                var totalCount = await repo.ListCountAsync();
+                var totalPages = (int)Math.Ceiling((double)totalCount / limit);
+
+                var items = await repo.ListAsync(criteria);
+
+                var result = await PagingResultFactory<T>.TaskCreate(items,
+                    new PageResult()
+                    {
+                        Count = items.Count,
+                        Offset = offset,
+                        Limit = limit
+                    }, new SummaryResult()
+                    {
+                        TotalCount = totalCount,
+                        TotalPages = totalPages
+                    });
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Logging.Error(ex);
+                throw ex;
+            }
+        }
+
+        #endregion
+    }
+}
