@@ -15,9 +15,25 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations
     /// </summary>
     public abstract class OperationMapperAsync<T> : OperationBaseAsync, IOperationMapperAsync<T>
     {
+        /// <summary>
+        /// Key defined for content attached to the message (mapped object)
+        /// </summary>
+        public virtual string MessageContentKey => null;
+
         public override async Task<IPipelineMessage> Execute(IPipelineMessage input)
         {
-            input.AddContent(await MapperAsync(input));
+            var result = await MapperAsync(input);
+            if (result != null)
+            {
+                if (string.IsNullOrEmpty(MessageContentKey))
+                {
+                    input.AddContent(result);
+                }
+                else
+                {
+                    input.AddContent(MessageContentKey, result);
+                }
+            }
             return input;
         }
 

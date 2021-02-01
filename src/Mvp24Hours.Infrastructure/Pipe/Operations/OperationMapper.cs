@@ -14,9 +14,25 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations
     /// </summary>
     public abstract class OperationMapper<T> : OperationBase, IOperationMapper<T>
     {
+        /// <summary>
+        /// Key defined for content attached to the message (mapped object)
+        /// </summary>
+        public virtual string MessageContentKey => null;
+
         public override IPipelineMessage Execute(IPipelineMessage input)
         {
-            input.AddContent(Mapper(input));
+            var result = Mapper(input);
+            if (result != null)
+            {
+                if (string.IsNullOrEmpty(MessageContentKey))
+                {
+                    input.AddContent(result);
+                }
+                else
+                {
+                    input.AddContent(MessageContentKey, result);
+                }
+            }
             return input;
         }
 
