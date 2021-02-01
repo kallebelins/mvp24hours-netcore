@@ -32,6 +32,5 @@ namespace Mvp24Hours.Core.Contract.Logic
         /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{T}.GetBy(Expression{Func{T, bool}}, IPagingCriteria{T})"/>
         /// </summary>
         IPagingResult<T> PagingGetBy(Expression<Func<T, bool>> clause, IPagingCriteria<T> criteria);
-
     }
 }

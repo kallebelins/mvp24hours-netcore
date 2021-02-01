@@ -5,13 +5,16 @@
 //=====================================================================================
 // Reproduction or sharing is free!
 //=====================================================================================
-using Mvp24Hours.Infrastructure.Log;
+using Mvp24Hours.Infrastructure.Logging;
 using System;
 using System.Net;
 using System.Net.Mail;
 
 namespace Mvp24Hours.Infrastructure.Helpers
 {
+    /// <summary>
+    /// Contains functions for sending email
+    /// </summary>
     public static class SmtpMailHelper
     {
         private static readonly ILoggingService _logger;
@@ -21,6 +24,9 @@ namespace Mvp24Hours.Infrastructure.Helpers
             _logger = LoggingService.GetLoggingService();
         }
 
+        /// <summary>
+        /// Sends email from the email message
+        /// </summary>
         public static void Send(this Core.ValueObjects.Infrastructure.MailMessage dto)
         {
             try

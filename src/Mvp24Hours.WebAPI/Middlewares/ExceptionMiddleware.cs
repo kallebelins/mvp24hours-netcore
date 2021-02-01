@@ -7,7 +7,7 @@
 //=====================================================================================
 using Microsoft.AspNetCore.Http;
 using Mvp24Hours.Infrastructure.Helpers;
-using Mvp24Hours.Infrastructure.Log;
+using Mvp24Hours.Infrastructure.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Net;

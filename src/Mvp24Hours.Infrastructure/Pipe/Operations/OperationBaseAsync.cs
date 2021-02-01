@@ -14,23 +14,25 @@ using System.Threading.Tasks;
 namespace Mvp24Hours.Infrastructure.Pipe.Operations
 {
     /// <summary>  
-    /// Abstraction of asynchronous mapping operations
+    /// Abstraction of asynchronous base operations
     /// </summary>
     public abstract class OperationBaseAsync : IOperationAsync
     {
         #region [ Ctors ]
         public OperationBaseAsync()
         {
-            Context = HttpContextHelper.GetService<INotificationContext>();
+            NotificationContext = HttpContextHelper.GetService<INotificationContext>();
 
-            if (Context == null)
+            if (NotificationContext == null)
                 throw new ArgumentNullException("Notification context is mandatory.");
         }
         #endregion
 
         #region [ Props ]
-        protected INotificationContext Context { get; private set; }
-        public bool IsValid => !Context.HasNotifications;
+        /// <summary>
+        /// Notification context based on individual HTTP request
+        /// </summary>
+        protected INotificationContext NotificationContext { get; private set; }
         public virtual bool IsRequired => false;
         #endregion
 

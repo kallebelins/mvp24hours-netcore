@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
+using Mvp24Hours.Core.DTO.Logic;
 using Newtonsoft.Json;
 using System.Net;
 using System.Threading.Tasks;
+using System.Linq;
+using Mvp24Hours.Core.ValueObjects.Infrastructure;
 
 namespace Mvp24Hours.WebAPI.Filters
 {
@@ -22,15 +25,9 @@ namespace Mvp24Hours.WebAPI.Filters
             {
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 context.HttpContext.Response.ContentType = "application/json";
-
-                var result = JsonConvert.SerializeObject(new
-                {
-                    HasErrors = true,
-                    Errors = _notificationContext.Notifications
-                });
-
+                var boResult = new BusinessResult<Notification>(_notificationContext.Notifications.ToList());
+                var result = JsonConvert.SerializeObject(boResult);
                 await context.HttpContext.Response.WriteAsync(result);
-
                 return;
             }
 

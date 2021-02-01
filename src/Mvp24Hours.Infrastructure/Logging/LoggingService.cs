@@ -5,17 +5,23 @@
 //=====================================================================================
 // Reproduction or sharing is free!
 //=====================================================================================
-using Mvp24Hours.Infrastructure.Log.Renderer;
+using Mvp24Hours.Infrastructure.Logging.Renderer;
 using NLog;
 using NLog.Config;
 using System;
 
-namespace Mvp24Hours.Infrastructure.Log
+namespace Mvp24Hours.Infrastructure.Logging
 {
+    /// <summary>
+    /// Provides logging interface and utility functions.
+    /// </summary>
     public class LoggingService : Logger, ILoggingService
     {
         private const string _loggerName = "NLogLogger";
 
+        /// <summary>
+        /// Get pre-configured instant log
+        /// </summary>
         public static ILoggingService GetLoggingService()
         {
             ConfigurationItemFactory.Default.LayoutRenderers

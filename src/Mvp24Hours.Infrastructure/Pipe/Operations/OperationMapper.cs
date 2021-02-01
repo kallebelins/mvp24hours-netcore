@@ -14,6 +14,12 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations
     /// </summary>
     public abstract class OperationMapper<T> : OperationBase, IOperationMapper<T>
     {
-        public abstract T Mapper(params object[] data);
+        public override IPipelineMessage Execute(IPipelineMessage input)
+        {
+            input.AddContent(Mapper(input));
+            return input;
+        }
+
+        public abstract T Mapper(IPipelineMessage input);
     }
 }

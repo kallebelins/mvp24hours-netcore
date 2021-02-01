@@ -19,18 +19,15 @@ using System.Threading.Tasks;
 namespace Mvp24Hours.Business.Logic
 {
     /// <summary>
-    /// Base business class
+    /// Asynchronous service for using repository and unit of work
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">Represents an entity</typeparam>
     public class RepositoryServiceAsync<T, U> : RepositoryServiceAsyncBase<T, U>, IQueryServiceAsync<T>, ICommandServiceAsync<T>
         where T : class, IEntityBase
         where U : IUnitOfWorkAsync
     {
         #region [ Implements IBaseAsyncBO ]
 
-        /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.ListAnyAsync()"/>
-        /// </summary>
         public virtual Task<bool> ListAnyAsync()
         {
             try
@@ -76,6 +73,22 @@ namespace Mvp24Hours.Business.Logic
             try
             {
                 return this.UnitOfWork.GetRepositoryAsync<T>().ListAsync(criteria);
+            }
+            catch (Exception ex)
+            {
+                Logging.Error(ex);
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.GetByAnyAsync(Expression{Func{T, bool}})"/>
+        /// </summary>
+        public Task<bool> GetByAnyAsync(Expression<Func<T, bool>> clause)
+        {
+            try
+            {
+                return this.UnitOfWork.GetRepositoryAsync<T>().GetByAnyAsync(clause);
             }
             catch (Exception ex)
             {

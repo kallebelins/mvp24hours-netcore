@@ -15,12 +15,9 @@ using System.Threading.Tasks;
 namespace Mvp24Hours.Core.Contract.Data
 {
     /// <summary>
-    /// Design Pattern: Repository
-    /// Description: Mediation between domain and data mapping layers using a collection as 
-    /// an interface for accessing domain objects. (Martin Fowler)
-    /// Learn more: http://martinfowler.com/eaaCatalog/repository.html
+    /// Class with asynchronous functions to perform database queries (filters, sorting and pagination) for an entity
     /// </summary>
-    /// <typeparam name="T">IEntity || IEntityBaseGuid</typeparam>
+    /// <typeparam name="T">Represents an entity</typeparam>
     public interface IQueryAsync<T>
         where T : IEntityBase
     {

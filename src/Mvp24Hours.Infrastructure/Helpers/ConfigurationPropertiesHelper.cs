@@ -8,11 +8,17 @@
 
 namespace Mvp24Hours.Infrastructure.Helpers
 {
+    /// <summary>
+    /// Contains pre-loaded configurations
+    /// </summary>
     public static class ConfigurationPropertiesHelper
     {
         #region [ Props ]
 
         private static int? _maxQtyByQueryPage;
+        /// <summary>
+        /// Maximum limit per page
+        /// </summary>
         public static int MaxQtyByQueryPage
         {
             get

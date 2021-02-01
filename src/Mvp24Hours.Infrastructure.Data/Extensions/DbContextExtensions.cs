@@ -12,6 +12,9 @@ namespace Mvp24Hours.Infrastructure.Data.Extensions
 {
     public static class DbContextExtensions
     {
+        /// <summary>
+        /// Runs commands on database
+        /// </summary>
         public static async Task<int> ExecuteNonQueryAsync(this DbContext context, string rawSql, params object[] parameters)
         {
             var conn = context.Database.GetDbConnection();
@@ -25,7 +28,9 @@ namespace Mvp24Hours.Infrastructure.Data.Extensions
                 return await command.ExecuteNonQueryAsync();
             }
         }
-
+        /// <summary>
+        /// Execute scalar command against database
+        /// </summary>
         public static async Task<T> ExecuteScalarAsync<T>(this DbContext context, string rawSql, params object[] parameters)
         {
             var conn = context.Database.GetDbConnection();

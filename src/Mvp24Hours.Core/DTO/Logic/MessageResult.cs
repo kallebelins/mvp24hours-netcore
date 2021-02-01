@@ -7,25 +7,27 @@
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Logic.DTO;
 using Mvp24Hours.Core.Enums;
-using System.Collections.Generic;
+using System;
 
-namespace Mvp24Hours.Core.ValueObjects.Infrastructure
+namespace Mvp24Hours.Core.DTO.Logic
 {
     /// <summary>
-    /// Represents a notification
     /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IMessageResult"/>
     /// </summary>
-    public class Notification : BaseVO, IMessageResult
+    public class MessageResult : IMessageResult
     {
-        #region [ Ctor ]
-        public Notification(string key, string message)
+        public MessageResult(string message, MessageType messageType)
+            : this(Guid.NewGuid().ToString(), message, messageType)
+        {
+        }
+
+        public MessageResult(string key, string message, MessageType messageType)
         {
             Key = key;
             Message = message;
+            Type = messageType;
         }
-        #endregion
 
-        #region [ Members ]
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IMessageResult.Key"/>
         /// </summary>
@@ -38,16 +40,5 @@ namespace Mvp24Hours.Core.ValueObjects.Infrastructure
         /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IMessageResult.Type"/>
         /// </summary>
         public MessageType Type { get; }
-        #endregion
-
-        #region [ Overrides ]
-        /// <summary>
-        /// <see cref="Mvp24Hours.Core.ValueObjects.BaseVO.GetEqualityComponents"/>
-        /// </summary>
-        protected override IEnumerable<object> GetEqualityComponents()
-        {
-            yield return Key;
-        }
-        #endregion
     }
 }

@@ -8,14 +8,14 @@
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Infrastructure.Helpers;
-using Mvp24Hours.Infrastructure.Log;
+using Mvp24Hours.Infrastructure.Logging;
 
 namespace Mvp24Hours.Business.Logic
 {
     /// <summary>
-    /// Base business class
+    /// Base service for using repository and unit of work
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">Represents an entity</typeparam>
     public abstract class RepositoryServiceBase<T, U>
         where T : class, IEntityBase
         where U : IUnitOfWork

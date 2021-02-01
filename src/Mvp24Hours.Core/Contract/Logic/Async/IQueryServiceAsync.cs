@@ -19,40 +19,58 @@ namespace Mvp24Hours.Core.Contract.Logic
     public interface IQueryServiceAsync<T> where T : class
     {
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{T}.ListAnyAsync()"/>
+        /// Checks whether any records returned by the List() method
         /// </summary>
+        /// <returns>Number of representations</returns>
         Task<bool> ListAnyAsync();
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{T}.ListCountAsync()"/>
+        /// Gets the amount of representations returned by the List() method.
         /// </summary>
+        /// <returns>Number of representations</returns>
         Task<int> ListCountAsync();
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{T}.ListAsync()"/>
+        /// Gets all representations of the typed entity.
         /// </summary>
+        /// <returns>List of entities</returns>
         Task<IList<T>> ListAsync();
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{T}.ListAsync(IPagingCriteria{T})"/>
+        /// Gets all representations of the entity typed with criteria.
         /// </summary>
-        Task<IList<T>> ListAsync(IPagingCriteria<T> clause);
+        /// <returns>List of entities</returns>
+        Task<IList<T>> ListAsync(IPagingCriteria<T> criteria);
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{T}.GetByCountAsync(Expression{Func{T, bool}})"/>
+        /// Checks whether any records returned by the GetBy() method.
         /// </summary>
+        /// <returns>Indicates whether there is a record</returns>
+        Task<bool> GetByAnyAsync(Expression<Func<T, bool>> clause);
+        /// <summary>
+        /// Gets the amount of representations returned by the GetBy() method.
+        /// </summary>
+        /// <returns>Number of representations</returns>
         Task<int> GetByCountAsync(Expression<Func<T, bool>> clause);
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{T}.GetByAsync(Expression{Func{T, bool}})"/>
+        /// Gets the representations based on the filter of the typed entity.
         /// </summary>
+        /// <param name="clause">Filter</param>
+        /// <returns>Number of representations</returns>
         Task<IList<T>> GetByAsync(Expression<Func<T, bool>> clause);
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{T}.GetByAsync(Expression{Func{T, bool}}, IPagingCriteria{T})"/>
+        /// Gets the filter-based representations of the entity typed with criteria.
         /// </summary>
+        /// <param name="clause">Filter</param>
+        /// <returns>Number of representations</returns>
         Task<IList<T>> GetByAsync(Expression<Func<T, bool>> clause, IPagingCriteria<T> criteria);
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{T}.GetByIdAsync(int)"/>
+        /// Gets a representation of the typed entity.
         /// </summary>
+        /// <param name="id">Identifier of entity</param>
+        /// <returns>A representation of the entity</returns>
         Task<T> GetByIdAsync(object id);
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{T}.GetByIdAsync(int, IPagingCriteria{T})"/>
+        /// Gets a representation of the entity typed with criteria.
         /// </summary>
-        Task<T> GetByIdAsync(object id, IPagingCriteria<T> clause);
+        /// <param name="id">Identifier of entity</param>
+        /// <returns>A representation of the entity</returns>
+        Task<T> GetByIdAsync(object id, IPagingCriteria<T> criteria);
     }
 }

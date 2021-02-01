@@ -11,17 +11,26 @@ using System.IO;
 
 namespace Mvp24Hours.Infrastructure.Helpers
 {
+    /// <summary>
+    /// Class that helps reading API settings
+    /// </summary>
     public class ConfigurationHelper
     {
         #region [ Envionment ]
 
         private static IHostEnvironment _environment;
 
+        /// <summary>
+        /// Defines the host environment of the application that is running
+        /// </summary>
         public static void SetEnvironment(IHostEnvironment environment)
         {
             _environment = environment;
         }
 
+        /// <summary>
+        /// Gets the host environment of the application that is running
+        /// </summary>
         public static IHostEnvironment GetEnvironment()
         {
             return _environment;
@@ -51,6 +60,9 @@ namespace Mvp24Hours.Infrastructure.Helpers
             }
         }
 
+        /// <summary>
+        /// Get the settings of the application that is running
+        /// </summary>
         public static string GetSettings(string key)
         {
             if (AppSettings != null)
@@ -68,6 +80,9 @@ namespace Mvp24Hours.Infrastructure.Helpers
 
         private static IConfiguration _configuration;
 
+        /// <summary>
+        /// Records native .NET core configuration
+        /// </summary>
         public static void SetConfiguration(IConfiguration configuration)
         {
             _configuration = configuration;

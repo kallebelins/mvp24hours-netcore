@@ -11,12 +11,9 @@ using System.Collections.Generic;
 namespace Mvp24Hours.Core.Contract.Data
 {
     /// <summary>
-    /// Design Pattern: Repository
-    /// Description: Mediation between domain and data mapping layers using a collection as 
-    /// an interface for accessing domain objects. (Martin Fowler)
-    /// Learn more: http://martinfowler.com/eaaCatalog/repository.html
+    /// Class with functions to perform database commands (add, modify or delete) for an entity
     /// </summary>
-    /// <typeparam name="T">IEntity || IEntityBaseGuid</typeparam>
+    /// <typeparam name="T">Represents an entity</typeparam>
     public interface ICommand<T>
         where T : IEntityBase
     {

@@ -10,6 +10,9 @@ using System.Collections.Generic;
 
 namespace Mvp24Hours.Core.DTO.Logic
 {
+    /// <summary>
+    /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPagingResult{T}"/>
+    /// </summary>
     public class PagingResult<T> : BusinessResult<T>, IPagingResult<T>
     {
         #region [ Ctor ]
@@ -28,8 +31,13 @@ namespace Mvp24Hours.Core.DTO.Logic
 
         #region [ Properties ]
 
+        /// <summary>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPagingResult{T}.Paging"/>
+        /// </summary>
         public IPageResult Paging { get; set; }
-
+        /// <summary>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPagingResult{T}.Summary"/>
+        /// </summary>
         public ISummaryResult Summary { get; set; }
 
         #endregion

@@ -16,8 +16,14 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Mvp24Hours.Infrastructure.Helpers
 {
+    /// <summary>
+    /// Contains functions to transform object (clone, serialize, ...)
+    /// </summary>
     public class ObjectHelper
     {
+        /// <summary>
+        /// Clone object instance with binary method in memory
+        /// </summary>
         public static T Clone<T>(T source)
         {
             if (!typeof(T).IsSerializable)
@@ -39,7 +45,9 @@ namespace Mvp24Hours.Infrastructure.Helpers
                 return (T)formatter.Deserialize(stream);
             }
         }
-
+        /// <summary>
+        /// Serializes instance based on default configuration
+        /// </summary>
         public static string Serialize<T>(T dto)
         {
             return JsonConvert.SerializeObject(dto, new JsonSerializerSettings

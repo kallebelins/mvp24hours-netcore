@@ -8,6 +8,9 @@
 
 namespace Mvp24Hours.Core.Enums.Infrastructure
 {
+    /// <summary>
+    /// Type of method used in the web request
+    /// </summary>
     public enum HateoasMethodType
     {
         GET,

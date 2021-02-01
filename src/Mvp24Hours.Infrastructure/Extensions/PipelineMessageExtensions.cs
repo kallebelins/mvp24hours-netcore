@@ -1,4 +1,11 @@
-﻿using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
+﻿//=====================================================================================
+// Developed by Kallebe Lins (kallebe.santos@outlook.com)
+// Teacher, Architect, Consultant and Project Leader
+// Virtual Card: https://www.linkedin.com/in/kallebelins
+//=====================================================================================
+// Reproduction or sharing is free!
+//=====================================================================================
+using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Core.Contract.Logic;
 using Mvp24Hours.Infrastructure.Helpers;
 using Mvp24Hours.Infrastructure.Pipe;
@@ -7,6 +14,9 @@ namespace Mvp24Hours.Infrastructure.Extensions
 {
     public static class PipelineMessageExtensions
     {
+        /// <summary>
+        /// Encapsulates object for pipeline message
+        /// </summary>
         public static IPipelineMessage ToMessage<T>(this T value)
         {
             IPipelineMessage message = new PipelineMessage();
@@ -16,7 +26,9 @@ namespace Mvp24Hours.Infrastructure.Extensions
             }
             return message;
         }
-
+        /// <summary>
+        /// Transform business object to pipeline message
+        /// </summary>
         public static IPipelineMessage ToMessage<T>(IBusinessResult<T> bo)
         {
             IPipelineMessage message = new PipelineMessage();
@@ -32,7 +44,9 @@ namespace Mvp24Hours.Infrastructure.Extensions
             }
             return message;
         }
-
+        /// <summary>
+        /// Transform business object to pipeline message and clone content
+        /// </summary>
         public static IPipelineMessage ToMessageClone<T>(IBusinessResult<T> bo)
         {
             IPipelineMessage message = new PipelineMessage();

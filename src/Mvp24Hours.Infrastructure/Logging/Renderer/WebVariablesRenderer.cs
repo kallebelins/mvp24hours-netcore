@@ -13,7 +13,7 @@ using NLog.LayoutRenderers;
 using System.Globalization;
 using System.Text;
 
-namespace Mvp24Hours.Infrastructure.Log.Renderer
+namespace Mvp24Hours.Infrastructure.Logging.Renderer
 {
     [LayoutRenderer("web_variables")]
     public class WebVariablesRenderer : LayoutRenderer

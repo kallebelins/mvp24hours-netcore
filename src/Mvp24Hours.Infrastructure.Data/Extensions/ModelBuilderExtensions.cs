@@ -15,6 +15,9 @@ namespace Mvp24Hours.Infrastructure.Extensions
 {
     public static class ModelBuilderExtensions
     {
+        /// <summary>
+        /// Apply filters in context
+        /// </summary>
         public static void ApplyGlobalFilters<TInterface>(this ModelBuilder modelBuilder, Expression<Func<TInterface, bool>> expression)
         {
             var entities = modelBuilder.Model

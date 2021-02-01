@@ -18,9 +18,6 @@ using System.Threading.Tasks;
 
 namespace Mvp24Hours.Infrastructure.Data
 {
-    /// <summary>
-    ///  <see cref="Mvp24Hours.Core.Contract.Data.IUnitOfWorkAsync"/>
-    /// </summary>
     public class UnitOfWorkAsync : IUnitOfWorkAsync, IDisposable
     {
         #region [ Ctor ]
@@ -39,9 +36,6 @@ namespace Mvp24Hours.Infrastructure.Data
 
         Dictionary<Type, object> repositories;
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IUnitOfWorkAsync"/>
-        /// </summary>
         public IRepositoryAsync<T> GetRepositoryAsync<T>()
             where T : class, IEntityBase
         {
@@ -77,17 +71,10 @@ namespace Mvp24Hours.Infrastructure.Data
 
         #region [ Unit of Work ]
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IUnitOfWorkAsync.SaveChangesAsync(CancellationToken cancellationToken)"/>
-        /// </summary>
         public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             return this.DbContext.SaveChangesAsync(cancellationToken);
         }
-
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IUnitOfWorkAsync.RollbackAsync()"/>
-        /// </summary>
         public void RollbackAsync()
         {
             var changedEntries = this.DbContext.ChangeTracker.Entries()
@@ -110,18 +97,10 @@ namespace Mvp24Hours.Infrastructure.Data
                 }
             }
         }
-
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.ISQLAsync.ExecuteQueryAsync(string, object[])"/>
-        /// </summary>
         public Task<IList<T>> ExecuteQueryAsync<T>(string sqlQuery, params object[] parameters) where T : class
         {
             return this.DbContext.SqlQueryAsync<T>(sqlQuery, parameters);
         }
-
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.ISQLAsync.ExecuteCommandAsync(string, object[])"/>
-        /// </summary>
         public Task<int> ExecuteCommandAsync(string sqlCommand, params object[] parameters)
         {
             return this.DbContext.Database.ExecuteSqlRawAsync(sqlCommand, parameters);

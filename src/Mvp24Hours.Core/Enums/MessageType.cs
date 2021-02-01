@@ -5,19 +5,17 @@
 //=====================================================================================
 // Reproduction or sharing is free!
 //=====================================================================================
-using Mvp24Hours.Core.Contract.Domain.Entity;
 
-namespace Mvp24Hours.Core.Contract.Data
+namespace Mvp24Hours.Core.Enums
 {
     /// <summary>
-    /// Design Pattern: Repository
-    /// Description: Mediation between domain and data mapping layers using a collection as 
-    /// an interface for accessing domain objects. (Martin Fowler)
-    /// Learn more: http://martinfowler.com/eaaCatalog/repository.html
+    /// Defines the type of message for user feedback
     /// </summary>
-    /// <typeparam name="T">Represents an entity</typeparam>
-    public interface IRepository<T> : IQuery<T>, ICommand<T>
-        where T : IEntityBase
+    public enum MessageType
     {
+        Success,
+        Info,
+        Warning,
+        Error
     }
 }

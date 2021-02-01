@@ -31,7 +31,7 @@ namespace Mvp24Hours.Core.Contract.Data
         /// <summary>
         /// Gets a repository
         /// </summary>
-        /// <returns></returns>
+        /// <returns>An asynchronous repository for an entity instance</returns>
         IRepositoryAsync<T> GetRepositoryAsync<T>() where T : class, IEntityBase;
     }
 }

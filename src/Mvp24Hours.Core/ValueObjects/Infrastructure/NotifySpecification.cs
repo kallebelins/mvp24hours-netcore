@@ -1,10 +1,22 @@
-﻿using Mvp24Hours.Core.Contract.Domain.Specifications;
+﻿//=====================================================================================
+// Developed by Kallebe Lins (kallebe.santos@outlook.com)
+// Teacher, Architect, Consultant and Project Leader
+// Virtual Card: https://www.linkedin.com/in/kallebelins
+//=====================================================================================
+// Reproduction or sharing is free!
+//=====================================================================================
+using Mvp24Hours.Core.Contract.Domain.Specifications;
 using System.Collections.Generic;
 
 namespace Mvp24Hours.Core.ValueObjects.Infrastructure
 {
+    /// <summary>
+    /// Represents a notification with specification
+    /// </summary>
     public class NotifySpecification<T> : BaseVO
     {
+        #region [ Ctor ]
+
         public NotifySpecification(ISpecification<T> specification)
         {
             Specification = specification;
@@ -17,13 +29,33 @@ namespace Mvp24Hours.Core.ValueObjects.Infrastructure
             MessageValidation = messageValidation;
         }
 
+        #endregion
+
+        #region [ Members ]
+
+        /// <summary>
+        /// Reference key for validation message
+        /// </summary>
         public string KeyValidation { get; }
+        /// <summary>
+        /// Validation message for specification not met
+        /// </summary>
         public string MessageValidation { get; }
+        /// <summary>
+        /// Test specification
+        /// </summary>
         public ISpecification<T> Specification { get; }
 
+        #endregion
+
+        #region [ Overrides ]
+        /// <summary>
+        /// <see cref="Mvp24Hours.Core.ValueObjects.BaseVO.GetEqualityComponents"/>
+        /// </summary>
         protected override IEnumerable<object> GetEqualityComponents()
         {
             yield return KeyValidation;
         }
+        #endregion
     }
 }

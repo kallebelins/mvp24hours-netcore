@@ -11,13 +11,16 @@ using System.Threading.Tasks;
 
 namespace Mvp24Hours.Infrastructure.Pipe.Operations.Files
 {
+    /// <summary>
+    /// Log writing operation
+    /// </summary>
     public class FileLogWriteOperation : OperationBaseAsync
     {
         public override bool IsRequired => true;
 
         public override Task<IPipelineMessage> Execute(IPipelineMessage input)
         {
-            FileLogHelper.WriteLog(input.GetContentAll(), "message", $"Token: {input.Token} / IsSuccess: {input.IsSucess} / Warnings: {string.Join('/', input.Errors)}");
+            FileLogHelper.WriteLog(input.GetContentAll(), "message", $"Token: {input.Token} / IsSuccess: {input.IsSuccess} / Warnings: {string.Join('/', input.Messages)}");
             return Task.FromResult(input);
         }
     }

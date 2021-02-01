@@ -16,6 +16,9 @@ using System.Threading.Tasks;
 
 namespace Mvp24Hours.Infrastructure.Data
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public abstract class Mvp24HoursContext : DbContext
     {
         #region [ Ctor ]
@@ -34,10 +37,15 @@ namespace Mvp24Hours.Infrastructure.Data
 
         #region [ Configs ]
 
+        /// <summary>
+        /// <see cref="Microsoft.EntityFrameworkCore.DbContext.OnConfiguring(DbContextOptionsBuilder)"/>
+        /// </summary>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
         }
-
+        /// <summary>
+        /// <see cref="Microsoft.EntityFrameworkCore.DbContext.OnModelCreating(ModelBuilder)"/>
+        /// </summary>
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -47,25 +55,33 @@ namespace Mvp24Hours.Infrastructure.Data
                 builder.ApplyGlobalFilters<IEntityDateLog>(e => e.Removed == null);
             }
         }
-
+        /// <summary>
+        /// <see cref="Microsoft.EntityFrameworkCore.DbContext.SaveChanges"/>
+        /// </summary>
         public override int SaveChanges()
         {
             this.ApplyLogRules();
             return base.SaveChanges();
         }
-
+        /// <summary>
+        /// <see cref="Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(CancellationToken)"/>
+        /// </summary>
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             ApplyLogRules();
             return base.SaveChangesAsync(cancellationToken);
         }
-
+        /// <summary>
+        /// <see cref="Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(bool, CancellationToken)"/>
+        /// </summary>
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {
             ApplyLogRules();
             return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
-
+        /// <summary>
+        /// Apply log rules
+        /// </summary>
         protected void ApplyLogRules()
         {
             if (!CanApplyEntityLog) return;
@@ -108,9 +124,14 @@ namespace Mvp24Hours.Infrastructure.Data
 
         #region [ Props ]
 
+        /// <summary>
+        /// Indicates whether log control can be performed by the base context of Mvp24Hours.
+        /// </summary>
         protected abstract bool CanApplyEntityLog { get; }
+        /// <summary>
+        /// Gets the value of the user logged in the context or logged into the database
+        /// </summary>
         protected abstract object EntityLogBy { get; }
-
 
         #endregion
     }

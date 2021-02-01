@@ -36,21 +36,34 @@ namespace Mvp24Hours.Infrastructure.Data
 
         #region [ Fields ]
 
-        // Read-only fields can be initialized only on the server.
+        /// <summary>
+        /// Database context
+        /// </summary>
         protected readonly DbContext dbContext;
+        /// <summary>
+        /// Represents relationship with entities in the database
+        /// </summary>
         protected DbSet<T> dbEntities;
+        /// <summary>
+        /// Gets the value of the user logged in the context or logged into the database
+        /// </summary>
         protected abstract object EntityLogBy { get; }
 
         #endregion
 
         #region [ Methods ]
+        /// <summary>
+        /// Gets database query with clause and aggregation of relationships
+        /// </summary>
         protected IQueryable<T> GetQuery(IPagingCriteria<T> clause, bool onlyNavigation = false)
         {
             // cria query
             var query = this.dbEntities.AsQueryable();
             return GetQuery(query, clause, onlyNavigation);
         }
-
+        /// <summary>
+        /// Gets database query with clause and aggregation of relationships
+        /// </summary>
         protected IQueryable<T> GetQuery(IQueryable<T> query, IPagingCriteria<T> clause, bool onlyNavigation = false)
         {
             var ordered = false;
@@ -181,7 +194,9 @@ namespace Mvp24Hours.Infrastructure.Data
         #region [ Supports ]
 
         PropertyInfo _keyInfo;
-
+        /// <summary>
+        /// 
+        /// </summary>
         protected PropertyInfo GetKeyInfo()
         {
             if (_keyInfo == null)
@@ -199,7 +214,9 @@ namespace Mvp24Hours.Infrastructure.Data
 
             return _keyInfo;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
         protected IQueryable<T> GetDynamicFilter<TValue>(IQueryable<T> query, PropertyInfo key, TValue value)
         {
             var entityParameter = Expression.Parameter(typeof(T), "e");
@@ -215,7 +232,9 @@ namespace Mvp24Hours.Infrastructure.Data
 
             return query.Where(lambda);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
         protected IQueryable<T> SortByKey(IQueryable<T> query, PropertyInfo key)
         {
             try

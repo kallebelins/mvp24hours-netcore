@@ -18,9 +18,9 @@ using System.Threading.Tasks;
 
 namespace Mvp24Hours.Infrastructure.Data
 {
-    /// <summary>
-    ///  <see cref="Mvp24Hours.Core.Contract.Data.IRepositoryAsync"/>
-    /// </summary>
+    ///// <summary>
+    /////  <see cref="Mvp24Hours.Core.Contract.Data.IRepositoryAsync"/>
+    ///// </summary>
     public class RepositoryAsync<T> : RepositoryBase<T>, IRepositoryAsync<T>
         where T : class, IEntityBase
     {
@@ -35,41 +35,26 @@ namespace Mvp24Hours.Infrastructure.Data
 
         #region [ IQueryAsync ]
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync.ListAnyAsync()"/>
-        /// </summary>
         public Task<bool> ListAnyAsync()
         {
             return GetQuery(null, true).AnyAsync();
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync.ListCountAsync()"/>
-        /// </summary>
         public Task<int> ListCountAsync()
         {
             return GetQuery(null, true).CountAsync();
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync.ListAsync()"/>
-        /// </summary>
         public Task<IList<T>> ListAsync()
         {
             return ListAsync(null);
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync.ListAsync(IPagingCriteria{T})"/>
-        /// </summary>
         public async Task<IList<T>> ListAsync(IPagingCriteria<T> clause)
         {
             return await GetQuery(clause).ToListAsync();
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync.GetByAnyAsync(Expression{Func{T, bool}})"/>
-        /// </summary>
         public Task<bool> GetByAnyAsync(Expression<Func<T, bool>> clause)
         {
             var query = this.dbEntities.AsQueryable();
@@ -77,9 +62,6 @@ namespace Mvp24Hours.Infrastructure.Data
             return GetQuery(query, null, true).AnyAsync();
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync.GetByCountAsync(Expression{Func{T, bool}})"/>
-        /// </summary>
         public Task<int> GetByCountAsync(Expression<Func<T, bool>> clause)
         {
             var query = this.dbEntities.AsQueryable();
@@ -87,17 +69,11 @@ namespace Mvp24Hours.Infrastructure.Data
             return GetQuery(query, null, true).CountAsync();
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync.GetByAsync(Expression{Func{T, bool}})"/>
-        /// </summary>
         public Task<IList<T>> GetByAsync(Expression<Func<T, bool>> clause)
         {
             return GetByAsync(clause, null);
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync.GetByAsync(Expression{Func{T, bool}}, IPagingCriteria{T})"/>
-        /// </summary>
         public async Task<IList<T>> GetByAsync(Expression<Func<T, bool>> clause, IPagingCriteria<T> criteria)
         {
             var query = this.dbEntities.AsQueryable();
@@ -105,17 +81,11 @@ namespace Mvp24Hours.Infrastructure.Data
             return await GetQuery(query, criteria).ToListAsync();
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync.GetByIdAsync(int)"/>
-        /// </summary>
         public Task<T> GetByIdAsync(object id)
         {
             return GetByIdAsync(id, null);
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync.GetByIdAsync(int, IPagingCriteria{T})"/>
-        /// </summary>
         public Task<T> GetByIdAsync(object id, IPagingCriteria<T> clause)
         {
             return GetDynamicFilter(GetQuery(clause, true), GetKeyInfo(), id).SingleOrDefaultAsync();
@@ -125,9 +95,6 @@ namespace Mvp24Hours.Infrastructure.Data
 
         #region [ ICommandAsync ]
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.ICommandAsync.AddAsync(T)"/>
-        /// </summary>
         public void AddAsync(T entity)
         {
             if (entity == null) return;
@@ -143,9 +110,6 @@ namespace Mvp24Hours.Infrastructure.Data
             }
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.ICommandAsync.AddAsync(IList{T})"/>
-        /// </summary>
         public void AddAsync(IList<T> entities)
         {
             if (entities != null && entities.Count > 0)
@@ -157,9 +121,6 @@ namespace Mvp24Hours.Infrastructure.Data
             }
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.ICommandAsync.ModifyAsync(T)"/>
-        /// </summary>
         public void ModifyAsync(T entity)
         {
             if (entity == null) return;
@@ -186,9 +147,6 @@ namespace Mvp24Hours.Infrastructure.Data
             dbContext.Entry(entityDb).CurrentValues.SetValues(entity);
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.ICommandAsync.ModifyAsync(IList{T})"/>
-        /// </summary>
         public void ModifyAsync(IList<T> entities)
         {
             if (entities != null && entities.Count > 0)
@@ -200,9 +158,6 @@ namespace Mvp24Hours.Infrastructure.Data
             }
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.ICommandAsync.RemoveAsync(T)"/>
-        /// </summary>
         public void RemoveAsync(T entity)
         {
             if (entity == null) return;
@@ -221,9 +176,6 @@ namespace Mvp24Hours.Infrastructure.Data
             }
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.ICommandAsync.RemoveAsync(IList{T})"/>
-        /// </summary>
         public void RemoveAsync(IList<T> entities)
         {
             if (entities != null && entities.Count > 0)
@@ -235,9 +187,6 @@ namespace Mvp24Hours.Infrastructure.Data
             }
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.ICommandAsync.RemoveAsync(int)"/>
-        /// </summary>
         public void RemoveAsync(object id)
         {
             var entity = this.GetByIdAsync(id);

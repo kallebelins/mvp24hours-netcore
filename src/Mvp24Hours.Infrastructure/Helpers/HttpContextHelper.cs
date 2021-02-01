@@ -10,25 +10,37 @@ using System.Linq;
 
 namespace Mvp24Hours.Infrastructure.Helpers
 {
+    /// <summary>
+    /// Contains functions to register and obtain context of the application that is running
+    /// </summary>
     public class HttpContextHelper
     {
         private static IHttpContextAccessor httpContextAccessor;
 
+        /// <summary>
+        /// Defines individual HTTP request context
+        /// </summary>
         public static void SetContext(IHttpContextAccessor accessor)
         {
             httpContextAccessor = accessor;
         }
-
+        /// <summary>
+        /// Get individual HTTP request context
+        /// </summary>
         public static HttpContext GetContext()
         {
             return httpContextAccessor?.HttpContext;
         }
-
+        /// <summary>
+        /// Gets service by type (registered at the application startup)
+        /// </summary>
         public static T GetService<T>()
         {
             return (T)GetContext().RequestServices?.GetService(typeof(T));
         }
-
+        /// <summary>
+        /// Gets IP of the user who originated the current request
+        /// </summary>
         public static string GetUserIP()
         {
             var context = HttpContextHelper.GetContext();
@@ -47,7 +59,9 @@ namespace Mvp24Hours.Infrastructure.Helpers
             }
             return "0.0.0.0";
         }
-
+        /// <summary>
+        /// Get web address dynamically from current service
+        /// </summary>
         public static string GetBaseUrl()
         {
             return $"{GetContext().Request.Scheme}://{GetContext().Request.Host.Value.ToString()}{GetContext().Request.PathBase.Value.ToString()}";

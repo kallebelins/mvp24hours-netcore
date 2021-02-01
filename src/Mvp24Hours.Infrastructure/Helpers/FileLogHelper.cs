@@ -5,13 +5,16 @@
 //=====================================================================================
 // Reproduction or sharing is free!
 //=====================================================================================
-using Mvp24Hours.Infrastructure.Log;
+using Mvp24Hours.Infrastructure.Logging;
 using Newtonsoft.Json;
 using System;
 using System.IO;
 
 namespace Mvp24Hours.Infrastructure.Helpers
 {
+    /// <summary>
+    /// Contains functions to handle log files
+    /// </summary>
     public class FileLogHelper
     {
         private static readonly ILoggingService _logger;
@@ -21,6 +24,9 @@ namespace Mvp24Hours.Infrastructure.Helpers
             _logger = LoggingService.GetLoggingService();
         }
 
+        /// <summary>
+        /// Writes log with model characteristics in the parameter
+        /// </summary>
         public static void WriteLog<T>(T dto, string suffixFilename = null, string header = null)
         {
             try
@@ -41,7 +47,9 @@ namespace Mvp24Hours.Infrastructure.Helpers
                 _logger.Error(ex);
             }
         }
-
+        /// <summary>
+        /// Writes log with model characteristics in the parameter using token to map location (system folder)
+        /// </summary>
         public static void WriteLogToken<T>(string token, string fileName, T obj)
         {
             try
@@ -64,7 +72,9 @@ namespace Mvp24Hours.Infrastructure.Helpers
                 _logger.Error(ex);
             }
         }
-
+        /// <summary>
+        /// Performs log reading based on token (system folder path)
+        /// </summary>
         public static T ReadLogToken<T>(string token, string fileName)
         {
             try
@@ -81,7 +91,6 @@ namespace Mvp24Hours.Infrastructure.Helpers
             }
             return default(T);
         }
-
         private static void WriteDisk<T>(T obj, string folder, string fileName, string header = null, bool append = false)
         {
             lock (obj)

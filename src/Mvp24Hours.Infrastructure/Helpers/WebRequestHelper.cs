@@ -5,7 +5,7 @@
 //=====================================================================================
 // Reproduction or sharing is free!
 //=====================================================================================
-using Mvp24Hours.Infrastructure.Log;
+using Mvp24Hours.Infrastructure.Logging;
 using System;
 using System.Collections;
 using System.IO;
@@ -15,16 +15,22 @@ using System.Threading.Tasks;
 
 namespace Mvp24Hours.Infrastructure.Helpers
 {
-    public class ServiceRequestHelper
+    /// <summary>
+    /// Contains functions for web requests
+    /// </summary>
+    public class WebRequestHelper
     {
         private static readonly ILoggingService _logger;
 
-        static ServiceRequestHelper()
+        static WebRequestHelper()
         {
             _logger = LoggingService.GetLoggingService();
         }
 
-        public static Encoding Codificacao { get; set; } = Encoding.UTF8;
+        /// <summary>
+        /// 
+        /// </summary>
+        public static Encoding EncodingRequest { get; set; } = Encoding.UTF8;
 
         public async static Task<string> PostAsync(string urlService, string data = "", Hashtable header = null, ICredentials credentials = null)
         {
@@ -51,8 +57,8 @@ namespace Mvp24Hours.Infrastructure.Helpers
             try
             {
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
-                if (Codificacao == null)
-                    Codificacao = Encoding.UTF8;
+                if (EncodingRequest == null)
+                    EncodingRequest = Encoding.UTF8;
                 HttpWebRequest requisicao = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(url);
                 requisicao.Method = method;
                 requisicao.ContentType = "application/json; charset=utf-8";
@@ -80,7 +86,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
                     if (data == null)
                         data = "";
                     string postData = data;
-                    bytes = Codificacao.GetBytes(postData);
+                    bytes = EncodingRequest.GetBytes(postData);
                     requisicao.ContentLength = bytes.Length;
                 }
 
@@ -92,7 +98,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
                         {
                             using (var content = response.GetResponseStream())
                             {
-                                using (var reader = new StreamReader(content, Codificacao))
+                                using (var reader = new StreamReader(content, EncodingRequest))
                                 {
                                     result = await reader.ReadToEndAsync();
                                 }
@@ -105,7 +111,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
                         {
                             reqstream.Write(bytes, 0, bytes.Length);
                             var httpResponse = (HttpWebResponse)requisicao.GetResponse();
-                            using (var streamReader = new StreamReader(httpResponse.GetResponseStream(), Codificacao))
+                            using (var streamReader = new StreamReader(httpResponse.GetResponseStream(), EncodingRequest))
                             {
                                 result = await streamReader.ReadToEndAsync();
                             }

@@ -17,9 +17,9 @@ using System.Linq.Expressions;
 namespace Mvp24Hours.Business.Logic
 {
     /// <summary>
-    /// Base business class
+    /// Base service for using repository and unit of work
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">Represents an entity</typeparam>
     public class RepositoryService<T, U> : RepositoryServiceBase<T, U>, IQueryService<T>, ICommandService<T>
         where T : class, IEntityBase
         where U : IUnitOfWork

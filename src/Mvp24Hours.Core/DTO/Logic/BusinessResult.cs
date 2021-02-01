@@ -15,7 +15,7 @@ using System.Runtime.Serialization;
 namespace Mvp24Hours.Core.DTO.Logic
 {
     /// <summary>
-    /// Encapsulates result for data transfer
+    /// <see cref="Mvp24Hours.Core.Contract.Logic.IBusinessResult{T}"/>
     /// </summary>
     [DataContract, Serializable]
     public class BusinessResult<T> : IBusinessResult<T>
@@ -37,6 +37,9 @@ namespace Mvp24Hours.Core.DTO.Logic
         #region [ Properties ]
 
         IList<T> data;
+        /// <summary>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.IBusinessResult{T}.Data"/>
+        /// </summary>
         public IList<T> Data
         {
             get
@@ -45,18 +48,27 @@ namespace Mvp24Hours.Core.DTO.Logic
             }
         }
 
-        private IList<IErrorResult> _errors;
-        public IList<IErrorResult> Errors
+        private IList<IMessageResult> _messages;
+        /// <summary>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.IBusinessResult{T}.Messages"/>
+        /// </summary>
+        public IList<IMessageResult> Messages
         {
             get
             {
-                return _errors ?? (_errors = new List<IErrorResult>());
+                return _messages ?? (_messages = new List<IMessageResult>());
             }
         }
 
-        public bool HasErrors => Errors.Any();
+        /// <summary>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.IBusinessResult{T}.HasErrors"/>
+        /// </summary>
+        public bool HasErrors => Messages.Where(x => x.Type == Enums.MessageType.Error).Any();
 
         IList<ILinkResult> links;
+        /// <summary>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.IBusinessResult{T}.Links"/>
+        /// </summary>
         public IList<ILinkResult> Links
         {
             get
@@ -65,6 +77,9 @@ namespace Mvp24Hours.Core.DTO.Logic
             }
         }
 
+        /// <summary>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.IBusinessResult{T}.Token"/>
+        /// </summary>
         public string Token { get; set; }
 
         #endregion

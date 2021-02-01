@@ -6,18 +6,24 @@
 // Reproduction or sharing is free!
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
+using Mvp24Hours.Core.Contract.Logic.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Mvp24Hours.Infrastructure.Pipe
 {
+    /// <summary>
+    /// <see cref="Mvp24Hours.Core.Contract.Infrastructure.Pipe.IPipelineMessage"/>
+    /// </summary>
     public class PipelineMessage : IPipelineMessage
     {
+        #region [ Ctor ]
+
         public PipelineMessage(params object[] args)
         {
             this._contents = new Dictionary<Type, object>();
-            this.IsSucess = true;
+            this.IsSuccess = true;
 
             if (args?.Count() > 0)
             {
@@ -26,17 +32,21 @@ namespace Mvp24Hours.Infrastructure.Pipe
             }
         }
 
+        #endregion
+
+        #region [ Members ]
+
         private Dictionary<Type, object> _contents;
-        private IList<string> _warnings;
+        private IList<IMessageResult> _messages;
         private bool _isLocked;
 
-        public bool IsSucess { get; set; }
+        public bool IsSuccess { get; set; }
 
-        public IList<string> Errors
+        public IList<IMessageResult> Messages
         {
             get
             {
-                return _warnings ?? (_warnings = new List<string>());
+                return _messages ?? (_messages = new List<IMessageResult>());
             }
         }
 
@@ -49,6 +59,10 @@ namespace Mvp24Hours.Infrastructure.Pipe
                 return _isLocked;
             }
         }
+
+        #endregion
+
+        #region [ Methods ]
 
         public void AddContent<T>(T obj)
         {
@@ -80,5 +94,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
         {
             _isLocked = true;
         }
+
+        #endregion
     }
 }

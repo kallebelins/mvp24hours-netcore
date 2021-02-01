@@ -14,16 +14,23 @@ namespace Mvp24Hours.Infrastructure.Extensions
 {
     public static class QueryableExtensions
     {
+        /// <summary>
+        /// Creates sort expression
+        /// </summary>
         public static IOrderedQueryable<T> OrderBy<T>(this IQueryable<T> source, string propertyName)
         {
             return OrderExpression(source, propertyName, false);
         }
-
+        /// <summary>
+        /// Adds sort expression
+        /// </summary>
         public static IOrderedQueryable<T> ThenBy<T>(this IOrderedQueryable<T> source, string propertyName)
         {
             return OrderExpression(source, propertyName, true);
         }
-
+        /// <summary>
+        /// Sorting expression
+        /// </summary>
         static IOrderedQueryable<T> OrderExpression<T>(this IQueryable<T> source, string propertyName, Boolean isThenBy)
         {
             if (source == null) throw new ArgumentNullException("source");

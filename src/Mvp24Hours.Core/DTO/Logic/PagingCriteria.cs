@@ -15,7 +15,7 @@ using System.Text.Json.Serialization;
 namespace Mvp24Hours.Core.DTO.Logic
 {
     /// <summary>
-    /// Class representing query clauses (pagination, sorting, navigation)
+    /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPagingCriteria{T}"/>
     /// </summary>
     [DataContract, Serializable]
     public class PagingCriteria<T> : IPagingCriteria<T>
@@ -30,46 +30,46 @@ namespace Mvp24Hours.Core.DTO.Logic
         }
 
         /// <summary>
-        /// Number of items per page
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPagingCriteria{T}.Limit"/>
         /// </summary>
         [DataMember]
         public int Limit { get; set; }
 
         /// <summary>
-        /// Page Number (Block Limited)
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPagingCriteria{T}.Offset"/>
         /// </summary>
         [DataMember]
         public int Offset { get; set; }
 
         /// <summary>
-        /// Sort criteria ascending expression
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPagingCriteria{T}.OrderByAscendingExpr"/>
         /// </summary>
         [IgnoreDataMember]
         [JsonIgnore]
         public IList<Expression<Func<T, dynamic>>> OrderByAscendingExpr { get; set; }
 
         /// <summary>
-        /// Sort criteria descending expression
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPagingCriteria{T}.OrderByDescendingExpr"/>
         /// </summary>
         [IgnoreDataMember]
         [JsonIgnore]
         public IList<Expression<Func<T, dynamic>>> OrderByDescendingExpr { get; set; }
 
         /// <summary>
-        /// Sort criteria with "name ASC" or "name DESC"
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPagingCriteria{T}.OrderBy"/>
         /// </summary>
         [DataMember]
         public IList<string> OrderBy { get; set; }
 
         /// <summary>
-        /// Criteria for objects loaded along with the object consulted
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPagingCriteria{T}.NavigationExpr"/>
         /// </summary>
         [IgnoreDataMember]
         [JsonIgnore]
         public IList<Expression<Func<T, dynamic>>> NavigationExpr { get; set; }
 
         /// <summary>
-        /// Criteria for objects loaded along with the object consulted
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPagingCriteria{T}.Navigation"/>
         /// </summary>
         [DataMember]
         public IList<string> Navigation { get; set; }

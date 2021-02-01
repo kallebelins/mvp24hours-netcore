@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace Mvp24Hours.Infrastructure.Pipe.Operations.Files
 {
+    /// <summary>
+    /// Operation for writing file log token
+    /// </summary>
     public class FileTokenWriteOperation<T> : OperationBaseAsync
     {
         public override Task<IPipelineMessage> Execute(IPipelineMessage input)

@@ -5,21 +5,21 @@
 //=====================================================================================
 // Reproduction or sharing is free!
 //=====================================================================================
-using Mvp24Hours.Application.Factory;
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.Logic;
 using Mvp24Hours.Core.Contract.Logic.DTO;
 using Mvp24Hours.Core.DTO.Logic;
+using Mvp24Hours.Infrastructure.Extensions;
 using System;
 using System.Linq.Expressions;
 
 namespace Mvp24Hours.Business.Logic
 {
     /// <summary>
-    /// Base business class
+    /// Base service for using repository with paginated results and unit of work
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">Represents an entity</typeparam>
     public class RepositoryPagingService<T, U> : RepositoryService<T, U>, IQueryService<T>, ICommandService<T>, IQueryPagingService<T>
         where T : class, IEntityBase
         where U : IUnitOfWork
@@ -57,7 +57,7 @@ namespace Mvp24Hours.Business.Logic
 
                 var items = repo.GetBy(clause, criteria);
 
-                var result = PagingResultFactory<T>.Create(items,
+                var result = items.ToBusinessPagging(
                     new PageResult()
                     {
                         Count = items.Count,
@@ -109,7 +109,7 @@ namespace Mvp24Hours.Business.Logic
 
                 var items = repo.List(criteria);
 
-                var result = PagingResultFactory<T>.Create(items,
+                var result = items.ToBusinessPagging(
                     new PageResult()
                     {
                         Count = items.Count,

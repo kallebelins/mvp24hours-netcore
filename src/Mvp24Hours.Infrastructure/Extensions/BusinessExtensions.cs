@@ -1,4 +1,11 @@
-﻿using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
+﻿//=====================================================================================
+// Developed by Kallebe Lins (kallebe.santos@outlook.com)
+// Teacher, Architect, Consultant and Project Leader
+// Virtual Card: https://www.linkedin.com/in/kallebelins
+//=====================================================================================
+// Reproduction or sharing is free!
+//=====================================================================================
+using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Core.Contract.Logic;
 using Mvp24Hours.Core.DTO.Logic;
 using System.Collections.Generic;
@@ -8,6 +15,9 @@ namespace Mvp24Hours.Infrastructure.Extensions
 {
     public static class BusinessExtensions
     {
+        /// <summary>
+        /// Transform a message into a business object
+        /// </summary>
         public static IBusinessResult<T> ToBusiness<T>(this IPipelineMessage message)
         {
             IBusinessResult<T> bo = new BusinessResult<T>();
@@ -23,12 +33,14 @@ namespace Mvp24Hours.Infrastructure.Extensions
                 {
                     items?.ToList()?.ForEach(item => bo.Data.Add(item));
                 }
-                message.Errors?.ToList()?.ForEach(item => bo.Errors.Add(new ErrorResult("PipelineMessage", item)));
+                message.Messages?.ToList()?.ForEach(item => bo.Messages.Add(item));
             }
             bo.Token = message.Token;
             return bo;
         }
-
+        /// <summary>
+        /// Encapsulates object for business
+        /// </summary>
         public static IBusinessResult<T> ToBusiness<T>(this T value)
         {
             IBusinessResult<T> bo = new BusinessResult<T>();

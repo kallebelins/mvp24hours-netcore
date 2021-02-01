@@ -5,53 +5,77 @@
 //=====================================================================================
 // Reproduction or sharing is free!
 //=====================================================================================
+using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
+using Mvp24Hours.Core.DTO.Logic;
+using Mvp24Hours.Core.Enums;
+using Mvp24Hours.Infrastructure.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Mvp24Hours.Infrastructure.Pipe
 {
+    /// <summary>
+    /// <see cref="Mvp24Hours.Core.Contract.Infrastructure.Pipe.IPipeline"/>
+    /// </summary>
     public class Pipeline : IPipeline
     {
-        private List<IOperation> operations = new List<IOperation>();
-        private bool _isBreakOnFail;
-        private string _token;
-
+        #region [ Ctor ]
         public Pipeline()
             : this(true)
         {
-
         }
-
         public Pipeline(string token)
             : this(token, true)
         {
         }
-
         public Pipeline(bool isBreakOnFail)
             : this(Guid.NewGuid().ToString(), isBreakOnFail)
         {
         }
-
         public Pipeline(string token, bool isBreakOnFail)
         {
             this._isBreakOnFail = isBreakOnFail;
             this._token = token;
-        }
 
+            Context = HttpContextHelper.GetService<INotificationContext>();
+
+            if (Context == null)
+                throw new ArgumentNullException("Notification context is mandatory.");
+        }
+        #endregion
+
+        #region [ Members ]
+
+        #region [ Fields ]
+        private List<IOperation> operations = new List<IOperation>();
+        private bool _isBreakOnFail;
+        private string _token;
+        #endregion
+
+        /// <summary>
+        /// Notification context based on individual HTTP request
+        /// </summary>
+        protected INotificationContext Context { get; private set; }
+        /// <summary>
+        /// Indicates whether there are failures in the notification context
+        /// </summary>
+        protected bool IsValidContext => !Context.HasErrorNotifications;
+        #endregion
+
+        #region [ Methods ]
         public IPipeline Add(IOperation operation)
         {
             this.operations.Add(operation);
             return this;
         }
-
         public IPipelineMessage Execute(IPipelineMessage input)
         {
             return this.operations.Aggregate(input, (current, operation) =>
             {
                 current.Token = this._token;
-                if (!operation.IsRequired && !current.IsSucess && this._isBreakOnFail)
+                if (!operation.IsRequired && (!current.IsSuccess || !IsValidContext) && this._isBreakOnFail)
                     return current;
                 if (current.IsLocked)
                     return current;
@@ -61,12 +85,13 @@ namespace Mvp24Hours.Infrastructure.Pipe
                 }
                 catch (Exception ex)
                 {
-                    current.IsSucess = false;
-                    current.Errors.Add((ex?.InnerException ?? ex).Message);
+                    current.IsSuccess = false;
+                    current.Messages.Add(new MessageResult((ex?.InnerException ?? ex).Message, MessageType.Error));
                     input.AddContent(ex);
                 }
                 return current;
             });
         }
+        #endregion
     }
 }

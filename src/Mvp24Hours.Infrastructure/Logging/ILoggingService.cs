@@ -7,8 +7,11 @@
 //=====================================================================================
 using System;
 
-namespace Mvp24Hours.Infrastructure.Log
+namespace Mvp24Hours.Infrastructure.Logging
 {
+    /// <summary>
+    /// Provides logging interface and utility functions.
+    /// </summary>
     public interface ILoggingService
     {
         bool IsDebugEnabled { get; }

@@ -9,13 +9,22 @@ using System;
 
 namespace Mvp24Hours.Infrastructure.Helpers
 {
+    /// <summary>
+    /// Contains timezone functions
+    /// </summary>
     public class TimeZoneHelper
     {
+        /// <summary>
+        /// Get current date and time based on South America time zone
+        /// </summary>
         public static DateTime GetTimeZoneNow()
         {
             return GetTimeZone(DateTime.UtcNow);
         }
 
+        /// <summary>
+        /// Get date and time based on South America time zone
+        /// </summary>
         public static DateTime GetTimeZone(DateTime utcDateTime)
         {
             DateTime dUtc;

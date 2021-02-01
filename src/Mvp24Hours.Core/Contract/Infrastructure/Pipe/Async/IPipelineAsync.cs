@@ -12,6 +12,14 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
     /// <summary>
     /// Defines pipeline engine
     /// </summary>
+    /// <example>
+    /// <code>
+    ///     IPipelineAsync pipeline = new PipelineAsync();
+    ///     pipeline.AddAsync(new FileLogWriteOperation());
+    ///     var result = await pipeline.Execute(filter.ToMessage());
+    ///     return result.ToBusiness{Product}();
+    /// </code>
+    /// </example>
     public interface IPipelineAsync
     {
         /// <summary>
