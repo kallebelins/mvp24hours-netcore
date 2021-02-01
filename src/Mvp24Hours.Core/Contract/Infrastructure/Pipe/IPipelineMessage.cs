@@ -36,9 +36,17 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
         /// </summary>
         void AddContent<T>(T obj);
         /// <summary>
+        /// Adds content to be attached to the message by key
+        /// </summary>
+        void AddContent<T>(string key, T obj);
+        /// <summary>
         /// Get content by type
         /// </summary>
         T GetContent<T>();
+        /// <summary>
+        /// Get content by key
+        /// </summary>
+        T GetContent<T>(string key);
         /// <summary>
         /// Get all content
         /// </summary>

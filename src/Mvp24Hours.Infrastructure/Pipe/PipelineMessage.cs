@@ -22,13 +22,13 @@ namespace Mvp24Hours.Infrastructure.Pipe
 
         public PipelineMessage(params object[] args)
         {
-            this._contents = new Dictionary<Type, object>();
+            this._contents = new Dictionary<string, object>();
             this.IsSuccess = true;
 
             if (args?.Count() > 0)
             {
                 foreach (var item in args)
-                    this._contents.Add(item.GetType(), item);
+                    AddContent(item.GetType().Name, item);
             }
         }
 
@@ -36,9 +36,8 @@ namespace Mvp24Hours.Infrastructure.Pipe
 
         #region [ Members ]
 
-        private Dictionary<Type, object> _contents;
+        private Dictionary<string, object> _contents;
         private IList<IMessageResult> _messages;
-        private bool _isLocked;
 
         public bool IsSuccess { get; set; }
 
@@ -52,13 +51,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
 
         public string Token { get; set; }
 
-        public bool IsLocked
-        {
-            get
-            {
-                return _isLocked;
-            }
-        }
+        public bool IsLocked { get; private set; }
 
         #endregion
 
@@ -66,21 +59,31 @@ namespace Mvp24Hours.Infrastructure.Pipe
 
         public void AddContent<T>(T obj)
         {
-            if (_contents.ContainsKey(typeof(T)))
+            AddContent<T>(typeof(T).Name, obj);
+        }
+
+        public void AddContent<T>(string key, T obj)
+        {
+            if (_contents.ContainsKey(key))
             {
-                _contents[typeof(T)] = obj;
+                _contents[key] = obj;
             }
             else
             {
-                _contents.Add(typeof(T), obj);
+                _contents.Add(key, obj);
             }
         }
 
         public T GetContent<T>()
         {
-            if (_contents.ContainsKey(typeof(T)))
+            return GetContent<T>(typeof(T).Name);
+        }
+
+        public T GetContent<T>(string key)
+        {
+            if (_contents.ContainsKey(key))
             {
-                return (T)_contents[typeof(T)];
+                return (T)_contents[key];
             }
             return default;
         }
@@ -92,7 +95,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
 
         public void Lock()
         {
-            _isLocked = true;
+            IsLocked = true;
         }
 
         #endregion
