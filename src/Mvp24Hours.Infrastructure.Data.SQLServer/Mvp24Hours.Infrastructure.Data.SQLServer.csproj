@@ -2,22 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Kallebe Lins</Authors>
     <Description>Series architectures for fast product construction.</Description>
-    <Copyright></Copyright>
-    <PackageProjectUrl>https://github.com/kallebelins</PackageProjectUrl>
-    <Company>Kallebe Lins</Company>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>1.0.2</Version>
+    <PackageProjectUrl>https://github.com/kallebelins</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Logic\Base\BaseMapperBO.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.2" />
   </ItemGroup>
 
   <ItemGroup>

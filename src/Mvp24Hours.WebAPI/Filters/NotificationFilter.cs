@@ -4,8 +4,6 @@ using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.DTO.Logic;
 using Mvp24Hours.Core.ValueObjects.Infrastructure;
 using Mvp24Hours.Infrastructure.Helpers;
-using Newtonsoft.Json;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 

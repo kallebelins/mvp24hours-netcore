@@ -8,7 +8,6 @@
 using Microsoft.EntityFrameworkCore;
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
-using Mvp24Hours.Infrastructure.Data.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;
 using System;
 using System.Collections.Generic;
@@ -107,22 +106,6 @@ namespace Mvp24Hours.Infrastructure.Data
                         break;
                 }
             }
-        }
-
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.ISQL.ExecuteQuery(string, object[])"/>
-        /// </summary>
-        public IList<T> ExecuteQuery<T>(string sqlQuery, params object[] parameters) where T : class
-        {
-            return this.DbContext.SqlQuery<T>(sqlQuery, parameters);
-        }
-
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.ISQL.ExecuteCommand(string, object[])"/>
-        /// </summary>
-        public int ExecuteCommand(string sqlCommand, params object[] parameters)
-        {
-            return this.DbContext.Database.ExecuteSqlRaw(sqlCommand, parameters);
         }
 
         #endregion
