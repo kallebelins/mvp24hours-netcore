@@ -40,6 +40,7 @@ namespace Mvp24Hours.Core.DTO.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IBusinessResult{T}.Data"/>
         /// </summary>
+        [DataMember]
         public IList<T> Data
         {
             get
@@ -52,6 +53,7 @@ namespace Mvp24Hours.Core.DTO.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IBusinessResult{T}.Messages"/>
         /// </summary>
+        [DataMember]
         public IList<IMessageResult> Messages
         {
             get
@@ -63,12 +65,14 @@ namespace Mvp24Hours.Core.DTO.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IBusinessResult{T}.HasErrors"/>
         /// </summary>
+        [DataMember]
         public bool HasErrors => Messages.Where(x => x.Type == Enums.MessageType.Error).Any();
 
         IList<ILinkResult> links;
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IBusinessResult{T}.Links"/>
         /// </summary>
+        [DataMember]
         public IList<ILinkResult> Links
         {
             get
@@ -80,6 +84,7 @@ namespace Mvp24Hours.Core.DTO.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IBusinessResult{T}.Token"/>
         /// </summary>
+        [DataMember]
         public string Token { get; set; }
 
         #endregion

@@ -18,7 +18,7 @@ namespace Mvp24Hours.Infrastructure.Contexts
     /// </summary>
     public class NotificationContext : INotificationContext
     {
-        #region [ Members ]
+        #region [ Fields / Properties ]
         private readonly List<Notification> _notifications;
         public IReadOnlyCollection<Notification> Notifications => _notifications;
         public bool HasNotifications => _notifications.Any();
@@ -36,6 +36,10 @@ namespace Mvp24Hours.Infrastructure.Contexts
         public void AddNotification(string key, string message)
         {
             _notifications.Add(new Notification(key, message));
+        }
+        public void AddNotification(string key, string message, MessageType type)
+        {
+            _notifications.Add(new Notification(key, message, type));
         }
         public void AddNotification(Notification notification)
         {

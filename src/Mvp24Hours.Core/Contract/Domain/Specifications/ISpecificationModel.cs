@@ -11,7 +11,7 @@ namespace Mvp24Hours.Core.Contract.Domain.Specifications
     /// Specification for class models (entity, dto and valueobjects)
     ///  <see cref="Mvp24Hours.Core.Contract.Domain.Specifications.ISpecification{T}"/>
     /// </summary>
-    public interface ISpecificationModel<T>
+    public interface ISpecificationModel<T> : ISpecification<T>
     {
         /// <summary>
         /// Checks whether a model meets the specification

@@ -8,12 +8,14 @@
 using Mvp24Hours.Core.Contract.Logic.DTO;
 using Mvp24Hours.Core.Enums;
 using System;
+using System.Runtime.Serialization;
 
 namespace Mvp24Hours.Core.DTO.Logic
 {
     /// <summary>
     /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IMessageResult"/>
     /// </summary>
+    [DataContract, Serializable]
     public class MessageResult : IMessageResult
     {
         public MessageResult(string message, MessageType messageType)
@@ -31,14 +33,17 @@ namespace Mvp24Hours.Core.DTO.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IMessageResult.Key"/>
         /// </summary>
+        [DataMember]
         public string Key { get; }
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IMessageResult.Message"/>
         /// </summary>
+        [DataMember]
         public string Message { get; }
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IMessageResult.Type"/>
         /// </summary>
+        [DataMember]
         public MessageType Type { get; }
     }
 }

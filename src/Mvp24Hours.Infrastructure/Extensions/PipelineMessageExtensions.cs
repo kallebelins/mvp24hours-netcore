@@ -27,6 +27,18 @@ namespace Mvp24Hours.Infrastructure.Extensions
             return message;
         }
         /// <summary>
+        /// Encapsulates object for pipeline message
+        /// </summary>
+        public static IPipelineMessage ToMessage<T>(this T value, string keyContent)
+        {
+            IPipelineMessage message = new PipelineMessage();
+            if (value != null)
+            {
+                message.AddContent(keyContent, (T)value);
+            }
+            return message;
+        }
+        /// <summary>
         /// Transform business object to pipeline message
         /// </summary>
         public static IPipelineMessage ToMessage<T>(IBusinessResult<T> bo)

@@ -27,6 +27,10 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
         /// </summary>
         IPipelineAsync AddAsync(IOperationAsync operation);
         /// <summary>
+        /// Records operations
+        /// </summary>
+        IPipelineAsync AddAsync<T>() where T : IOperationAsync, new();
+        /// <summary>
         /// Performs operations
         /// </summary>
         Task<IPipelineMessage> Execute(IPipelineMessage input);

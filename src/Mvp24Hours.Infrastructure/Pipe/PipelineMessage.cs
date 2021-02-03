@@ -7,7 +7,6 @@
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Core.Contract.Logic.DTO;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -34,7 +33,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
 
         #endregion
 
-        #region [ Members ]
+        #region [ Fields / Properties ]
 
         private Dictionary<string, object> _contents;
         private IList<IMessageResult> _messages;

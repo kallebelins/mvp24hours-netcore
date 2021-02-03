@@ -25,6 +25,10 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
         /// </summary>
         IPipeline Add(IOperation operation);
         /// <summary>
+        /// Records operations
+        /// </summary>
+        IPipeline Add<T>() where T : IOperation, new();
+        /// <summary>
         /// Performs operations
         /// </summary>
         IPipelineMessage Execute(IPipelineMessage input);

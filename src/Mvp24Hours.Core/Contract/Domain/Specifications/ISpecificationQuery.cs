@@ -14,7 +14,7 @@ namespace Mvp24Hours.Core.Contract.Domain.Specifications
     /// Specification for queries
     ///  <see cref="Mvp24Hours.Core.Contract.Domain.Specifications.ISpecification{T}"/>
     /// </summary>
-    public interface ISpecificationQuery<T>
+    public interface ISpecificationQuery<T> : ISpecification<T>
     {
         /// <summary>
         /// Lambda expression that represents a filter applied to an entity or list

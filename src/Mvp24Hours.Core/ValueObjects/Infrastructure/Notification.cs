@@ -19,13 +19,18 @@ namespace Mvp24Hours.Core.ValueObjects.Infrastructure
     {
         #region [ Ctor ]
         public Notification(string key, string message)
+            : this(key, message, MessageType.Error)
+        {
+        }
+        public Notification(string key, string message, MessageType type)
         {
             Key = key;
             Message = message;
+            Type = type;
         }
         #endregion
 
-        #region [ Members ]
+        #region [ Fields / Properties ]
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IMessageResult.Key"/>
         /// </summary>

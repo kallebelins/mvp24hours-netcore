@@ -31,7 +31,7 @@ namespace Mvp24Hours.Core.ValueObjects.Infrastructure
 
         #endregion
 
-        #region [ Members ]
+        #region [ Fields / Properties ]
 
         /// <summary>
         /// Reference key for validation message

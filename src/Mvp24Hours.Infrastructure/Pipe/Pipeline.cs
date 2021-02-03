@@ -46,7 +46,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
         }
         #endregion
 
-        #region [ Members ]
+        #region [ Fields / Properties ]
 
         #region [ Fields ]
         private List<IOperation> operations = new List<IOperation>();
@@ -65,6 +65,10 @@ namespace Mvp24Hours.Infrastructure.Pipe
         #endregion
 
         #region [ Methods ]
+        public IPipeline Add<T>() where T : IOperation, new()
+        {
+            return Add(new T());
+        }
         public IPipeline Add(IOperation operation)
         {
             this.operations.Add(operation);
@@ -92,6 +96,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
                 return current;
             });
         }
+
         #endregion
     }
 }

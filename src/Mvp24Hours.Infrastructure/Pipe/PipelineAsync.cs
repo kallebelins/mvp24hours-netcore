@@ -48,7 +48,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
         }
         #endregion
 
-        #region [ Members ]
+        #region [ Fields / Properties ]
 
         #region [ Fields ]
         private List<IOperationAsync> _operations = new List<IOperationAsync>();
@@ -67,6 +67,10 @@ namespace Mvp24Hours.Infrastructure.Pipe
         #endregion
 
         #region [ Methods ]
+        public IPipelineAsync AddAsync<T>() where T : IOperationAsync, new()
+        {
+            return AddAsync(new T());
+        }
         public IPipelineAsync AddAsync(IOperationAsync operation)
         {
             this._operations.Add(operation);

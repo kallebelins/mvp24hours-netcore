@@ -15,7 +15,7 @@ namespace Mvp24Hours.Core.ValueObjects.Infrastructure
     /// </summary>
     public class MailMessage : BaseVO
     {
-        #region [ Members ]
+        #region [ Fields / Properties ]
         /// <summary>
         /// Gets the collection of addresses that contains the recipients of this email message.
         /// </summary>

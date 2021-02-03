@@ -1,4 +1,5 @@
-﻿using Mvp24Hours.Core.ValueObjects.Infrastructure;
+﻿using Mvp24Hours.Core.Enums;
+using Mvp24Hours.Core.ValueObjects.Infrastructure;
 using System.Collections.Generic;
 
 namespace Mvp24Hours.Core.Contract.Infrastructure.Contexts
@@ -26,6 +27,13 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Contexts
         /// <param name="key">Reference key</param>
         /// <param name="message">Message for notification</param>
         void AddNotification(string key, string message);
+        /// <summary>
+        /// Adds a notification to the context from the key and message reference
+        /// </summary>
+        /// <param name="key">Reference key</param>
+        /// <param name="message">Message for notification</param>
+        /// <param name="type">Type of feedback to the client</param>
+        void AddNotification(string key, string message, MessageType type);
         /// <summary>
         /// Adds a notification to the context
         /// </summary>
