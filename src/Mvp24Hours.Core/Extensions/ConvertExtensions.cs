@@ -10,6 +10,41 @@ namespace Mvp24Hours.Core.Extensions
 {
     public static class ConvertExtensions
     {
+        public static int? ToInt(this string value, int? defaultValue = null)
+        {
+            if (!value.HasValue())
+                return null;
+            return int.TryParse(value, out int result) ? (int?)result : defaultValue;
+        }
+
+        public static long? ToLong(this string value, long? defaultValue = null)
+        {
+            if (!value.HasValue())
+                return null;
+            return long.TryParse(value, out long result) ? (long?)result : defaultValue;
+        }
+
+        public static bool? ToBoolean(this string value, bool? defaultValue = null)
+        {
+            if (!value.HasValue())
+                return null;
+            return bool.TryParse(value, out bool result) ? (bool?)result : defaultValue;
+        }
+
+        public static decimal? ToDecimal(this string value, decimal? defaultValue = null)
+        {
+            if (!value.HasValue())
+                return null;
+            return decimal.TryParse(value, out decimal result) ? (decimal?)result : defaultValue;
+        }
+
+        public static DateTime? ToDateTime(this string value, DateTime? defaultValue = null)
+        {
+            if (!value.HasValue())
+                return null;
+            return DateTime.TryParse(value, out DateTime result) ? (DateTime?)result : defaultValue;
+        }
+
         public static string NullSafe(this string target)
         {
             return (target ?? string.Empty).Trim();
