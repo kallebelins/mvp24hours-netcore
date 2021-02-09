@@ -95,6 +95,16 @@ namespace Mvp24Hours.Infrastructure.Pipe
             return default;
         }
 
+        public bool HasContent<T>()
+        {
+            return HasContent(typeof(T).Name);
+        }
+
+        public bool HasContent(string key)
+        {
+            return _contents.ContainsKey(key);
+        }
+
         public IList<object> GetContentAll()
         {
             return _contents.Values.ToList();

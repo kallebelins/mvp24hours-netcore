@@ -52,6 +52,14 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
         /// </summary>
         T GetContent<T>(string key);
         /// <summary>
+        /// Checks for content by type
+        /// </summary>
+        bool HasContent<T>();
+        /// <summary>
+        /// Checks for content by key
+        /// </summary>
+        bool HasContent(string key);
+        /// <summary>
         /// Get all content
         /// </summary>
         IList<object> GetContentAll();
