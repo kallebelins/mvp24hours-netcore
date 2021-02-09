@@ -18,11 +18,7 @@ namespace Mvp24Hours.Core.ValueObjects.Infrastructure
     public class Notification : BaseVO, IMessageResult
     {
         #region [ Ctor ]
-        public Notification(string key, string message)
-            : this(key, message, MessageType.Error)
-        {
-        }
-        public Notification(string key, string message, MessageType type)
+        public Notification(string key, string message, MessageType type = MessageType.Error)
         {
             Key = key;
             Message = message;

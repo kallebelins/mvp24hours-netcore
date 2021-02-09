@@ -8,18 +8,18 @@
         /// <summary>
         /// Resource URI
         /// </summary>
-        string Href { get; set; }
+        string Href { get; }
         /// <summary>
         /// Describes how the URI relates to the current resource
         /// </summary>
-        string Rel { get; set; }
+        string Rel { get; }
         /// <summary>
         /// Method for web request
         /// </summary>
-        string Method { get; set; }
+        string Method { get; }
         /// <summary>
         /// Indicates whether the URI is a template or definitive address
         /// </summary>
-        bool? IsTemplate { get; set; }
+        bool? IsTemplate { get; }
     }
 }

@@ -15,6 +15,7 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
     /// </summary>
     public interface IPipelineMessage
     {
+        #region [ Properties ]
         /// <summary>
         /// Indicates whether the message is blocked
         /// </summary>
@@ -22,7 +23,7 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
         /// <summary>
         /// Indicates whether the message is successfully traveling through the pipeline
         /// </summary>
-        bool IsSuccess { get; set; }
+        bool IsSuccess { get; }
         /// <summary>
         /// List of feedback messages
         /// </summary>
@@ -30,7 +31,10 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
         /// <summary>
         /// Transaction reference token
         /// </summary>
-        string Token { get; set; }
+        string Token { get; }
+        #endregion
+
+        #region [ Methods ]
         /// <summary>
         /// Adds content to be attached to the message by type
         /// </summary>
@@ -54,6 +58,15 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
         /// <summary>
         /// Blocks message for non-mandatory operations
         /// </summary>
-        void Lock();
+        void SetLock();
+        /// <summary>
+        /// Defines token content
+        /// </summary>
+        void SetToken(string token);
+        /// <summary>
+        /// Defines whether an operation failed or broke the message
+        /// </summary>
+        void SetFailure();
+        #endregion
     }
 }

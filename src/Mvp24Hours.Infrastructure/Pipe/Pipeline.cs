@@ -78,7 +78,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
         {
             return this.operations.Aggregate(input, (current, operation) =>
             {
-                current.Token = this._token;
+                current.SetToken(this._token);
                 if (!operation.IsRequired && (!current.IsSuccess || !IsValidContext) && this._isBreakOnFail)
                     return current;
                 if (current.IsLocked)
@@ -89,7 +89,6 @@ namespace Mvp24Hours.Infrastructure.Pipe
                 }
                 catch (Exception ex)
                 {
-                    current.IsSuccess = false;
                     current.Messages.Add(new MessageResult((ex?.InnerException ?? ex).Message, MessageType.Error));
                     input.AddContent(ex);
                 }

@@ -17,15 +17,21 @@ namespace Mvp24Hours.Core.DTO.Logic
     [DataContract, Serializable]
     public class SummaryResult : ISummaryResult
     {
+        public SummaryResult(int totalCount, int totalPages)
+        {
+            TotalCount = totalCount;
+            TotalPages = totalPages;
+        }
+
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.ISummaryResult.TotalCount"/>
         /// </summary>
         [DataMember]
-        public int TotalCount { get; set; }
+        public int TotalCount { get; }
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.ISummaryResult.TotalPages"/>
         /// </summary>
         [DataMember]
-        public int TotalPages { get; set; }
+        public int TotalPages { get; }
     }
 }

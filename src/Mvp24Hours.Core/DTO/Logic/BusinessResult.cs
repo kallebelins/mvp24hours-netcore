@@ -45,7 +45,7 @@ namespace Mvp24Hours.Core.DTO.Logic
         {
             get
             {
-                return data ?? (data = new List<T>());
+                return data ??= new List<T>();
             }
         }
 
@@ -58,7 +58,7 @@ namespace Mvp24Hours.Core.DTO.Logic
         {
             get
             {
-                return _messages ?? (_messages = new List<IMessageResult>());
+                return _messages ??= new List<IMessageResult>();
             }
         }
 
@@ -77,7 +77,7 @@ namespace Mvp24Hours.Core.DTO.Logic
         {
             get
             {
-                return links ?? (links = new List<ILinkResult>());
+                return links ??= new List<ILinkResult>();
             }
         }
 

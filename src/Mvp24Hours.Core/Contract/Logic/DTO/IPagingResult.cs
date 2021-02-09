@@ -8,10 +8,10 @@
         /// <summary>
         /// Pagination details
         /// </summary>
-        IPageResult Paging { get; set; }
+        IPageResult Paging { get; }
         /// <summary>
         /// Pagination summary
         /// </summary>
-        ISummaryResult Summary { get; set; }
+        ISummaryResult Summary { get; }
     }
 }

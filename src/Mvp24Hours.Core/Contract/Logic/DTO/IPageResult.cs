@@ -8,14 +8,14 @@
         /// <summary>
         /// Limit items on the page
         /// </summary>
-        int Limit { get; set; }
+        int Limit { get; }
         /// <summary>
         /// Page number or item block
         /// </summary>
-        int Offset { get; set; }
+        int Offset { get; }
         /// <summary>
         /// Quantity of items on the current page
         /// </summary>
-        int Count { get; set; }
+        int Count { get; }
     }
 }

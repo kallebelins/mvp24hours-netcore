@@ -17,25 +17,33 @@ namespace Mvp24Hours.Core.DTO.Logic
     [DataContract, Serializable]
     public class LinkResult : ILinkResult
     {
+        public LinkResult(string href, string rel, string method, bool? isTemplate = null)
+        {
+            Href = href;
+            Rel = rel;
+            Method = method;
+            IsTemplate = isTemplate;
+        }
+
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.ILinkResult.Href"/>
         /// </summary>
         [DataMember]
-        public string Href { get; set; }
+        public string Href { get; }
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.ILinkResult.Rel"/>
         /// </summary>
         [DataMember]
-        public string Rel { get; set; }
+        public string Rel { get; }
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.ILinkResult.Method"/>
         /// </summary>
         [DataMember]
-        public string Method { get; set; }
+        public string Method { get; }
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.ILinkResult.IsTemplate"/>
         /// </summary>
         [DataMember]
-        public bool? IsTemplate { get; set; }
+        public bool? IsTemplate { get; }
     }
 }

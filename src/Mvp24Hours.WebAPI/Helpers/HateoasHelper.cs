@@ -140,13 +140,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
             string url = isTemplate ? ResolveUrlTemplate(routeName, routeValues) : ResolveUrl(routeName, routeValues);
             if (!string.IsNullOrEmpty(url))
             {
-                return new LinkResult
-                {
-                    Href = url,
-                    Rel = rel,
-                    Method = method.ToString(),
-                    IsTemplate = isTemplate
-                };
+                return new LinkResult(url, rel, method.ToString(), isTemplate);
             }
             return null;
         }

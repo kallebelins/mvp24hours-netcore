@@ -21,10 +21,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
 
         public static IPagingResult<T> ToBusinessPagging<T>(this IList<T> _data, IPageResult page, ISummaryResult summary)
         {
-            var bo = new PagingResult<T>(_data);
-            bo.Paging = page;
-            bo.Summary = summary;
-            return bo;
+            return new PagingResult<T>(page, summary, _data);
         }
     }
 }

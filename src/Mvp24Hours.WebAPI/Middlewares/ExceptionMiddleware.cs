@@ -6,6 +6,8 @@
 // Reproduction or sharing is free!
 //=====================================================================================
 using Microsoft.AspNetCore.Http;
+using Mvp24Hours.Core.DTO.Logic;
+using Mvp24Hours.Core.ValueObjects.Infrastructure;
 using Mvp24Hours.Infrastructure.Helpers;
 using Mvp24Hours.Infrastructure.Logging;
 using Newtonsoft.Json;
@@ -53,12 +55,9 @@ namespace Mvp24Hours.Infrastructure.Middlewares
             else
                 message = $"Message: {(exception?.InnerException ?? exception).Message}";
 
-            var messageResult = JsonConvert.SerializeObject(new
-            {
-                HasErrors = true,
-                Errors = new string[] { message }
-            });
-
+            var boResult = new BusinessResult<Notification>();
+            boResult.Messages.Add(new Notification("internalservererror", message, Core.Enums.MessageType.Error));
+            var messageResult = ObjectHelper.Serialize(boResult);
             return context.Response.WriteAsync(messageResult);
         }
 

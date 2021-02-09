@@ -15,11 +15,35 @@ namespace Mvp24Hours.Core.ValueObjects.Infrastructure
     /// </summary>
     public class MailMessage : BaseVO
     {
-        #region [ Fields / Properties ]
+        #region [ Ctor ]
+        public MailMessage(string from, string fromName, string subject, string body, string replyTo = null)
+        {
+            From = from;
+            FromName = fromName;
+            Subject = subject;
+            Body = body;
+            ReplyTo = replyTo;
+        }
+        #endregion
+
+        #region [ Fields ]
+        IList<string> to;
+        IList<string> copyTo;
+        IList<string> copyToBackground;
+        IList<Attachment> attachments;
+        #endregion
+
+        #region [ Properties ]
         /// <summary>
         /// Gets the collection of addresses that contains the recipients of this email message.
         /// </summary>
-        public List<string> To { get; set; }
+        public IList<string> To
+        {
+            get
+            {
+                return to ??= new List<string>();
+            }
+        }
         /// <summary>
         /// Gets or sets the address for this email message.
         /// </summary>
@@ -43,15 +67,33 @@ namespace Mvp24Hours.Core.ValueObjects.Infrastructure
         /// <summary>
         /// Gets the collection of addresses that contains the CC (carbon copy) recipients of this email message.
         /// </summary>
-        public List<string> CopyTo { get; set; }
+        public IList<string> CopyTo
+        {
+            get
+            {
+                return copyTo ??= new List<string>();
+            }
+        }
         /// <summary>
         /// Gets the collection of addresses that contains the CCO recipients (with blind copy) of this email message.
         /// </summary>
-        public List<string> CopyToBackground { get; set; }
+        public IList<string> CopyToBackground
+        {
+            get
+            {
+                return copyToBackground ??= new List<string>();
+            }
+        }
         /// <summary>
         /// Gets the collection of attachments used to store data attached to this email message.
         /// </summary>
-        public List<Attachment> Attachments { get; set; }
+        public IList<Attachment> Attachments
+        {
+            get
+            {
+                return attachments ??= new List<Attachment>();
+            }
+        }
         #endregion
 
         #region [ Overrides ]

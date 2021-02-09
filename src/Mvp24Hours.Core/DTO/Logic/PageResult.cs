@@ -18,20 +18,27 @@ namespace Mvp24Hours.Core.DTO.Logic
     [DataContract, Serializable]
     public class PageResult : IPageResult
     {
+        public PageResult(int limit, int offset, int count)
+        {
+            Limit = limit;
+            Offset = offset;
+            Count = count;
+        }
+
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPageResult.Limit"/>
         /// </summary>
         [DataMember]
-        public int Limit { get; set; }
+        public int Limit { get; }
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPageResult.Offset"/>
         /// </summary>
         [DataMember]
-        public int Offset { get; set; }
+        public int Offset { get; }
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPageResult.Count"/>
         /// </summary>
         [DataMember]
-        public int Count { get; set; }
+        public int Count { get; }
     }
 }

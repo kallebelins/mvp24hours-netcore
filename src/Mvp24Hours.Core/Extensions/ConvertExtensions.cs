@@ -10,6 +10,11 @@ namespace Mvp24Hours.Core.Extensions
 {
     public static class ConvertExtensions
     {
+        public static T ToEnum<T>(this string value, T defaultValue = default) where T: Enum
+        {
+            return Enum.TryParse(typeof(T), value, true, out object result) ? (T)result : defaultValue;
+        }
+
         public static int? ToInt(this string value, int? defaultValue = null)
         {
             if (!value.HasValue())

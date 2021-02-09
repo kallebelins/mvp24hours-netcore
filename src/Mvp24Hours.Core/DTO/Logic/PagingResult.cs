@@ -20,14 +20,11 @@ namespace Mvp24Hours.Core.DTO.Logic
     {
         #region [ Ctor ]
 
-        public PagingResult()
-             : base()
+        public PagingResult(IPageResult paging, ISummaryResult summary, IList<T> data = null)
+             : base(data)
         {
-        }
-
-        public PagingResult(IList<T> data)
-            : base(data)
-        {
+            Paging = paging;
+            Summary = summary;
         }
 
         #endregion
@@ -38,12 +35,12 @@ namespace Mvp24Hours.Core.DTO.Logic
         /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPagingResult{T}.Paging"/>
         /// </summary>
         [DataMember]
-        public IPageResult Paging { get; set; }
+        public IPageResult Paging { get; }
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPagingResult{T}.Summary"/>
         /// </summary>
         [DataMember]
-        public ISummaryResult Summary { get; set; }
+        public ISummaryResult Summary { get;  }
 
         #endregion
     }

@@ -34,12 +34,12 @@ namespace Mvp24Hours.Infrastructure.Helpers
                 string logPath = ConfigurationHelper.GetSettings("Mvp24Hours:FileLog:Path");
                 if (string.IsNullOrEmpty(logPath))
                     return;
-                string filename = $"{DateTime.Today.ToString("yyyy_MM_dd")}_{Guid.NewGuid().ToString()}.log";
+                string filename = $"{DateTime.Today:yyyy_MM_dd}_{Guid.NewGuid().ToString()}.log";
                 if (!string.IsNullOrEmpty(suffixFilename))
                 {
                     filename = $"{suffixFilename.ToLower()}_{filename}";
                 }
-                var folder = $"{logPath}\\{DateTime.Today.ToString("yyyy_MM_dd")}\\";
+                var folder = $"{logPath}\\{DateTime.Today:yyyy_MM_dd}\\";
                 WriteDisk(dto, folder, filename, $"{header} Hora : {DateTime.Now.ToString("HH:mm:ss.fff")}", true);
             }
             catch (Exception ex)

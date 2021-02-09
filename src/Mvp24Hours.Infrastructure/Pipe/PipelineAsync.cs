@@ -81,7 +81,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
             return await this._operations.Aggregate(Task.FromResult(input), async (current, operation) =>
             {
                 var result = await current;
-                result.Token = this._token;
+                result.SetToken(this._token);
                 if (!operation.IsRequired && (!result.IsSuccess || !IsValidContext) && this._isBreakOnFail)
                     return result;
                 if (result.IsLocked)
@@ -92,7 +92,6 @@ namespace Mvp24Hours.Infrastructure.Pipe
                 }
                 catch (Exception ex)
                 {
-                    result.IsSuccess = false;
                     result.Messages.Add(new MessageResult((ex?.InnerException ?? ex).Message, MessageType.Error));
                     input.AddContent(ex);
                 }

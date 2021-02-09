@@ -58,16 +58,9 @@ namespace Mvp24Hours.Business.Logic
                 var items = repo.GetBy(clause, criteria);
 
                 var result = items.ToBusinessPagging(
-                    new PageResult()
-                    {
-                        Count = items.Count,
-                        Offset = offset,
-                        Limit = limit
-                    }, new SummaryResult()
-                    {
-                        TotalCount = totalCount,
-                        TotalPages = totalPages
-                    });
+                    new PageResult(limit, offset, items.Count),
+                    new SummaryResult(totalCount, totalPages)
+                );
 
                 return result;
             }
@@ -110,16 +103,9 @@ namespace Mvp24Hours.Business.Logic
                 var items = repo.List(criteria);
 
                 var result = items.ToBusinessPagging(
-                    new PageResult()
-                    {
-                        Count = items.Count,
-                        Offset = offset,
-                        Limit = limit
-                    }, new SummaryResult()
-                    {
-                        TotalCount = totalCount,
-                        TotalPages = totalPages
-                    });
+                    new PageResult(limit, offset, items.Count),
+                    new SummaryResult(totalCount, totalPages)
+                );
 
                 return result;
             }

@@ -22,7 +22,6 @@ namespace Mvp24Hours.Infrastructure.Pipe
         public PipelineMessage(params object[] args)
         {
             this._contents = new Dictionary<string, object>();
-            this.IsSuccess = true;
 
             if (args?.Count() > 0)
             {
@@ -33,18 +32,27 @@ namespace Mvp24Hours.Infrastructure.Pipe
 
         #endregion
 
-        #region [ Fields / Properties ]
-
+        #region [ Fields ]
         private Dictionary<string, object> _contents;
         private IList<IMessageResult> _messages;
+        private bool isSuccess = true;
+        #endregion
 
-        public bool IsSuccess { get; set; }
+        #region [ Properties ]
+
+        public bool IsSuccess
+        {
+            get
+            {
+                return !Messages?.Any(x => x.Type == Core.Enums.MessageType.Error) ?? isSuccess;
+            }
+        }
 
         public IList<IMessageResult> Messages
         {
             get
             {
-                return _messages ?? (_messages = new List<IMessageResult>());
+                return _messages ??= new List<IMessageResult>();
             }
         }
 
@@ -92,9 +100,19 @@ namespace Mvp24Hours.Infrastructure.Pipe
             return _contents.Values.ToList();
         }
 
-        public void Lock()
+        public void SetLock()
         {
             IsLocked = true;
+        }
+
+        public void SetToken(string token)
+        {
+            Token = token;
+        }
+
+        public void SetFailure()
+        {
+            isSuccess = false;
         }
 
         #endregion

@@ -17,7 +17,7 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations
         public override IPipelineMessage Execute(IPipelineMessage input)
         {
             if (!IsValid(input))
-                input.Lock();
+                input.SetLock();
             return input;
         }
 
