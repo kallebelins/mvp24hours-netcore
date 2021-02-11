@@ -11,9 +11,13 @@ namespace Mvp24Hours.Core.Mappings
     /// </summary>
     public class MappingProfile : Profile
     {
-        public MappingProfile()
+        public MappingProfile(Assembly assembly)
         {
-            ApplyMappingsFromAssembly(Assembly.GetExecutingAssembly());
+            foreach (var assemblyName in assembly.GetReferencedAssemblies())
+            {
+                Assembly assemblyLoaded = Assembly.Load(assemblyName);
+                ApplyMappingsFromAssembly(assemblyLoaded);
+            }
         }
 
         private void ApplyMappingsFromAssembly(Assembly assembly)

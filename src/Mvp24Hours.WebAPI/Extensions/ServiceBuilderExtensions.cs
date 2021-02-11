@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
@@ -17,6 +18,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.IO.Compression;
+using System.Reflection;
 
 namespace Mvp24Hours.WebAPI.Extensions
 {
@@ -25,6 +27,34 @@ namespace Mvp24Hours.WebAPI.Extensions
     /// </summary>
     public static class ServiceBuilderExtensions
     {
+        /// <summary>
+        /// Add all services
+        /// </summary>
+        public static IServiceCollection AddMvp24HoursAll<TDbContext>(this IServiceCollection services, Assembly assemblyMap = null, Func<IServiceProvider, TDbContext> dbFactory = null)
+            where TDbContext : DbContext
+        {
+            services.AddMvp24HoursService();
+            services.AddMvp24HoursDbService(dbFactory);
+            services.AddMvp24HoursMapService(assemblyMap);
+            services.AddMvp24HoursJsonService();
+            services.AddMvp24HoursZipService();
+            return services;
+        }
+
+        /// <summary>
+        /// Add all services async
+        /// </summary>
+        public static IServiceCollection AddMvp24HoursAllAsync<TDbContext>(this IServiceCollection services, Assembly assemblyMap = null, Func<IServiceProvider, TDbContext> dbFactory = null)
+            where TDbContext : DbContext
+        {
+            services.AddMvp24HoursService();
+            services.AddMvp24HoursDbAsyncService(dbFactory);
+            services.AddMvp24HoursMapService(assemblyMap);
+            services.AddMvp24HoursJsonService();
+            services.AddMvp24HoursZipService();
+            return services;
+        }
+
         /// <summary>
         /// Adds essential services
         /// </summary>
@@ -51,15 +81,15 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// <summary>
         /// Add database context services
         /// </summary>
-        public static IServiceCollection AddMvp24HoursDbAsyncService(this IServiceCollection services, params Type[] contextTypes)
+        public static IServiceCollection AddMvp24HoursDbAsyncService<TDbContext>(this IServiceCollection services, Func<IServiceProvider, TDbContext> dbFactory = null)
+            where TDbContext : DbContext
         {
-            foreach (var type in contextTypes)
-            {
-                services.AddScoped(type, type);
-            }
-
             services.AddScoped<IUnitOfWorkAsync>(x => new UnitOfWorkAsync());
             services.AddScoped(typeof(IRepositoryAsync<>), typeof(RepositoryAsync<>));
+            if (dbFactory != null)
+                services.AddScoped<DbContext>(dbFactory);
+            else
+                services.AddScoped<DbContext, TDbContext>();
 
             return services;
         }
@@ -67,32 +97,16 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// <summary>
         /// Add database context services
         /// </summary>
-        public static IServiceCollection AddMvp24HoursDbService(this IServiceCollection services, params Type[] contextTypes)
+        public static IServiceCollection AddMvp24HoursDbService<TDbContext>(this IServiceCollection services, Func<IServiceProvider, TDbContext> dbFactory = null)
+               where TDbContext : DbContext
         {
-            foreach (var type in contextTypes)
-            {
-                services.AddScoped(type, type);
-            }
-
             services.AddScoped<IUnitOfWork>(x => new UnitOfWork());
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            if (dbFactory != null)
+                services.AddScoped<DbContext>(dbFactory);
+            else
+                services.AddScoped<DbContext, TDbContext>();
 
-            return services;
-        }
-
-        /// <summary>
-        /// Add business services (result / criteria / paging)
-        /// </summary>
-        public static IServiceCollection AddMvp24HoursBsService(this IServiceCollection services)
-        {
-            services.AddSingleton(typeof(IBusinessResult<>), typeof(BusinessResult<>));
-            services.AddSingleton(typeof(ILinkResult), typeof(LinkResult));
-            services.AddSingleton(typeof(IMessageResult), typeof(MessageResult));
-            services.AddSingleton(typeof(IPageResult), typeof(PageResult));
-            services.AddSingleton(typeof(IPagingCriteria), typeof(PagingCriteria));
-            services.AddSingleton(typeof(IPagingCriteriaExpression<>), typeof(PagingCriteriaExpression<>));
-            services.AddSingleton(typeof(IPagingResult<>), typeof(PagingResult<>));
-            services.AddSingleton(typeof(ISummaryResult), typeof(SummaryResult));
 
             return services;
         }
@@ -100,11 +114,12 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// <summary>
         /// Add mapping services
         /// </summary>
-        public static IServiceCollection AddMvp24HoursMapService(this IServiceCollection services)
+        public static IServiceCollection AddMvp24HoursMapService(this IServiceCollection services, Assembly assemblyMap)
         {
+            Assembly local = assemblyMap ?? Assembly.GetExecutingAssembly();
             var mapperConfig = new MapperConfiguration(mc =>
             {
-                mc.AddProfile(new MappingProfile());
+                mc.AddProfile(new MappingProfile(local));
             });
 
             IMapper mapper = mapperConfig.CreateMapper();
