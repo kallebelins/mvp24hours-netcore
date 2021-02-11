@@ -5,11 +5,11 @@
 //=====================================================================================
 // Reproduction or sharing is free!
 //=====================================================================================
+using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Logging;
 using System;
 using System.Net;
 using System.Net.Mail;
-using Mvp24Hours.Infrastructure.Extensions;
 
 namespace Mvp24Hours.Infrastructure.Helpers
 {

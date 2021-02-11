@@ -6,11 +6,10 @@
 // Reproduction or sharing is free!
 //=====================================================================================
 using Microsoft.AspNetCore.Http;
-using Mvp24Hours.Core.DTO.Logic;
 using Mvp24Hours.Core.ValueObjects.Infrastructure;
+using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Helpers;
 using Mvp24Hours.Infrastructure.Logging;
-using Newtonsoft.Json;
 using System;
 using System.Net;
 using System.Threading.Tasks;

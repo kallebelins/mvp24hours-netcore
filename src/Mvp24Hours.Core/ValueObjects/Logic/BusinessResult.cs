@@ -12,18 +12,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 
-namespace Mvp24Hours.Core.DTO.Logic
+namespace Mvp24Hours.Core.ValueObjects.Logic
 {
     /// <summary>
     /// <see cref="Mvp24Hours.Core.Contract.Logic.IBusinessResult{T}"/>
     /// </summary>
     [DataContract, Serializable]
-    public class BusinessResult<T> : IBusinessResult<T>
+    public class BusinessResult<T> : BaseVO, IBusinessResult<T>
     {
         #region [ Ctor ]
 
         public BusinessResult()
         {
+        }
+
+        public BusinessResult(string token)
+            : this()
+        {
+            Token = token;
         }
 
         public BusinessResult(IList<T> data)
@@ -49,7 +55,7 @@ namespace Mvp24Hours.Core.DTO.Logic
             }
         }
 
-        private IList<IMessageResult> _messages;
+        private IList<IMessageResult> messages;
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IBusinessResult{T}.Messages"/>
         /// </summary>
@@ -58,7 +64,7 @@ namespace Mvp24Hours.Core.DTO.Logic
         {
             get
             {
-                return _messages ??= new List<IMessageResult>();
+                return messages ??= new List<IMessageResult>();
             }
         }
 
@@ -85,7 +91,19 @@ namespace Mvp24Hours.Core.DTO.Logic
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IBusinessResult{T}.Token"/>
         /// </summary>
         [DataMember]
-        public string Token { get; set; }
+        public string Token { get; private set; }
+
+        #endregion
+
+        #region [ Methods ]
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return data;
+            yield return messages;
+            yield return Token;
+            yield return links;
+        }
 
         #endregion
     }

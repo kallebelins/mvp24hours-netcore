@@ -7,16 +7,18 @@
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Logic;
 using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace Mvp24Hours.Core.DTO.Logic
+namespace Mvp24Hours.Core.ValueObjects.Logic
 {
     /// <summary>
     /// <see cref="Mvp24Hours.Core.Contract.Logic.ILinkResult"/>
     /// </summary>
     [DataContract, Serializable]
-    public class LinkResult : ILinkResult
+    public class LinkResult : BaseVO, ILinkResult
     {
+        #region [ Ctor ]
         public LinkResult(string href, string rel, string method, bool? isTemplate = null)
         {
             Href = href;
@@ -24,7 +26,9 @@ namespace Mvp24Hours.Core.DTO.Logic
             Method = method;
             IsTemplate = isTemplate;
         }
+        #endregion
 
+        #region [ Properties ]
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.ILinkResult.Href"/>
         /// </summary>
@@ -45,5 +49,16 @@ namespace Mvp24Hours.Core.DTO.Logic
         /// </summary>
         [DataMember]
         public bool? IsTemplate { get; }
+        #endregion
+
+        #region [ Methods ]
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Href;
+            yield return Rel;
+            yield return Method;
+            yield return IsTemplate;
+        }
+        #endregion
     }
 }

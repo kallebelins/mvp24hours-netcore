@@ -39,7 +39,7 @@ namespace Mvp24Hours.Core.Contract.Data
         /// Gets all representations of the entity typed with criteria.
         /// </summary>
         /// <returns>List of entities</returns>
-        IList<T> List(IPagingCriteria<T> criteria);
+        IList<T> List(IPagingCriteria criteria);
         /// <summary>
         /// Checks whether any records returned by the GetBy() method.
         /// </summary>
@@ -61,7 +61,7 @@ namespace Mvp24Hours.Core.Contract.Data
         /// </summary>
         /// <param name="clause">Filter</param>
         /// <returns>Number of representations</returns>
-        IList<T> GetBy(Expression<Func<T, bool>> clause, IPagingCriteria<T> criteria);
+        IList<T> GetBy(Expression<Func<T, bool>> clause, IPagingCriteria criteria);
         /// <summary>
         /// Gets a representation of the typed entity.
         /// </summary>
@@ -73,6 +73,6 @@ namespace Mvp24Hours.Core.Contract.Data
         /// </summary>
         /// <param name="id">Identifier of entity</param>
         /// <returns>A representation of the entity</returns>
-        T GetById(object id, IPagingCriteria<T> criteria);
+        T GetById(object id, IPagingCriteria criteria);
     }
 }

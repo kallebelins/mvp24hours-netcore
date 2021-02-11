@@ -66,9 +66,9 @@ namespace Mvp24Hours.Business.Logic
         }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.ListAsync(IPagingCriteria{T})"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.ListAsync(IPagingCriteria)"/>
         /// </summary>
-        public virtual Task<IList<T>> ListAsync(IPagingCriteria<T> criteria)
+        public virtual Task<IList<T>> ListAsync(IPagingCriteria criteria)
         {
             try
             {
@@ -122,9 +122,9 @@ namespace Mvp24Hours.Business.Logic
         }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.GetByAsync(Expression{Func{T, bool}}, IPagingCriteria{T})"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.GetByAsync(Expression{Func{T, bool}}, IPagingCriteria)"/>
         /// </summary>
-        public virtual Task<IList<T>> GetByAsync(Expression<Func<T, bool>> clause, IPagingCriteria<T> criteria)
+        public virtual Task<IList<T>> GetByAsync(Expression<Func<T, bool>> clause, IPagingCriteria criteria)
         {
             try
             {
@@ -146,9 +146,9 @@ namespace Mvp24Hours.Business.Logic
         }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.GetByIdAsync(int, IPagingCriteria{T})"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.GetByIdAsync(int, IPagingCriteria)"/>
         /// </summary>
-        public virtual Task<T> GetByIdAsync(object id, IPagingCriteria<T> criteria)
+        public virtual Task<T> GetByIdAsync(object id, IPagingCriteria criteria)
         {
             try
             {

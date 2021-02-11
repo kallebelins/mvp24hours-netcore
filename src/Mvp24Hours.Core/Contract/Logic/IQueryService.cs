@@ -30,9 +30,9 @@ namespace Mvp24Hours.Core.Contract.Logic
         /// </summary>
         IList<T> List();
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{T}.List(IPagingCriteria{T})"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{T}.List(IPagingCriteria)"/>
         /// </summary>
-        IList<T> List(IPagingCriteria<T> criteria);
+        IList<T> List(IPagingCriteria criteria);
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{T}.GetByCount(Expression{Func{T, bool}})"/>
         /// </summary>
@@ -42,16 +42,16 @@ namespace Mvp24Hours.Core.Contract.Logic
         /// </summary>
         IList<T> GetBy(Expression<Func<T, bool>> clause);
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{T}.GetBy(Expression{Func{T, bool}}, IPagingCriteria{T})"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{T}.GetBy(Expression{Func{T, bool}}, IPagingCriteria)"/>
         /// </summary>
-        IList<T> GetBy(Expression<Func<T, bool>> clause, IPagingCriteria<T> criteria);
+        IList<T> GetBy(Expression<Func<T, bool>> clause, IPagingCriteria criteria);
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{T}.GetById(int)"/>
         /// </summary>
         T GetById(object id);
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{T}.GetById(int, IPagingCriteria{T})"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{T}.GetById(int, IPagingCriteria)"/>
         /// </summary>
-        T GetById(object id, IPagingCriteria<T> criteria);
+        T GetById(object id, IPagingCriteria criteria);
     }
 }

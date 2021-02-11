@@ -59,9 +59,9 @@ namespace Mvp24Hours.Infrastructure.Data
         }
 
         /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQuery.List(IPagingCriteria{T})"/>
+        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQuery.List(IPagingCriteria)"/>
         /// </summary>
-        public IList<T> List(IPagingCriteria<T> clause)
+        public IList<T> List(IPagingCriteria clause)
         {
             return GetQuery(clause).ToList();
         }
@@ -95,9 +95,9 @@ namespace Mvp24Hours.Infrastructure.Data
         }
 
         /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQuery.GetBy(Expression{Func{T, bool}}, IPagingCriteria{T})"/>
+        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQuery.GetBy(Expression{Func{T, bool}}, IPagingCriteria)"/>
         /// </summary>
-        public IList<T> GetBy(Expression<Func<T, bool>> clause, IPagingCriteria<T> criteria)
+        public IList<T> GetBy(Expression<Func<T, bool>> clause, IPagingCriteria criteria)
         {
             var query = this.dbEntities.AsQueryable();
             query = query.Where(clause);
@@ -113,9 +113,9 @@ namespace Mvp24Hours.Infrastructure.Data
         }
 
         /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQuery.GetById(int, IPagingCriteria{T})"/>
+        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQuery.GetById(int, IPagingCriteria)"/>
         /// </summary>
-        public T GetById(object id, IPagingCriteria<T> clause)
+        public T GetById(object id, IPagingCriteria clause)
         {
             return GetDynamicFilter(GetQuery(clause, true), GetKeyInfo(), id).SingleOrDefault();
         }

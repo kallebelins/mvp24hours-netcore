@@ -37,7 +37,7 @@ namespace Mvp24Hours.Core.Contract.Logic
         /// Gets all representations of the entity typed with criteria.
         /// </summary>
         /// <returns>List of entities</returns>
-        Task<IList<T>> ListAsync(IPagingCriteria<T> criteria);
+        Task<IList<T>> ListAsync(IPagingCriteria criteria);
         /// <summary>
         /// Checks whether any records returned by the GetBy() method.
         /// </summary>
@@ -59,7 +59,7 @@ namespace Mvp24Hours.Core.Contract.Logic
         /// </summary>
         /// <param name="clause">Filter</param>
         /// <returns>Number of representations</returns>
-        Task<IList<T>> GetByAsync(Expression<Func<T, bool>> clause, IPagingCriteria<T> criteria);
+        Task<IList<T>> GetByAsync(Expression<Func<T, bool>> clause, IPagingCriteria criteria);
         /// <summary>
         /// Gets a representation of the typed entity.
         /// </summary>
@@ -71,6 +71,6 @@ namespace Mvp24Hours.Core.Contract.Logic
         /// </summary>
         /// <param name="id">Identifier of entity</param>
         /// <returns>A representation of the entity</returns>
-        Task<T> GetByIdAsync(object id, IPagingCriteria<T> criteria);
+        Task<T> GetByIdAsync(object id, IPagingCriteria criteria);
     }
 }

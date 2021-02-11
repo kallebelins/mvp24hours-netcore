@@ -7,8 +7,8 @@
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
-using Mvp24Hours.Core.DTO.Logic;
 using Mvp24Hours.Core.Enums;
+using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Helpers;
 using System;
 using System.Collections.Generic;

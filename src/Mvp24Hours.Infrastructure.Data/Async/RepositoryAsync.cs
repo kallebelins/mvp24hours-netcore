@@ -50,7 +50,7 @@ namespace Mvp24Hours.Infrastructure.Data
             return ListAsync(null);
         }
 
-        public async Task<IList<T>> ListAsync(IPagingCriteria<T> clause)
+        public async Task<IList<T>> ListAsync(IPagingCriteria clause)
         {
             return await GetQuery(clause).ToListAsync();
         }
@@ -74,7 +74,7 @@ namespace Mvp24Hours.Infrastructure.Data
             return GetByAsync(clause, null);
         }
 
-        public async Task<IList<T>> GetByAsync(Expression<Func<T, bool>> clause, IPagingCriteria<T> criteria)
+        public async Task<IList<T>> GetByAsync(Expression<Func<T, bool>> clause, IPagingCriteria criteria)
         {
             var query = this.dbEntities.AsQueryable();
             query = query.Where(clause);
@@ -86,7 +86,7 @@ namespace Mvp24Hours.Infrastructure.Data
             return GetByIdAsync(id, null);
         }
 
-        public Task<T> GetByIdAsync(object id, IPagingCriteria<T> clause)
+        public Task<T> GetByIdAsync(object id, IPagingCriteria clause)
         {
             return GetDynamicFilter(GetQuery(clause, true), GetKeyInfo(), id).SingleOrDefaultAsync();
         }

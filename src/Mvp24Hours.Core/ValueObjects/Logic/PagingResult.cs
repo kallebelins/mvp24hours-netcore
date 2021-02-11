@@ -10,7 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace Mvp24Hours.Core.DTO.Logic
+namespace Mvp24Hours.Core.ValueObjects.Logic
 {
     /// <summary>
     /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPagingResult{T}"/>
@@ -40,8 +40,17 @@ namespace Mvp24Hours.Core.DTO.Logic
         /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPagingResult{T}.Summary"/>
         /// </summary>
         [DataMember]
-        public ISummaryResult Summary { get;  }
+        public ISummaryResult Summary { get; }
 
+        #endregion
+
+        #region [ Methods ]
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Paging;
+            yield return Summary;
+            yield return base.GetEqualityComponents();
+        }
         #endregion
     }
 }

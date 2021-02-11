@@ -27,6 +27,6 @@ namespace Mvp24Hours.Core.Contract.Logic
         /// <summary>
         /// Transaction reference token
         /// </summary>
-        string Token { get; set; }
+        string Token { get; }
     }
 }

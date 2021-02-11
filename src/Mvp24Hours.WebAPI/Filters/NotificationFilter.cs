@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
-using Mvp24Hours.Core.DTO.Logic;
 using Mvp24Hours.Core.ValueObjects.Infrastructure;
+using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Helpers;
 using System.Net;
 using System.Threading.Tasks;

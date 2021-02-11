@@ -198,7 +198,7 @@ namespace Mvp24Hours.WebAPI.Extensions
             return result;
         }
 
-        public static IPagingResult<T> AddLinkSelf<T, U>(this IPagingResult<T> result, string routeName, IPagingCriteria<U> Paging)
+        public static IPagingResult<T> AddLinkSelf<T>(this IPagingResult<T> result, string routeName, IPagingCriteria Paging)
         {
             if (!string.IsNullOrEmpty(routeName))
             {
@@ -209,7 +209,7 @@ namespace Mvp24Hours.WebAPI.Extensions
             return result;
         }
 
-        public static IPagingResult<T> AddLinkSelf<T, U>(this IPagingResult<T> result, string routeName, IPagingCriteria<U> Paging, HateoasMethodType method)
+        public static IPagingResult<T> AddLinkSelf<T>(this IPagingResult<T> result, string routeName, IPagingCriteria Paging, HateoasMethodType method)
         {
             if (!string.IsNullOrEmpty(routeName))
             {
@@ -257,7 +257,7 @@ namespace Mvp24Hours.WebAPI.Extensions
             return result;
         }
 
-        public static IPagingResult<T> AddLinkCollection<T, U>(this IPagingResult<T> result, string routeName, IPagingCriteria<U> Paging)
+        public static IPagingResult<T> AddLinkCollection<T>(this IPagingResult<T> result, string routeName, IPagingCriteria Paging)
         {
             if (!string.IsNullOrEmpty(routeName))
             {
@@ -268,7 +268,7 @@ namespace Mvp24Hours.WebAPI.Extensions
             return result;
         }
 
-        public static IPagingResult<T> AddLinkCollection<T, U>(this IPagingResult<T> result, string routeName, IPagingCriteria<U> Paging, HateoasMethodType method)
+        public static IPagingResult<T> AddLinkCollection<T>(this IPagingResult<T> result, string routeName, IPagingCriteria Paging, HateoasMethodType method)
         {
             if (!string.IsNullOrEmpty(routeName))
             {
@@ -283,13 +283,13 @@ namespace Mvp24Hours.WebAPI.Extensions
 
         #region [ Paging ]
 
-        public static IPagingResult<T> AddLinkPaging<T, U>(this IPagingResult<T> result, string routeName, IPagingCriteria<U> Paging)
+        public static IPagingResult<T> AddLinkPaging<T>(this IPagingResult<T> result, string routeName, IPagingCriteria Paging)
         {
             AddLinkPaging(result, routeName, Paging, HateoasMethodType.GET);
             return result;
         }
 
-        public static IPagingResult<T> AddLinkPaging<T, U>(this IPagingResult<T> result, string routeName, IPagingCriteria<U> Paging, HateoasMethodType method)
+        public static IPagingResult<T> AddLinkPaging<T>(this IPagingResult<T> result, string routeName, IPagingCriteria Paging, HateoasMethodType method)
         {
             var link = HateoasHelper.CreateLink(routeName, result, Paging, HateoasType.First, method);
             if (link != null)

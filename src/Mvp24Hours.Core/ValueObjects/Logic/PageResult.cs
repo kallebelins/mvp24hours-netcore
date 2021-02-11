@@ -8,23 +8,27 @@
 
 using Mvp24Hours.Core.Contract.Logic.DTO;
 using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace Mvp24Hours.Core.DTO.Logic
+namespace Mvp24Hours.Core.ValueObjects.Logic
 {
     /// <summary>
     /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPageResult"/>
     /// </summary>
     [DataContract, Serializable]
-    public class PageResult : IPageResult
+    public class PageResult : BaseVO, IPageResult
     {
+        #region [ Ctor ]
         public PageResult(int limit, int offset, int count)
         {
             Limit = limit;
             Offset = offset;
             Count = count;
         }
+        #endregion
 
+        #region [ Properties ]
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPageResult.Limit"/>
         /// </summary>
@@ -40,5 +44,15 @@ namespace Mvp24Hours.Core.DTO.Logic
         /// </summary>
         [DataMember]
         public int Count { get; }
+        #endregion
+
+        #region [ Methods ]
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Limit;
+            yield return Offset;
+            yield return Count;
+        }
+        #endregion
     }
 }

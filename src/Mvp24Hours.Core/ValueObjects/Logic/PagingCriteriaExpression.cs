@@ -12,45 +12,30 @@ using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 
-namespace Mvp24Hours.Core.DTO.Logic
+namespace Mvp24Hours.Core.ValueObjects.Logic
 {
     /// <summary>
-    /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPagingCriteria{T}"/>
+    /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPagingCriteria"/>
     /// </summary>
     [DataContract, Serializable]
-    public class PagingCriteria<T> : IPagingCriteria<T>
+    public class PagingCriteriaExpression<T> : PagingCriteria, IPagingCriteriaExpression<T>
     {
         #region [ Ctor ]
-        public PagingCriteria(int limit, int offset)
+        public PagingCriteriaExpression(int limit, int offset, IList<string> orderBy = null, IList<string> navigation = null)
+            : base(limit, offset, orderBy, navigation)
         {
-            Limit = limit;
-            Offset = offset;
         }
         #endregion
 
         #region [ Fields ]
         private IList<Expression<Func<T, dynamic>>> orderByAscendingExpr;
         private IList<Expression<Func<T, dynamic>>> orderByDescendingExpr;
-        private IList<string> orderBy;
         private IList<Expression<Func<T, dynamic>>> navigationExpr;
-        private IList<string> navigation;
         #endregion
 
         #region [ Properties ]
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPagingCriteria{T}.Limit"/>
-        /// </summary>
-        [DataMember]
-        public int Limit { get; }
-
-        /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPagingCriteria{T}.Offset"/>
-        /// </summary>
-        [DataMember]
-        public int Offset { get; }
-
-        /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPagingCriteria{T}.OrderByAscendingExpr"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPagingCriteria.OrderByAscendingExpr"/>
         /// </summary>
         [IgnoreDataMember]
         [JsonIgnore]
@@ -61,9 +46,8 @@ namespace Mvp24Hours.Core.DTO.Logic
                 return orderByAscendingExpr ??= new List<Expression<Func<T, dynamic>>>();
             }
         }
-
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPagingCriteria{T}.OrderByDescendingExpr"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPagingCriteria.OrderByDescendingExpr"/>
         /// </summary>
         [IgnoreDataMember]
         [JsonIgnore]
@@ -74,21 +58,8 @@ namespace Mvp24Hours.Core.DTO.Logic
                 return orderByDescendingExpr ??= new List<Expression<Func<T, dynamic>>>();
             }
         }
-
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPagingCriteria{T}.OrderBy"/>
-        /// </summary>
-        [DataMember]
-        public IList<string> OrderBy
-        {
-            get
-            {
-                return orderBy ??= new List<string>();
-            }
-        }
-
-        /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPagingCriteria{T}.NavigationExpr"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPagingCriteria.NavigationExpr"/>
         /// </summary>
         [IgnoreDataMember]
         [JsonIgnore]
@@ -99,17 +70,15 @@ namespace Mvp24Hours.Core.DTO.Logic
                 return navigationExpr ??= new List<Expression<Func<T, dynamic>>>();
             }
         }
+        #endregion
 
-        /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPagingCriteria{T}.Navigation"/>
-        /// </summary>
-        [DataMember]
-        public IList<string> Navigation
+        #region [ Methods ]
+        protected override IEnumerable<object> GetEqualityComponents()
         {
-            get
-            {
-                return navigation ??= new List<string>();
-            }
+            yield return orderByAscendingExpr;
+            yield return orderByDescendingExpr;
+            yield return navigationExpr;
+            yield return base.GetEqualityComponents();
         }
         #endregion
     }

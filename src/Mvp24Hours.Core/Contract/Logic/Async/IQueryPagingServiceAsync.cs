@@ -22,16 +22,16 @@ namespace Mvp24Hours.Core.Contract.Logic
         /// </summary>
         Task<IPagingResult<T>> PagingListAsync();
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync{T}.ListAsync(IPagingCriteria{T})"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync{T}.ListAsync(IPagingCriteria)"/>
         /// </summary>
-        Task<IPagingResult<T>> PagingListAsync(IPagingCriteria<T> clause);
+        Task<IPagingResult<T>> PagingListAsync(IPagingCriteria clause);
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync{T}.GetByAsync(Expression{Func{T, bool}})"/>
         /// </summary>
         Task<IPagingResult<T>> PagingGetByAsync(Expression<Func<T, bool>> clause);
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync{T}.GetByAsync(Expression{Func{T, bool}}, IPagingCriteria{T})"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync{T}.GetByAsync(Expression{Func{T, bool}}, IPagingCriteria)"/>
         /// </summary>
-        Task<IPagingResult<T>> PagingGetByAsync(Expression<Func<T, bool>> clause, IPagingCriteria<T> criteria);
+        Task<IPagingResult<T>> PagingGetByAsync(Expression<Func<T, bool>> clause, IPagingCriteria criteria);
     }
 }

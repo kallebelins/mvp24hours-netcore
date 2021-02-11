@@ -11,9 +11,9 @@
     <PackageProjectUrl>https://github.com/kallebelins</PackageProjectUrl>
     <Company>Kallebe Lins</Company>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>1.0.7</Version>
-    <AssemblyVersion>1.0.7.0</AssemblyVersion>
-    <FileVersion>1.0.7.0</FileVersion>
+    <Version>1.0.8</Version>
+    <AssemblyVersion>1.0.8.0</AssemblyVersion>
+    <FileVersion>1.0.8.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 

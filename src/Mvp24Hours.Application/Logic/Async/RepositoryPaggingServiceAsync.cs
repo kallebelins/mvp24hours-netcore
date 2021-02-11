@@ -9,7 +9,7 @@ using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.Logic;
 using Mvp24Hours.Core.Contract.Logic.DTO;
-using Mvp24Hours.Core.DTO.Logic;
+using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Extensions;
 using System;
 using System.Linq.Expressions;
@@ -33,9 +33,9 @@ namespace Mvp24Hours.Business.Logic
         }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.GetByAsync(Expression{Func{T, bool}}, IPagingCriteria{T})"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.GetByAsync(Expression{Func{T, bool}}, IPagingCriteria)"/>
         /// </summary>
-        public virtual async Task<IPagingResult<T>> PagingGetByAsync(Expression<Func<T, bool>> clause, IPagingCriteria<T> criteria)
+        public virtual async Task<IPagingResult<T>> PagingGetByAsync(Expression<Func<T, bool>> clause, IPagingCriteria criteria)
         {
             try
             {
@@ -56,7 +56,7 @@ namespace Mvp24Hours.Business.Logic
                 var items = await repo.GetByAsync(clause, criteria);
 
                 var result = await items.ToBusinessPaggingAsync(
-                    new PageResult(limit, offset, items.Count), 
+                    new PageResult(limit, offset, items.Count),
                     new SummaryResult(totalCount, totalPages)
                 );
 
@@ -78,9 +78,9 @@ namespace Mvp24Hours.Business.Logic
         }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.ListAsync(IPagingCriteria{T})"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.ListAsync(IPagingCriteria)"/>
         /// </summary>
-        public async virtual Task<IPagingResult<T>> PagingListAsync(IPagingCriteria<T> criteria)
+        public async virtual Task<IPagingResult<T>> PagingListAsync(IPagingCriteria criteria)
         {
             try
             {

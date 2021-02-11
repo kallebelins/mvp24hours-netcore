@@ -55,7 +55,7 @@ namespace Mvp24Hours.Infrastructure.Data
         /// <summary>
         /// Gets database query with clause and aggregation of relationships
         /// </summary>
-        protected IQueryable<T> GetQuery(IPagingCriteria<T> clause, bool onlyNavigation = false)
+        protected IQueryable<T> GetQuery(IPagingCriteria clause, bool onlyNavigation = false)
         {
             // cria query
             var query = this.dbEntities.AsQueryable();
@@ -64,18 +64,23 @@ namespace Mvp24Hours.Infrastructure.Data
         /// <summary>
         /// Gets database query with clause and aggregation of relationships
         /// </summary>
-        protected IQueryable<T> GetQuery(IQueryable<T> query, IPagingCriteria<T> clause, bool onlyNavigation = false)
+        protected IQueryable<T> GetQuery(IQueryable<T> query, IPagingCriteria clause, bool onlyNavigation = false)
         {
             var ordered = false;
 
             if (clause != null)
             {
-                // navigation by expression
-                if (clause.NavigationExpr != null && clause.NavigationExpr.Count > 0)
+                // navigation
+                if (clause is IPagingCriteriaExpression<T>)
                 {
-                    foreach (var nav in clause.NavigationExpr)
+                    var clauseExpr = clause as IPagingCriteriaExpression<T>;
+                    // navigation by expression
+                    if (clauseExpr.NavigationExpr != null && clauseExpr.NavigationExpr.Count > 0)
                     {
-                        query = query.Include(nav);
+                        foreach (var nav in clauseExpr.NavigationExpr)
+                        {
+                            query = query.Include(nav);
+                        }
                     }
                 }
 
@@ -97,42 +102,47 @@ namespace Mvp24Hours.Infrastructure.Data
 
                 if (clause != null)
                 {
-                    // ordination by ascending expression
-                    if (clause.OrderByAscendingExpr != null && clause.OrderByAscendingExpr.Count > 0)
+                    // ordination
+                    if (clause is IPagingCriteriaExpression<T>)
                     {
-                        IOrderedQueryable<T> queryOrdered = null;
-                        foreach (var ord in clause.OrderByAscendingExpr)
+                        var clauseExpr = clause as IPagingCriteriaExpression<T>;
+                        // ordination by ascending expression
+                        if (clauseExpr.OrderByAscendingExpr != null && clauseExpr.OrderByAscendingExpr.Count > 0)
                         {
-                            if (queryOrdered == null)
+                            IOrderedQueryable<T> queryOrdered = null;
+                            foreach (var ord in clauseExpr.OrderByAscendingExpr)
                             {
-                                ordered = true;
-                                queryOrdered = query.OrderBy(ord);
+                                if (queryOrdered == null)
+                                {
+                                    ordered = true;
+                                    queryOrdered = query.OrderBy(ord);
+                                }
+                                else
+                                {
+                                    queryOrdered = queryOrdered.ThenBy(ord);
+                                }
                             }
-                            else
-                            {
-                                queryOrdered = queryOrdered.ThenBy(ord);
-                            }
+                            query = queryOrdered ?? query;
                         }
-                        query = queryOrdered ?? query;
-                    }
 
-                    // ordination by descending expression
-                    if (clause.OrderByDescendingExpr != null && clause.OrderByDescendingExpr.Count > 0)
-                    {
-                        IOrderedQueryable<T> queryOrdered = null;
-                        foreach (var ord in clause.OrderByDescendingExpr)
+                        // ordination by descending expression
+                        if (clauseExpr.OrderByDescendingExpr != null && clauseExpr.OrderByDescendingExpr.Count > 0)
                         {
-                            if (queryOrdered == null)
+                            IOrderedQueryable<T> queryOrdered = null;
+                            foreach (var ord in clauseExpr.OrderByDescendingExpr)
                             {
-                                ordered = true;
-                                queryOrdered = query.OrderByDescending(ord);
+                                if (queryOrdered == null)
+                                {
+                                    ordered = true;
+                                    queryOrdered = query.OrderByDescending(ord);
+                                }
+                                else
+                                {
+                                    queryOrdered = queryOrdered.ThenByDescending(ord);
+                                }
                             }
-                            else
-                            {
-                                queryOrdered = queryOrdered.ThenByDescending(ord);
-                            }
+                            query = queryOrdered ?? query;
                         }
-                        query = queryOrdered ?? query;
                     }
 
                     // ordination by string

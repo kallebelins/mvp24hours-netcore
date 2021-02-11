@@ -67,9 +67,9 @@ namespace Mvp24Hours.Business.Logic
         }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.List(IPagingCriteria{T})"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.List(IPagingCriteria)"/>
         /// </summary>
-        public virtual IList<T> List(IPagingCriteria<T> criteria)
+        public virtual IList<T> List(IPagingCriteria criteria)
         {
             try
             {
@@ -107,9 +107,9 @@ namespace Mvp24Hours.Business.Logic
         }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.GetBy(Expression{Func{T, bool}}, IPagingCriteria{T})"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.GetBy(Expression{Func{T, bool}}, IPagingCriteria)"/>
         /// </summary>
-        public virtual IList<T> GetBy(Expression<Func<T, bool>> clause, IPagingCriteria<T> criteria)
+        public virtual IList<T> GetBy(Expression<Func<T, bool>> clause, IPagingCriteria criteria)
         {
             try
             {
@@ -131,9 +131,9 @@ namespace Mvp24Hours.Business.Logic
         }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.GetById(int, IPagingCriteria{T})"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.GetById(int, IPagingCriteria)"/>
         /// </summary>
-        public virtual T GetById(object id, IPagingCriteria<T> criteria)
+        public virtual T GetById(object id, IPagingCriteria criteria)
         {
             try
             {

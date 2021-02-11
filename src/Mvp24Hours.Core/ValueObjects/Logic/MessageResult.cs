@@ -8,16 +8,18 @@
 using Mvp24Hours.Core.Contract.Logic.DTO;
 using Mvp24Hours.Core.Enums;
 using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace Mvp24Hours.Core.DTO.Logic
+namespace Mvp24Hours.Core.ValueObjects.Logic
 {
     /// <summary>
     /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IMessageResult"/>
     /// </summary>
     [DataContract, Serializable]
-    public class MessageResult : IMessageResult
+    public class MessageResult : BaseVO, IMessageResult
     {
+        #region [ Ctor ]
         public MessageResult(string message, MessageType messageType)
             : this(Guid.NewGuid().ToString(), message, messageType)
         {
@@ -29,7 +31,9 @@ namespace Mvp24Hours.Core.DTO.Logic
             Message = message;
             Type = messageType;
         }
+        #endregion
 
+        #region [ Properties ]
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IMessageResult.Key"/>
         /// </summary>
@@ -45,5 +49,15 @@ namespace Mvp24Hours.Core.DTO.Logic
         /// </summary>
         [DataMember]
         public MessageType Type { get; }
+        #endregion
+
+        #region [ Methods ]
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Key;
+            yield return Message;
+            yield return Type;
+        }
+        #endregion
     }
 }

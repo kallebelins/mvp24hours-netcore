@@ -8,8 +8,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Mvp24Hours.Core.Contract.Logic;
 using Mvp24Hours.Core.Contract.Logic.DTO;
-using Mvp24Hours.Core.DTO.Logic;
 using Mvp24Hours.Core.Enums.Infrastructure;
+using Mvp24Hours.Core.ValueObjects.Logic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -149,12 +149,12 @@ namespace Mvp24Hours.Infrastructure.Helpers
 
         #region [ Paging Link ]
 
-        public static ILinkResult CreateLink<T, U>(string routeName, IPagingResult<T> result, IPagingCriteria<U> Paging, HateoasType type)
+        public static ILinkResult CreateLink<T>(string routeName, IPagingResult<T> result, IPagingCriteria Paging, HateoasType type)
         {
-            return CreateLink<T, U>(routeName, result, Paging, type, HateoasMethodType.GET);
+            return CreateLink<T>(routeName, result, Paging, type, HateoasMethodType.GET);
         }
 
-        public static ILinkResult CreateLink<T, U>(string routeName, IPagingResult<T> result, IPagingCriteria<U> Paging, HateoasType type, HateoasMethodType method)
+        public static ILinkResult CreateLink<T>(string routeName, IPagingResult<T> result, IPagingCriteria Paging, HateoasType type, HateoasMethodType method)
         {
             if (type == HateoasType.Self)
             {

@@ -7,7 +7,7 @@
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Core.Contract.Logic;
-using Mvp24Hours.Core.DTO.Logic;
+using Mvp24Hours.Core.ValueObjects.Logic;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -20,7 +20,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
         /// </summary>
         public static IBusinessResult<T> ToBusiness<T>(this IPipelineMessage message)
         {
-            IBusinessResult<T> bo = new BusinessResult<T>();
+            IBusinessResult<T> bo = new BusinessResult<T>(message.Token);
             if (message != null)
             {
                 var item = message.GetContent<T>();
@@ -35,7 +35,6 @@ namespace Mvp24Hours.Infrastructure.Extensions
                 }
                 message.Messages?.ToList()?.ForEach(item => bo.Messages.Add(item));
             }
-            bo.Token = message.Token;
             return bo;
         }
         /// <summary>

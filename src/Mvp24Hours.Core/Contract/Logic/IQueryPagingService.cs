@@ -21,16 +21,16 @@ namespace Mvp24Hours.Core.Contract.Logic
         /// </summary>
         IPagingResult<T> PagingList();
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{T}.List(IPagingCriteria{T})"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{T}.List(IPagingCriteria)"/>
         /// </summary>
-        IPagingResult<T> PagingList(IPagingCriteria<T> clause);
+        IPagingResult<T> PagingList(IPagingCriteria clause);
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{T}.GetBy(Expression{Func{T, bool}})"/>
         /// </summary>
         IPagingResult<T> PagingGetBy(Expression<Func<T, bool>> clause);
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{T}.GetBy(Expression{Func{T, bool}}, IPagingCriteria{T})"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{T}.GetBy(Expression{Func{T, bool}}, IPagingCriteria)"/>
         /// </summary>
-        IPagingResult<T> PagingGetBy(Expression<Func<T, bool>> clause, IPagingCriteria<T> criteria);
+        IPagingResult<T> PagingGetBy(Expression<Func<T, bool>> clause, IPagingCriteria criteria);
     }
 }

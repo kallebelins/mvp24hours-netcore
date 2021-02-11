@@ -6,7 +6,7 @@
 // Reproduction or sharing is free!
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Logic.DTO;
-using Mvp24Hours.Core.DTO.Logic;
+using Mvp24Hours.Core.ValueObjects.Logic;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

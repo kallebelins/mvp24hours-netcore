@@ -10,7 +10,7 @@ namespace Mvp24Hours.Core.Extensions
 {
     public static class ConvertExtensions
     {
-        public static T ToEnum<T>(this string value, T defaultValue = default) where T: Enum
+        public static T ToEnum<T>(this string value, T defaultValue = default) where T : Enum
         {
             return Enum.TryParse(typeof(T), value, true, out object result) ? (T)result : defaultValue;
         }

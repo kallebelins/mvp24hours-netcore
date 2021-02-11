@@ -9,7 +9,7 @@ using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.Logic;
 using Mvp24Hours.Core.Contract.Logic.DTO;
-using Mvp24Hours.Core.DTO.Logic;
+using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Extensions;
 using System;
 using System.Linq.Expressions;
@@ -35,9 +35,9 @@ namespace Mvp24Hours.Business.Logic
         }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.GetBy(Expression{Func{T, bool}}, IPagingCriteria{T})"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.GetBy(Expression{Func{T, bool}}, IPagingCriteria)"/>
         /// </summary>
-        public virtual IPagingResult<T> PagingGetBy(Expression<Func<T, bool>> clause, IPagingCriteria<T> criteria)
+        public virtual IPagingResult<T> PagingGetBy(Expression<Func<T, bool>> clause, IPagingCriteria criteria)
         {
             try
             {
@@ -80,9 +80,9 @@ namespace Mvp24Hours.Business.Logic
         }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.List(IPagingCriteria{T})"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.List(IPagingCriteria)"/>
         /// </summary>
-        public virtual IPagingResult<T> PagingList(IPagingCriteria<T> criteria)
+        public virtual IPagingResult<T> PagingList(IPagingCriteria criteria)
         {
             try
             {
