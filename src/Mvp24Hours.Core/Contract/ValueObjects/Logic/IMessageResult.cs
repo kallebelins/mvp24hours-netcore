@@ -1,6 +1,6 @@
 ﻿using Mvp24Hours.Core.Enums;
 
-namespace Mvp24Hours.Core.Contract.Logic.DTO
+namespace Mvp24Hours.Core.Contract.ValueObjects.Logic
 {
     /// <summary>
     /// Reply message template

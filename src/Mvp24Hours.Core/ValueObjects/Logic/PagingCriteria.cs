@@ -5,7 +5,7 @@
 //=====================================================================================
 // Reproduction or sharing is free!
 //=====================================================================================
-using Mvp24Hours.Core.Contract.Logic.DTO;
+using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -13,63 +13,49 @@ using System.Runtime.Serialization;
 namespace Mvp24Hours.Core.ValueObjects.Logic
 {
     /// <summary>
-    /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPagingCriteria"/>
+    /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IPagingCriteria"/>
     /// </summary>
     [DataContract, Serializable]
     public class PagingCriteria : BaseVO, IPagingCriteria
     {
         #region [ Ctor ]
-        public PagingCriteria(int limit, int offset, IList<string> orderBy = null, IList<string> navigation = null)
+        public PagingCriteria(
+            int limit,
+            int offset,
+            IReadOnlyCollection<string> orderBy = null,
+            IReadOnlyCollection<string> navigation = null)
         {
             Limit = limit;
             Offset = offset;
-            _orderBy = orderBy;
-            _navigation = navigation;
-
+            OrderBy = orderBy;
+            Navigation = navigation;
         }
-        #endregion
-
-        #region [ Fields ]
-        private IList<string> _orderBy;
-        private IList<string> _navigation;
         #endregion
 
         #region [ Properties ]
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPagingCriteria.Limit"/>
+        /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IPagingCriteria.Limit"/>
         /// </summary>
         [DataMember]
         public int Limit { get; }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPagingCriteria.Offset"/>
+        /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IPagingCriteria.Offset"/>
         /// </summary>
         [DataMember]
         public int Offset { get; }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPagingCriteria.OrderBy"/>
+        /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IPagingCriteria.OrderBy"/>
         /// </summary>
         [DataMember]
-        public IList<string> OrderBy
-        {
-            get
-            {
-                return _orderBy ??= new List<string>();
-            }
-        }
+        public IReadOnlyCollection<string> OrderBy { get; }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPagingCriteria.Navigation"/>
+        /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IPagingCriteria.Navigation"/>
         /// </summary>
         [DataMember]
-        public IList<string> Navigation
-        {
-            get
-            {
-                return _navigation ??= new List<string>();
-            }
-        }
+        public IReadOnlyCollection<string> Navigation { get; }
         #endregion
 
         #region [ Methods ]
@@ -77,8 +63,8 @@ namespace Mvp24Hours.Core.ValueObjects.Logic
         {
             yield return Limit;
             yield return Offset;
-            yield return _orderBy;
-            yield return _navigation;
+            yield return OrderBy;
+            yield return Navigation;
         }
         #endregion
     }

@@ -24,9 +24,7 @@ namespace Mvp24Hours.WebAPI.Filters
             {
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 context.HttpContext.Response.ContentType = "application/json";
-                var boResult = new BusinessResult<Notification>();
-                foreach (var n in _notificationContext.Notifications)
-                    boResult.Messages.Add(n);
+                var boResult = new BusinessResult<Notification>(messages: _notificationContext.Notifications);
                 var result = ObjectHelper.Serialize(boResult);
                 await context.HttpContext.Response.WriteAsync(result);
                 return;

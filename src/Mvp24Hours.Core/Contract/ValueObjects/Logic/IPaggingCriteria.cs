@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Mvp24Hours.Core.Contract.Logic.DTO
+namespace Mvp24Hours.Core.Contract.ValueObjects.Logic
 {
     /// <summary>
     /// Represents a definition for search criteria on a page
@@ -18,10 +18,10 @@ namespace Mvp24Hours.Core.Contract.Logic.DTO
         /// <summary>
         /// Clause for sorting by field
         /// </summary>
-        IList<string> OrderBy { get; }
+        IReadOnlyCollection<string> OrderBy { get; }
         /// <summary>
         /// Related objects that will be loaded together
         /// </summary>
-        IList<string> Navigation { get; }
+        IReadOnlyCollection<string> Navigation { get; }
     }
 }

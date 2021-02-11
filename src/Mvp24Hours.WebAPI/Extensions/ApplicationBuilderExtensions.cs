@@ -10,12 +10,49 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Mvp24Hours.Infrastructure.Helpers;
+using Mvp24Hours.Infrastructure.Middlewares;
+using Mvp24Hours.WebAPI.Middlewares;
 using System;
 
 namespace Mvp24Hours.WebAPI.Extensions
 {
     public static class ApplicationBuilderExtensions
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        public static IApplicationBuilder UseExceptionHandling(this IApplicationBuilder builder)
+        {
+            return builder.UseMiddleware<ExceptionMiddleware>();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        public static IApplicationBuilder UseCaching(this IApplicationBuilder builder)
+        {
+            return builder.UseMiddleware<CachingMiddleware>();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        public static IApplicationBuilder UseDocumentation(this IApplicationBuilder builder)
+        {
+            builder.UseSwagger();
+            builder.UseSwaggerUI(opt =>
+            {
+                opt.SwaggerEndpoint("/swagger/v1/swagger.json", "Integração Meios de Hospedagem - v1");
+            });
+            return builder;
+        }
+
         /// <summary>
         /// Configure application context
         /// </summary>

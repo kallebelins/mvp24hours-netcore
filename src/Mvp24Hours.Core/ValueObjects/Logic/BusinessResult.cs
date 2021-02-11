@@ -5,8 +5,7 @@
 //=====================================================================================
 // Reproduction or sharing is free!
 //=====================================================================================
-using Mvp24Hours.Core.Contract.Logic;
-using Mvp24Hours.Core.Contract.Logic.DTO;
+using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,51 +21,34 @@ namespace Mvp24Hours.Core.ValueObjects.Logic
     {
         #region [ Ctor ]
 
-        public BusinessResult()
+        public BusinessResult(
+            IReadOnlyCollection<T> data = null,
+            IReadOnlyCollection<IMessageResult> messages = null,
+            IList<ILinkResult> links = null,
+            string token = null
+        )
         {
-        }
-
-        public BusinessResult(string token)
-            : this()
-        {
+            Data = data;
+            Messages = messages;
+            Links = links;
             Token = token;
-        }
-
-        public BusinessResult(IList<T> data)
-            : this()
-        {
-            this.data = data;
         }
 
         #endregion
 
         #region [ Properties ]
 
-        IList<T> data;
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IBusinessResult{T}.Data"/>
         /// </summary>
         [DataMember]
-        public IList<T> Data
-        {
-            get
-            {
-                return data ??= new List<T>();
-            }
-        }
+        public IReadOnlyCollection<T> Data { get; }
 
-        private IList<IMessageResult> messages;
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IBusinessResult{T}.Messages"/>
         /// </summary>
         [DataMember]
-        public IList<IMessageResult> Messages
-        {
-            get
-            {
-                return messages ??= new List<IMessageResult>();
-            }
-        }
+        public IReadOnlyCollection<IMessageResult> Messages { get; }
 
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IBusinessResult{T}.HasErrors"/>
@@ -74,7 +56,7 @@ namespace Mvp24Hours.Core.ValueObjects.Logic
         [DataMember]
         public bool HasErrors => Messages.Where(x => x.Type == Enums.MessageType.Error).Any();
 
-        IList<ILinkResult> links;
+        private IList<ILinkResult> links;
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IBusinessResult{T}.Links"/>
         /// </summary>
@@ -85,13 +67,17 @@ namespace Mvp24Hours.Core.ValueObjects.Logic
             {
                 return links ??= new List<ILinkResult>();
             }
+            private set
+            {
+                links = value;
+            }
         }
 
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IBusinessResult{T}.Token"/>
         /// </summary>
         [DataMember]
-        public string Token { get; private set; }
+        public string Token { get; }
 
         #endregion
 
@@ -99,10 +85,10 @@ namespace Mvp24Hours.Core.ValueObjects.Logic
 
         protected override IEnumerable<object> GetEqualityComponents()
         {
-            yield return data;
-            yield return messages;
             yield return Token;
-            yield return links;
+            yield return Data;
+            yield return Messages;
+            yield return Links;
         }
 
         #endregion

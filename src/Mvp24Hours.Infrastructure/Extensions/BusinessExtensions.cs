@@ -6,9 +6,10 @@
 // Reproduction or sharing is free!
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
-using Mvp24Hours.Core.Contract.Logic;
+using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Mvp24Hours.Infrastructure.Extensions
@@ -20,34 +21,40 @@ namespace Mvp24Hours.Infrastructure.Extensions
         /// </summary>
         public static IBusinessResult<T> ToBusiness<T>(this IPipelineMessage message)
         {
-            IBusinessResult<T> bo = new BusinessResult<T>(message.Token);
             if (message != null)
             {
+                var dataList = new List<T>();
+
                 var item = message.GetContent<T>();
                 if (item != null)
                 {
-                    bo.Data.Add((T)item);
+                    dataList.Add((T)item);
                 }
+
                 IList<T> items = message.GetContent<List<T>>() ?? (IList<T>)message.GetContent<IEnumerable<T>>();
                 if (items?.Count > 0)
                 {
-                    items?.ToList()?.ForEach(item => bo.Data.Add(item));
+                    items?.ToList()?.ForEach(item => dataList.Add(item));
                 }
-                message.Messages?.ToList()?.ForEach(item => bo.Messages.Add(item));
+
+                return new BusinessResult<T>(
+                    token: message.Token,
+                    data: new ReadOnlyCollection<T>(dataList),
+                    messages: new ReadOnlyCollection<IMessageResult>(message.Messages)
+                );
             }
-            return bo;
+            return new BusinessResult<T>(token: message.Token);
         }
         /// <summary>
         /// Encapsulates object for business
         /// </summary>
         public static IBusinessResult<T> ToBusiness<T>(this T value)
         {
-            IBusinessResult<T> bo = new BusinessResult<T>();
             if (value != null)
             {
-                bo.Data.Add(value);
+                return new BusinessResult<T>(data: new ReadOnlyCollection<T>(new List<T> { value }));
             }
-            return bo;
+            return new BusinessResult<T>();
         }
     }
 }

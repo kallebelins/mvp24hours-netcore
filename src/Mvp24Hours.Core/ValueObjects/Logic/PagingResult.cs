@@ -5,7 +5,7 @@
 //=====================================================================================
 // Reproduction or sharing is free!
 //=====================================================================================
-using Mvp24Hours.Core.Contract.Logic.DTO;
+using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -13,15 +13,21 @@ using System.Runtime.Serialization;
 namespace Mvp24Hours.Core.ValueObjects.Logic
 {
     /// <summary>
-    /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPagingResult{T}"/>
+    /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IPagingResult{T}"/>
     /// </summary>
     [DataContract, Serializable]
     public class PagingResult<T> : BusinessResult<T>, IPagingResult<T>
     {
         #region [ Ctor ]
 
-        public PagingResult(IPageResult paging, ISummaryResult summary, IList<T> data = null)
-             : base(data)
+        public PagingResult(
+            IPageResult paging,
+            ISummaryResult summary,
+            IReadOnlyCollection<T> data = null,
+            IReadOnlyCollection<IMessageResult> messages = null,
+            IList<ILinkResult> links = null,
+            string token = null
+        ) : base(data, messages, links, token)
         {
             Paging = paging;
             Summary = summary;
@@ -32,12 +38,12 @@ namespace Mvp24Hours.Core.ValueObjects.Logic
         #region [ Properties ]
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPagingResult{T}.Paging"/>
+        /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IPagingResult{T}.Paging"/>
         /// </summary>
         [DataMember]
         public IPageResult Paging { get; }
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPagingResult{T}.Summary"/>
+        /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IPagingResult{T}.Summary"/>
         /// </summary>
         [DataMember]
         public ISummaryResult Summary { get; }

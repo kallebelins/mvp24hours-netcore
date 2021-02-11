@@ -1,7 +1,6 @@
-﻿using Mvp24Hours.Core.Contract.Logic.DTO;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace Mvp24Hours.Core.Contract.Logic
+namespace Mvp24Hours.Core.Contract.ValueObjects.Logic
 {
     /// <summary>
     /// Business object used to encapsulate response to requests
@@ -11,11 +10,11 @@ namespace Mvp24Hours.Core.Contract.Logic
         /// <summary>
         /// Encapsulated model data list
         /// </summary>
-        IList<T> Data { get; }
+        IReadOnlyCollection<T> Data { get; }
         /// <summary>
         /// Business messages for user feedback
         /// </summary>
-        IList<IMessageResult> Messages { get; }
+        IReadOnlyCollection<IMessageResult> Messages { get; }
         /// <summary>
         /// Indicates if you have an error message
         /// </summary>

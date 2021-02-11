@@ -5,11 +5,9 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
-using Mvp24Hours.Core.Contract.Logic;
-using Mvp24Hours.Core.Contract.Logic.DTO;
+using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Core.Mappings;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Contexts;
@@ -18,10 +16,7 @@ using Mvp24Hours.WebAPI.Filters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
-using System.IO;
 using System.IO.Compression;
-using System.Linq;
-using System.Reflection;
 
 namespace Mvp24Hours.WebAPI.Extensions
 {
@@ -56,11 +51,27 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// <summary>
         /// Add database context services
         /// </summary>
-        public static IServiceCollection AddMvp24HoursDbService(this IServiceCollection services, params Type[] TDbContexts)
+        public static IServiceCollection AddMvp24HoursDbAsyncService(this IServiceCollection services, params Type[] contextTypes)
         {
-            foreach (var db in TDbContexts)
+            foreach (var type in contextTypes)
             {
-                services.AddScoped(db.GetType(), db);
+                services.AddScoped(type, type);
+            }
+
+            services.AddScoped<IUnitOfWorkAsync>(x => new UnitOfWorkAsync());
+            services.AddScoped(typeof(IRepositoryAsync<>), typeof(RepositoryAsync<>));
+
+            return services;
+        }
+
+        /// <summary>
+        /// Add database context services
+        /// </summary>
+        public static IServiceCollection AddMvp24HoursDbService(this IServiceCollection services, params Type[] contextTypes)
+        {
+            foreach (var type in contextTypes)
+            {
+                services.AddScoped(type, type);
             }
 
             services.AddScoped<IUnitOfWork>(x => new UnitOfWork());
@@ -74,14 +85,14 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// </summary>
         public static IServiceCollection AddMvp24HoursBsService(this IServiceCollection services)
         {
-            services.AddScoped(typeof(IBusinessResult<>), typeof(BusinessResult<>));
-            services.AddScoped(typeof(ILinkResult), typeof(LinkResult));
-            services.AddScoped(typeof(IMessageResult), typeof(MessageResult));
-            services.AddScoped(typeof(IPageResult), typeof(PageResult));
-            services.AddScoped(typeof(IPagingCriteria), typeof(PagingCriteria));
-            services.AddScoped(typeof(IPagingCriteriaExpression<>), typeof(PagingCriteriaExpression<>));
-            services.AddScoped(typeof(IPagingResult<>), typeof(PagingResult<>));
-            services.AddScoped(typeof(ISummaryResult), typeof(SummaryResult));
+            services.AddSingleton(typeof(IBusinessResult<>), typeof(BusinessResult<>));
+            services.AddSingleton(typeof(ILinkResult), typeof(LinkResult));
+            services.AddSingleton(typeof(IMessageResult), typeof(MessageResult));
+            services.AddSingleton(typeof(IPageResult), typeof(PageResult));
+            services.AddSingleton(typeof(IPagingCriteria), typeof(PagingCriteria));
+            services.AddSingleton(typeof(IPagingCriteriaExpression<>), typeof(PagingCriteriaExpression<>));
+            services.AddSingleton(typeof(IPagingResult<>), typeof(PagingResult<>));
+            services.AddSingleton(typeof(ISummaryResult), typeof(SummaryResult));
 
             return services;
         }
@@ -105,7 +116,7 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// <summary>
         /// 
         /// </summary>
-        public static IServiceCollection AddMvp24HoursJsonSerializer(this IServiceCollection services)
+        public static IServiceCollection AddMvp24HoursJsonService(this IServiceCollection services)
         {
             services.AddControllers().AddJsonOptions(options =>
             {
@@ -123,44 +134,7 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// <summary>
         /// 
         /// </summary>
-        public static IServiceCollection Add24Mapping(this IServiceCollection services)
-        {
-            var mapperConfig = new MapperConfiguration(mc =>
-            {
-                mc.AddProfile(new MappingProfile());
-            });
-
-            IMapper mapper = mapperConfig.CreateMapper();
-            services.AddSingleton(mapper);
-
-            return services;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public static IServiceCollection Add24Documentation(this IServiceCollection services)
-        {
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Customer API", Version = "v1" });
-
-                //c.DocumentFilter<CustomSwaggerFilter>();
-                c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
-
-                // Set the comments path for the Swagger JSON and UI.
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                c.IncludeXmlComments(xmlPath);
-            });
-
-            return services;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public static IServiceCollection Add24Compreesion(this IServiceCollection services)
+        public static IServiceCollection AddMvp24HoursZipService(this IServiceCollection services)
         {
             services.Configure<GzipCompressionProviderOptions>(options =>
             {

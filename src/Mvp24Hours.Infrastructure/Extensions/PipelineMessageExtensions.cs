@@ -6,7 +6,7 @@
 // Reproduction or sharing is free!
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
-using Mvp24Hours.Core.Contract.Logic;
+using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Helpers;
 using Mvp24Hours.Infrastructure.Pipe;
 

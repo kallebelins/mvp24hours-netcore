@@ -1,4 +1,4 @@
-﻿namespace Mvp24Hours.Core.Contract.Logic
+﻿namespace Mvp24Hours.Core.Contract.ValueObjects.Logic
 {
     /// <summary>
     /// Defines the information needed to access a resource

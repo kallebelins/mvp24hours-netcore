@@ -6,8 +6,7 @@
 // Reproduction or sharing is free!
 //=====================================================================================
 using Microsoft.AspNetCore.Mvc;
-using Mvp24Hours.Core.Contract.Logic;
-using Mvp24Hours.Core.Contract.Logic.DTO;
+using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Core.Enums.Infrastructure;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using System;
@@ -64,7 +63,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
 
         public static ILinkResult CreateLink(string routeName, object routeValues, HateoasType type, bool isTemplate)
         {
-            return CreateLink(routeName, routeValues, type, false, HateoasMethodType.GET);
+            return CreateLink(routeName, routeValues, type, isTemplate, HateoasMethodType.GET);
         }
 
         public static ILinkResult CreateLink(string routeName, object routeValues, HateoasType type, bool isTemplate, HateoasMethodType method)

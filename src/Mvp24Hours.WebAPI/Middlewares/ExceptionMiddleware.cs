@@ -11,6 +11,7 @@ using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Helpers;
 using Mvp24Hours.Infrastructure.Logging;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -54,8 +55,11 @@ namespace Mvp24Hours.Infrastructure.Middlewares
             else
                 message = $"Message: {(exception?.InnerException ?? exception).Message}";
 
-            var boResult = new BusinessResult<Notification>();
-            boResult.Messages.Add(new Notification("internalservererror", message, Core.Enums.MessageType.Error));
+            var boResult = new BusinessResult<Notification>(
+                messages: new List<Notification> {
+                    new Notification("internalservererror", message, Core.Enums.MessageType.Error)
+                }
+            );
             var messageResult = ObjectHelper.Serialize(boResult);
             return context.Response.WriteAsync(messageResult);
         }

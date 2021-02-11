@@ -5,7 +5,7 @@
 //=====================================================================================
 // Reproduction or sharing is free!
 //=====================================================================================
-using Mvp24Hours.Core.Contract.Logic.DTO;
+using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -13,7 +13,7 @@ using System.Runtime.Serialization;
 namespace Mvp24Hours.Core.ValueObjects.Logic
 {
     /// <summary>
-    /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.ISummaryResult"/>
+    /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.ISummaryResult"/>
     /// </summary>
     [DataContract, Serializable]
     public class SummaryResult : BaseVO, ISummaryResult
@@ -28,12 +28,12 @@ namespace Mvp24Hours.Core.ValueObjects.Logic
 
         #region [ Properties ]
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.ISummaryResult.TotalCount"/>
+        /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.ISummaryResult.TotalCount"/>
         /// </summary>
         [DataMember]
         public int TotalCount { get; }
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.ISummaryResult.TotalPages"/>
+        /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.ISummaryResult.TotalPages"/>
         /// </summary>
         [DataMember]
         public int TotalPages { get; }

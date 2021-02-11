@@ -1,4 +1,4 @@
-﻿namespace Mvp24Hours.Core.Contract.Logic.DTO
+﻿namespace Mvp24Hours.Core.Contract.ValueObjects.Logic
 {
     /// <summary>
     /// Represents a pagination summary

@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
-using Mvp24Hours.Core.Contract.Mappings;
 using Mvp24Hours.Infrastructure.Helpers;
 using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace Mvp24Hours.Infrastructure.Extensions
 {
@@ -38,13 +35,12 @@ namespace Mvp24Hours.Infrastructure.Extensions
         /// <summary>
         /// Convert instance to mapped object
         /// </summary>
-        public static TDestination MapTo<TSource, TDestination>(this TSource source) 
-            where TSource : IMapFrom<TSource>
+        public static TDestination MapTo<TDestination>(this object source)
         {
             IMapper mapper = HttpContextHelper.GetService<IMapper>();
             if (mapper == null)
                 throw new ArgumentNullException("Profile not registered for AutoMapper.");
-            return mapper.Map<TSource, TDestination>(source);
+            return mapper.Map<TDestination>(source);
         }
     }
 }

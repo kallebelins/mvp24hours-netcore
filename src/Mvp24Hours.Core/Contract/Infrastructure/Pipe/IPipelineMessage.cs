@@ -5,7 +5,7 @@
 //=====================================================================================
 // Reproduction or sharing is free!
 //=====================================================================================
-using Mvp24Hours.Core.Contract.Logic.DTO;
+using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using System.Collections.Generic;
 
 namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe

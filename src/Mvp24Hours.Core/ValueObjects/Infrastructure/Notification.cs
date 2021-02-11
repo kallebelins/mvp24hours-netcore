@@ -5,7 +5,7 @@
 //=====================================================================================
 // Reproduction or sharing is free!
 //=====================================================================================
-using Mvp24Hours.Core.Contract.Logic.DTO;
+using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Core.Enums;
 using System.Collections.Generic;
 
@@ -13,7 +13,7 @@ namespace Mvp24Hours.Core.ValueObjects.Infrastructure
 {
     /// <summary>
     /// Represents a notification
-    /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IMessageResult"/>
+    /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IMessageResult"/>
     /// </summary>
     public class Notification : BaseVO, IMessageResult
     {
@@ -28,15 +28,15 @@ namespace Mvp24Hours.Core.ValueObjects.Infrastructure
 
         #region [ Fields / Properties ]
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IMessageResult.Key"/>
+        /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IMessageResult.Key"/>
         /// </summary>
         public string Key { get; }
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IMessageResult.Message"/>
+        /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IMessageResult.Message"/>
         /// </summary>
         public string Message { get; }
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IMessageResult.Type"/>
+        /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IMessageResult.Type"/>
         /// </summary>
         public MessageType Type { get; }
         #endregion

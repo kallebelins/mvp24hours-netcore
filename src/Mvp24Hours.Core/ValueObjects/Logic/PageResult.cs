@@ -6,7 +6,7 @@
 // Reproduction or sharing is free!
 //=====================================================================================
 
-using Mvp24Hours.Core.Contract.Logic.DTO;
+using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -14,7 +14,7 @@ using System.Runtime.Serialization;
 namespace Mvp24Hours.Core.ValueObjects.Logic
 {
     /// <summary>
-    /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPageResult"/>
+    /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IPageResult"/>
     /// </summary>
     [DataContract, Serializable]
     public class PageResult : BaseVO, IPageResult
@@ -30,17 +30,17 @@ namespace Mvp24Hours.Core.ValueObjects.Logic
 
         #region [ Properties ]
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPageResult.Limit"/>
+        /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IPageResult.Limit"/>
         /// </summary>
         [DataMember]
         public int Limit { get; }
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPageResult.Offset"/>
+        /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IPageResult.Offset"/>
         /// </summary>
         [DataMember]
         public int Offset { get; }
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IPageResult.Count"/>
+        /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IPageResult.Count"/>
         /// </summary>
         [DataMember]
         public int Count { get; }

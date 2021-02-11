@@ -5,7 +5,7 @@
 //=====================================================================================
 // Reproduction or sharing is free!
 //=====================================================================================
-using Mvp24Hours.Core.Contract.Logic.DTO;
+using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Core.Enums;
 using System;
 using System.Collections.Generic;
@@ -14,7 +14,7 @@ using System.Runtime.Serialization;
 namespace Mvp24Hours.Core.ValueObjects.Logic
 {
     /// <summary>
-    /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IMessageResult"/>
+    /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IMessageResult"/>
     /// </summary>
     [DataContract, Serializable]
     public class MessageResult : BaseVO, IMessageResult
@@ -35,17 +35,17 @@ namespace Mvp24Hours.Core.ValueObjects.Logic
 
         #region [ Properties ]
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IMessageResult.Key"/>
+        /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IMessageResult.Key"/>
         /// </summary>
         [DataMember]
         public string Key { get; }
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IMessageResult.Message"/>
+        /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IMessageResult.Message"/>
         /// </summary>
         [DataMember]
         public string Message { get; }
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.DTO.IMessageResult.Type"/>
+        /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IMessageResult.Type"/>
         /// </summary>
         [DataMember]
         public MessageType Type { get; }
