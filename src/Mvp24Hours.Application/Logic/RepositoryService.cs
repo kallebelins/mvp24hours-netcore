@@ -212,7 +212,7 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.Remove(int)"/>
         /// </summary>
-        public virtual int Remove(object id)
+        public virtual int RemoveById(object id)
         {
             try
             {

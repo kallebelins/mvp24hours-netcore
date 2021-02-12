@@ -8,10 +8,13 @@
 using Mvp24Hours.Infrastructure.Logging;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Mvp24Hours.Infrastructure.Helpers
 {
@@ -32,26 +35,57 @@ namespace Mvp24Hours.Infrastructure.Helpers
         /// </summary>
         public static Encoding EncodingRequest { get; set; } = Encoding.UTF8;
 
+        public static string ToQueryString(params object[] objs)
+        {
+            if (objs == null)
+                return string.Empty;
+
+            var result = new List<string>();
+            foreach (var obj in objs)
+            {
+                var props = obj
+                    .GetType()
+                    .GetProperties()
+                    .Where(p => p.GetValue(obj, null) != null);
+
+                foreach (var p in props)
+                {
+                    var value = p.GetValue(obj, null);
+                    var enumerable = value as ICollection;
+                    if (enumerable != null)
+                    {
+                        result.AddRange(from object v in enumerable select string.Format("{0}={1}", p.Name, HttpUtility.UrlEncode(v.ToString())));
+                    }
+                    else
+                    {
+                        result.Add(string.Format("{0}={1}", p.Name, HttpUtility.UrlEncode(value.ToString())));
+                    }
+                }
+            }
+
+            return string.Join("&", result.ToArray());
+        }
+
         public async static Task<string> PostAsync(string urlService, string data = "", Hashtable header = null, ICredentials credentials = null)
         {
-            return await sendAsync(urlService, header, credentials, "POST", data);
+            return await SendAsync(urlService, header, credentials, "POST", data);
         }
         public async static Task<string> GetAsync(string url, Hashtable header = null, ICredentials credentials = null)
         {
-            return await sendAsync(url, header, credentials, "GET", null);
+            return await SendAsync(url, header, credentials, "GET", null);
         }
 
         public async static Task<string> PutAsync(string urlService, string data = "", Hashtable header = null, ICredentials credentials = null)
         {
-            return await sendAsync(urlService, header, credentials, "PUT", data);
+            return await SendAsync(urlService, header, credentials, "PUT", data);
         }
 
         public async static Task<string> DeleteAsync(string url, Hashtable header = null, ICredentials credentials = null)
         {
-            return await sendAsync(url, header, credentials, "DELETE", null);
+            return await SendAsync(url, header, credentials, "DELETE", null);
         }
 
-        private async static Task<string> sendAsync(string url, Hashtable header, ICredentials credentials, string method, string data)
+        private async static Task<string> SendAsync(string url, Hashtable header, ICredentials credentials, string method, string data)
         {
             string result = string.Empty;
             try
@@ -79,7 +113,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
                     }
                 }
                 requisicao.Timeout = 300000;
-                bool hasData = (method == "POST" || method == "PATCH");
+                bool hasData = (method == "POST" || method == "PUT");
                 byte[] bytes = null;
                 if (hasData)
                 {

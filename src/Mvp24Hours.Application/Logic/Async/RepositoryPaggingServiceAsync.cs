@@ -55,7 +55,7 @@ namespace Mvp24Hours.Business.Logic
 
                 var items = await repo.GetByAsync(clause, criteria);
 
-                var result = await items.ToBusinessPaggingAsync(
+                var result = await items.ToBusinessPagingAsync(
                     new PageResult(limit, offset, items.Count),
                     new SummaryResult(totalCount, totalPages)
                 );
@@ -100,7 +100,7 @@ namespace Mvp24Hours.Business.Logic
 
                 var items = await repo.ListAsync(criteria);
 
-                var result = await items.ToBusinessPaggingAsync(
+                var result = await items.ToBusinessPagingAsync(
                     new PageResult(limit, offset, items.Count),
                     new SummaryResult(totalCount, totalPages)
                 );

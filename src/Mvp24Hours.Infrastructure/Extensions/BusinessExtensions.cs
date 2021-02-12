@@ -23,24 +23,38 @@ namespace Mvp24Hours.Infrastructure.Extensions
         {
             if (message != null)
             {
-                var dataList = new List<T>();
+                IList<T> dataList = new List<T>();
 
-                var item = message.GetContent<T>();
-                if (item != null)
+                if (message.HasContent<T>())
                 {
-                    dataList.Add((T)item);
+                    var itemContent = message.GetContent<T>();
+                    if (itemContent != null)
+                    {
+                        dataList.Add((T)itemContent);
+                    }
                 }
 
-                IList<T> items = message.GetContent<List<T>>() ?? (IList<T>)message.GetContent<IEnumerable<T>>();
-                if (items?.Count > 0)
+                IEnumerable<T> items = null;
+
+                if (message.HasContent<IList<T>>())
+                    items = message.GetContent<IList<T>>();
+
+                if (message.HasContent<ICollection<T>>())
+                    items = message.GetContent<ICollection<T>>();
+
+                if (message.HasContent<IEnumerable<T>>())
+                    items = message.GetContent<IEnumerable<T>>();
+
+                if (items != null && items.Any())
                 {
-                    items?.ToList()?.ForEach(item => dataList.Add(item));
+                    foreach (var item in items)
+                        dataList.Add(item);
                 }
 
                 return new BusinessResult<T>(
                     token: message.Token,
                     data: new ReadOnlyCollection<T>(dataList),
-                    messages: new ReadOnlyCollection<IMessageResult>(message.Messages)
+                    messages: new ReadOnlyCollection<IMessageResult>(message.Messages ?? new List<IMessageResult>())
                 );
             }
             return new BusinessResult<T>(token: message.Token);
@@ -53,6 +67,35 @@ namespace Mvp24Hours.Infrastructure.Extensions
             if (value != null)
             {
                 return new BusinessResult<T>(data: new ReadOnlyCollection<T>(new List<T> { value }));
+            }
+            return new BusinessResult<T>();
+        }
+
+        /// <summary>
+        /// Encapsulates object for business with message
+        /// </summary>
+        public static IBusinessResult<T> ToBusinessWithMessage<T>(this T value, params IMessageResult[] messageResult)
+        {
+            if (value != null)
+            {
+                return new BusinessResult<T>(
+                    data: new ReadOnlyCollection<T>(new List<T> { value }), 
+                    messages: new ReadOnlyCollection<IMessageResult>(messageResult?.ToList() ?? new List<IMessageResult>())
+                );
+            }
+            return new BusinessResult<T>();
+        }
+
+        /// <summary>
+        /// Encapsulates object for business with message
+        /// </summary>
+        public static IBusinessResult<T> ToBusinessWithMessage<T>(this IBusinessResult<T> value, params IMessageResult[] messageResult)
+        {
+            if (value != null)
+            {
+                return new BusinessResult<T>(
+                    messages: new ReadOnlyCollection<IMessageResult>(messageResult?.ToList() ?? new List<IMessageResult>())
+                );
             }
             return new BusinessResult<T>();
         }

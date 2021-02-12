@@ -1,5 +1,6 @@
 ﻿using Mvp24Hours.Core.DTOs.Models;
 using Mvp24Hours.Core.ValueObjects.Logic;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace Mvp24Hours.Core.Extensions
@@ -11,8 +12,8 @@ namespace Mvp24Hours.Core.Extensions
             return new PagingCriteria(
                 request.Limit,
                 request.Offset,
-                new ReadOnlyCollection<string>(request.OrderBy),
-                new ReadOnlyCollection<string>(request.Navigation)
+                new ReadOnlyCollection<string>(request.OrderBy ?? new List<string>()),
+                new ReadOnlyCollection<string>(request.Navigation ?? new List<string>())
             );
         }
     }

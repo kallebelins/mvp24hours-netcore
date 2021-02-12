@@ -128,9 +128,7 @@ namespace Mvp24Hours.Infrastructure.Data
             var entityDb = dbContext.Set<T>().Find(entity.EntityKey);
 
             if (entityDb == null)
-            {
-                throw new InvalidOperationException("Key value not found.");
-            }
+                return;
 
             // properties that can not be changed
 
@@ -187,11 +185,12 @@ namespace Mvp24Hours.Infrastructure.Data
             }
         }
 
-        public void RemoveAsync(object id)
+        public void RemoveByIdAsync(object id)
         {
             var entity = this.GetByIdAsync(id);
-            if (entity == null) return;
-            this.RemoveAsync(entity);
+            if (entity == null) 
+                return;
+            this.RemoveByIdAsync(entity);
         }
 
         public void ForceRemoveAsync(T entity)

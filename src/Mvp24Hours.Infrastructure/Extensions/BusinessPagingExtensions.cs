@@ -13,16 +13,16 @@ using System.Threading.Tasks;
 
 namespace Mvp24Hours.Infrastructure.Extensions
 {
-    public static class BusinessPaggingExtensions
+    public static class BusinessPagingExtensions
     {
-        public static Task<IPagingResult<T>> ToBusinessPaggingAsync<T>(this IList<T> data, IPageResult page, ISummaryResult summary)
+        public static Task<IPagingResult<T>> ToBusinessPagingAsync<T>(this IList<T> data, IPageResult page, ISummaryResult summary)
         {
-            return Task.FromResult(ToBusinessPagging(data, page, summary));
+            return Task.FromResult(ToBusinessPaging(data, page, summary));
         }
 
-        public static IPagingResult<T> ToBusinessPagging<T>(this IList<T> data, IPageResult page, ISummaryResult summary)
+        public static IPagingResult<T> ToBusinessPaging<T>(this IList<T> data, IPageResult page, ISummaryResult summary)
         {
-            return new PagingResult<T>(page, summary, new ReadOnlyCollection<T>(data));
+            return new PagingResult<T>(page, summary, new ReadOnlyCollection<T>(data ?? new List<T>()));
         }
     }
 }

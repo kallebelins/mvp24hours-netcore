@@ -12,6 +12,7 @@ using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Mvp24Hours.Infrastructure.Pipe
@@ -19,6 +20,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
     /// <summary>
     /// <see cref="Mvp24Hours.Core.Contract.Infrastructure.Pipe.IPipeline"/>
     /// </summary>
+    [DebuggerStepThrough]
     public class Pipeline : IPipeline
     {
         #region [ Ctor ]

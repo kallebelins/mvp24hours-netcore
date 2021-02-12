@@ -225,14 +225,14 @@ namespace Mvp24Hours.Business.Logic
         }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.RemoveAsync(int)"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.RemoveByIdAsync(int)"/>
         /// </summary>
-        public virtual Task<int> RemoveAsync(object id)
+        public async virtual Task<int> RemoveByIdAsync(object id)
         {
             try
             {
-                var entity = this.UnitOfWork.GetRepositoryAsync<T>().GetByIdAsync(id);
-                return this.RemoveAsync(entity);
+                var entity = await this.UnitOfWork.GetRepositoryAsync<T>().GetByIdAsync(id);
+                return await this.RemoveAsync(entity);
             }
             catch (Exception ex)
             {

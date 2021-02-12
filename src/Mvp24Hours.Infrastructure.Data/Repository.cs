@@ -236,7 +236,7 @@ namespace Mvp24Hours.Infrastructure.Data
         /// <summary>
         ///  <see cref="Mvp24Hours.Core.Contract.Data.ICommand.Remove(int)"/>
         /// </summary>
-        public void Remove(object id)
+        public void RemoveById(object id)
         {
             var entity = this.GetById(id);
             if (entity == null) return;

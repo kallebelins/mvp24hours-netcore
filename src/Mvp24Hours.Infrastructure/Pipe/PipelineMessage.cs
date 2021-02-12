@@ -19,6 +19,11 @@ namespace Mvp24Hours.Infrastructure.Pipe
     {
         #region [ Ctor ]
 
+        public PipelineMessage()
+            : this(null)
+        {
+        }
+
         public PipelineMessage(params object[] args)
         {
             this._contents = new Dictionary<string, object>();
@@ -26,7 +31,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
             if (args?.Count() > 0)
             {
                 foreach (var item in args)
-                    AddContent(item.GetType().Name, item);
+                    AddContent(item.GetType().FullName, item);
             }
         }
 
@@ -66,7 +71,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
 
         public void AddContent<T>(T obj)
         {
-            AddContent<T>(typeof(T).Name, obj);
+            AddContent<T>(typeof(T).FullName, obj);
         }
 
         public void AddContent<T>(string key, T obj)
@@ -83,7 +88,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
 
         public T GetContent<T>()
         {
-            return GetContent<T>(typeof(T).Name);
+            return GetContent<T>(typeof(T).FullName);
         }
 
         public T GetContent<T>(string key)
@@ -97,7 +102,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
 
         public bool HasContent<T>()
         {
-            return HasContent(typeof(T).Name);
+            return HasContent(typeof(T).FullName);
         }
 
         public bool HasContent(string key)

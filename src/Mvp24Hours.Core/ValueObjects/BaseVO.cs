@@ -35,7 +35,7 @@ namespace Mvp24Hours.Core.ValueObjects
             if (obj == null)
                 return false;
             if (GetType() != obj.GetType())
-                throw new ArgumentException($"Invalid comparison of Value Objects of different types: {GetType()} and {obj.GetType()}");
+                return false;
             var valueObject = (BaseVO)obj;
             return GetEqualityComponents().SequenceEqual(valueObject.GetEqualityComponents());
         }

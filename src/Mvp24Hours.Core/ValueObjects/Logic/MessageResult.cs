@@ -7,6 +7,7 @@
 //=====================================================================================
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Core.Enums;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -25,6 +26,7 @@ namespace Mvp24Hours.Core.ValueObjects.Logic
         {
         }
 
+        [JsonConstructor]
         public MessageResult(string key, string message, MessageType messageType)
         {
             Key = key;

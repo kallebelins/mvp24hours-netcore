@@ -28,9 +28,9 @@ namespace Mvp24Hours.Core.Contract.Logic
         /// </summary>
         Task<int> RemoveAsync(T entity);
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync{T}.RemoveAsync(int)"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Data.ICommandAsync{T}.RemoveByIdAsync(object)"/>
         /// </summary>
-        Task<int> RemoveAsync(object id);
+        Task<int> RemoveByIdAsync(object id);
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Data.IUnitOfWorkAsync.SaveChangesAsync()"/>
         /// </summary>

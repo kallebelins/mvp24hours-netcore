@@ -12,6 +12,7 @@ using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,6 +21,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
     /// <summary>
     /// <see cref="Mvp24Hours.Core.Contract.Infrastructure.Pipe.IPipelineAsync"/>
     /// </summary>
+    [DebuggerStepThrough]
     public class PipelineAsync : IPipelineAsync
     {
         #region [ Ctor ]

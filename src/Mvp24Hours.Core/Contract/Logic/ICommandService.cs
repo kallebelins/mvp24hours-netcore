@@ -26,9 +26,9 @@ namespace Mvp24Hours.Core.Contract.Logic
         /// </summary>
         int Remove(T entity);
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{T}.Remove(int)"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Data.ICommand{T}.RemoveById(object)"/>
         /// </summary>
-        int Remove(object id);
+        int RemoveById(object id);
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Data.IUnitOfWork.SaveChanges()"/>
         /// </summary>

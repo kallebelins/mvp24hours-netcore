@@ -51,6 +51,6 @@ namespace Mvp24Hours.Core.Contract.Data
         /// Removes an entity by the code identifier (logical exclusion).
         /// </summary>
         /// <param name="id">Identifier of entity</param>
-        void Remove(object id);
+        void RemoveById(object id);
     }
 }
