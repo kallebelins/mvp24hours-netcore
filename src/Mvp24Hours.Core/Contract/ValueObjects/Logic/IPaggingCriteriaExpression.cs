@@ -12,14 +12,14 @@ namespace Mvp24Hours.Core.Contract.ValueObjects.Logic
         /// <summary>
         /// Expression for sorting by ascending field
         /// </summary>
-        IReadOnlyCollection<Expression<Func<T, dynamic>>> OrderByAscendingExpr { get; }
+        IList<Expression<Func<T, dynamic>>> OrderByAscendingExpr { get; }
         /// <summary>
         /// Expression for sorting by descending field
         /// </summary>
-        IReadOnlyCollection<Expression<Func<T, dynamic>>> OrderByDescendingExpr { get; }
+        IList<Expression<Func<T, dynamic>>> OrderByDescendingExpr { get; }
         /// <summary>
         /// Expression for loading related objects
         /// </summary>
-        IReadOnlyCollection<Expression<Func<T, dynamic>>> NavigationExpr { get; }
+        IList<Expression<Func<T, dynamic>>> NavigationExpr { get; }
     }
 }

@@ -68,7 +68,7 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
         /// </summary>
         void SetLock();
         /// <summary>
-        /// Defines token content
+        /// Sets content token only if it is empty or null
         /// </summary>
         void SetToken(string token);
         /// <summary>

@@ -27,5 +27,9 @@ namespace Mvp24Hours.Core.Contract.ValueObjects.Logic
         /// Transaction reference token
         /// </summary>
         string Token { get; }
+        /// <summary>
+        /// Defines token only if token is empty or null
+        /// </summary>
+        void SetToken(string token);
     }
 }

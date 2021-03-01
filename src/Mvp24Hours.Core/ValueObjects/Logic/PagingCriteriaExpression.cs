@@ -31,25 +31,40 @@ namespace Mvp24Hours.Core.ValueObjects.Logic
         }
         #endregion
 
+        #region [ Fields ]
+        private IList<Expression<Func<T, dynamic>>> orderByAscendingExpr;
+        private IList<Expression<Func<T, dynamic>>> orderByDescendingExpr;
+        private IList<Expression<Func<T, dynamic>>> navigationExpr;
+        #endregion
+
         #region [ Properties ]
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IPagingCriteria.OrderByAscendingExpr"/>
         /// </summary>
         [IgnoreDataMember]
         [JsonIgnore]
-        public IReadOnlyCollection<Expression<Func<T, dynamic>>> OrderByAscendingExpr { get; }
+        public IList<Expression<Func<T, dynamic>>> OrderByAscendingExpr
+        {
+            get { return orderByAscendingExpr ??= new List<Expression<Func<T, dynamic>>>(); }
+        }
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IPagingCriteria.OrderByDescendingExpr"/>
         /// </summary>
         [IgnoreDataMember]
         [JsonIgnore]
-        public IReadOnlyCollection<Expression<Func<T, dynamic>>> OrderByDescendingExpr { get; }
+        public IList<Expression<Func<T, dynamic>>> OrderByDescendingExpr
+        {
+            get { return orderByDescendingExpr ??= new List<Expression<Func<T, dynamic>>>(); }
+        }
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IPagingCriteria.NavigationExpr"/>
         /// </summary>
         [IgnoreDataMember]
         [JsonIgnore]
-        public IReadOnlyCollection<Expression<Func<T, dynamic>>> NavigationExpr { get; }
+        public IList<Expression<Func<T, dynamic>>> NavigationExpr
+        {
+            get { return navigationExpr ??= new List<Expression<Func<T, dynamic>>>(); }
+        }
         #endregion
 
         #region [ Methods ]

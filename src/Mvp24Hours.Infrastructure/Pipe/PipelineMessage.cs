@@ -61,7 +61,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
             }
         }
 
-        public string Token { get; set; }
+        public string Token { get; private set; }
 
         public bool IsLocked { get; private set; }
 
@@ -122,6 +122,8 @@ namespace Mvp24Hours.Infrastructure.Pipe
 
         public void SetToken(string token)
         {
+            if (string.IsNullOrEmpty(Token)
+                && !string.IsNullOrEmpty(token))
             Token = token;
         }
 

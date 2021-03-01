@@ -19,7 +19,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
         /// <summary>
         /// Transform a message into a business object
         /// </summary>
-        public static IBusinessResult<T> ToBusiness<T>(this IPipelineMessage message)
+        public static IBusinessResult<T> ToBusiness<T>(this IPipelineMessage message, string tokenDefault = null)
         {
             if (message != null)
             {
@@ -52,23 +52,27 @@ namespace Mvp24Hours.Infrastructure.Extensions
                 }
 
                 return new BusinessResult<T>(
-                    token: message.Token,
+                    token: message.Token ?? tokenDefault,
                     data: new ReadOnlyCollection<T>(dataList),
                     messages: new ReadOnlyCollection<IMessageResult>(message.Messages ?? new List<IMessageResult>())
                 );
             }
-            return new BusinessResult<T>(token: message.Token);
+            return new BusinessResult<T>(token: tokenDefault);
         }
+
         /// <summary>
         /// Encapsulates object for business
         /// </summary>
-        public static IBusinessResult<T> ToBusiness<T>(this T value)
+        public static IBusinessResult<T> ToBusiness<T>(this T value, string tokenDefault = null)
         {
             if (value != null)
             {
-                return new BusinessResult<T>(data: new ReadOnlyCollection<T>(new List<T> { value }));
+                return new BusinessResult<T>(
+                    token: tokenDefault,
+                    data: new ReadOnlyCollection<T>(new List<T> { value })
+                );
             }
-            return new BusinessResult<T>();
+            return new BusinessResult<T>(token: tokenDefault);
         }
 
         /// <summary>
@@ -76,14 +80,23 @@ namespace Mvp24Hours.Infrastructure.Extensions
         /// </summary>
         public static IBusinessResult<T> ToBusinessWithMessage<T>(this T value, params IMessageResult[] messageResult)
         {
+            return ToBusinessWithMessage(value, null, messageResult);
+        }
+
+        /// <summary>
+        /// Encapsulates object for business with message
+        /// </summary>
+        public static IBusinessResult<T> ToBusinessWithMessage<T>(this T value, string tokenDefault = null, params IMessageResult[] messageResult)
+        {
             if (value != null)
             {
                 return new BusinessResult<T>(
-                    data: new ReadOnlyCollection<T>(new List<T> { value }), 
+                    token: tokenDefault,
+                    data: new ReadOnlyCollection<T>(new List<T> { value }),
                     messages: new ReadOnlyCollection<IMessageResult>(messageResult?.ToList() ?? new List<IMessageResult>())
                 );
             }
-            return new BusinessResult<T>();
+            return new BusinessResult<T>(token: tokenDefault);
         }
 
         /// <summary>
@@ -91,13 +104,22 @@ namespace Mvp24Hours.Infrastructure.Extensions
         /// </summary>
         public static IBusinessResult<T> ToBusinessWithMessage<T>(this IBusinessResult<T> value, params IMessageResult[] messageResult)
         {
+            return ToBusinessWithMessage(value, null, messageResult);
+        }
+
+        /// <summary>
+        /// Encapsulates object for business with message
+        /// </summary>
+        public static IBusinessResult<T> ToBusinessWithMessage<T>(this IBusinessResult<T> value, string tokenDefault = null, params IMessageResult[] messageResult)
+        {
             if (value != null)
             {
                 return new BusinessResult<T>(
+                    token: tokenDefault,
                     messages: new ReadOnlyCollection<IMessageResult>(messageResult?.ToList() ?? new List<IMessageResult>())
                 );
             }
-            return new BusinessResult<T>();
+            return new BusinessResult<T>(token: tokenDefault);
         }
     }
 }

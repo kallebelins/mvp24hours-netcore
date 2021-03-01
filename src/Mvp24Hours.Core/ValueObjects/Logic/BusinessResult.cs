@@ -78,11 +78,18 @@ namespace Mvp24Hours.Core.ValueObjects.Logic
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IBusinessResult{T}.Token"/>
         /// </summary>
         [DataMember]
-        public string Token { get; }
+        public string Token { get; private set; }
 
         #endregion
 
         #region [ Methods ]
+
+        public void SetToken(string token)
+        {
+            if (string.IsNullOrEmpty(this.Token)
+                && !string.IsNullOrEmpty(token))
+                this.Token = token;
+        }
 
         protected override IEnumerable<object> GetEqualityComponents()
         {
@@ -95,17 +102,31 @@ namespace Mvp24Hours.Core.ValueObjects.Logic
         #endregion
 
         #region [ Static's ]
+
         public static IBusinessResult<T> Create(params IMessageResult[] messageResult)
         {
+            return Create(null, messageResult);
+        }
+
+        public static IBusinessResult<T> Create(string tokenDefault, params IMessageResult[] messageResult)
+        {
             return new BusinessResult<T>(
+                token: tokenDefault,
                 messages: new ReadOnlyCollection<IMessageResult>(messageResult?.ToList() ?? new List<IMessageResult>())
             );
         }
+
         public static IBusinessResult<T> Create(T value, params IMessageResult[] messageResult)
+        {
+            return Create(value, null, messageResult);
+        }
+
+        public static IBusinessResult<T> Create(T value, string tokenDefault, params IMessageResult[] messageResult)
         {
             if (value != null)
             {
                 return new BusinessResult<T>(
+                    token: tokenDefault,
                     data: new ReadOnlyCollection<T>(new List<T> { value }),
                     messages: new ReadOnlyCollection<IMessageResult>(messageResult?.ToList() ?? new List<IMessageResult>())
                 );

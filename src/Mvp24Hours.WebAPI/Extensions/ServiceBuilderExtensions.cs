@@ -28,7 +28,7 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// <summary>
         /// Add all services
         /// </summary>
-        public static IServiceCollection AddMvp24HoursAll<TDbContext>(this IServiceCollection services, Assembly assemblyMap = null, Func<IServiceProvider, TDbContext> dbFactory = null)
+        public static IServiceCollection AddMvp24HoursAll<TDbContext>(this IServiceCollection services, Func<IServiceProvider, TDbContext> dbFactory, Assembly assemblyMap = null)
             where TDbContext : DbContext
         {
             services.AddMvp24HoursService();
@@ -40,13 +40,37 @@ namespace Mvp24Hours.WebAPI.Extensions
         }
 
         /// <summary>
+        /// Add all services
+        /// </summary>
+        public static IServiceCollection AddMvp24HoursAll(this IServiceCollection services, Assembly assemblyMap = null)
+        {
+            services.AddMvp24HoursService();
+            services.AddMvp24HoursMapService(assemblyMap);
+            services.AddMvp24HoursJsonService();
+            services.AddMvp24HoursZipService();
+            return services;
+        }
+
+        /// <summary>
         /// Add all services async
         /// </summary>
-        public static IServiceCollection AddMvp24HoursAllAsync<TDbContext>(this IServiceCollection services, Assembly assemblyMap = null, Func<IServiceProvider, TDbContext> dbFactory = null)
+        public static IServiceCollection AddMvp24HoursAllAsync<TDbContext>(this IServiceCollection services, Func<IServiceProvider, TDbContext> dbFactory, Assembly assemblyMap = null)
             where TDbContext : DbContext
         {
             services.AddMvp24HoursService();
             services.AddMvp24HoursDbAsyncService(dbFactory);
+            services.AddMvp24HoursMapService(assemblyMap);
+            services.AddMvp24HoursJsonService();
+            services.AddMvp24HoursZipService();
+            return services;
+        }
+
+        /// <summary>
+        /// Add all services async
+        /// </summary>
+        public static IServiceCollection AddMvp24HoursAllAsync(this IServiceCollection services, Assembly assemblyMap = null)
+        {
+            services.AddMvp24HoursService();
             services.AddMvp24HoursMapService(assemblyMap);
             services.AddMvp24HoursJsonService();
             services.AddMvp24HoursZipService();

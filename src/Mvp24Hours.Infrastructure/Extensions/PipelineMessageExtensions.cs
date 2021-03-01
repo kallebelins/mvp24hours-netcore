@@ -17,31 +17,39 @@ namespace Mvp24Hours.Infrastructure.Extensions
         /// <summary>
         /// Encapsulates object for pipeline message
         /// </summary>
-        public static IPipelineMessage ToMessage<T>(this T value)
+        public static IPipelineMessage ToMessage<T>(this T value, string tokenDefault = null)
         {
             IPipelineMessage message = new PipelineMessage();
             if (value != null)
             {
                 message.AddContent((T)value);
             }
+            if (!string.IsNullOrEmpty(tokenDefault))
+            {
+                message.SetToken(tokenDefault);
+            }
             return message;
         }
         /// <summary>
         /// Encapsulates object for pipeline message
         /// </summary>
-        public static IPipelineMessage ToMessage<T>(this T value, string keyContent)
+        public static IPipelineMessage ToMessageWithKeyContent<T>(this T value, string keyContent, string tokenDefault = null)
         {
             IPipelineMessage message = new PipelineMessage();
             if (value != null)
             {
                 message.AddContent(keyContent, (T)value);
             }
+            if (!string.IsNullOrEmpty(tokenDefault))
+            {
+                message.SetToken(tokenDefault);
+            }
             return message;
         }
         /// <summary>
         /// Transform business object to pipeline message
         /// </summary>
-        public static IPipelineMessage ToMessage<T>(IBusinessResult<T> bo)
+        public static IPipelineMessage ToMessage<T>(IBusinessResult<T> bo, string tokenDefault = null)
         {
             IPipelineMessage message = new PipelineMessage();
             if (bo != null)
@@ -53,13 +61,21 @@ namespace Mvp24Hours.Infrastructure.Extensions
                         message.AddContent((T)item);
                     }
                 }
+                if (!string.IsNullOrEmpty(bo.Token))
+                {
+                    message.SetToken(bo.Token);
+                }
+                else if (!string.IsNullOrEmpty(tokenDefault))
+                {
+                    message.SetToken(tokenDefault);
+                }
             }
             return message;
         }
         /// <summary>
         /// Transform business object to pipeline message and clone content
         /// </summary>
-        public static IPipelineMessage ToMessageClone<T>(IBusinessResult<T> bo)
+        public static IPipelineMessage ToMessageClone<T>(IBusinessResult<T> bo, string tokenDefault = null)
         {
             IPipelineMessage message = new PipelineMessage();
             if (bo != null)
@@ -70,6 +86,14 @@ namespace Mvp24Hours.Infrastructure.Extensions
                     {
                         message.AddContent(ObjectHelper.Clone<T>(item));
                     }
+                }
+                if (!string.IsNullOrEmpty(bo.Token))
+                {
+                    message.SetToken(bo.Token);
+                }
+                else if (!string.IsNullOrEmpty(tokenDefault))
+                {
+                    message.SetToken(tokenDefault);
                 }
             }
             return message;

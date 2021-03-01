@@ -43,12 +43,12 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
-        public static IApplicationBuilder UseDocumentation(this IApplicationBuilder builder)
+        public static IApplicationBuilder UseDocumentation(this IApplicationBuilder builder, string name)
         {
             builder.UseSwagger();
             builder.UseSwaggerUI(opt =>
             {
-                opt.SwaggerEndpoint("/swagger/v1/swagger.json", "Integração Meios de Hospedagem - v1");
+                opt.SwaggerEndpoint("/swagger/v1/swagger.json", name);
             });
             return builder;
         }

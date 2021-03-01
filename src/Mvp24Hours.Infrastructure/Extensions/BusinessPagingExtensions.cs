@@ -15,14 +15,19 @@ namespace Mvp24Hours.Infrastructure.Extensions
 {
     public static class BusinessPagingExtensions
     {
-        public static Task<IPagingResult<T>> ToBusinessPagingAsync<T>(this IList<T> data, IPageResult page, ISummaryResult summary)
+        public static Task<IPagingResult<T>> ToBusinessPagingAsync<T>(this IList<T> data, IPageResult page, ISummaryResult summary, string tokenDefault = null)
         {
-            return Task.FromResult(ToBusinessPaging(data, page, summary));
+            return Task.FromResult(ToBusinessPaging(data, page, summary, tokenDefault));
         }
 
-        public static IPagingResult<T> ToBusinessPaging<T>(this IList<T> data, IPageResult page, ISummaryResult summary)
+        public static IPagingResult<T> ToBusinessPaging<T>(this IList<T> data, IPageResult page, ISummaryResult summary, string tokenDefault = null)
         {
-            return new PagingResult<T>(page, summary, new ReadOnlyCollection<T>(data ?? new List<T>()));
+            return new PagingResult<T>(
+                page, 
+                summary, 
+                new ReadOnlyCollection<T>(data ?? new List<T>()),
+                token: tokenDefault
+            );
         }
     }
 }

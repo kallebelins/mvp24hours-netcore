@@ -15,10 +15,12 @@ namespace Mvp24Hours.WebAPI.Middlewares
     public class CachingMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly string[] _varyByQueryKeys;
 
-        public CachingMiddleware(RequestDelegate next)
+        public CachingMiddleware(RequestDelegate next, string[] varyByQueryKeys)
         {
             _next = next;
+            _varyByQueryKeys = varyByQueryKeys;
         }
 
         public async Task Invoke(HttpContext context)
@@ -33,7 +35,7 @@ namespace Mvp24Hours.WebAPI.Middlewares
             var responseCachingFeature = context.Features.Get<IResponseCachingFeature>();
             if (responseCachingFeature != null)
             {
-                responseCachingFeature.VaryByQueryKeys = new[] { "Param1" };
+                responseCachingFeature.VaryByQueryKeys = _varyByQueryKeys;
             }
             await _next(context);
         }
