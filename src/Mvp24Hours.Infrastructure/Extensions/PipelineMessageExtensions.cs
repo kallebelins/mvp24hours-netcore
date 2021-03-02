@@ -17,7 +17,15 @@ namespace Mvp24Hours.Infrastructure.Extensions
         /// <summary>
         /// Encapsulates object for pipeline message
         /// </summary>
-        public static IPipelineMessage ToMessage<T>(this T value, string tokenDefault = null)
+        public static IPipelineMessage ToMessage<T>(this T value)
+        {
+            return ToMessageWithToken<T>(value, null);
+        }
+
+        /// <summary>
+        /// Encapsulates object for pipeline message
+        /// </summary>
+        public static IPipelineMessage ToMessageWithToken<T>(this T value, string tokenDefault)
         {
             IPipelineMessage message = new PipelineMessage();
             if (value != null)
@@ -30,10 +38,19 @@ namespace Mvp24Hours.Infrastructure.Extensions
             }
             return message;
         }
+
         /// <summary>
         /// Encapsulates object for pipeline message
         /// </summary>
-        public static IPipelineMessage ToMessageWithKeyContent<T>(this T value, string keyContent, string tokenDefault = null)
+        public static IPipelineMessage ToMessage<T>(this T value, string keyContent)
+        {
+            return ToMessageWithToken<T>(value, keyContent, null);
+        }
+
+        /// <summary>
+        /// Encapsulates object for pipeline message
+        /// </summary>
+        public static IPipelineMessage ToMessageWithToken<T>(this T value, string keyContent, string tokenDefault)
         {
             IPipelineMessage message = new PipelineMessage();
             if (value != null)
@@ -46,10 +63,19 @@ namespace Mvp24Hours.Infrastructure.Extensions
             }
             return message;
         }
+
         /// <summary>
         /// Transform business object to pipeline message
         /// </summary>
-        public static IPipelineMessage ToMessage<T>(IBusinessResult<T> bo, string tokenDefault = null)
+        public static IPipelineMessage ToMessage<T>(IBusinessResult<T> bo)
+        {
+            return ToMessageWithToken<T>(bo, null);
+        }
+
+        /// <summary>
+        /// Transform business object to pipeline message
+        /// </summary>
+        public static IPipelineMessage ToMessageWithToken<T>(IBusinessResult<T> bo, string tokenDefault)
         {
             IPipelineMessage message = new PipelineMessage();
             if (bo != null)
@@ -72,10 +98,19 @@ namespace Mvp24Hours.Infrastructure.Extensions
             }
             return message;
         }
+
         /// <summary>
         /// Transform business object to pipeline message and clone content
         /// </summary>
-        public static IPipelineMessage ToMessageClone<T>(IBusinessResult<T> bo, string tokenDefault = null)
+        public static IPipelineMessage ToMessageClone<T>(IBusinessResult<T> bo)
+        {
+            return ToMessageCloneWithToken<T>(bo, null);
+        }
+
+        /// <summary>
+        /// Transform business object to pipeline message and clone content
+        /// </summary>
+        public static IPipelineMessage ToMessageCloneWithToken<T>(IBusinessResult<T> bo, string tokenDefault)
         {
             IPipelineMessage message = new PipelineMessage();
             if (bo != null)

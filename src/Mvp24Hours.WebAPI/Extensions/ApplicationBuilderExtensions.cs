@@ -33,9 +33,9 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
-        public static IApplicationBuilder UseCaching(this IApplicationBuilder builder)
+        public static IApplicationBuilder UseCaching(this IApplicationBuilder builder, params string[] varyByQueryKeys)
         {
-            return builder.UseMiddleware<CachingMiddleware>();
+            return builder.UseMiddleware<CachingMiddleware>(varyByQueryKeys);
         }
 
         /// <summary>

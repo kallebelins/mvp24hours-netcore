@@ -75,7 +75,7 @@ namespace Mvp24Hours.Infrastructure.Data
                 {
                     var clauseExpr = clause as IPagingCriteriaExpression<T>;
                     // navigation by expression
-                    if (clauseExpr.NavigationExpr != null && clauseExpr.NavigationExpr.Count > 0)
+                    if (clauseExpr.NavigationExpr.AnyOrNotNull())
                     {
                         foreach (var nav in clauseExpr.NavigationExpr)
                         {
@@ -85,7 +85,7 @@ namespace Mvp24Hours.Infrastructure.Data
                 }
 
                 // navigation by string
-                if (clause.Navigation != null && clause.Navigation.Count > 0)
+                if (clause.Navigation.AnyOrNotNull())
                 {
                     foreach (var nav in clause.Navigation)
                     {
@@ -107,7 +107,7 @@ namespace Mvp24Hours.Infrastructure.Data
                     {
                         var clauseExpr = clause as IPagingCriteriaExpression<T>;
                         // ordination by ascending expression
-                        if (clauseExpr.OrderByAscendingExpr != null && clauseExpr.OrderByAscendingExpr.Count > 0)
+                        if (clauseExpr.OrderByAscendingExpr.AnyOrNotNull())
                         {
                             IOrderedQueryable<T> queryOrdered = null;
                             foreach (var ord in clauseExpr.OrderByAscendingExpr)
@@ -126,7 +126,7 @@ namespace Mvp24Hours.Infrastructure.Data
                         }
 
                         // ordination by descending expression
-                        if (clauseExpr.OrderByDescendingExpr != null && clauseExpr.OrderByDescendingExpr.Count > 0)
+                        if (clauseExpr.OrderByDescendingExpr.AnyOrNotNull())
                         {
                             IOrderedQueryable<T> queryOrdered = null;
                             foreach (var ord in clauseExpr.OrderByDescendingExpr)
@@ -146,7 +146,7 @@ namespace Mvp24Hours.Infrastructure.Data
                     }
 
                     // ordination by string
-                    if (clause.OrderBy != null && clause.OrderBy.Count > 0)
+                    if (clause.OrderBy.AnyOrNotNull())
                     {
                         IOrderedQueryable<T> queryOrdered = null;
                         foreach (var ord in clause.OrderBy)

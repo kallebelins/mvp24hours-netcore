@@ -28,6 +28,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
         {
             return OrderExpression(source, propertyName, true);
         }
+
         /// <summary>
         /// Sorting expression
         /// </summary>
@@ -42,8 +43,8 @@ namespace Mvp24Hours.Infrastructure.Extensions
             if (propertyName.Contains('_') || propertyName.Contains(' '))
             {
                 propertyName = propertyName.Replace(' ', '_');
-                isDescending = (propertyName.Split('_')[1].ToLower() == "desc");
-                propertyName = propertyName.Split('_')[0];
+                isDescending = propertyName.EndsWith("_desc");
+                propertyName = propertyName.Replace("_asc", "").Replace("_desc", "");
             }
 
             Type type = typeof(T);
