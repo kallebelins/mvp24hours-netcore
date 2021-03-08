@@ -128,16 +128,14 @@ namespace Mvp24Hours.Core.Extensions
 
         public static byte[] ZipByte(this string str)
         {
-            using (MemoryStream memory = new MemoryStream())
+            using MemoryStream memory = new MemoryStream();
+            DeflateStream gzip = new DeflateStream(memory, CompressionMode.Compress);
+            using (StreamWriter writer = new StreamWriter(gzip, System.Text.Encoding.UTF8))
             {
-                DeflateStream gzip = new DeflateStream(memory, CompressionMode.Compress);
-                using (StreamWriter writer = new StreamWriter(gzip, System.Text.Encoding.UTF8))
-                {
-                    writer.Write(str);
-                }
-                byte[] btComp = memory.ToArray();
-                return btComp;
+                writer.Write(str);
             }
+            byte[] btComp = memory.ToArray();
+            return btComp;
         }
 
         public static string UnZipBase64(this string str)
@@ -148,14 +146,10 @@ namespace Mvp24Hours.Core.Extensions
 
         public static string UnZip(this byte[] bty)
         {
-            using (MemoryStream inputStream = new MemoryStream(bty))
-            {
-                DeflateStream gzip = new DeflateStream(inputStream, CompressionMode.Decompress);
-                using (StreamReader reader = new StreamReader(gzip, System.Text.Encoding.UTF8))
-                {
-                    return reader.ReadToEnd();
-                }
-            }
+            using MemoryStream inputStream = new MemoryStream(bty);
+            DeflateStream gzip = new DeflateStream(inputStream, CompressionMode.Decompress);
+            using StreamReader reader = new StreamReader(gzip, System.Text.Encoding.UTF8);
+            return reader.ReadToEnd();
         }
     }
 }

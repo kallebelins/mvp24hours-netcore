@@ -188,7 +188,7 @@ namespace Mvp24Hours.Infrastructure.Data
         public void RemoveByIdAsync(object id)
         {
             var entity = this.GetByIdAsync(id);
-            if (entity == null) 
+            if (entity == null)
                 return;
             this.RemoveByIdAsync(entity);
         }

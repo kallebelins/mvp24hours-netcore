@@ -1,9 +1,6 @@
 ﻿using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Helpers;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mvp24Hours.Infrastructure.Extensions
 {

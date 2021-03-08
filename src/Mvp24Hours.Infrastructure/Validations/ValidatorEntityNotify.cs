@@ -14,14 +14,14 @@ using System;
 
 namespace Mvp24Hours.Infrastructure.Validations
 {
-    public class ValidatorEntityNotify<T> : ValidatorNotify<T>, IValidatorNotify<T>
+    public class ValidatorEntityNotify<T> : ValidatorNotify<T>, IValidatorNotify<T>, IValidator<T>
         where T : class, IEntityBase
     {
         #region [ Props ]
         private IUnitOfWork unitOfWork = null;
         protected virtual IUnitOfWork UnitOfWork
         {
-            get { return (unitOfWork ?? (unitOfWork = HttpContextHelper.GetService<IUnitOfWork>())); }
+            get { return (unitOfWork ??= HttpContextHelper.GetService<IUnitOfWork>()); }
         }
         #endregion
 

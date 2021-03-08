@@ -9,7 +9,6 @@ using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using System.Collections.Generic;
 using System.Linq;
-using System;
 
 namespace Mvp24Hours.Infrastructure.Pipe
 {
@@ -74,11 +73,13 @@ namespace Mvp24Hours.Infrastructure.Pipe
 
         public void AddContent<T>(T obj)
         {
+            if (obj == null) return;
             AddContent<T>(obj.GetType().FullName, obj);
         }
 
         public void AddContent<T>(string key, T obj)
         {
+            if (obj == null) return;
             if (_contents.ContainsKey(key))
             {
                 _contents[key] = obj;

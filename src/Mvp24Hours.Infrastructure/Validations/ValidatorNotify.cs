@@ -15,7 +15,7 @@ using System.Collections.Generic;
 
 namespace Mvp24Hours.Infrastructure.Validations
 {
-    public class ValidatorNotify<T> : IValidatorNotify<T>
+    public class ValidatorNotify<T> : IValidatorNotify<T>, IValidator<T>
         where T : class
     {
         #region [ Ctor ]

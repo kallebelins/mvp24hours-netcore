@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Mvp24Hours.Core.Extensions
@@ -141,7 +142,7 @@ namespace Mvp24Hours.Core.Extensions
             else
                 resto = 11 - resto;
             digito = resto.ToString();
-            tempCpf = tempCpf + digito;
+            tempCpf += digito;
             soma = 0;
             for (int i = 0; i < 10; i++)
                 soma += int.Parse(tempCpf[i].ToString()) * multiplicador2[i];
@@ -150,7 +151,7 @@ namespace Mvp24Hours.Core.Extensions
                 resto = 0;
             else
                 resto = 11 - resto;
-            digito = digito + resto.ToString();
+            digito += resto.ToString();
             return cpf.EndsWith(digito);
         }
 
@@ -179,7 +180,7 @@ namespace Mvp24Hours.Core.Extensions
             else
                 resto = 11 - resto;
             digito = resto.ToString();
-            tempCnpj = tempCnpj + digito;
+            tempCnpj += digito;
             soma = 0;
             for (int i = 0; i < 13; i++)
                 soma += int.Parse(tempCnpj[i].ToString()) * multiplicador2[i];
@@ -188,7 +189,7 @@ namespace Mvp24Hours.Core.Extensions
                 resto = 0;
             else
                 resto = 11 - resto;
-            digito = digito + resto.ToString();
+            digito += resto.ToString();
             return cnpj.EndsWith(digito);
         }
 
@@ -335,6 +336,12 @@ namespace Mvp24Hours.Core.Extensions
                 return ((d9 & d10) > 0) && ((d9 & d10) < 29);
 
             return false;
+        }
+
+        public static bool IsValidConstraint(this string text, params string[] values)
+        {
+            if (string.IsNullOrEmpty(text) || values == null || values.Length == 0) return false;
+            return values.Contains(text);
         }
     }
 }

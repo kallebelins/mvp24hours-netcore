@@ -24,7 +24,7 @@ namespace Mvp24Hours.Core.Contract.Domain.Validations
     ///         return 0;
     /// </code>
     /// </example>
-    public interface IValidatorNotify<T>
+    public interface IValidatorNotify<T> : IValidator<T>
     {
         /// <summary>
         /// Notification context
@@ -67,12 +67,5 @@ namespace Mvp24Hours.Core.Contract.Domain.Validations
         /// <returns>IValidatorNotify{T}</returns>
         IValidatorNotify<T> AddSpecification<U>(ISpecificationValidator<T> specificationValidator)
             where U : ISpecificationValidator<T>;
-
-        /// <summary>
-        /// Tests whether the model meets all added specifications
-        /// </summary>
-        /// <param name="Candidate">Model object for testing</param>
-        /// <returns>true|false</returns>
-        bool Validate(T Candidate);
     }
 }

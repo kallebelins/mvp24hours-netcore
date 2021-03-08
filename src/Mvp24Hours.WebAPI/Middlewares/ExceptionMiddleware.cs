@@ -8,13 +8,11 @@
 using Microsoft.AspNetCore.Http;
 using Mvp24Hours.Core.DTOs;
 using Mvp24Hours.Core.Enums;
-using Mvp24Hours.Core.ValueObjects.Infrastructure;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;
 using Mvp24Hours.Infrastructure.Logging;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 

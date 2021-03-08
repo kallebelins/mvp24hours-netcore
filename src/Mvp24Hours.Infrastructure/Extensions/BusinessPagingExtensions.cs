@@ -23,8 +23,8 @@ namespace Mvp24Hours.Infrastructure.Extensions
         public static IPagingResult<T> ToBusinessPaging<T>(this IList<T> data, IPageResult page, ISummaryResult summary, string tokenDefault = null)
         {
             return new PagingResult<T>(
-                page, 
-                summary, 
+                page,
+                summary,
                 new ReadOnlyCollection<T>(data ?? new List<T>()),
                 token: tokenDefault
             );
