@@ -23,7 +23,7 @@ namespace Mvp24Hours.Infrastructure.Data
 
         public UnitOfWorkAsync()
         {
-            this.DbContext = HttpContextHelper.GetService<DbContext>();
+            this.DbContext = ServiceProviderHelper.GetService<DbContext>();
             this.repositories = new Dictionary<Type, object>();
         }
 

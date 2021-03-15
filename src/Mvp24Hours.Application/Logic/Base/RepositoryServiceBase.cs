@@ -30,7 +30,7 @@ namespace Mvp24Hours.Business.Logic
         /// <returns>T</returns>
         protected virtual U UnitOfWork
         {
-            get { return (U)(unitOfWork ?? (unitOfWork = HttpContextHelper.GetService<U>())); }
+            get { return (U)(unitOfWork ?? (unitOfWork = ServiceProviderHelper.GetService<U>())); }
         }
 
         ILoggingService logger = null;

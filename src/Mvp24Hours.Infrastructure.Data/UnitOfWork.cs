@@ -24,7 +24,7 @@ namespace Mvp24Hours.Infrastructure.Data
 
         public UnitOfWork()
         {
-            this.DbContext = HttpContextHelper.GetService<DbContext>();
+            this.DbContext = ServiceProviderHelper.GetService<DbContext>();
             this.repositories = new Dictionary<Type, object>();
         }
 

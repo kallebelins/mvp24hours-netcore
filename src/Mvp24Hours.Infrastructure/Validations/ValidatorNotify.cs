@@ -21,7 +21,7 @@ namespace Mvp24Hours.Infrastructure.Validations
         #region [ Ctor ]
         public ValidatorNotify()
         {
-            Context = HttpContextHelper.GetService<INotificationContext>();
+            Context = ServiceProviderHelper.GetService<INotificationContext>();
 
             if (Context == null)
                 throw new ArgumentNullException("Notification context is mandatory.");

@@ -31,9 +31,9 @@ namespace Mvp24Hours.Infrastructure.Helpers
                 throw new ArgumentException("The type must be serializable.", nameof(source));
             }
 
-            if (Object.ReferenceEquals(source, null))
+            if (source == null)
             {
-                return default(T);
+                return default;
             }
 
             IFormatter formatter = new BinaryFormatter();
@@ -44,18 +44,6 @@ namespace Mvp24Hours.Infrastructure.Helpers
                 stream.Seek(0, SeekOrigin.Begin);
                 return (T)formatter.Deserialize(stream);
             }
-        }
-        /// <summary>
-        /// Serializes instance based on default configuration
-        /// </summary>
-        public static string Serialize<T>(T dto)
-        {
-            return JsonConvert.SerializeObject(dto, new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                Converters = new List<JsonConverter> { new StringEnumConverter() },
-                NullValueHandling = NullValueHandling.Ignore
-            });
         }
     }
 }

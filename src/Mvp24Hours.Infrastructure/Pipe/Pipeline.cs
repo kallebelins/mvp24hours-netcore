@@ -41,7 +41,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
             this._isBreakOnFail = isBreakOnFail;
             this._token = token;
 
-            Context = HttpContextHelper.GetService<INotificationContext>();
+            Context = ServiceProviderHelper.GetService<INotificationContext>();
 
             if (Context == null)
                 throw new ArgumentNullException("Notification context is mandatory.");

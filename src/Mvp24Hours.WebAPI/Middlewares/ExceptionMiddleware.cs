@@ -60,15 +60,14 @@ namespace Mvp24Hours.Infrastructure.Middlewares
                 message.ToMessageResult("internalservererror", MessageType.Error)
             );
 
-            var messageResult = ObjectHelper.Serialize(boResult);
+            var messageResult = JsonHelper.Serialize(boResult);
             return context.Response.WriteAsync(messageResult);
         }
 
         private bool GetTraceMiddleware()
         {
             string enableTraceStr = ConfigurationHelper.GetSettings("Mvp24Hours:Web:TraceMiddleware");
-            bool enableTrace;
-            bool.TryParse(enableTraceStr, out enableTrace);
+            bool.TryParse(enableTraceStr, out bool enableTrace);
             return enableTrace;
         }
     }

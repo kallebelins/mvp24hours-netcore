@@ -23,6 +23,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
         public static void SetContext(IHttpContextAccessor accessor)
         {
             httpContextAccessor = accessor;
+            ServiceProviderHelper.SetProvider(accessor.HttpContext.RequestServices);
         }
         /// <summary>
         /// Get individual HTTP request context
@@ -36,7 +37,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
         /// </summary>
         public static T GetService<T>()
         {
-            return (T)GetContext().RequestServices?.GetService(typeof(T));
+            return (T)ServiceProviderHelper.GetService<T>();
         }
         /// <summary>
         /// Gets IP of the user who originated the current request

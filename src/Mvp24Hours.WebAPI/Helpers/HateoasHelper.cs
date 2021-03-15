@@ -21,13 +21,13 @@ namespace Mvp24Hours.Infrastructure.Helpers
 
         private static string ResolveUrl(string routeName, object routeValues)
         {
-            var _urlHelper = HttpContextHelper.GetService<IUrlHelper>();
+            var _urlHelper = ServiceProviderHelper.GetService<IUrlHelper>();
             return _urlHelper.Link(routeName, routeValues);
         }
 
         private static string ResolveUrlTemplate(string routeName, object routeValues)
         {
-            var _urlHelper = HttpContextHelper.GetService<IUrlHelper>();
+            var _urlHelper = ServiceProviderHelper.GetService<IUrlHelper>();
             string url = _urlHelper.RouteUrl(routeName, routeValues);
 
             if (!string.IsNullOrEmpty(url))
@@ -35,7 +35,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
                 if (url.EndsWith("0"))
                     return url.Replace("/0", "/{id}");
                 else if (url.EndsWith(Guid.Empty.ToString()))
-                    return url.Replace($"/{Guid.Empty.ToString()}", "/{oid}");
+                    return url.Replace($"/{Guid.Empty}", "/{oid}");
                 else
                     return url;
             }

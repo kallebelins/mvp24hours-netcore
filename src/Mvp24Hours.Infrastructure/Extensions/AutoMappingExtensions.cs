@@ -37,7 +37,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
         /// </summary>
         public static TDestination MapTo<TDestination>(this object source)
         {
-            IMapper mapper = HttpContextHelper.GetService<IMapper>();
+            IMapper mapper = ServiceProviderHelper.GetService<IMapper>();
             if (mapper == null)
                 throw new ArgumentNullException("Profile not registered for AutoMapper.");
             return mapper.Map<TDestination>(source);

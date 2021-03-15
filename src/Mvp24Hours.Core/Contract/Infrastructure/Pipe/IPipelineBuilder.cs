@@ -20,7 +20,7 @@
     /// }
     /// 
     /// // use
-    /// var builder = HttpContextHelper.GetService{IProductGetByBuilder}();
+    /// var builder = ServiceProviderHelper.GetService{IProductGetByBuilder}();
     /// builder.Builder(pipeline);
     /// </code>
     /// </example>

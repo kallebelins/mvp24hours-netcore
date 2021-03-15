@@ -21,7 +21,7 @@ namespace Mvp24Hours.Infrastructure.Validations
         private IUnitOfWork unitOfWork = null;
         protected virtual IUnitOfWork UnitOfWork
         {
-            get { return (unitOfWork ??= HttpContextHelper.GetService<IUnitOfWork>()); }
+            get { return (unitOfWork ??= ServiceProviderHelper.GetService<IUnitOfWork>()); }
         }
         #endregion
 

@@ -31,7 +31,7 @@ namespace Mvp24Hours.Business.Logic
         /// <returns>T</returns>
         protected virtual U UnitOfWork
         {
-            get { return (U)(unitOfWork ?? (unitOfWork = HttpContextHelper.GetService<U>())); }
+            get { return (U)(unitOfWork ??= ServiceProviderHelper.GetService<U>()); }
         }
 
         ILoggingService logger = null;
@@ -42,7 +42,7 @@ namespace Mvp24Hours.Business.Logic
         /// <returns>ILoggingService</returns>
         protected virtual ILoggingService Logging
         {
-            get { return logger ?? (logger = LoggingService.GetLoggingService()); }
+            get { return logger ??= LoggingService.GetLoggingService(); }
         }
 
         /// <summary>

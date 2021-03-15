@@ -21,7 +21,7 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations
         #region [ Ctors ]
         public OperationBase()
         {
-            NotificationContext = HttpContextHelper.GetService<INotificationContext>();
+            NotificationContext = ServiceProviderHelper.GetService<INotificationContext>();
 
             if (NotificationContext == null)
                 throw new ArgumentNullException("Notification context is mandatory.");
