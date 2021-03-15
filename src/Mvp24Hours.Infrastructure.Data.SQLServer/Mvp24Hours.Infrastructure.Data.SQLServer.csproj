@@ -7,8 +7,8 @@
     <Description>Series architectures for fast product construction.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/kallebelins</PackageProjectUrl>
-    <Version>1.0.16</Version>
-    <AssemblyVersion>1.0.16.0</AssemblyVersion>
+    <Version>1.0.17</Version>
+    <AssemblyVersion>1.0.17.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
