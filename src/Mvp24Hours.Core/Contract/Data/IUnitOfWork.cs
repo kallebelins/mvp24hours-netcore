@@ -16,7 +16,7 @@ namespace Mvp24Hours.Core.Contract.Data
 	/// coordinates writing out changes and resolving competition issues. (Martin Fowler)
     /// Learn more: http://martinfowler.com/eaaCatalog/unitOfWork.html
     /// </summary>
-    public interface IUnitOfWork : IDisposable
+    public interface IUnitOfWork
     {
         /// <summary>
         /// Persists the actions taken in the transaction

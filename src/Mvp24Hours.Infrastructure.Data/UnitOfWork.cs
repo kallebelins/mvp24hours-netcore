@@ -18,7 +18,7 @@ namespace Mvp24Hours.Infrastructure.Data
     /// <summary>
     ///  <see cref="Mvp24Hours.Core.Contract.Data.IUnitOfWork"/>
     /// </summary>
-    public class UnitOfWork : IUnitOfWork, IDisposable
+    public class UnitOfWork : IUnitOfWork
     {
         #region [ Ctor ]
 
@@ -53,22 +53,31 @@ namespace Mvp24Hours.Infrastructure.Data
 
         #region [ IDisposable ]
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+        /*
+            Cannot access a disposed context instance. 
+            A common cause of this error is disposing a context instance that was resolved from dependency 
+            injection and then later trying to use the same context instance elsewhere in your application. 
+            This may occur if you are calling 'Dispose' on the context instance, or wrapping it in a using statement. 
+            If you are using dependency injection, you should let the dependency injection container take care 
+            of disposing context instances.
+        */
 
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (this.DbContext != null)
-                {
-                    this.DbContext.Dispose();
-                }
-            }
-        }
+        //public void Dispose()
+        //{
+        //    Dispose(true);
+        //    GC.SuppressFinalize(this);
+        //}
+
+        //protected virtual void Dispose(bool disposing)
+        //{
+        //    if (disposing)
+        //    {
+        //        if (this.DbContext != null)
+        //        {
+        //            this.DbContext.Dispose();
+        //        }
+        //    }
+        //}
 
         #endregion
 
