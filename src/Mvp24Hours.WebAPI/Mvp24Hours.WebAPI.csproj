@@ -9,9 +9,21 @@
     <Company>Kallebe Lins</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>1.0.18</Version>
-    <AssemblyVersion>1.0.18.0</AssemblyVersion>
+    <Version>1.0.19</Version>
+    <AssemblyVersion>1.0.19.0</AssemblyVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="sample-appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="sample-appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />

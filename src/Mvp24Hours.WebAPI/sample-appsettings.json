@@ -1,0 +1,30 @@
+{
+  "Mvp24Hours": {
+    "Persistence": {
+      "MaxQtyByQueryPage": 30
+    },
+    "FileLog": {
+      "Path": "",
+      "TokenPath": ""
+    },
+    "SmtpMail": {
+      "SmtpServer": "",
+      "SmtpUser": "",
+      "SmtpPassword": "",
+      "SmtpPort": "",
+      "SmtpSSL": "",
+      "MailTo": "",
+      "MailFrom": "",
+      "MailFromName": "",
+      "ReplyTo": "",
+      "ReplyToName": ""
+    },
+    "Web": {
+      "TraceMiddleware": true
+    },
+    "Filters": {
+      "EnableNotification": true,
+      "EnableHATEOAS": true
+    }
+  }
+}

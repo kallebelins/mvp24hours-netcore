@@ -8,6 +8,7 @@
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Core.Enums;
+using Mvp24Hours.Core.Extensions;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Helpers;
 using System;
@@ -35,13 +36,13 @@ namespace Mvp24Hours.Infrastructure.Pipe
         {
         }
         public PipelineAsync(bool isBreakOnFail)
-            : this(Guid.NewGuid().ToString(), isBreakOnFail)
+            : this(null, isBreakOnFail)
         {
         }
         public PipelineAsync(string token, bool isBreakOnFail)
         {
             this._isBreakOnFail = isBreakOnFail;
-            this._token = token ?? Guid.NewGuid().ToString();
+            this._token = token;
 
             Context = ServiceProviderHelper.GetService<INotificationContext>();
 
@@ -80,6 +81,11 @@ namespace Mvp24Hours.Infrastructure.Pipe
         }
         public async Task<IPipelineMessage> Execute(IPipelineMessage input)
         {
+            if (!_token.HasValue())
+            {
+                _token = input.Token.HasValue() ? input.Token : Guid.NewGuid().ToString();
+            }
+
             return await this._operations.Aggregate(Task.FromResult(input), async (current, operation) =>
             {
                 var result = await current;

@@ -28,5 +28,10 @@ namespace Mvp24Hours.Infrastructure.Extensions
         {
             return JsonConvert.DeserializeObject<IBusinessResult<T>>(value, JsonHelper.JsonBusinessResultSettings<T>());
         }
+
+        public static dynamic ToDynamic<T>(this T obj)
+        {
+            return ObjectHelper.ConvertToDynamic(obj);
+        }
     }
 }

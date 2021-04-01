@@ -8,6 +8,7 @@
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Core.Enums;
+using Mvp24Hours.Core.Extensions;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Helpers;
 using System;
@@ -33,7 +34,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
         {
         }
         public Pipeline(bool isBreakOnFail)
-            : this(Guid.NewGuid().ToString(), isBreakOnFail)
+            : this(null, isBreakOnFail)
         {
         }
         public Pipeline(string token, bool isBreakOnFail)
@@ -78,6 +79,11 @@ namespace Mvp24Hours.Infrastructure.Pipe
         }
         public IPipelineMessage Execute(IPipelineMessage input)
         {
+            if (!_token.HasValue())
+            {
+                _token = input.Token.HasValue() ? input.Token : Guid.NewGuid().ToString();
+            }
+
             return this.operations.Aggregate(input, (current, operation) =>
             {
                 current.SetToken(this._token);

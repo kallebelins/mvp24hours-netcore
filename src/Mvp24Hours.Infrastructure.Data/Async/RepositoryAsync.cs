@@ -58,14 +58,16 @@ namespace Mvp24Hours.Infrastructure.Data
         public Task<bool> GetByAnyAsync(Expression<Func<T, bool>> clause)
         {
             var query = this.dbEntities.AsQueryable();
-            query = query.Where(clause);
+            if (clause != null)
+                query = query.Where(clause);
             return GetQuery(query, null, true).AnyAsync();
         }
 
         public Task<int> GetByCountAsync(Expression<Func<T, bool>> clause)
         {
             var query = this.dbEntities.AsQueryable();
-            query = query.Where(clause);
+            if (clause != null)
+                query = query.Where(clause);
             return GetQuery(query, null, true).CountAsync();
         }
 
@@ -77,7 +79,8 @@ namespace Mvp24Hours.Infrastructure.Data
         public async Task<IList<T>> GetByAsync(Expression<Func<T, bool>> clause, IPagingCriteria criteria)
         {
             var query = this.dbEntities.AsQueryable();
-            query = query.Where(clause);
+            if (clause != null)
+                query = query.Where(clause);
             return await GetQuery(query, criteria).ToListAsync();
         }
 

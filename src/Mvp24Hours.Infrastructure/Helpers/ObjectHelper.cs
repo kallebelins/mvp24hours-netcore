@@ -5,7 +5,9 @@
 //=====================================================================================
 // Reproduction or sharing is free!
 //=====================================================================================
+using Mvp24Hours.Infrastructure.Extensions;
 using System;
+using System.Dynamic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -40,6 +42,12 @@ namespace Mvp24Hours.Infrastructure.Helpers
                 stream.Seek(0, SeekOrigin.Begin);
                 return (T)formatter.Deserialize(stream);
             }
+        }
+
+        public static dynamic ConvertToDynamic(object obj)
+        {
+            var json = obj.ToSerialize();
+            return json.ToDeserialize<ExpandoObject>();
         }
     }
 }

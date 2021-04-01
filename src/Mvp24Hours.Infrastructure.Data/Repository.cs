@@ -72,7 +72,8 @@ namespace Mvp24Hours.Infrastructure.Data
         public bool GetByAny(Expression<Func<T, bool>> clause)
         {
             var query = this.dbEntities.AsQueryable();
-            query = query.Where(clause);
+            if (clause != null)
+                query = query.Where(clause);
             return GetQuery(query, null, true).Any();
         }
 
@@ -82,7 +83,8 @@ namespace Mvp24Hours.Infrastructure.Data
         public int GetByCount(Expression<Func<T, bool>> clause)
         {
             var query = this.dbEntities.AsQueryable();
-            query = query.Where(clause);
+            if (clause != null)
+                query = query.Where(clause);
             return GetQuery(query, null, true).Count();
         }
 
@@ -100,7 +102,8 @@ namespace Mvp24Hours.Infrastructure.Data
         public IList<T> GetBy(Expression<Func<T, bool>> clause, IPagingCriteria criteria)
         {
             var query = this.dbEntities.AsQueryable();
-            query = query.Where(clause);
+            if (clause != null)
+                query = query.Where(clause);
             return GetQuery(query, criteria).ToList();
         }
 

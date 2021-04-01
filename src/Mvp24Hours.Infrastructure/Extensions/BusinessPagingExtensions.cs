@@ -9,6 +9,7 @@ using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Mvp24Hours.Infrastructure.Extensions
@@ -28,6 +29,45 @@ namespace Mvp24Hours.Infrastructure.Extensions
                 new ReadOnlyCollection<T>(data ?? new List<T>()),
                 token: tokenDefault
             );
+        }
+
+        public static IPagingResult<T> ToBusinessPagingWithMessage<T>(this IList<T> value, params IMessageResult[] messageResult)
+        {
+            return ToBusinessPagingWithMessage(value, null, messageResult);
+        }
+
+        public static IPagingResult<T> ToBusinessPagingWithMessage<T>(this IList<T> value, string tokenDefault = null, params IMessageResult[] messageResult)
+        {
+            if (value != null)
+            {
+                return new PagingResult<T>(
+                    new PageResult(0, 0, 0),
+                    new SummaryResult(0, 0),
+                    token: tokenDefault,
+                    data: new ReadOnlyCollection<T>(value),
+                    messages: new ReadOnlyCollection<IMessageResult>(messageResult?.ToList() ?? new List<IMessageResult>())
+                );
+            }
+            return PagingResult<T>.Create(tokenDefault);
+        }
+
+        public static IPagingResult<T> ToBusinessPagingWithMessage<T>(this T value, params IMessageResult[] messageResult)
+        {
+            return ToBusinessPagingWithMessage(value, null, messageResult);
+        }
+
+        public static IPagingResult<T> ToBusinessPagingWithMessage<T>(this T value, string tokenDefault = null, params IMessageResult[] messageResult)
+        {
+            if (value != null)
+            {
+                return new PagingResult<T>(
+                    new PageResult(0, 0, 0),
+                    new SummaryResult(0, 0),
+                    token: tokenDefault,
+                    messages: new ReadOnlyCollection<IMessageResult>(messageResult?.ToList() ?? new List<IMessageResult>())
+                );
+            }
+            return PagingResult<T>.Create(tokenDefault);
         }
     }
 }

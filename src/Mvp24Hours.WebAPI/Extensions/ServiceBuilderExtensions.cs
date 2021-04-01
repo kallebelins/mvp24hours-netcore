@@ -28,7 +28,7 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// <summary>
         /// Add all services
         /// </summary>
-        public static IServiceCollection AddMvp24HoursAll<TDbContext>(this IServiceCollection services, Func<IServiceProvider, TDbContext> dbFactory, Assembly assemblyMap = null)
+        public static IServiceCollection AddMvp24HoursAll<TDbContext>(this IServiceCollection services, Func<IServiceProvider, TDbContext> dbFactory = null, Assembly assemblyMap = null)
             where TDbContext : DbContext
         {
             services.AddMvp24HoursService();
@@ -54,7 +54,7 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// <summary>
         /// Add all services async
         /// </summary>
-        public static IServiceCollection AddMvp24HoursAllAsync<TDbContext>(this IServiceCollection services, Func<IServiceProvider, TDbContext> dbFactory, Assembly assemblyMap = null)
+        public static IServiceCollection AddMvp24HoursAllAsync<TDbContext>(this IServiceCollection services, Func<IServiceProvider, TDbContext> dbFactory = null, Assembly assemblyMap = null)
             where TDbContext : DbContext
         {
             services.AddMvp24HoursService();
@@ -92,6 +92,8 @@ namespace Mvp24Hours.WebAPI.Extensions
             #endregion
 
             #region [ Hateaos ]
+            services.AddScoped<IHATEOASContext, HATEOASContext>();
+            services.AddMvc(options => options.Filters.Add<HATEOASFilter>());
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>()
                 .AddScoped<IUrlHelper>(x => x.GetRequiredService<IUrlHelperFactory>()
                 .GetUrlHelper(x.GetRequiredService<IActionContextAccessor>().ActionContext));

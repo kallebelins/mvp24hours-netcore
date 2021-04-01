@@ -25,13 +25,11 @@ namespace Mvp24Hours.Core.ValueObjects.Logic
         public BusinessResult(
             IReadOnlyCollection<T> data = null,
             IReadOnlyCollection<IMessageResult> messages = null,
-            IList<ILinkResult> links = null,
             string token = null
         )
         {
             Data = data;
             Messages = messages;
-            Links = links;
             Token = token;
         }
 
@@ -57,23 +55,6 @@ namespace Mvp24Hours.Core.ValueObjects.Logic
         [DataMember]
         public bool HasErrors => Messages?.Where(x => x.Type == Enums.MessageType.Error)?.Any() ?? false;
 
-        private IList<ILinkResult> links;
-        /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IBusinessResult{T}.Links"/>
-        /// </summary>
-        [DataMember]
-        public IList<ILinkResult> Links
-        {
-            get
-            {
-                return links ??= new List<ILinkResult>();
-            }
-            private set
-            {
-                links = value;
-            }
-        }
-
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IBusinessResult{T}.Token"/>
         /// </summary>
@@ -96,7 +77,6 @@ namespace Mvp24Hours.Core.ValueObjects.Logic
             yield return Token;
             yield return Data;
             yield return Messages;
-            yield return Links;
         }
 
         #endregion
