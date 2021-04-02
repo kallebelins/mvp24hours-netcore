@@ -34,7 +34,7 @@ namespace Mvp24Hours.WebAPI.Filters
 
         public async Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next)
         {
-            if (EnableFilter)
+            if (!EnableFilter)
             {
                 await next();
                 return;
