@@ -19,12 +19,12 @@ namespace Mvp24Hours.Infrastructure.Extensions
             return JsonHelper.Deserialize<T>(value, jsonSerializerSettings);
         }
 
-        public static IPagingResult<T> ToPagingResult<T>(this string value, JsonSerializerSettings jsonSerializerSettings = null)
+        public static IPagingResult<T> ToDeserializePagingResult<T>(this string value, JsonSerializerSettings jsonSerializerSettings = null)
         {
             return JsonConvert.DeserializeObject<IPagingResult<T>>(value, JsonHelper.JsonPagingResultSettings<T>(jsonSerializerSettings));
         }
 
-        public static IBusinessResult<T> ToBusinessResult<T>(this string value, JsonSerializerSettings jsonSerializerSettings = null)
+        public static IBusinessResult<T> ToDeserializeBusinessResult<T>(this string value, JsonSerializerSettings jsonSerializerSettings = null)
         {
             return JsonConvert.DeserializeObject<IBusinessResult<T>>(value, JsonHelper.JsonBusinessResultSettings<T>(jsonSerializerSettings));
         }

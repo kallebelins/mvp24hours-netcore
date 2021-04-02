@@ -1,4 +1,6 @@
-﻿using Mvp24Hours.Core.Enums;
+﻿using Mvp24Hours.Core.Converters;
+using Mvp24Hours.Core.Enums;
+using System.Text.Json.Serialization;
 
 namespace Mvp24Hours.Core.Contract.ValueObjects.Logic
 {
@@ -19,5 +21,9 @@ namespace Mvp24Hours.Core.Contract.ValueObjects.Logic
         /// User feedback type
         /// </summary>
         MessageType Type { get; }
+        /// <summary>
+        /// User feedback type code
+        /// </summary>
+        int TypeCode { get; }
     }
 }

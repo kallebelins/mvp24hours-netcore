@@ -6,6 +6,7 @@
 // Reproduction or sharing is free!
 //=====================================================================================
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
+using Mvp24Hours.Core.Converters;
 using Mvp24Hours.Core.Enums;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -24,6 +25,12 @@ namespace Mvp24Hours.Core.ValueObjects.Infrastructure
     {
         #region [ Ctor ]
         [JsonConstructor]
+        public Notification(string key, string message, int typeCode)
+        {
+            Key = key;
+            Message = message;
+            Type = (MessageType)typeCode;
+        }
         public Notification(string key, string message, MessageType type = MessageType.Error)
         {
             Key = key;
@@ -47,8 +54,13 @@ namespace Mvp24Hours.Core.ValueObjects.Infrastructure
         /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IMessageResult.Type"/>
         /// </summary>
         [DataMember]
-        [JsonConverter(typeof(StringEnumConverter))]
         public MessageType Type { get; }
+        /// <summary>
+        /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IMessageResult.TypeCode"/>
+        /// </summary>
+        [DataMember]
+        public int TypeCode { get { return (int)Type; } }
+
         #endregion
 
         #region [ Overrides ]

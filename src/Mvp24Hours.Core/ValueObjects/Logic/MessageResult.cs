@@ -12,6 +12,7 @@ using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Mvp24Hours.Core.Converters;
 
 namespace Mvp24Hours.Core.ValueObjects.Logic
 {
@@ -22,17 +23,24 @@ namespace Mvp24Hours.Core.ValueObjects.Logic
     public class MessageResult : BaseVO, IMessageResult
     {
         #region [ Ctor ]
-        public MessageResult(string message, MessageType messageType)
-            : this(Guid.NewGuid().ToString(), message, messageType)
+        public MessageResult(string message, MessageType type)
+            : this(Guid.NewGuid().ToString(), message, type)
         {
         }
 
         [JsonConstructor]
-        public MessageResult(string key, string message, MessageType messageType)
+        public MessageResult(string key, string message, int typeCode)
         {
             Key = key;
             Message = message;
-            Type = messageType;
+            Type = (MessageType)typeCode;
+        }
+
+        public MessageResult(string key, string message, MessageType type)
+        {
+            Key = key;
+            Message = message;
+            Type = type;
         }
         #endregion
 
@@ -51,8 +59,12 @@ namespace Mvp24Hours.Core.ValueObjects.Logic
         /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IMessageResult.Type"/>
         /// </summary>
         [DataMember]
-        [JsonConverter(typeof(StringEnumConverter))]
         public MessageType Type { get; }
+        /// <summary>
+        /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IMessageResult.TypeCode"/>
+        /// </summary>
+        [DataMember]
+        public int TypeCode { get { return (int)Type; } }
         #endregion
 
         #region [ Methods ]
