@@ -8,6 +8,7 @@
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Core.Enums;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -50,6 +51,7 @@ namespace Mvp24Hours.Core.ValueObjects.Logic
         /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IMessageResult.Type"/>
         /// </summary>
         [DataMember]
+        [JsonConverter(typeof(StringEnumConverter))]
         public MessageType Type { get; }
         #endregion
 

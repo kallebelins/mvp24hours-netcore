@@ -10,29 +10,29 @@ namespace Mvp24Hours.Infrastructure.Helpers
 {
     public static class JsonHelper
     {
-        public static string Serialize<T>(T dto)
+        public static string Serialize<T>(T dto, JsonSerializerSettings jsonSerializerSettings = null)
         {
-            return JsonConvert.SerializeObject(dto, new JsonSerializerSettings
+            return JsonConvert.SerializeObject(dto, jsonSerializerSettings ?? JsonDefaultSettings());
+        }
+
+        public static T Deserialize<T>(string value, JsonSerializerSettings jsonSerializerSettings = null)
+        {
+            return JsonConvert.DeserializeObject<T>(value, jsonSerializerSettings ?? JsonDefaultSettings());
+        }
+
+        public static JsonSerializerSettings JsonDefaultSettings()
+        {
+            return new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
                 Converters = new List<JsonConverter> { new StringEnumConverter() },
                 NullValueHandling = NullValueHandling.Ignore
-            });
+            };
         }
 
-        public static T Deserialize<T>(string value)
+        public static JsonSerializerSettings JsonPagingResultSettings<T>(JsonSerializerSettings jsonSerializerSettings = null)
         {
-            return JsonConvert.DeserializeObject<T>(value, new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                Converters = new List<JsonConverter> { new StringEnumConverter() },
-                NullValueHandling = NullValueHandling.Ignore
-            });
-        }
-
-        public static JsonSerializerSettings JsonPagingResultSettings<T>()
-        {
-            var settings = new JsonSerializerSettings();
+            var settings = jsonSerializerSettings ?? JsonDefaultSettings();
             settings.Converters.Add(new ValueObjectConverter<IPagingResult<T>, PagingResult<T>>());
             settings.Converters.Add(new ValueObjectConverter<IPageResult, PageResult>());
             settings.Converters.Add(new ValueObjectConverter<ISummaryResult, SummaryResult>());
@@ -41,9 +41,9 @@ namespace Mvp24Hours.Infrastructure.Helpers
             return settings;
         }
 
-        public static JsonSerializerSettings JsonBusinessResultSettings<T>()
+        public static JsonSerializerSettings JsonBusinessResultSettings<T>(JsonSerializerSettings jsonSerializerSettings = null)
         {
-            var settings = new JsonSerializerSettings();
+            var settings = jsonSerializerSettings ?? JsonDefaultSettings();
             settings.Converters.Add(new ValueObjectConverter<IBusinessResult<T>, BusinessResult<T>>());
             settings.Converters.Add(new ValueObjectConverter<ISummaryResult, SummaryResult>());
             settings.Converters.Add(new ValueObjectConverter<ILinkResult, LinkResult>());

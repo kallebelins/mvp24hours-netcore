@@ -7,7 +7,11 @@
 //=====================================================================================
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Core.Enums;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace Mvp24Hours.Core.ValueObjects.Infrastructure
 {
@@ -15,9 +19,11 @@ namespace Mvp24Hours.Core.ValueObjects.Infrastructure
     /// Represents a notification
     /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IMessageResult"/>
     /// </summary>
+    [DataContract, Serializable]
     public class Notification : BaseVO, IMessageResult
     {
         #region [ Ctor ]
+        [JsonConstructor]
         public Notification(string key, string message, MessageType type = MessageType.Error)
         {
             Key = key;
@@ -30,14 +36,18 @@ namespace Mvp24Hours.Core.ValueObjects.Infrastructure
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IMessageResult.Key"/>
         /// </summary>
+        [DataMember]
         public string Key { get; }
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IMessageResult.Message"/>
         /// </summary>
+        [DataMember]
         public string Message { get; }
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IMessageResult.Type"/>
         /// </summary>
+        [DataMember]
+        [JsonConverter(typeof(StringEnumConverter))]
         public MessageType Type { get; }
         #endregion
 

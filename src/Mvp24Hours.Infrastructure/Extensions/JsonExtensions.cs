@@ -7,26 +7,26 @@ namespace Mvp24Hours.Infrastructure.Extensions
 {
     public static class JsonExtensions
     {
-        public static string ToSerialize<T>(this T value)
+        public static string ToSerialize<T>(this T value, JsonSerializerSettings jsonSerializerSettings = null)
         {
             if (value == null) return string.Empty;
-            return JsonHelper.Serialize(value);
+            return JsonHelper.Serialize(value, jsonSerializerSettings);
         }
 
-        public static T ToDeserialize<T>(this string value)
+        public static T ToDeserialize<T>(this string value, JsonSerializerSettings jsonSerializerSettings = null)
         {
             if (!value.HasValue()) return default;
-            return JsonHelper.Deserialize<T>(value);
+            return JsonHelper.Deserialize<T>(value, jsonSerializerSettings);
         }
 
-        public static IPagingResult<T> ToPagingResult<T>(this string value)
+        public static IPagingResult<T> ToPagingResult<T>(this string value, JsonSerializerSettings jsonSerializerSettings = null)
         {
-            return JsonConvert.DeserializeObject<IPagingResult<T>>(value, JsonHelper.JsonPagingResultSettings<T>());
+            return JsonConvert.DeserializeObject<IPagingResult<T>>(value, JsonHelper.JsonPagingResultSettings<T>(jsonSerializerSettings));
         }
 
-        public static IBusinessResult<T> ToBusinessResult<T>(this string value)
+        public static IBusinessResult<T> ToBusinessResult<T>(this string value, JsonSerializerSettings jsonSerializerSettings = null)
         {
-            return JsonConvert.DeserializeObject<IBusinessResult<T>>(value, JsonHelper.JsonBusinessResultSettings<T>());
+            return JsonConvert.DeserializeObject<IBusinessResult<T>>(value, JsonHelper.JsonBusinessResultSettings<T>(jsonSerializerSettings));
         }
 
         public static dynamic ToDynamic<T>(this T obj)
