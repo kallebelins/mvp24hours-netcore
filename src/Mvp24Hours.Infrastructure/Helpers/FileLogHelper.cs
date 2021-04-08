@@ -3,8 +3,9 @@
 // Teacher, Architect, Consultant and Project Leader
 // Virtual Card: https://www.linkedin.com/in/kallebelins
 //=====================================================================================
-// Reproduction or sharing is free!
+// Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Mvp24Hours.Core.Extensions;
 using Mvp24Hours.Infrastructure.Logging;
 using Newtonsoft.Json;
 using System;
@@ -27,11 +28,12 @@ namespace Mvp24Hours.Infrastructure.Helpers
         /// <summary>
         /// Writes log with model characteristics in the parameter
         /// </summary>
-        public static void WriteLog<T>(T dto, string suffixFilename = null, string header = null)
+        public static void WriteLog<T>(T dto, string suffixFilename = null, string header = null, string logPath = null)
         {
             try
             {
-                string logPath = ConfigurationHelper.GetSettings("Mvp24Hours:FileLog:Path");
+                if (!logPath.HasValue())
+                    logPath = ConfigurationHelper.GetSettings("Mvp24Hours:FileLog:Path");
                 if (string.IsNullOrEmpty(logPath))
                     return;
                 string filename = $"{DateTime.Today:yyyy_MM_dd}_{Guid.NewGuid().ToString()}.log";
@@ -39,7 +41,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
                 {
                     filename = $"{suffixFilename.ToLower()}_{filename}";
                 }
-                var folder = $"{logPath}\\{DateTime.Today:yyyy_MM_dd}\\";
+                var folder = $"{logPath}/{DateTime.Today:yyyy_MM_dd}/";
                 WriteDisk(dto, folder, filename, $"{header} Hora : {DateTime.Now.ToString("HH:mm:ss.fff")}", true);
             }
             catch (Exception ex)
@@ -50,17 +52,18 @@ namespace Mvp24Hours.Infrastructure.Helpers
         /// <summary>
         /// Writes log with model characteristics in the parameter using token to map location (system folder)
         /// </summary>
-        public static void WriteLogToken<T>(string token, string fileName, T obj)
+        public static void WriteLogToken<T>(string token, string fileName, T obj, string logPath = null)
         {
             try
             {
                 lock (obj)
                 {
-                    string logPath = ConfigurationHelper.GetSettings("Mvp24Hours:FileLog:TokenPath");
+                    if (!logPath.HasValue())
+                        logPath = ConfigurationHelper.GetSettings("Mvp24Hours:FileLog:TokenPath");
                     if (string.IsNullOrEmpty(logPath))
                         return;
 
-                    var folder = $"{logPath}\\{token}\\";
+                    var folder = $"{logPath}/{token}/";
                     Directory.CreateDirectory(folder);
 
                     var fullPath = $"{folder}{fileName}.json";
@@ -75,12 +78,13 @@ namespace Mvp24Hours.Infrastructure.Helpers
         /// <summary>
         /// Performs log reading based on token (system folder path)
         /// </summary>
-        public static T ReadLogToken<T>(string token, string fileName)
+        public static T ReadLogToken<T>(string token, string fileName, string logPath = null)
         {
             try
             {
-                string logPath = ConfigurationHelper.GetSettings("Mvp24Hours:FileLog:TokenPath");
-                var fullPath = $"{logPath}\\{token}\\{fileName}.json";
+                if (!logPath.HasValue())
+                    logPath = ConfigurationHelper.GetSettings("Mvp24Hours:FileLog:TokenPath");
+                var fullPath = $"{logPath}/{token}/{fileName}.json";
                 if (!File.Exists(fullPath))
                     return default(T);
                 return JsonConvert.DeserializeObject<T>(File.ReadAllText(fullPath));

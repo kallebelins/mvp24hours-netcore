@@ -3,7 +3,7 @@
 // Teacher, Architect, Consultant and Project Leader
 // Virtual Card: https://www.linkedin.com/in/kallebelins
 //=====================================================================================
-// Reproduction or sharing is free!
+// Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Infrastructure.Helpers;
@@ -16,6 +16,8 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations.Files
     /// </summary>
     public class FileTokenWriteOperation<T> : OperationBaseAsync
     {
+        public virtual string FileLogPath => null;
+
         public override Task<IPipelineMessage> Execute(IPipelineMessage input)
         {
             var dto = input.GetContent<T>();
@@ -23,7 +25,7 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations.Files
             if (dto == null)
                 return Task.FromResult(input);
 
-            FileLogHelper.WriteLogToken(input.Token, typeof(T).Name.ToLower(), dto);
+            FileLogHelper.WriteLogToken(input.Token, typeof(T).Name.ToLower(), dto, FileLogPath);
 
             return Task.FromResult(input);
         }

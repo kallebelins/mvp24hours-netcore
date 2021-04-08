@@ -1,4 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿//=====================================================================================
+// Developed by Kallebe Lins (kallebe.santos@outlook.com)
+// Teacher, Architect, Consultant and Project Leader
+// Virtual Card: https://www.linkedin.com/in/kallebelins
+//=====================================================================================
+// Reproduction or sharing is free! Contribute to a better world!
+//=====================================================================================
+using Newtonsoft.Json;
 using System;
 
 namespace Mvp24Hours.Core.Converters

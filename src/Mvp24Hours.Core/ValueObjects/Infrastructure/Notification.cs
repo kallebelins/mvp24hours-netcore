@@ -3,13 +3,11 @@
 // Teacher, Architect, Consultant and Project Leader
 // Virtual Card: https://www.linkedin.com/in/kallebelins
 //=====================================================================================
-// Reproduction or sharing is free!
+// Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
-using Mvp24Hours.Core.Converters;
 using Mvp24Hours.Core.Enums;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
