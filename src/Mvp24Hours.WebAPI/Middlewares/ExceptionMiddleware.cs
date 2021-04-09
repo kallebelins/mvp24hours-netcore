@@ -35,7 +35,10 @@ namespace Mvp24Hours.Infrastructure.Middlewares
         {
             try
             {
-                await _next(httpContext);
+                if (!httpContext.Response.HasStarted)
+                {
+                    await _next(httpContext);
+                }                
             }
             catch (Exception ex)
             {

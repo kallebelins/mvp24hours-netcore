@@ -44,7 +44,10 @@ namespace Mvp24Hours.WebAPI.Middlewares
             {
                 responseCachingFeature.VaryByQueryKeys = _varyByQueryKeys;
             }
-            await _next(context);
+            if (!context.Response.HasStarted)
+            {
+                await _next(context);
+            }         
         }
     }
 }
