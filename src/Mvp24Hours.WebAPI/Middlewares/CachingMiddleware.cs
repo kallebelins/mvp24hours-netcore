@@ -47,7 +47,7 @@ namespace Mvp24Hours.WebAPI.Middlewares
             if (!context.Response.HasStarted)
             {
                 await _next(context);
-            }         
+            }
         }
     }
 }

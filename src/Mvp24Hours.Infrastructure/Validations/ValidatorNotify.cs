@@ -32,7 +32,7 @@ namespace Mvp24Hours.Infrastructure.Validations
 
         #region [ Props ]
         public INotificationContext Context { get; private set; }
-        public bool IsValid => !Context.HasNotifications;
+        public bool IsValid => !Context.HasErrorNotifications;
         #endregion
 
         #region [ Specification ]

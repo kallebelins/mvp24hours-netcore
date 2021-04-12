@@ -93,14 +93,16 @@ namespace Mvp24Hours.WebAPI.Extensions
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             #endregion
 
-            #region [ Notification ]
+            #region [ Filters ]
             services.AddScoped<INotificationContext, NotificationContext>();
-            services.AddMvc(options => options.Filters.Add<NotificationFilter>());
-            #endregion
-
-            #region [ Hateaos ]
             services.AddScoped<IHATEOASContext, HATEOASContext>();
-            services.AddMvc(options => options.Filters.Add<HATEOASFilter>());
+
+            services.AddMvc(options =>
+            {
+                options.Filters.Add<NotificationFilter>();
+                options.Filters.Add<HATEOASFilter>();
+            });
+
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>()
                 .AddScoped<IUrlHelper>(x => x.GetRequiredService<IUrlHelperFactory>()
                 .GetUrlHelper(x.GetRequiredService<IActionContextAccessor>().ActionContext));

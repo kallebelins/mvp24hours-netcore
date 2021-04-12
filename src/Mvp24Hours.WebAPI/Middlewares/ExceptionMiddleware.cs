@@ -36,14 +36,13 @@ namespace Mvp24Hours.Infrastructure.Middlewares
             try
             {
                 if (!httpContext.Response.HasStarted)
-                {
                     await _next(httpContext);
-                }                
             }
             catch (Exception ex)
             {
                 _logger.Error(ex);
-                await HandleExceptionAsync(httpContext, ex);
+                if (!httpContext.Response.HasStarted)
+                    await HandleExceptionAsync(httpContext, ex);
             }
         }
 
