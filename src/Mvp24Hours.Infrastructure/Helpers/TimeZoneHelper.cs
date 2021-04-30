@@ -6,6 +6,8 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Mvp24Hours.Infrastructure.Helpers
 {
@@ -40,7 +42,32 @@ namespace Mvp24Hours.Infrastructure.Helpers
                     dUtc = DateTime.SpecifyKind(utcDateTime, DateTimeKind.Utc);
                     break;
             }
-            return TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
+            return TimeZoneInfo.ConvertTime(DateTime.UtcNow, GetTimeZoneInfo());
+        }
+
+        private static TimeZoneInfo GetTimeZoneInfo()
+        {
+            string timeZoneIds = ConfigurationHelper.GetSettings("Mvp24Hours:General:TimeZoneIds");
+            var timeZoneIdsList = new List<string>();
+
+            if (!string.IsNullOrEmpty(timeZoneIds))
+            {
+                timeZoneIdsList.AddRange(timeZoneIds.Split(","));
+            } else
+            {
+                timeZoneIdsList.Add("E. South America Standard Time");
+                timeZoneIdsList.Add("Brazil/East");
+            }
+
+            var zone = TimeZoneInfo.GetSystemTimeZones()
+                .FirstOrDefault(x => timeZoneIdsList.Contains(x.Id));
+
+            if (zone != null)
+            {
+                return zone;
+            }
+
+            return TimeZoneInfo.Local;
         }
     }
 }

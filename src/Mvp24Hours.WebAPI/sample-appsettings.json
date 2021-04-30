@@ -1,5 +1,8 @@
 {
   "Mvp24Hours": {
+    "General": {
+      "TimeZoneIds": ""
+    },
     "Persistence": {
       "MaxQtyByQueryPage": 30
     },

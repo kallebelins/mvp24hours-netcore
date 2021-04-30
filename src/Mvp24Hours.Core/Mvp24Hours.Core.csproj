@@ -11,9 +11,9 @@
     <PackageProjectUrl>https://github.com/kallebelins</PackageProjectUrl>
     <Company>Kallebe Lins</Company>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>1.4.221</Version>
-    <AssemblyVersion>1.4.22.1</AssemblyVersion>
-    <FileVersion>1.4.22.1</FileVersion>
+    <Version>1.4.301</Version>
+    <AssemblyVersion>1.4.30.1</AssemblyVersion>
+    <FileVersion>1.4.30.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
