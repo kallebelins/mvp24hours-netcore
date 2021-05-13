@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Extensions;
@@ -26,8 +27,11 @@ using Mvp24Hours.WebAPI.Filters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using StackExchange.Redis;
+using Swashbuckle.AspNetCore.Filters;
 using System;
+using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Reflection;
 
 namespace Mvp24Hours.WebAPI.Extensions
@@ -200,7 +204,7 @@ namespace Mvp24Hours.WebAPI.Extensions
         }
 
         /// <summary>
-        /// Veja as configurações em: https://stackexchange.github.io/StackExchange.Redis/Configuration.html
+        /// See settings at: https://stackexchange.github.io/StackExchange.Redis/Configuration.html
         /// </summary>
         public static IServiceCollection AddMvp24HoursRedisCache(this IServiceCollection services, IConfiguration configuration)
         {
@@ -220,7 +224,7 @@ namespace Mvp24Hours.WebAPI.Extensions
         }
 
         /// <summary>
-        /// Veja as configurações em: https://stackexchange.github.io/StackExchange.Redis/Configuration.html
+        /// See settings at: https://stackexchange.github.io/StackExchange.Redis/Configuration.html
         /// </summary>
         public static IServiceCollection AddMvp24HoursRedisCache(this IServiceCollection services, IConfiguration configuration, string connectionStringName, string instanceName = null)
         {
@@ -248,6 +252,43 @@ namespace Mvp24Hours.WebAPI.Extensions
 
             return services;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static IServiceCollection AddMvp24HoursSwagger(this IServiceCollection services, string version, string title, string xmlCommentsFileName = null, bool enableExample = false)
+        {
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc(version, new OpenApiInfo { Title = title, Version = version });
+
+                if (enableExample)
+                {
+                    c.ExampleFilters();
+                    c.OperationFilter<AddResponseHeadersFilter>();
+                }
+
+                c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+
+                // Set the comments path for the Swagger JSON and UI.
+                if (!string.IsNullOrEmpty(xmlCommentsFileName))
+                {
+                    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlCommentsFileName);
+                    if (File.Exists(xmlPath))
+                    {
+                        c.IncludeXmlComments(xmlPath);
+                    }
+                }
+            });
+
+            if (enableExample)
+            {
+                services.AddSwaggerExamplesFromAssemblies(Assembly.GetEntryAssembly());
+            }
+
+            return services;
+        }
+
 
     }
 }
