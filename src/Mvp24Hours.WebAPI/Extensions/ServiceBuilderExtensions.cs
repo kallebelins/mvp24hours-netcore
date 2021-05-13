@@ -6,21 +6,26 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using AutoMapper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
+using Mvp24Hours.Core.Extensions;
 using Mvp24Hours.Core.Mappings;
 using Mvp24Hours.Infrastructure.Contexts;
 using Mvp24Hours.Infrastructure.Data;
+using Mvp24Hours.Infrastructure.Helpers;
 using Mvp24Hours.WebAPI.Filters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using StackExchange.Redis;
 using System;
 using System.IO.Compression;
 using System.Reflection;
@@ -42,7 +47,6 @@ namespace Mvp24Hours.WebAPI.Extensions
             services.AddMvp24HoursDbService(dbFactory);
             services.AddMvp24HoursMapService(assemblyMap);
             services.AddMvp24HoursJsonService();
-            services.AddMvp24HoursZipService();
             return services;
         }
 
@@ -54,7 +58,6 @@ namespace Mvp24Hours.WebAPI.Extensions
             services.AddMvp24HoursService();
             services.AddMvp24HoursMapService(assemblyMap);
             services.AddMvp24HoursJsonService();
-            services.AddMvp24HoursZipService();
             return services;
         }
 
@@ -68,7 +71,6 @@ namespace Mvp24Hours.WebAPI.Extensions
             services.AddMvp24HoursDbAsyncService(dbFactory);
             services.AddMvp24HoursMapService(assemblyMap);
             services.AddMvp24HoursJsonService();
-            services.AddMvp24HoursZipService();
             return services;
         }
 
@@ -80,7 +82,6 @@ namespace Mvp24Hours.WebAPI.Extensions
             services.AddMvp24HoursService();
             services.AddMvp24HoursMapService(assemblyMap);
             services.AddMvp24HoursJsonService();
-            services.AddMvp24HoursZipService();
             return services;
         }
 
@@ -182,14 +183,71 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// <summary>
         /// 
         /// </summary>
-        public static IServiceCollection AddMvp24HoursZipService(this IServiceCollection services)
+        public static IServiceCollection AddMvp24HoursZipService(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<GzipCompressionProviderOptions>(options =>
             {
                 options.Level = CompressionLevel.Optimal;
             });
 
+            services.AddResponseCompression(options =>
+            {
+                options.EnableForHttps = (bool)configuration.GetSection("Mvp24Hours:Web:ResponseCompressionForHttps")?.ToString()?.ToBoolean(false);
+                options.Providers.Add<GzipCompressionProvider>();
+            });
+
             return services;
         }
+
+        /// <summary>
+        /// Veja as configurações em: https://stackexchange.github.io/StackExchange.Redis/Configuration.html
+        /// </summary>
+        public static IServiceCollection AddMvp24HoursRedisCache(this IServiceCollection services, IConfiguration configuration)
+        {
+            var redisConfiguration = configuration.GetSection("Mvp24Hours:Persistence:Redis")?.Get<ConfigurationOptions>();
+
+            if (redisConfiguration == null)
+            {
+                throw new ArgumentNullException("Redis configuration not defined.");
+            }
+
+            services.AddDistributedRedisCache(options =>
+            {
+                options.ConfigurationOptions = redisConfiguration;
+            });
+
+            return services;
+        }
+
+        /// <summary>
+        /// Veja as configurações em: https://stackexchange.github.io/StackExchange.Redis/Configuration.html
+        /// </summary>
+        public static IServiceCollection AddMvp24HoursRedisCache(this IServiceCollection services, IConfiguration configuration, string connectionStringName, string instanceName = null)
+        {
+            var redisConfiguration = configuration.GetSection("Mvp24Hours:Persistence:Redis")?.Get<ConfigurationOptions>();
+
+            if (redisConfiguration == null)
+            {
+                redisConfiguration = new ConfigurationOptions
+                {
+                    AbortOnConnectFail = false,
+                    AllowAdmin = true,
+                    ConnectRetry = 2,
+                    ConnectTimeout = 6000,
+                    ResponseTimeout = 6000,
+                    Ssl = false                    
+                };
+            }
+
+            services.AddDistributedRedisCache(options =>
+            {
+                options.Configuration = configuration.GetConnectionString(connectionStringName);
+                options.InstanceName = instanceName;
+                options.ConfigurationOptions = redisConfiguration;
+            });
+
+            return services;
+        }
+
     }
 }

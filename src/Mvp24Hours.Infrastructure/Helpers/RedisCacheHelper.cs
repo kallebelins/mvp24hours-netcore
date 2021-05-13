@@ -1,5 +1,7 @@
 using Microsoft.Extensions.Caching.Distributed;
+using Mvp24Hours.Core.Extensions;
 using Mvp24Hours.Infrastructure.Extensions;
+using Mvp24Hours.Infrastructure.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,6 +10,10 @@ namespace Mvp24Hours.Infrastructure.Helpers
 {
     public class RedisCacheHelper
     {
+        private static readonly ILoggingService _logger;
+        private static bool EnableRedis => (bool)ConfigurationHelper.GetSettings("Persistence:EnableRedis").ToBoolean(true);
+
+        
         private static IDistributedCache _redisCache;
         public static IDistributedCache RedisCache
         {
@@ -17,29 +23,75 @@ namespace Mvp24Hours.Infrastructure.Helpers
             }
         }
 
+        static RedisCacheHelper()
+        {
+            _logger = LoggingService.GetLoggingService();
+        }
+
         public static async Task<string> GetStringAsync(string key, CancellationToken token = default)
         {
-            return await RedisCache.GetRedisStringAsync(key, token);
+            if (RedisCache == null || !EnableRedis) return null;
+            try
+            {
+                return await RedisCache.GetRedisStringAsync(key, token);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+            }
+            return null;
         }
 
         public static async Task SetStringAsync(string key, string value, CancellationToken token = default)
         {
-            await RedisCache.SetRedisStringAsync(key, value, token);
+            if (RedisCache == null || !EnableRedis) return;
+            try
+            {
+                await RedisCache.SetRedisStringAsync(key, value, token);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+            }
         }
 
         public static async Task SetStringAsync(string key, string value, int minutes, CancellationToken token = default)
         {
-            await RedisCache.SetRedisStringAsync(key, value, minutes, token);
+            if (RedisCache == null || !EnableRedis) return;
+            try
+            {
+                await RedisCache.SetRedisStringAsync(key, value, minutes, token);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+            }
         }
 
         public static async Task SetStringAsync(string key, string value, DateTimeOffset time, CancellationToken token = default)
         {
-            await RedisCache.SetRedisStringAsync(key, value, time, token);
+            if (RedisCache == null || !EnableRedis) return;
+            try
+            {
+                await RedisCache.SetRedisStringAsync(key, value, time, token);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+            }
         }
 
         public static async Task RemoveStringAsync(string key, CancellationToken token = default)
         {
-            await RedisCache.RemoveRedisStringAsync(key, token);
+            if (RedisCache == null || !EnableRedis) return;
+            try
+            {
+                await RedisCache.RemoveRedisStringAsync(key, token);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+            }
         }
     }
 }

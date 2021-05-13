@@ -9,9 +9,9 @@
     <Company>Kallebe Lins</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>1.4.301</Version>
-    <AssemblyVersion>1.4.30.1</AssemblyVersion>
-    <FileVersion>1.4.30.1</FileVersion>
+    <Version>1.5.131</Version>
+    <AssemblyVersion>1.5.13.1</AssemblyVersion>
+    <FileVersion>1.5.13.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -32,6 +32,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Redis" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.1" />
   </ItemGroup>

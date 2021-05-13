@@ -23,7 +23,7 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
-        public static IApplicationBuilder UseExceptionHandling(this IApplicationBuilder builder)
+        public static IApplicationBuilder UseMvp24HoursExceptionHandling(this IApplicationBuilder builder)
         {
             return builder.UseMiddleware<ExceptionMiddleware>();
         }
@@ -33,7 +33,7 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
-        public static IApplicationBuilder UseCaching(this IApplicationBuilder builder, params string[] varyByQueryKeys)
+        public static IApplicationBuilder UseMvp24HoursCaching(this IApplicationBuilder builder, params string[] varyByQueryKeys)
         {
             return builder.UseMiddleware<CachingMiddleware>(varyByQueryKeys);
         }
@@ -43,7 +43,7 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
-        public static IApplicationBuilder UseDocumentation(this IApplicationBuilder builder, string name)
+        public static IApplicationBuilder UseMvp24HoursDocumentation(this IApplicationBuilder builder, string name)
         {
             builder.UseSwagger();
             builder.UseSwaggerUI(opt =>

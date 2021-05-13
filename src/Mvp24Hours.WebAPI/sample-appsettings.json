@@ -4,7 +4,22 @@
       "TimeZoneIds": ""
     },
     "Persistence": {
-      "MaxQtyByQueryPage": 30
+      "MaxQtyByQueryPage": 30,
+      "EnableRedis": true,
+      "Redis": {
+        "AbortOnConnectFail": false,
+        "AllowAdmin": true,
+        "Ssl": false,
+        "ConnectTimeout": 6000,
+        "ConnectRetry": 2,
+        "Database": 0,
+        "Hosts": [
+          {
+            "Host": "localhost",
+            "Port": "6379"
+          }
+        ]
+      }
     },
     "FileLog": {
       "Path": "",
@@ -23,7 +38,8 @@
       "ReplyToName": ""
     },
     "Web": {
-      "TraceMiddleware": true
+      "TraceMiddleware": true,
+      "ResponseCompressionForHttps": false
     },
     "Filters": {
       "EnableNotification": true,
