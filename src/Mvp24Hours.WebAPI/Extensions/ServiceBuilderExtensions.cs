@@ -33,6 +33,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
+using System.Collections.Generic;
 
 namespace Mvp24Hours.WebAPI.Extensions
 {
@@ -212,12 +213,28 @@ namespace Mvp24Hours.WebAPI.Extensions
 
             if (redisConfiguration == null)
             {
-                throw new ArgumentNullException("Redis configuration not defined.");
+                throw new ArgumentNullException("Redis configuration not defined. [Mvp24Hours:Persistence:Redis]");
             }
+
+            var hosts = configuration.GetSection("Mvp24Hours:Persistence:Redis:Hosts")?.Get<List<string>>();
+
+            if (hosts == null)
+            {
+                throw new ArgumentNullException("Redis hosts configuration not defined. [Mvp24Hours:Persistence:Redis:Hosts]");
+            }
+
+            foreach (var h in hosts)
+            {
+                redisConfiguration.EndPoints.Add(h);
+            }
+
+            string instanceName = configuration.GetSection("Mvp24Hours:Persistence:Redis:InstanceName")?.Value
+                ?? Assembly.GetEntryAssembly().GetName().Name.Replace(".", "_");
 
             services.AddDistributedRedisCache(options =>
             {
                 options.ConfigurationOptions = redisConfiguration;
+                options.InstanceName = $"{instanceName}_".ToLower();
             });
 
             return services;
@@ -228,26 +245,10 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// </summary>
         public static IServiceCollection AddMvp24HoursRedisCache(this IServiceCollection services, IConfiguration configuration, string connectionStringName, string instanceName = null)
         {
-            var redisConfiguration = configuration.GetSection("Mvp24Hours:Persistence:Redis")?.Get<ConfigurationOptions>();
-
-            if (redisConfiguration == null)
-            {
-                redisConfiguration = new ConfigurationOptions
-                {
-                    AbortOnConnectFail = false,
-                    AllowAdmin = true,
-                    ConnectRetry = 2,
-                    ConnectTimeout = 6000,
-                    ResponseTimeout = 6000,
-                    Ssl = false                    
-                };
-            }
-
             services.AddDistributedRedisCache(options =>
             {
                 options.Configuration = configuration.GetConnectionString(connectionStringName);
-                options.InstanceName = instanceName;
-                options.ConfigurationOptions = redisConfiguration;
+                options.InstanceName = $"{instanceName ?? Assembly.GetEntryAssembly().GetName().Name.Replace(".", "_")}_".ToLower();
             });
 
             return services;

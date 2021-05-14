@@ -7,18 +7,14 @@
       "MaxQtyByQueryPage": 30,
       "EnableRedis": true,
       "Redis": {
+        "Hosts": [ "localhost:6379" ],
+        "InstanceName": null,
+        "DefaultDatabase": 0,
         "AbortOnConnectFail": false,
         "AllowAdmin": true,
         "Ssl": false,
         "ConnectTimeout": 6000,
-        "ConnectRetry": 2,
-        "Database": 0,
-        "Hosts": [
-          {
-            "Host": "localhost",
-            "Port": "6379"
-          }
-        ]
+        "ConnectRetry": 2
       }
     },
     "FileLog": {

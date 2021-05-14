@@ -11,9 +11,21 @@ namespace Mvp24Hours.Infrastructure.Helpers
     public class RedisCacheHelper
     {
         private static readonly ILoggingService _logger;
-        private static bool EnableRedis => (bool)ConfigurationHelper.GetSettings("Persistence:EnableRedis").ToBoolean(true);
 
-        
+        private static bool? _enableRedis;
+        private static bool EnableRedis
+        {
+            get
+            {
+                if (_enableRedis == null)
+                {
+                    string value = ConfigurationHelper.GetSettings("Mvp24Hours:Persistence:EnableRedis");
+                    _enableRedis = value.ToBoolean(true);
+                }
+                return  (bool)_enableRedis;
+            }
+        }
+
         private static IDistributedCache _redisCache;
         public static IDistributedCache RedisCache
         {
