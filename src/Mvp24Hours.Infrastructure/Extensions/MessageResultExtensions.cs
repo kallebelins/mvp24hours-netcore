@@ -18,7 +18,10 @@ namespace Mvp24Hours.Infrastructure.Extensions
         {
             var messagesResult = new List<IMessageResult>();
             foreach (var item in messages)
+            {
                 messagesResult.Add(new MessageResult(item ?? "Undefined message.", messageType));
+            }
+
             return messagesResult;
         }
 

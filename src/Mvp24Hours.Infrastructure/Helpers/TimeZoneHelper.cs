@@ -53,7 +53,8 @@ namespace Mvp24Hours.Infrastructure.Helpers
             if (!string.IsNullOrEmpty(timeZoneIds))
             {
                 timeZoneIdsList.AddRange(timeZoneIds.Split(","));
-            } else
+            }
+            else
             {
                 timeZoneIdsList.Add("E. South America Standard Time");
                 timeZoneIdsList.Add("Brazil/East");

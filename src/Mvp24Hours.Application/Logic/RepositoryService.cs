@@ -159,7 +159,9 @@ namespace Mvp24Hours.Business.Logic
             {
                 if (typeof(T) == typeof(IValidationModel)
                     && !(entity as IValidationModel).IsValid())
+                {
                     return 0;
+                }
 
                 this.UnitOfWork.GetRepository<T>().Add(entity);
                 return this.SaveChanges();
@@ -180,7 +182,9 @@ namespace Mvp24Hours.Business.Logic
             {
                 if (typeof(T) == typeof(IValidationModel)
                     && !(entity as IValidationModel).IsValid())
+                {
                     return 0;
+                }
 
                 this.UnitOfWork.GetRepository<T>().Modify(entity);
                 return this.SaveChanges();

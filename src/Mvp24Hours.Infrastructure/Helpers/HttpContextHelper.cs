@@ -42,13 +42,23 @@ namespace Mvp24Hours.Infrastructure.Helpers
             {
                 string ip = context.Connection?.RemoteIpAddress?.ToString() ?? context.Connection?.LocalIpAddress?.ToString();
                 if (ip.Contains(":"))
+                {
                     ip = ip.Split(':').First().Trim();
+                }
+
                 if (ip.Contains(","))
+                {
                     ip = ip.Split(',').First().Trim();
+                }
+
                 if (!string.IsNullOrEmpty(ip))
+                {
                     return ip;
+                }
                 else
+                {
                     return "127.0.0.1";
+                }
             }
             return "0.0.0.0";
         }

@@ -20,6 +20,29 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// <summary>
         /// 
         /// </summary>
+        public static IServiceCollection Remove<T>(this IServiceCollection services)
+        {
+            services.Remove(typeof(T));
+            return services;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static IServiceCollection Remove(this IServiceCollection services, Type type)
+        {
+            var serviceDescriptor = services.FirstOrDefault(descriptor => descriptor.ServiceType == type);
+            if (serviceDescriptor != null)
+            {
+                services.Remove(serviceDescriptor);
+            }
+
+            return services;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public static void AddAllTypes<T>(this IServiceCollection services
             , Assembly[] assemblies
             , bool additionalRegisterTypesByThemself = false
@@ -32,7 +55,9 @@ namespace Mvp24Hours.WebAPI.Extensions
             {
                 services.Add(new ServiceDescriptor(typeof(T), type, lifetime));
                 if (additionalRegisterTypesByThemself)
+                {
                     services.Add(new ServiceDescriptor(type, type, lifetime));
+                }
             }
         }
 
@@ -54,7 +79,9 @@ namespace Mvp24Hours.WebAPI.Extensions
             {
                 services.Add(new ServiceDescriptor(t, type, lifetime));
                 if (additionalRegisterTypesByThemself)
+                {
                     services.Add(new ServiceDescriptor(type, type, lifetime));
+                }
             }
         }
     }

@@ -28,9 +28,15 @@ namespace Mvp24Hours.Infrastructure.Pipe.Resolvers
         {
             string keyName = key;
             if (!isSimpleKey)
+            {
                 keyName = $"{key}_{typeof(T).FullName}";
+            }
+
             if (!_buildersComplex.ContainsKey(keyName))
+            {
                 _buildersComplex.Add(keyName, new List<Type>());
+            }
+
             _buildersComplex[keyName].Add(typeof(U));
             return this;
         }
@@ -49,11 +55,19 @@ namespace Mvp24Hours.Infrastructure.Pipe.Resolvers
         {
             string keyName = key;
             if (!isSimpleKey)
+            {
                 keyName = $"{key}_{typeof(T).FullName}";
+            }
+
             if (_builders.ContainsKey(keyName))
+            {
                 _builders[keyName] = typeof(U);
+            }
             else
+            {
                 _builders.Add(keyName, typeof(U));
+            }
+
             return this;
         }
 
@@ -68,7 +82,10 @@ namespace Mvp24Hours.Infrastructure.Pipe.Resolvers
         {
             string keyName = key;
             if (!isSimpleKey)
+            {
                 keyName = $"{key}_{typeof(T).FullName}";
+            }
+
             if (_builders.ContainsKey(keyName))
             {
                 return (T)Activator.CreateInstance(_builders[keyName]);
@@ -87,13 +104,18 @@ namespace Mvp24Hours.Infrastructure.Pipe.Resolvers
         {
             string keyName = key;
             if (!isSimpleKey)
+            {
                 keyName = $"{key}_{typeof(T).FullName}";
+            }
 
             if (_buildersComplex.ContainsKey(keyName))
             {
                 var result = new List<T>();
                 foreach (var item in _buildersComplex[keyName])
+                {
                     result.Add((T)Activator.CreateInstance(item));
+                }
+
                 return result;
             }
             return default;
@@ -115,7 +137,10 @@ namespace Mvp24Hours.Infrastructure.Pipe.Resolvers
         {
             string keyName = key;
             if (typeComposeKey != null)
+            {
                 keyName = $"{key}_{typeComposeKey.FullName}";
+            }
+
             return _builders.ContainsKey(keyName);
         }
 
@@ -129,7 +154,10 @@ namespace Mvp24Hours.Infrastructure.Pipe.Resolvers
         {
             string keyName = key;
             if (typeComposeKey != null)
+            {
                 keyName = $"{key}_{typeComposeKey.FullName}";
+            }
+
             return _buildersComplex.ContainsKey(keyName);
         }
     }

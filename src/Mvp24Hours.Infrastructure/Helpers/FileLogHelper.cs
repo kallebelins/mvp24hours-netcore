@@ -33,9 +33,15 @@ namespace Mvp24Hours.Infrastructure.Helpers
             try
             {
                 if (!logPath.HasValue())
+                {
                     logPath = ConfigurationHelper.GetSettings("Mvp24Hours:FileLog:Path");
+                }
+
                 if (string.IsNullOrEmpty(logPath))
+                {
                     return;
+                }
+
                 string filename = $"{DateTime.Today:yyyy_MM_dd}_{Guid.NewGuid().ToString()}.log";
                 if (!string.IsNullOrEmpty(suffixFilename))
                 {
@@ -59,9 +65,14 @@ namespace Mvp24Hours.Infrastructure.Helpers
                 lock (obj)
                 {
                     if (!logPath.HasValue())
+                    {
                         logPath = ConfigurationHelper.GetSettings("Mvp24Hours:FileLog:TokenPath");
+                    }
+
                     if (string.IsNullOrEmpty(logPath))
+                    {
                         return;
+                    }
 
                     var folder = $"{logPath}/{token}/";
                     Directory.CreateDirectory(folder);
@@ -83,10 +94,16 @@ namespace Mvp24Hours.Infrastructure.Helpers
             try
             {
                 if (!logPath.HasValue())
+                {
                     logPath = ConfigurationHelper.GetSettings("Mvp24Hours:FileLog:TokenPath");
+                }
+
                 var fullPath = $"{logPath}/{token}/{fileName}.json";
                 if (!File.Exists(fullPath))
+                {
                     return default(T);
+                }
+
                 return JsonConvert.DeserializeObject<T>(File.ReadAllText(fullPath));
             }
             catch (Exception ex)
@@ -104,7 +121,10 @@ namespace Mvp24Hours.Infrastructure.Helpers
                 using (var sw = new StreamWriter(fullpath, append))
                 {
                     if (!string.IsNullOrEmpty(header))
+                    {
                         sw.Write(header.PadLeft(5, '-').PadRight(5, '-') + "\r\n");
+                    }
+
                     sw.Write(JsonConvert.SerializeObject(obj) + "\r\n");
                 }
             }

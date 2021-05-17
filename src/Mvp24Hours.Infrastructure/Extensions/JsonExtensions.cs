@@ -18,13 +18,21 @@ namespace Mvp24Hours.Infrastructure.Extensions
     {
         public static string ToSerialize<T>(this T value, JsonSerializerSettings jsonSerializerSettings = null)
         {
-            if (value == null) return string.Empty;
+            if (value == null)
+            {
+                return string.Empty;
+            }
+
             return JsonHelper.Serialize(value, jsonSerializerSettings);
         }
 
         public static T ToDeserialize<T>(this string value, JsonSerializerSettings jsonSerializerSettings = null)
         {
-            if (!value.HasValue()) return default;
+            if (!value.HasValue())
+            {
+                return default;
+            }
+
             return JsonHelper.Deserialize<T>(value, jsonSerializerSettings);
         }
 

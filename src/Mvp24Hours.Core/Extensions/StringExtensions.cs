@@ -20,5 +20,20 @@ namespace Mvp24Hours.Core.Extensions
             string value = text ?? string.Empty;
             return value.Length > size ? value.Substring(0, size) + "..." : value;
         }
+
+        public static string SubstringSafe(this string text, int start, int length = int.MaxValue)
+        {
+            if (start >= text.Length)
+            {
+                return string.Empty;
+            }
+
+            if (start + length > text.Length)
+            {
+                length = text.Length - start;
+            }
+
+            return text.Substring(start, length);
+        }
     }
 }

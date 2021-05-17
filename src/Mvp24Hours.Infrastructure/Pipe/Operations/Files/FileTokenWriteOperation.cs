@@ -23,7 +23,9 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations.Files
             var dto = input.GetContent<T>();
 
             if (dto == null)
+            {
                 return Task.FromResult(input);
+            }
 
             FileLogHelper.WriteLogToken(input.Token, typeof(T).Name.ToLower(), dto, FileLogPath);
 

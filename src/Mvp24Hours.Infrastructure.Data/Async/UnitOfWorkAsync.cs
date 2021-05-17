@@ -33,14 +33,14 @@ namespace Mvp24Hours.Infrastructure.Data
 
         protected DbContext DbContext { get; private set; }
 
-        Dictionary<Type, object> repositories;
+        readonly Dictionary<Type, object> repositories;
 
         public IRepositoryAsync<T> GetRepositoryAsync<T>()
             where T : class, IEntityBase
         {
             if (!this.repositories.ContainsKey(typeof(T)))
             {
-                this.repositories.Add(typeof(T), (IRepositoryAsync<T>)new RepositoryAsync<T>(this.DbContext));
+                this.repositories.Add(typeof(T), ServiceProviderHelper.GetService<IRepositoryAsync<T>>());
             }
             return repositories[typeof(T)] as IRepositoryAsync<T>;
         }

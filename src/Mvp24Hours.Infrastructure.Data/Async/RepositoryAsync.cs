@@ -35,14 +35,28 @@ namespace Mvp24Hours.Infrastructure.Data
 
         #region [ IQueryAsync ]
 
-        public Task<bool> ListAnyAsync()
+        public async Task<bool> ListAnyAsync()
         {
-            return GetQuery(null, true).AnyAsync();
+            using var scope = CreateTransactionScope(true);
+            var result = await GetQuery(null, true).AnyAsync();
+            if (scope != null)
+            {
+                scope.Complete();
+            }
+
+            return result;
         }
 
-        public Task<int> ListCountAsync()
+        public async Task<int> ListCountAsync()
         {
-            return GetQuery(null, true).CountAsync();
+            using var scope = CreateTransactionScope(true);
+            var result = await GetQuery(null, true).CountAsync();
+            if (scope != null)
+            {
+                scope.Complete();
+            }
+
+            return result;
         }
 
         public Task<IList<T>> ListAsync()
@@ -52,24 +66,52 @@ namespace Mvp24Hours.Infrastructure.Data
 
         public async Task<IList<T>> ListAsync(IPagingCriteria clause)
         {
-            return await GetQuery(clause).ToListAsync();
+            using var scope = CreateTransactionScope();
+            var result = await GetQuery(clause).ToListAsync();
+            if (scope != null)
+            {
+                scope.Complete();
+            }
+
+            return result;
         }
 
-        public Task<bool> GetByAnyAsync(Expression<Func<T, bool>> clause)
+        public async Task<bool> GetByAnyAsync(Expression<Func<T, bool>> clause)
         {
+            using var scope = CreateTransactionScope(true);
             var query = this.dbEntities.AsQueryable();
             if (clause != null)
+            {
                 query = query.Where(clause);
-            return GetQuery(query, null, true).AnyAsync();
+            }
+
+            var result = await GetQuery(query, null, true).AnyAsync();
+            if (scope != null)
+            {
+                scope.Complete();
+            }
+
+            return result;
         }
 
-        public Task<int> GetByCountAsync(Expression<Func<T, bool>> clause)
+        public async Task<int> GetByCountAsync(Expression<Func<T, bool>> clause)
         {
+            using var scope = CreateTransactionScope(true);
             var query = this.dbEntities.AsQueryable();
             if (clause != null)
+            {
                 query = query.Where(clause);
-            return GetQuery(query, null, true).CountAsync();
+            }
+
+            var result = await GetQuery(query, null, true).CountAsync();
+            if (scope != null)
+            {
+                scope.Complete();
+            }
+
+            return result;
         }
+
 
         public Task<IList<T>> GetByAsync(Expression<Func<T, bool>> clause)
         {
@@ -78,10 +120,20 @@ namespace Mvp24Hours.Infrastructure.Data
 
         public async Task<IList<T>> GetByAsync(Expression<Func<T, bool>> clause, IPagingCriteria criteria)
         {
+            using var scope = CreateTransactionScope();
             var query = this.dbEntities.AsQueryable();
             if (clause != null)
+            {
                 query = query.Where(clause);
-            return await GetQuery(query, criteria).ToListAsync();
+            }
+
+            var result = await GetQuery(query, criteria).ToListAsync();
+            if (scope != null)
+            {
+                scope.Complete();
+            }
+
+            return result;
         }
 
         public Task<T> GetByIdAsync(object id)
@@ -91,7 +143,14 @@ namespace Mvp24Hours.Infrastructure.Data
 
         public Task<T> GetByIdAsync(object id, IPagingCriteria clause)
         {
-            return GetDynamicFilter(GetQuery(clause, true), GetKeyInfo(), id).SingleOrDefaultAsync();
+            using var scope = CreateTransactionScope();
+            var result = GetDynamicFilter(GetQuery(clause, true), GetKeyInfo(), id).SingleOrDefaultAsync();
+            if (scope != null)
+            {
+                scope.Complete();
+            }
+
+            return result;
         }
 
         #endregion
@@ -100,7 +159,10 @@ namespace Mvp24Hours.Infrastructure.Data
 
         public void AddAsync(T entity)
         {
-            if (entity == null) return;
+            if (entity == null)
+            {
+                return;
+            }
 
             var entry = dbContext.Entry(entity);
             if (entry.State != EntityState.Detached)
@@ -126,12 +188,17 @@ namespace Mvp24Hours.Infrastructure.Data
 
         public void ModifyAsync(T entity)
         {
-            if (entity == null) return;
+            if (entity == null)
+            {
+                return;
+            }
 
             var entityDb = dbContext.Set<T>().Find(entity.EntityKey);
 
             if (entityDb == null)
+            {
                 return;
+            }
 
             // properties that can not be changed
 
@@ -161,8 +228,10 @@ namespace Mvp24Hours.Infrastructure.Data
 
         public void RemoveAsync(T entity)
         {
-            if (entity == null) return;
-
+            if (entity == null)
+            {
+                return;
+            }
 
             if (entity.GetType() == typeof(IEntityLog<>))
             {
@@ -192,13 +261,19 @@ namespace Mvp24Hours.Infrastructure.Data
         {
             var entity = this.GetByIdAsync(id);
             if (entity == null)
+            {
                 return;
+            }
+
             this.RemoveByIdAsync(entity);
         }
 
         public void ForceRemoveAsync(T entity)
         {
-            if (entity == null) return;
+            if (entity == null)
+            {
+                return;
+            }
 
             var entry = dbContext.Entry(entity);
             if (entry.State != EntityState.Deleted)

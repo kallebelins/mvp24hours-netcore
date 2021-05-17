@@ -174,7 +174,9 @@ namespace Mvp24Hours.Business.Logic
             {
                 if (typeof(T) == typeof(IValidationModel)
                     && !(entity as IValidationModel).IsValid())
+                {
                     return Task.FromResult(0);
+                }
 
                 this.UnitOfWork.GetRepositoryAsync<T>().AddAsync(entity);
                 return this.SaveChangesAsync();
@@ -195,7 +197,9 @@ namespace Mvp24Hours.Business.Logic
             {
                 if (typeof(T) == typeof(IValidationModel)
                     && !(entity as IValidationModel).IsValid())
+                {
                     return Task.FromResult(0);
+                }
 
                 this.UnitOfWork.GetRepositoryAsync<T>().ModifyAsync(entity);
                 return this.SaveChangesAsync();
@@ -227,7 +231,7 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.RemoveByIdAsync(int)"/>
         /// </summary>
-        public async virtual Task<int> RemoveByIdAsync(object id)
+        public virtual async Task<int> RemoveByIdAsync(object id)
         {
             try
             {

@@ -8,6 +8,7 @@
 using Microsoft.EntityFrameworkCore;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
+using Mvp24Hours.Core.Extensions;
 using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;
 using System;
@@ -15,6 +16,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Transactions;
 
 namespace Mvp24Hours.Infrastructure.Data
 {
@@ -48,6 +50,20 @@ namespace Mvp24Hours.Infrastructure.Data
         /// Gets the value of the user logged in the context or logged into the database
         /// </summary>
         protected abstract object EntityLogBy { get; }
+
+        private static bool? _enableReadUncommitedQuery;
+        private static bool EnableReadUncommitedQuery
+        {
+            get
+            {
+                if (_enableReadUncommitedQuery == null)
+                {
+                    string value = ConfigurationHelper.GetSettings("Mvp24Hours:Persistence:ReadUncommitedQuery");
+                    _enableReadUncommitedQuery = value.ToBoolean(false);
+                }
+                return (bool)_enableReadUncommitedQuery;
+            }
+        }
 
         #endregion
 
@@ -183,6 +199,18 @@ namespace Mvp24Hours.Infrastructure.Data
 
             return query;
         }
+        protected TransactionScope CreateTransactionScope(bool isAggregate = false)
+        {
+            if (isAggregate || EnableReadUncommitedQuery)
+            {
+                return new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
+                {
+                    IsolationLevel = IsolationLevel.ReadUncommitted,
+                    Timeout = TransactionManager.MaximumTimeout
+                }, TransactionScopeAsyncFlowOption.Enabled);
+            }
+            return null;
+        }
 
         #endregion
 
@@ -236,7 +264,7 @@ namespace Mvp24Hours.Infrastructure.Data
                     Expression.Equal(
                         Expression.Property(entityParameter, key),
                         ((value != null && value.GetType() == key.PropertyType) || typeof(TValue) == key.PropertyType)
-                            ? (Expression)Expression.Constant(value)
+                            ? Expression.Constant(value)
                                 : (Expression)Expression.Convert(Expression.Constant(value), key.PropertyType)),
                         entityParameter);
 

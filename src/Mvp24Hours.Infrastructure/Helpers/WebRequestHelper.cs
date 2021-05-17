@@ -38,7 +38,9 @@ namespace Mvp24Hours.Infrastructure.Helpers
         public static string ToQueryString(params object[] objs)
         {
             if (objs == null)
+            {
                 return string.Empty;
+            }
 
             var result = new List<string>();
             foreach (var obj in objs)
@@ -66,39 +68,45 @@ namespace Mvp24Hours.Infrastructure.Helpers
             return string.Join("&", result.ToArray());
         }
 
-        public async static Task<string> PostAsync(string urlService, string data = "", Hashtable header = null, ICredentials credentials = null)
+        public static async Task<string> PostAsync(string urlService, string data = "", Hashtable header = null, ICredentials credentials = null)
         {
             return await SendAsync(urlService, header, credentials, "POST", data);
         }
-        public async static Task<string> GetAsync(string url, Hashtable header = null, ICredentials credentials = null)
+        public static async Task<string> GetAsync(string url, Hashtable header = null, ICredentials credentials = null)
         {
             return await SendAsync(url, header, credentials, "GET", null);
         }
 
-        public async static Task<string> PutAsync(string urlService, string data = "", Hashtable header = null, ICredentials credentials = null)
+        public static async Task<string> PutAsync(string urlService, string data = "", Hashtable header = null, ICredentials credentials = null)
         {
             return await SendAsync(urlService, header, credentials, "PUT", data);
         }
 
-        public async static Task<string> DeleteAsync(string url, Hashtable header = null, ICredentials credentials = null)
+        public static async Task<string> DeleteAsync(string url, Hashtable header = null, ICredentials credentials = null)
         {
             return await SendAsync(url, header, credentials, "DELETE", null);
         }
 
-        private async static Task<string> SendAsync(string url, Hashtable header, ICredentials credentials, string method, string data)
+        private static async Task<string> SendAsync(string url, Hashtable header, ICredentials credentials, string method, string data)
         {
             string result = string.Empty;
             try
             {
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
                 if (EncodingRequest == null)
+                {
                     EncodingRequest = Encoding.UTF8;
+                }
+
                 HttpWebRequest requisicao = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(url);
                 requisicao.Method = method;
                 requisicao.ContentType = "application/json; charset=utf-8";
                 requisicao.Headers.Add("Accept-Encoding", "gzip,deflate");
                 if (credentials != null)
+                {
                     requisicao.Credentials = credentials;
+                }
+
                 requisicao.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
                 if (header != null)
                 {
@@ -118,7 +126,10 @@ namespace Mvp24Hours.Infrastructure.Helpers
                 if (hasData)
                 {
                     if (data == null)
+                    {
                         data = "";
+                    }
+
                     string postData = data;
                     bytes = EncodingRequest.GetBytes(postData);
                     requisicao.ContentLength = bytes.Length;
@@ -164,7 +175,10 @@ namespace Mvp24Hours.Infrastructure.Helpers
                             }
                         }
                     }
-                    else throw;
+                    else
+                    {
+                        throw;
+                    }
                 }
             }
             catch (Exception ex)

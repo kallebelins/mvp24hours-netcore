@@ -43,7 +43,10 @@ namespace Mvp24Hours.Core.Extensions
                 }
                 else if (seen.Add(property)) // Handle cyclic references
                 {
-                    foreach (var simple in GetAllSimpleProperties(property, seen)) yield return simple;
+                    foreach (var simple in GetAllSimpleProperties(property, seen))
+                    {
+                        yield return simple;
+                    }
                 }
             }
         }

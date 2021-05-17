@@ -23,7 +23,9 @@ namespace Mvp24Hours.WebAPI.Extensions
             {
                 var link = HateoasHelper.CreateLink(routeName, new Dictionary<string, object>(), HateoasType.Item, true, HateoasMethodType.GET);
                 if (link != null)
+                {
                     result.AddLink(link);
+                }
             }
             return result;
         }
@@ -34,7 +36,9 @@ namespace Mvp24Hours.WebAPI.Extensions
             {
                 var link = HateoasHelper.CreateLink(routeName, routeValues, HateoasType.Item, true, HateoasMethodType.GET);
                 if (link != null)
+                {
                     result.AddLink(link);
+                }
             }
             return result;
         }
@@ -45,7 +49,9 @@ namespace Mvp24Hours.WebAPI.Extensions
             {
                 var link = HateoasHelper.CreateLink(routeName, routeValues, HateoasType.Item, true, method);
                 if (link != null)
+                {
                     result.AddLink(link);
+                }
             }
             return result;
         }
@@ -60,7 +66,9 @@ namespace Mvp24Hours.WebAPI.Extensions
             {
                 var link = HateoasHelper.CreateLink(routeName, new Dictionary<string, object>(), HateoasType.Create, true, HateoasMethodType.POST);
                 if (link != null)
+                {
                     result.AddLink(link);
+                }
             }
             return result;
         }
@@ -71,7 +79,9 @@ namespace Mvp24Hours.WebAPI.Extensions
             {
                 var link = HateoasHelper.CreateLink(routeName, routeValues, HateoasType.Create, true, HateoasMethodType.POST);
                 if (link != null)
+                {
                     result.AddLink(link);
+                }
             }
             return result;
         }
@@ -82,7 +92,9 @@ namespace Mvp24Hours.WebAPI.Extensions
             {
                 var link = HateoasHelper.CreateLink(routeName, routeValues, HateoasType.Create, true, method);
                 if (link != null)
+                {
                     result.AddLink(link);
+                }
             }
             return result;
         }
@@ -97,7 +109,9 @@ namespace Mvp24Hours.WebAPI.Extensions
             {
                 var link = HateoasHelper.CreateLink(routeName, new Dictionary<string, object>(), HateoasType.Edit, true, HateoasMethodType.PUT);
                 if (link != null)
+                {
                     result.AddLink(link);
+                }
             }
             return result;
         }
@@ -108,7 +122,9 @@ namespace Mvp24Hours.WebAPI.Extensions
             {
                 var link = HateoasHelper.CreateLink(routeName, routeValues, HateoasType.Edit, true, HateoasMethodType.PUT);
                 if (link != null)
+                {
                     result.AddLink(link);
+                }
             }
             return result;
         }
@@ -119,7 +135,9 @@ namespace Mvp24Hours.WebAPI.Extensions
             {
                 var link = HateoasHelper.CreateLink(routeName, routeValues, HateoasType.Edit, true, method);
                 if (link != null)
+                {
                     result.AddLink(link);
+                }
             }
             return result;
         }
@@ -134,7 +152,9 @@ namespace Mvp24Hours.WebAPI.Extensions
             {
                 var link = HateoasHelper.CreateLink(routeName, new Dictionary<string, object>(), HateoasType.Delete, true, HateoasMethodType.DELETE);
                 if (link != null)
+                {
                     result.AddLink(link);
+                }
             }
             return result;
         }
@@ -145,7 +165,9 @@ namespace Mvp24Hours.WebAPI.Extensions
             {
                 var link = HateoasHelper.CreateLink(routeName, routeValues, HateoasType.Delete, true, HateoasMethodType.DELETE);
                 if (link != null)
+                {
                     result.AddLink(link);
+                }
             }
             return result;
         }
@@ -156,7 +178,9 @@ namespace Mvp24Hours.WebAPI.Extensions
             {
                 var link = HateoasHelper.CreateLink(routeName, routeValues, HateoasType.Delete, true, method);
                 if (link != null)
+                {
                     result.AddLink(link);
+                }
             }
             return result;
         }
@@ -171,7 +195,9 @@ namespace Mvp24Hours.WebAPI.Extensions
             {
                 var link = HateoasHelper.CreateLink(routeName, new Dictionary<string, object>(), HateoasType.Self, false, HateoasMethodType.GET);
                 if (link != null)
+                {
                     result.AddLink(link);
+                }
             }
             return result;
         }
@@ -182,7 +208,9 @@ namespace Mvp24Hours.WebAPI.Extensions
             {
                 var link = HateoasHelper.CreateLink(routeName, routeValues, HateoasType.Self, false, HateoasMethodType.GET);
                 if (link != null)
+                {
                     context.AddLink(link);
+                }
             }
             return context;
         }
@@ -193,7 +221,9 @@ namespace Mvp24Hours.WebAPI.Extensions
             {
                 var link = HateoasHelper.CreateLink(routeName, routeValues, HateoasType.Self, false, method);
                 if (link != null)
+                {
                     context.AddLink(link);
+                }
             }
             return context;
         }
@@ -204,7 +234,9 @@ namespace Mvp24Hours.WebAPI.Extensions
             {
                 var link = HateoasHelper.CreateLink(routeName, result, Paging, HateoasType.Self, HateoasMethodType.GET);
                 if (link != null)
+                {
                     context.AddLink(link);
+                }
             }
             return context;
         }
@@ -215,7 +247,9 @@ namespace Mvp24Hours.WebAPI.Extensions
             {
                 var link = HateoasHelper.CreateLink(routeName, result, Paging, HateoasType.Self, method);
                 if (link != null)
+                {
                     context.AddLink(link);
+                }
             }
             return context;
         }
@@ -230,7 +264,9 @@ namespace Mvp24Hours.WebAPI.Extensions
             {
                 var link = HateoasHelper.CreateLink(routeName, new Dictionary<string, object>(), HateoasType.Collection, true, HateoasMethodType.GET);
                 if (link != null)
+                {
                     result.AddLink(link);
+                }
             }
             return result;
         }
@@ -241,7 +277,9 @@ namespace Mvp24Hours.WebAPI.Extensions
             {
                 var link = HateoasHelper.CreateLink(routeName, routeValues, HateoasType.Collection, true, HateoasMethodType.GET);
                 if (link != null)
+                {
                     result.AddLink(link);
+                }
             }
             return result;
         }
@@ -252,7 +290,9 @@ namespace Mvp24Hours.WebAPI.Extensions
             {
                 var link = HateoasHelper.CreateLink(routeName, routeValues, HateoasType.Collection, true, method);
                 if (link != null)
+                {
                     result.AddLink(link);
+                }
             }
             return result;
         }
@@ -263,7 +303,9 @@ namespace Mvp24Hours.WebAPI.Extensions
             {
                 var link = HateoasHelper.CreateLink(routeName, result, Paging, HateoasType.Collection, HateoasMethodType.GET);
                 if (link != null)
+                {
                     context.AddLink(link);
+                }
             }
             return context;
         }
@@ -274,7 +316,9 @@ namespace Mvp24Hours.WebAPI.Extensions
             {
                 var link = HateoasHelper.CreateLink(routeName, result, Paging, HateoasType.Collection, method);
                 if (link != null)
+                {
                     context.AddLink(link);
+                }
             }
             return context;
         }
@@ -291,23 +335,34 @@ namespace Mvp24Hours.WebAPI.Extensions
 
         public static IHATEOASContext AddLinkPaging<T>(this IHATEOASContext context, IPagingResult<T> result, string routeName, IPagingCriteria Paging, HateoasMethodType method)
         {
-            if (context == null) return context;
+            if (context == null)
+            {
+                return context;
+            }
 
             var link = HateoasHelper.CreateLink(routeName, result, Paging, HateoasType.First, method);
             if (link != null)
+            {
                 context.AddLink(link);
+            }
 
             link = HateoasHelper.CreateLink(routeName, result, Paging, HateoasType.Previous, method);
             if (link != null)
+            {
                 context.AddLink(link);
+            }
 
             link = HateoasHelper.CreateLink(routeName, result, Paging, HateoasType.Next, method);
             if (link != null)
+            {
                 context.AddLink(link);
+            }
 
             link = HateoasHelper.CreateLink(routeName, result, Paging, HateoasType.Last, method);
             if (link != null)
+            {
                 context.AddLink(link);
+            }
 
             return context;
         }

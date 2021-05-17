@@ -44,7 +44,11 @@ namespace Mvp24Hours.Infrastructure.Extensions
 
         public static async Task<string> GetRedisStringAsync(this IDistributedCache cache, string key, CancellationToken token = default)
         {
-            if (!EnableRedis) return null;
+            if (!EnableRedis)
+            {
+                return null;
+            }
+
             try
             {
                 return await cache.GetStringAsync(key, token);
@@ -58,7 +62,11 @@ namespace Mvp24Hours.Infrastructure.Extensions
 
         public static async Task SetRedisStringAsync(this IDistributedCache cache, string key, string value, CancellationToken token = default)
         {
-            if (!EnableRedis) return;
+            if (!EnableRedis)
+            {
+                return;
+            }
+
             try
             {
                 await cache.SetRedisStringAsync(key, value, DateTimeOffset.Now.AddMinutes(5), token);
@@ -71,7 +79,11 @@ namespace Mvp24Hours.Infrastructure.Extensions
 
         public static async Task SetRedisStringAsync(this IDistributedCache cache, string key, string value, int minutes, CancellationToken token = default)
         {
-            if (!EnableRedis) return;
+            if (!EnableRedis)
+            {
+                return;
+            }
+
             try
             {
                 await cache.SetRedisStringAsync(key, value, DateTimeOffset.Now.AddMinutes(minutes), token);
@@ -84,7 +96,11 @@ namespace Mvp24Hours.Infrastructure.Extensions
 
         public static async Task SetRedisStringAsync(this IDistributedCache cache, string key, string value, DateTimeOffset time, CancellationToken token = default)
         {
-            if (!EnableRedis) return;
+            if (!EnableRedis)
+            {
+                return;
+            }
+
             try
             {
                 await cache.SetStringAsync(key, value, GetRedisCacheOptions(time), token);
@@ -97,7 +113,11 @@ namespace Mvp24Hours.Infrastructure.Extensions
 
         public static async Task RemoveRedisStringAsync(this IDistributedCache cache, string key, CancellationToken token = default)
         {
-            if (!EnableRedis) return;
+            if (!EnableRedis)
+            {
+                return;
+            }
+
             try
             {
                 await cache.RemoveAsync(key, token);

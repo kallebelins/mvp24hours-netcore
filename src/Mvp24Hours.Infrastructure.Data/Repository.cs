@@ -73,7 +73,10 @@ namespace Mvp24Hours.Infrastructure.Data
         {
             var query = this.dbEntities.AsQueryable();
             if (clause != null)
+            {
                 query = query.Where(clause);
+            }
+
             return GetQuery(query, null, true).Any();
         }
 
@@ -84,7 +87,10 @@ namespace Mvp24Hours.Infrastructure.Data
         {
             var query = this.dbEntities.AsQueryable();
             if (clause != null)
+            {
                 query = query.Where(clause);
+            }
+
             return GetQuery(query, null, true).Count();
         }
 
@@ -103,7 +109,10 @@ namespace Mvp24Hours.Infrastructure.Data
         {
             var query = this.dbEntities.AsQueryable();
             if (clause != null)
+            {
                 query = query.Where(clause);
+            }
+
             return GetQuery(query, criteria).ToList();
         }
 
@@ -128,7 +137,10 @@ namespace Mvp24Hours.Infrastructure.Data
         /// </summary>
         public void Add(T entity)
         {
-            if (entity == null) return;
+            if (entity == null)
+            {
+                return;
+            }
 
             var entry = dbContext.Entry(entity);
             if (entry.State != EntityState.Detached)
@@ -164,7 +176,10 @@ namespace Mvp24Hours.Infrastructure.Data
         /// </summary>
         public void Modify(T entity)
         {
-            if (entity == null) return;
+            if (entity == null)
+            {
+                return;
+            }
 
             var entityDb = dbContext.Set<T>().Find(entity.EntityKey);
 
@@ -207,7 +222,10 @@ namespace Mvp24Hours.Infrastructure.Data
         /// </summary>
         public void Remove(T entity)
         {
-            if (entity == null) return;
+            if (entity == null)
+            {
+                return;
+            }
 
             if (entity.GetType() == typeof(IEntityLog<>))
             {
@@ -242,7 +260,11 @@ namespace Mvp24Hours.Infrastructure.Data
         public void RemoveById(object id)
         {
             var entity = this.GetById(id);
-            if (entity == null) return;
+            if (entity == null)
+            {
+                return;
+            }
+
             this.Remove(entity);
         }
 
@@ -251,7 +273,10 @@ namespace Mvp24Hours.Infrastructure.Data
         /// </summary>
         private void ForceRemove(T entity)
         {
-            if (entity == null) return;
+            if (entity == null)
+            {
+                return;
+            }
 
             var entry = dbContext.Entry(entity);
             if (entry.State != EntityState.Deleted)

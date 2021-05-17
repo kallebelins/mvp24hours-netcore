@@ -36,13 +36,17 @@ namespace Mvp24Hours.Infrastructure.Middlewares
             try
             {
                 if (!httpContext.Response.HasStarted)
+                {
                     await _next(httpContext);
+                }
             }
             catch (Exception ex)
             {
                 _logger.Error(ex);
                 if (!httpContext.Response.HasStarted)
+                {
                     await HandleExceptionAsync(httpContext, ex);
+                }
             }
         }
 
@@ -54,9 +58,13 @@ namespace Mvp24Hours.Infrastructure.Middlewares
             string message;
 
             if (TraceMiddleware)
+            {
                 message = $"Message: {(exception?.InnerException ?? exception).Message} / Trace: {exception.StackTrace}";
+            }
             else
+            {
                 message = $"Message: {(exception?.InnerException ?? exception).Message}";
+            }
 
             var boResult = BusinessResult<VoidResult>.Create(
                 message.ToMessageResult("internalservererror", MessageType.Error)

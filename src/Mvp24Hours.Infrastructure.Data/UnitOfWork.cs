@@ -34,7 +34,7 @@ namespace Mvp24Hours.Infrastructure.Data
 
         protected DbContext DbContext { get; private set; }
 
-        Dictionary<Type, object> repositories;
+        readonly Dictionary<Type, object> repositories;
 
         /// <summary>
         ///  <see cref="Mvp24Hours.Core.Contract.Data.IUnitOfWork"/>
@@ -44,7 +44,7 @@ namespace Mvp24Hours.Infrastructure.Data
         {
             if (!this.repositories.ContainsKey(typeof(T)))
             {
-                this.repositories.Add(typeof(T), (IRepository<T>)new Repository<T>(this.DbContext));
+                this.repositories.Add(typeof(T), ServiceProviderHelper.GetService<IRepository<T>>());
             }
             return repositories[typeof(T)] as IRepository<T>;
         }

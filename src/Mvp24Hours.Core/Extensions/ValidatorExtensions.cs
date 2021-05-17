@@ -16,7 +16,9 @@ namespace Mvp24Hours.Core.Extensions
         public static bool IsInt32(this string value)
         {
             if (!value.HasValue())
+            {
                 return false;
+            }
 
             return int.TryParse(value, out _);
         }
@@ -24,7 +26,9 @@ namespace Mvp24Hours.Core.Extensions
         public static bool IsLong(this string value)
         {
             if (!value.HasValue())
+            {
                 return false;
+            }
 
             return long.TryParse(value, out _);
         }
@@ -32,7 +36,9 @@ namespace Mvp24Hours.Core.Extensions
         public static bool IsBoolean(this string value)
         {
             if (!value.HasValue())
+            {
                 return false;
+            }
 
             return bool.TryParse(value, out _);
         }
@@ -40,7 +46,9 @@ namespace Mvp24Hours.Core.Extensions
         public static bool IsDecimal(this string value)
         {
             if (!value.HasValue())
+            {
                 return false;
+            }
 
             return decimal.TryParse(value, out _);
         }
@@ -48,7 +56,9 @@ namespace Mvp24Hours.Core.Extensions
         public static bool IsDateTime(this string value)
         {
             if (!value.HasValue())
+            {
                 return false;
+            }
 
             return DateTime.TryParse(value, out _);
         }
@@ -56,7 +66,9 @@ namespace Mvp24Hours.Core.Extensions
         public static bool IsValidWebUrl(this string target)
         {
             if (!target.HasValue())
+            {
                 return false;
+            }
 
             var WebUrlExpression = new Regex(@"(http|https)://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?", RegexOptions.Singleline | RegexOptions.Compiled);
             return target.HasValue() && WebUrlExpression.IsMatch(target);
@@ -70,7 +82,9 @@ namespace Mvp24Hours.Core.Extensions
         public static bool IsValidRegex(this string value, string pattern, RegexOptions options = RegexOptions.IgnoreCase)
         {
             if (!value.HasValue())
+            {
                 return false;
+            }
 
             return new Regex(pattern, options).IsMatch(value);
         }
@@ -78,7 +92,9 @@ namespace Mvp24Hours.Core.Extensions
         public static bool IsValidEmail(this string email)
         {
             if (!email.HasValue())
+            {
                 return false;
+            }
 
             string pattern = @"^(?!\.)(""([^""\r\\]|\\[""\r\\])*""|" + @"([-a-z0-9!#$%&'*+/=?^_`{|}~]|(?<!\.)\.)*)(?<!\.)" + @"@[a-z0-9][\w\.-]*[a-z0-9]\.[a-z][a-z\.]*[a-z]$";
             var regex = new Regex(pattern, RegexOptions.IgnoreCase);
@@ -87,46 +103,77 @@ namespace Mvp24Hours.Core.Extensions
 
         public static bool IsValidRange(this DateTime start, DateTime end)
         {
-            if (!start.IsValidDate() || !end.IsValidDate()) return false;
-            if (start > end) return false;
+            if (!start.IsValidDate() || !end.IsValidDate())
+            {
+                return false;
+            }
+
+            if (start > end)
+            {
+                return false;
+            }
+
             return true;
         }
 
         public static bool IsValidDate(this DateTime start)
         {
-            if (start == DateTime.MinValue) return false;
-            if (start == DateTime.MaxValue) return false;
+            if (start == DateTime.MinValue)
+            {
+                return false;
+            }
+
+            if (start == DateTime.MaxValue)
+            {
+                return false;
+            }
+
             return true;
         }
 
         public static bool IsValidPis(this string pis)
         {
             if (!pis.HasValue())
+            {
                 return false;
+            }
 
             int[] multiplicador = new int[10] { 3, 2, 9, 8, 7, 6, 5, 4, 3, 2 };
             int soma;
             int resto;
             if (pis.Trim().Length != 11)
+            {
                 return false;
+            }
+
             pis = pis.Trim();
             pis = pis.Replace("-", "").Replace(".", "").PadLeft(11, '0');
 
             soma = 0;
             for (int i = 0; i < 10; i++)
+            {
                 soma += int.Parse(pis[i].ToString()) * multiplicador[i];
+            }
+
             resto = soma % 11;
             if (resto < 2)
+            {
                 resto = 0;
+            }
             else
+            {
                 resto = 11 - resto;
+            }
+
             return pis.EndsWith(resto.ToString());
         }
 
         public static bool IsValidCpf(this string cpf)
         {
             if (!cpf.HasValue())
+            {
                 return false;
+            }
 
             int[] multiplicador1 = new int[9] { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
             int[] multiplicador2 = new int[10] { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
@@ -137,27 +184,46 @@ namespace Mvp24Hours.Core.Extensions
             cpf = cpf.Trim();
             cpf = cpf.Replace(".", "").Replace("-", "");
             if (cpf.Length != 11)
+            {
                 return false;
+            }
+
             tempCpf = cpf.Substring(0, 9);
             soma = 0;
 
             for (int i = 0; i < 9; i++)
+            {
                 soma += int.Parse(tempCpf[i].ToString()) * multiplicador1[i];
+            }
+
             resto = soma % 11;
             if (resto < 2)
+            {
                 resto = 0;
+            }
             else
+            {
                 resto = 11 - resto;
+            }
+
             digito = resto.ToString();
             tempCpf += digito;
             soma = 0;
             for (int i = 0; i < 10; i++)
+            {
                 soma += int.Parse(tempCpf[i].ToString()) * multiplicador2[i];
+            }
+
             resto = soma % 11;
             if (resto < 2)
+            {
                 resto = 0;
+            }
             else
+            {
                 resto = 11 - resto;
+            }
+
             digito += resto.ToString();
             return cpf.EndsWith(digito);
         }
@@ -165,7 +231,9 @@ namespace Mvp24Hours.Core.Extensions
         public static bool IsValidCnpj(this string cnpj)
         {
             if (!cnpj.HasValue())
+            {
                 return false;
+            }
 
             int[] multiplicador1 = new int[12] { 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2 };
             int[] multiplicador2 = new int[13] { 6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2 };
@@ -176,26 +244,45 @@ namespace Mvp24Hours.Core.Extensions
             cnpj = cnpj.Trim();
             cnpj = cnpj.Replace(".", "").Replace("-", "").Replace("/", "");
             if (cnpj.Length != 14)
+            {
                 return false;
+            }
+
             tempCnpj = cnpj.Substring(0, 12);
             soma = 0;
             for (int i = 0; i < 12; i++)
+            {
                 soma += int.Parse(tempCnpj[i].ToString()) * multiplicador1[i];
+            }
+
             resto = (soma % 11);
             if (resto < 2)
+            {
                 resto = 0;
+            }
             else
+            {
                 resto = 11 - resto;
+            }
+
             digito = resto.ToString();
             tempCnpj += digito;
             soma = 0;
             for (int i = 0; i < 13; i++)
+            {
                 soma += int.Parse(tempCnpj[i].ToString()) * multiplicador2[i];
+            }
+
             resto = (soma % 11);
             if (resto < 2)
+            {
                 resto = 0;
+            }
             else
+            {
                 resto = 11 - resto;
+            }
+
             digito += resto.ToString();
             return cnpj.EndsWith(digito);
         }
@@ -203,7 +290,9 @@ namespace Mvp24Hours.Core.Extensions
         public static bool IsValidCreditCard(this string cardNo, string expiryDate, string cvv)
         {
             if (!cardNo.HasValue() || !expiryDate.HasValue() || !cvv.HasValue())
+            {
                 return false;
+            }
 
             var cardCheck = new Regex(@"^(1298|1267|4512|4567|8901|8933)([\-\s]?[0-9]{4}){3}$");
             var monthCheck = new Regex(@"^(0[1-9]|1[0-2])$");
@@ -211,13 +300,20 @@ namespace Mvp24Hours.Core.Extensions
             var cvvCheck = new Regex(@"^\d{3}$");
 
             if (!cardCheck.IsMatch(cardNo)) // <1>check card number is valid
+            {
                 return false;
+            }
+
             if (!cvvCheck.IsMatch(cvv)) // <2>check cvv is valid as "999"
+            {
                 return false;
+            }
 
             var dateParts = expiryDate.Split('/'); //expiry date in from MM/yyyy            
             if (!monthCheck.IsMatch(dateParts[0]) || !yearCheck.IsMatch(dateParts[1])) // <3 - 6>
+            {
                 return false; // ^ check date format is valid as "MM/yyyy"
+            }
 
             var year = int.Parse(dateParts[1]);
             var month = int.Parse(dateParts[0]);
@@ -231,7 +327,9 @@ namespace Mvp24Hours.Core.Extensions
         public static bool IsValidCreditCard(this string cardNo)
         {
             if (!cardNo.HasValue())
+            {
                 return false;
+            }
 
             //Build your Regular Expression
             Regex expression = new Regex(@"^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$");
@@ -243,13 +341,17 @@ namespace Mvp24Hours.Core.Extensions
         public static bool IsValidCNS(this string cns)
         {
             if (!cns.HasValue())
+            {
                 return false;
+            }
 
             Regex definitive = new Regex(@"/[1-2][0-9]{10}00[0-1][0-9]/");
             Regex provisional = new Regex(@"/[7-9][0-9]{14}/");
 
             if (definitive.IsMatch(cns) || provisional.IsMatch(cns))
+            {
                 return CNSWeightedSum(cns) % 11 == 0;
+            }
 
             return false;
         }
@@ -258,14 +360,19 @@ namespace Mvp24Hours.Core.Extensions
         {
             int soma = 0;
             for (int i = 0; i < value.Length; i++)
+            {
                 soma += value[i] * (15 - i);
+            }
+
             return soma;
         }
 
         public static bool IsValidRenavam(this string value)
         {
             if (!value.HasValue())
+            {
                 return false;
+            }
 
             var renavam = value.OnlyNumbers();
 
@@ -312,7 +419,9 @@ namespace Mvp24Hours.Core.Extensions
             UltDig = sTitulo.Length;
 
             if (sTitulo == "000000000000")
+            {
                 return false;
+            }
 
             d1 = int.Parse(sTitulo.Substring((UltDig - 10), 1));
             d2 = int.Parse(sTitulo.Substring((UltDig - 9), 1));
@@ -331,23 +440,33 @@ namespace Mvp24Hours.Core.Extensions
             DV1 %= 11;
 
             if (DV1 == 10)
+            {
                 DV1 = 0;
+            }
 
             DV2 = (d9 * 7) + (d10 * 8) + (DV1 * 9);
             DV2 %= 11;
 
             if (DV2 == 10)
+            {
                 DV2 = 0;
+            }
 
             if ((d11 == DV1) && (d12 == DV2))
+            {
                 return ((d9 & d10) > 0) && ((d9 & d10) < 29);
+            }
 
             return false;
         }
 
         public static bool IsValidConstraint(this string text, params string[] values)
         {
-            if (string.IsNullOrEmpty(text) || values == null || values.Length == 0) return false;
+            if (string.IsNullOrEmpty(text) || values == null || values.Length == 0)
+            {
+                return false;
+            }
+
             return values.Contains(text);
         }
     }

@@ -84,7 +84,10 @@ namespace Mvp24Hours.Infrastructure.Data
         /// </summary>
         protected void ApplyLogRules()
         {
-            if (!CanApplyEntityLog) return;
+            if (!CanApplyEntityLog)
+            {
+                return;
+            }
 
             // entity log and guid
             foreach (var entry in this.ChangeTracker

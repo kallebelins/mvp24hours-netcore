@@ -73,13 +73,21 @@ namespace Mvp24Hours.Infrastructure.Pipe
 
         public void AddContent<T>(T obj)
         {
-            if (obj == null) return;
+            if (obj == null)
+            {
+                return;
+            }
+
             AddContent<T>(obj.GetType().FullName, obj);
         }
 
         public void AddContent<T>(string key, T obj)
         {
-            if (obj == null) return;
+            if (obj == null)
+            {
+                return;
+            }
+
             if (_contents.ContainsKey(key))
             {
                 _contents[key] = obj;
@@ -128,7 +136,9 @@ namespace Mvp24Hours.Infrastructure.Pipe
         {
             if (string.IsNullOrEmpty(Token)
                 && !string.IsNullOrEmpty(token))
+            {
                 Token = token;
+            }
         }
 
         public void SetFailure()

@@ -49,7 +49,10 @@ namespace Mvp24Hours.Infrastructure.Helpers
                 if (_appSettings == null)
                 {
                     var env = GetEnvironment();
-                    if (env == null) return null;
+                    if (env == null)
+                    {
+                        return null;
+                    }
 
                     IConfigurationBuilder builder = new ConfigurationBuilder();
                     builder.AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json"), optional: true, reloadOnChange: true);

@@ -22,18 +22,17 @@ using Mvp24Hours.Core.Extensions;
 using Mvp24Hours.Core.Mappings;
 using Mvp24Hours.Infrastructure.Contexts;
 using Mvp24Hours.Infrastructure.Data;
-using Mvp24Hours.Infrastructure.Helpers;
 using Mvp24Hours.WebAPI.Filters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using StackExchange.Redis;
 using Swashbuckle.AspNetCore.Filters;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
-using System.Collections.Generic;
 
 namespace Mvp24Hours.WebAPI.Extensions
 {
@@ -45,6 +44,7 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// <summary>
         /// Add all services
         /// </summary>
+        [Obsolete]
         public static IServiceCollection AddMvp24HoursAll<TDbContext>(this IServiceCollection services, Func<IServiceProvider, TDbContext> dbFactory = null, Assembly assemblyMap = null)
             where TDbContext : DbContext
         {
@@ -58,6 +58,7 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// <summary>
         /// Add all services
         /// </summary>
+        [Obsolete]
         public static IServiceCollection AddMvp24HoursAll(this IServiceCollection services, Assembly assemblyMap = null)
         {
             services.AddMvp24HoursService();
@@ -69,6 +70,7 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// <summary>
         /// Add all services async
         /// </summary>
+        [Obsolete]
         public static IServiceCollection AddMvp24HoursAllAsync<TDbContext>(this IServiceCollection services, Func<IServiceProvider, TDbContext> dbFactory = null, Assembly assemblyMap = null)
             where TDbContext : DbContext
         {
@@ -82,6 +84,7 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// <summary>
         /// Add all services async
         /// </summary>
+        [Obsolete]
         public static IServiceCollection AddMvp24HoursAllAsync(this IServiceCollection services, Assembly assemblyMap = null)
         {
             services.AddMvp24HoursService();
@@ -120,15 +123,28 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// <summary>
         /// Add database context services
         /// </summary>
-        public static IServiceCollection AddMvp24HoursDbAsyncService<TDbContext>(this IServiceCollection services, Func<IServiceProvider, TDbContext> dbFactory = null)
+        public static IServiceCollection AddMvp24HoursDbAsyncService<TDbContext>(this IServiceCollection services, Func<IServiceProvider, TDbContext> dbFactory = null, Type repositoryAsync = null)
             where TDbContext : DbContext
         {
             services.AddScoped<IUnitOfWorkAsync>(x => new UnitOfWorkAsync());
-            services.AddScoped(typeof(IRepositoryAsync<>), typeof(RepositoryAsync<>));
-            if (dbFactory != null)
-                services.AddScoped<DbContext>(dbFactory);
+
+            if (repositoryAsync != null)
+            {
+                services.AddScoped(typeof(IRepositoryAsync<>), repositoryAsync);
+            }
             else
+            {
+                services.AddScoped(typeof(IRepositoryAsync<>), typeof(RepositoryAsync<>));
+            }
+
+            if (dbFactory != null)
+            {
+                services.AddScoped<DbContext>(dbFactory);
+            }
+            else
+            {
                 services.AddScoped<DbContext, TDbContext>();
+            }
 
             return services;
         }
@@ -136,16 +152,28 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// <summary>
         /// Add database context services
         /// </summary>
-        public static IServiceCollection AddMvp24HoursDbService<TDbContext>(this IServiceCollection services, Func<IServiceProvider, TDbContext> dbFactory = null)
+        public static IServiceCollection AddMvp24HoursDbService<TDbContext>(this IServiceCollection services, Func<IServiceProvider, TDbContext> dbFactory = null, Type repository = null)
                where TDbContext : DbContext
         {
             services.AddScoped<IUnitOfWork>(x => new UnitOfWork());
-            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            if (dbFactory != null)
-                services.AddScoped<DbContext>(dbFactory);
-            else
-                services.AddScoped<DbContext, TDbContext>();
 
+            if (repository != null)
+            {
+                services.AddScoped(typeof(IRepository<>), repository);
+            }
+            else
+            {
+                services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            }
+
+            if (dbFactory != null)
+            {
+                services.AddScoped<DbContext>(dbFactory);
+            }
+            else
+            {
+                services.AddScoped<DbContext, TDbContext>();
+            }
 
             return services;
         }
@@ -257,7 +285,7 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// <summary>
         /// 
         /// </summary>
-        public static IServiceCollection AddMvp24HoursSwagger(this IServiceCollection services, string version, string title, string xmlCommentsFileName = null, bool enableExample = false)
+        public static IServiceCollection AddMvp24HoursSwagger(this IServiceCollection services, string version, string title, string xmlCommentsFileName = null, bool enableExample = false, bool enableOAuth2 = false)
         {
             services.AddSwaggerGen(c =>
             {
@@ -270,6 +298,35 @@ namespace Mvp24Hours.WebAPI.Extensions
                 }
 
                 c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+
+                if (enableOAuth2)
+                {
+                    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                    {
+                        Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n 
+                          Enter 'Bearer' [space] and then your token in the text input below.
+                          \r\n\r\nExample: 'Bearer 12345abcdef'",
+                        Name = "Authorization",
+                        In = ParameterLocation.Header,
+                        Type = SecuritySchemeType.ApiKey,
+                        Scheme = "Bearer"
+                    });
+
+                    c.AddSecurityRequirement(new OpenApiSecurityRequirement() {
+                        {
+                            new OpenApiSecurityScheme {
+                                Reference = new OpenApiReference {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "Bearer"
+                                },
+                                Scheme = "oauth2",
+                                Name = "Bearer",
+                                In = ParameterLocation.Header,
+                            },
+                            new List<string>()
+                        }
+                    });
+                }
 
                 // Set the comments path for the Swagger JSON and UI.
                 if (!string.IsNullOrEmpty(xmlCommentsFileName))

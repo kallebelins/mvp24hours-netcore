@@ -24,7 +24,9 @@ namespace Mvp24Hours.Infrastructure.Validations
             Context = ServiceProviderHelper.GetService<INotificationContext>();
 
             if (Context == null)
+            {
                 throw new ArgumentNullException("Notification context is mandatory.");
+            }
 
             NotifySpecifications = new List<NotifySpecification<T>>();
         }
@@ -107,9 +109,13 @@ namespace Mvp24Hours.Infrastructure.Validations
                 if (!satisfiedBy)
                 {
                     if (!string.IsNullOrEmpty(item.KeyValidation))
+                    {
                         Context.AddNotification(item.KeyValidation, item.MessageValidation);
+                    }
                     else
+                    {
                         Context.AddNotification(Guid.NewGuid().ToString(), item.Specification.ToString());
+                    }
                 }
             }
             return IsValid;

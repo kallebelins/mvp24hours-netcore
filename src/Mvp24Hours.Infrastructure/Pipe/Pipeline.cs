@@ -45,7 +45,9 @@ namespace Mvp24Hours.Infrastructure.Pipe
             Context = ServiceProviderHelper.GetService<INotificationContext>();
 
             if (Context == null)
+            {
                 throw new ArgumentNullException("Notification context is mandatory.");
+            }
         }
         #endregion
 
@@ -88,9 +90,15 @@ namespace Mvp24Hours.Infrastructure.Pipe
             {
                 current.SetToken(this._token);
                 if (!operation.IsRequired && (!current.IsSuccess || !IsValidContext) && this._isBreakOnFail)
+                {
                     return current;
+                }
+
                 if (current.IsLocked)
+                {
                     return current;
+                }
+
                 try
                 {
                     return operation.Execute(current);

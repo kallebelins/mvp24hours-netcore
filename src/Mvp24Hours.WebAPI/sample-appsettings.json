@@ -5,6 +5,7 @@
     },
     "Persistence": {
       "MaxQtyByQueryPage": 30,
+      "ReadUncommitedQuery": false,
       "EnableRedis": true,
       "Redis": {
         "Hosts": [ "localhost:6379" ],

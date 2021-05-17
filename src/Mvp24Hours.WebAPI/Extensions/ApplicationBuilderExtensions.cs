@@ -33,6 +33,16 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
+        public static IApplicationBuilder UseMvp24HoursCors(this IApplicationBuilder builder)
+        {
+            return builder.UseMiddleware<CorsMiddleware>();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
         public static IApplicationBuilder UseMvp24HoursCaching(this IApplicationBuilder builder, params string[] varyByQueryKeys)
         {
             return builder.UseMiddleware<CachingMiddleware>(varyByQueryKeys);

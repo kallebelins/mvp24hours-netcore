@@ -30,7 +30,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
             IPipelineMessage message = new PipelineMessage();
             if (value != null)
             {
-                message.AddContent((T)value);
+                message.AddContent(value);
             }
             if (!string.IsNullOrEmpty(tokenDefault))
             {
@@ -55,7 +55,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
             IPipelineMessage message = new PipelineMessage();
             if (value != null)
             {
-                message.AddContent(keyContent, (T)value);
+                message.AddContent(keyContent, value);
             }
             if (!string.IsNullOrEmpty(tokenDefault))
             {
@@ -84,7 +84,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
                 {
                     foreach (var item in bo.Data)
                     {
-                        message.AddContent((T)item);
+                        message.AddContent(item);
                     }
                 }
                 if (!string.IsNullOrEmpty(bo.Token))

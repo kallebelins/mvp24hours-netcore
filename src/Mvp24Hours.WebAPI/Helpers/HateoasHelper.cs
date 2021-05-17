@@ -33,11 +33,17 @@ namespace Mvp24Hours.Infrastructure.Helpers
             if (!string.IsNullOrEmpty(url))
             {
                 if (url.EndsWith("0"))
+                {
                     return url.Replace("/0", "/{id}");
+                }
                 else if (url.EndsWith(Guid.Empty.ToString()))
+                {
                     return url.Replace($"/{Guid.Empty}", "/{oid}");
+                }
                 else
+                {
                     return url;
+                }
             }
             return string.Empty;
         }

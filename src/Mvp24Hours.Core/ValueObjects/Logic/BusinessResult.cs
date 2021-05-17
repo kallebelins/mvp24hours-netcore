@@ -69,7 +69,9 @@ namespace Mvp24Hours.Core.ValueObjects.Logic
         {
             if (string.IsNullOrEmpty(this.Token)
                 && !string.IsNullOrEmpty(token))
+            {
                 this.Token = token;
+            }
         }
 
         protected override IEnumerable<object> GetEqualityComponents()

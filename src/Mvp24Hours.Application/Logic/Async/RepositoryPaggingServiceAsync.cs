@@ -80,7 +80,7 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.ListAsync(IPagingCriteria)"/>
         /// </summary>
-        public async virtual Task<IPagingResult<T>> PagingListAsync(IPagingCriteria criteria)
+        public virtual async Task<IPagingResult<T>> PagingListAsync(IPagingCriteria criteria)
         {
             try
             {

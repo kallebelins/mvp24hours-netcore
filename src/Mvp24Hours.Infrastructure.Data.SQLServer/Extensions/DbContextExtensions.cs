@@ -22,8 +22,13 @@ namespace Mvp24Hours.Infrastructure.Data.Extensions
             {
                 command.CommandText = rawSql;
                 if (parameters != null)
+                {
                     foreach (var p in parameters)
+                    {
                         command.Parameters.Add(p);
+                    }
+                }
+
                 await conn.OpenAsync();
                 return await command.ExecuteNonQueryAsync();
             }
@@ -38,8 +43,13 @@ namespace Mvp24Hours.Infrastructure.Data.Extensions
             {
                 command.CommandText = rawSql;
                 if (parameters != null)
+                {
                     foreach (var p in parameters)
+                    {
                         command.Parameters.Add(p);
+                    }
+                }
+
                 await conn.OpenAsync();
                 return (T)await command.ExecuteScalarAsync();
             }

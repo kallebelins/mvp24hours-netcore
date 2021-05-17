@@ -42,10 +42,14 @@ namespace Mvp24Hours.Infrastructure.Logging.Renderer
             var serverVariables = HttpContextHelper.GetContext()?.Features?.Get<IServerVariablesFeature>();
 
             if (serverVariables == null)
+            {
                 return;
+            }
 
             if (serverVariables[HttpHostKey] == null || serverVariables[UrlKey] == null)
+            {
                 return;
+            }
 
             var xml = string.Format("url: {0}{1}", serverVariables[HttpHostKey], serverVariables[UrlKey]);
 

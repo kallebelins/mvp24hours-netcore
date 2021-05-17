@@ -54,9 +54,13 @@ namespace Mvp24Hours.Infrastructure.Validations
                 if (!satisfiedBy)
                 {
                     if (!string.IsNullOrEmpty(item.KeyValidation))
+                    {
                         Context.AddNotification(item.KeyValidation, item.MessageValidation);
+                    }
                     else
+                    {
                         Context.AddNotification(Guid.NewGuid().ToString(), specification.ToString());
+                    }
                 }
             }
             return IsValid;

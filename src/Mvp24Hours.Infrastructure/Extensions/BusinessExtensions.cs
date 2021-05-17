@@ -30,7 +30,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
                     var itemContent = message.GetContent<T>();
                     if (itemContent != null)
                     {
-                        dataList.Add((T)itemContent);
+                        dataList.Add(itemContent);
                     }
                 }
 

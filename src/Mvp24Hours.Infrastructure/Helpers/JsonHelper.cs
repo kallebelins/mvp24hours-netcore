@@ -31,7 +31,9 @@ namespace Mvp24Hours.Infrastructure.Helpers
             set
             {
                 if (value != null)
+                {
                     _jsonDefaultSettings = value;
+                }
             }
         }
 

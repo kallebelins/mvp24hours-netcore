@@ -22,7 +22,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
                     string value = ConfigurationHelper.GetSettings("Mvp24Hours:Persistence:EnableRedis");
                     _enableRedis = value.ToBoolean(true);
                 }
-                return  (bool)_enableRedis;
+                return (bool)_enableRedis;
             }
         }
 
@@ -42,7 +42,11 @@ namespace Mvp24Hours.Infrastructure.Helpers
 
         public static async Task<string> GetStringAsync(string key, CancellationToken token = default)
         {
-            if (RedisCache == null || !EnableRedis) return null;
+            if (RedisCache == null || !EnableRedis)
+            {
+                return null;
+            }
+
             try
             {
                 return await RedisCache.GetRedisStringAsync(key, token);
@@ -56,7 +60,11 @@ namespace Mvp24Hours.Infrastructure.Helpers
 
         public static async Task SetStringAsync(string key, string value, CancellationToken token = default)
         {
-            if (RedisCache == null || !EnableRedis) return;
+            if (RedisCache == null || !EnableRedis)
+            {
+                return;
+            }
+
             try
             {
                 await RedisCache.SetRedisStringAsync(key, value, token);
@@ -69,7 +77,11 @@ namespace Mvp24Hours.Infrastructure.Helpers
 
         public static async Task SetStringAsync(string key, string value, int minutes, CancellationToken token = default)
         {
-            if (RedisCache == null || !EnableRedis) return;
+            if (RedisCache == null || !EnableRedis)
+            {
+                return;
+            }
+
             try
             {
                 await RedisCache.SetRedisStringAsync(key, value, minutes, token);
@@ -82,7 +94,11 @@ namespace Mvp24Hours.Infrastructure.Helpers
 
         public static async Task SetStringAsync(string key, string value, DateTimeOffset time, CancellationToken token = default)
         {
-            if (RedisCache == null || !EnableRedis) return;
+            if (RedisCache == null || !EnableRedis)
+            {
+                return;
+            }
+
             try
             {
                 await RedisCache.SetRedisStringAsync(key, value, time, token);
@@ -95,7 +111,11 @@ namespace Mvp24Hours.Infrastructure.Helpers
 
         public static async Task RemoveStringAsync(string key, CancellationToken token = default)
         {
-            if (RedisCache == null || !EnableRedis) return;
+            if (RedisCache == null || !EnableRedis)
+            {
+                return;
+            }
+
             try
             {
                 await RedisCache.RemoveRedisStringAsync(key, token);

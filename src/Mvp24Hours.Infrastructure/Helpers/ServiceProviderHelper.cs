@@ -14,10 +14,19 @@ namespace Mvp24Hours.Infrastructure.Helpers
 
         public static T GetService<T>()
         {
+            return (T)GetService(typeof(T));
+        }
+
+        public static object GetService(Type type)
+        {
             if (IsHttpContext)
-                return (T)HttpContextHelper.GetContext()?.RequestServices?.GetService(typeof(T));
+            {
+                return HttpContextHelper.GetContext()?.RequestServices?.GetService(type);
+            }
             else
-                return (T)_serviceProvider?.GetService(typeof(T));
+            {
+                return _serviceProvider?.GetService(type);
+            }
         }
 
         public static bool IsHttpContext

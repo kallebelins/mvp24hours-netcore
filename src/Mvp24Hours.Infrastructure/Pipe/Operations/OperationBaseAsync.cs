@@ -24,7 +24,9 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations
             NotificationContext = ServiceProviderHelper.GetService<INotificationContext>();
 
             if (NotificationContext == null)
+            {
                 throw new ArgumentNullException("Notification context is mandatory.");
+            }
         }
         #endregion
 
