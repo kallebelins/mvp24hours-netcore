@@ -50,7 +50,6 @@ namespace Mvp24Hours.Infrastructure.Extensions
 
             if (propertyName.Contains('_') || propertyName.Contains(' '))
             {
-                // propertyName = propertyName.Replace(' ', '_');
                 isDescending = propertyName.EndsWith("_desc") 
                     || propertyName.EndsWith(" desc");
                 propertyName = propertyName
@@ -64,7 +63,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
             PropertyInfo pi = type.GetProperty(propertyName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
             if (pi == null)
             {
-                throw new ArgumentNullException("Ordering property not found.");
+                throw new ArgumentNullException("Property for ordering not found or key attribute does not exist in the entity.");
             }
             Expression expr = Expression.Property(arg, pi);
             type = pi.PropertyType;
