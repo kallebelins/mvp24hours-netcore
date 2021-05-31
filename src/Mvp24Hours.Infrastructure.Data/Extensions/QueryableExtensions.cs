@@ -9,6 +9,7 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using Mvp24Hours.Core.Extensions;
 
 namespace Mvp24Hours.Infrastructure.Extensions
 {
@@ -45,19 +46,26 @@ namespace Mvp24Hours.Infrastructure.Extensions
             }
 
             bool isDescending = false;
-            propertyName = propertyName.Trim();
+            propertyName = propertyName.Trim().ToLower();
 
             if (propertyName.Contains('_') || propertyName.Contains(' '))
             {
-                propertyName = propertyName.Replace(' ', '_');
-                isDescending = propertyName.EndsWith("_desc");
-                propertyName = propertyName.Replace("_asc", "").Replace("_desc", "");
+                // propertyName = propertyName.Replace(' ', '_');
+                isDescending = propertyName.EndsWith("_desc") 
+                    || propertyName.EndsWith(" desc");
+                propertyName = propertyName
+                    .RemoveEnd("_asc").RemoveEnd(" asc")
+                    .RemoveEnd("_desc").RemoveEnd(" desc");
             }
 
             Type type = typeof(T);
             ParameterExpression arg = Expression.Parameter(type, "x");
 
             PropertyInfo pi = type.GetProperty(propertyName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+            if (pi == null)
+            {
+                throw new ArgumentNullException("Ordering property not found.");
+            }
             Expression expr = Expression.Property(arg, pi);
             type = pi.PropertyType;
 

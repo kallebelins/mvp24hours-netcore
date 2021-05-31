@@ -5,10 +5,27 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using System.Text.RegularExpressions;
+
 namespace Mvp24Hours.Core.Extensions
 {
     public static class StringExtensions
     {
+        public static string RegexReplace(this string source, string pattern, string replacement)
+        {
+            return Regex.Replace(source, pattern, replacement);
+        }
+
+        public static string ReplaceEnd(this string source, string value, string replacement)
+        {
+            return RegexReplace(source, $"{value}$", replacement);
+        }
+
+        public static string RemoveEnd(this string source, string value)
+        {
+            return ReplaceEnd(source, value, string.Empty);
+        }
+
         public static string Truncate(this string text, int size)
         {
             string value = text ?? string.Empty;
