@@ -9,9 +9,9 @@
     <Company>Kallebe Lins</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>1.5.311</Version>
-    <AssemblyVersion>1.5.31.1</AssemblyVersion>
-    <FileVersion>1.5.31.1</FileVersion>
+    <Version>1.6.101</Version>
+    <AssemblyVersion>1.6.10.1</AssemblyVersion>
+    <FileVersion>1.6.10.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

@@ -5,11 +5,11 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Mvp24Hours.Core.Extensions;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using Mvp24Hours.Core.Extensions;
 
 namespace Mvp24Hours.Infrastructure.Extensions
 {
@@ -50,7 +50,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
 
             if (propertyName.Contains('_') || propertyName.Contains(' '))
             {
-                isDescending = propertyName.EndsWith("_desc") 
+                isDescending = propertyName.EndsWith("_desc")
                     || propertyName.EndsWith(" desc");
                 propertyName = propertyName
                     .RemoveEnd("_asc").RemoveEnd(" asc")

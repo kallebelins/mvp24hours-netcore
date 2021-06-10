@@ -23,6 +23,7 @@ using Mvp24Hours.Core.Mappings;
 using Mvp24Hours.Infrastructure.Contexts;
 using Mvp24Hours.Infrastructure.Data;
 using Mvp24Hours.WebAPI.Filters;
+using Mvp24Hours.WebAPI.Filters.Swagger;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using StackExchange.Redis;
@@ -285,7 +286,10 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// <summary>
         /// 
         /// </summary>
-        public static IServiceCollection AddMvp24HoursSwagger(this IServiceCollection services, string version, string title, string xmlCommentsFileName = null, bool enableExample = false, bool enableOAuth2 = false)
+        public static IServiceCollection AddMvp24HoursSwagger(this IServiceCollection services,
+            string version, string title, string xmlCommentsFileName = null,
+            bool enableExample = false, bool enableOAuth2 = false,
+            IEnumerable<Type> authTypes = null)
         {
             services.AddSwaggerGen(c =>
             {
@@ -312,20 +316,27 @@ namespace Mvp24Hours.WebAPI.Extensions
                         Scheme = "Bearer"
                     });
 
-                    c.AddSecurityRequirement(new OpenApiSecurityRequirement() {
-                        {
-                            new OpenApiSecurityScheme {
-                                Reference = new OpenApiReference {
-                                    Type = ReferenceType.SecurityScheme,
-                                    Id = "Bearer"
+                    if (authTypes == null)
+                    {
+                        c.AddSecurityRequirement(new OpenApiSecurityRequirement() {
+                            {
+                                new OpenApiSecurityScheme {
+                                    Reference = new OpenApiReference {
+                                        Type = ReferenceType.SecurityScheme,
+                                        Id = "Bearer"
+                                    },
+                                    Scheme = "oauth2",
+                                    Name = "Bearer",
+                                    In = ParameterLocation.Header,
                                 },
-                                Scheme = "oauth2",
-                                Name = "Bearer",
-                                In = ParameterLocation.Header,
-                            },
-                            new List<string>()
-                        }
-                    });
+                                new List<string>()
+                            }
+                        });
+                    }
+                    else
+                    {
+                        c.OperationFilter<AuthResponsesOperationFilter>(authTypes);
+                    }
                 }
 
                 // Set the comments path for the Swagger JSON and UI.

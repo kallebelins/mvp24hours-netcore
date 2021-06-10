@@ -9,7 +9,7 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Linq;
 
-namespace Mvp24Hours.WebAPI.Filters
+namespace Mvp24Hours.WebAPI.Filters.Swagger
 {
     public class CustomSwaggerFilter : IDocumentFilter
     {

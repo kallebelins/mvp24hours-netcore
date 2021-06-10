@@ -21,32 +21,32 @@ namespace Mvp24Hours.Infrastructure.Helpers
         /// </summary>
         public static DateTime GetTimeZoneNow()
         {
-            return GetTimeZone(DateTime.UtcNow);
+            return TimeZoneInfo.ConvertTime(DateTime.UtcNow, GetTimeZoneInfo());
         }
 
         /// <summary>
         /// Get date and time based on South America time zone
         /// </summary>
-        public static DateTime GetTimeZone(DateTime utcDateTime)
+        public static DateTime GetTimeZone(DateTime utcDateTime, DateTimeKind? kind)
         {
-            DateTime dUtc;
-            switch (utcDateTime.Kind)
+            var dUtc = (kind ?? utcDateTime.Kind) switch
             {
-                case DateTimeKind.Utc:
-                    dUtc = utcDateTime;
-                    break;
-                case DateTimeKind.Local:
-                    dUtc = utcDateTime.ToUniversalTime();
-                    break;
-                default: //DateTimeKind.Unspecified
-                    dUtc = DateTime.SpecifyKind(utcDateTime, DateTimeKind.Utc);
-                    break;
-            }
-            return TimeZoneInfo.ConvertTime(DateTime.UtcNow, GetTimeZoneInfo());
+                DateTimeKind.Utc => utcDateTime,
+                DateTimeKind.Local => utcDateTime.ToUniversalTime(),
+                _ => DateTime.SpecifyKind(utcDateTime, DateTimeKind.Utc),
+            };
+            return TimeZoneInfo.ConvertTime(dUtc, GetTimeZoneInfo());
         }
+
+        private static TimeZoneInfo _timeZoneInfo;
 
         private static TimeZoneInfo GetTimeZoneInfo()
         {
+            if (_timeZoneInfo != null)
+            {
+                return _timeZoneInfo;
+            }
+
             string timeZoneIds = ConfigurationHelper.GetSettings("Mvp24Hours:General:TimeZoneIds");
             var timeZoneIdsList = new List<string>();
 
@@ -58,17 +58,21 @@ namespace Mvp24Hours.Infrastructure.Helpers
             {
                 timeZoneIdsList.Add("E. South America Standard Time");
                 timeZoneIdsList.Add("Brazil/East");
+                timeZoneIdsList.Add("America/Sao_Paulo");
             }
 
-            var zone = TimeZoneInfo.GetSystemTimeZones()
-                .FirstOrDefault(x => timeZoneIdsList.Contains(x.Id));
-
-            if (zone != null)
+            if (_timeZoneInfo == null)
             {
-                return zone;
+                _timeZoneInfo = TimeZoneInfo.GetSystemTimeZones()
+                    .FirstOrDefault(x => timeZoneIdsList.Contains(x.Id));
+
+                if (_timeZoneInfo == null)
+                {
+                    _timeZoneInfo = TimeZoneInfo.Local;
+                }
             }
 
-            return TimeZoneInfo.Local;
+            return _timeZoneInfo;
         }
     }
 }
