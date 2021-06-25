@@ -33,22 +33,59 @@ namespace Mvp24Hours.Infrastructure.Contexts
         #endregion
 
         #region [ Methods ]
-        public void AddNotification(string key, string message)
+
+        public void Add(string key, string message)
         {
             _notifications.Add(new Notification(key, message));
         }
-        public void AddNotification(string key, string message, MessageType type)
+
+        public void Add(string key, string message, MessageType type)
         {
             _notifications.Add(new Notification(key, message, type));
         }
-        public void AddNotification(Notification notification)
+
+        public void Add(Notification notification)
         {
             _notifications.Add(notification);
         }
-        public void AddNotifications(IEnumerable<Notification> notifications)
+
+        public void Add(IEnumerable<Notification> notifications)
         {
             _notifications.AddRange(notifications);
         }
+
+        public void AddIfTrue(bool condition, string key, string message)
+        {
+            if (condition)
+            {
+                Add(key, message);
+            }
+        }
+
+        public void AddIfTrue(bool condition, string key, string message, MessageType type)
+        {
+            if (condition)
+            {
+                Add(key, message, type);
+            }
+        }
+
+        public void AddIfTrue(bool condition, Notification notification)
+        {
+            if (condition)
+            {
+                Add(notification);
+            }
+        }
+
+        public void AddIfTrue(bool condition, IEnumerable<Notification> notifications)
+        {
+            if (condition)
+            {
+                Add(notifications);
+            }
+        }
+
         #endregion
     }
 }

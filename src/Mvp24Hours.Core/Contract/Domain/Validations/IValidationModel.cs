@@ -10,12 +10,17 @@ namespace Mvp24Hours.Core.Contract.Domain.Validations
     /// <summary>
     /// Used to validate model (entity, valueobjects, dto, ...)
     /// </summary>
-    public interface IValidationModel
+    public interface IValidationModel<T>
     {
         /// <summary>
         /// Ensures the model is valid
         /// </summary>
         /// <returns>true|false</returns>
         bool IsValid();
+        /// <summary>
+        /// Ensures the model is valid
+        /// </summary>
+        /// <returns>true|false</returns>
+        bool IsValid(IValidatorNotify<T> validatorNotify);
     }
 }

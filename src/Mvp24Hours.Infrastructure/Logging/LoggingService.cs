@@ -141,7 +141,7 @@ namespace Mvp24Hours.Infrastructure.Logging
             if (exception != null)
             {
                 assemblyProp = exception.Source;
-                classProp = exception.TargetSite.DeclaringType.FullName;
+                classProp = exception.TargetSite.DeclaringType?.FullName ?? exception.TargetSite.ReflectedType?.FullName;
                 methodProp = exception.TargetSite.Name;
                 messageProp = exception.Message;
 

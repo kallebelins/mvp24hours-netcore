@@ -5,7 +5,6 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-using Mvp24Hours.Core.Contract.Domain.Specifications;
 using Mvp24Hours.Core.Contract.Domain.Validations;
 using System;
 using System.Collections.Generic;
@@ -16,7 +15,7 @@ namespace Mvp24Hours.Core.ValueObjects
     /// <summary>
     /// Base value object
     /// </summary>
-    public abstract class BaseVO : IValidationModel
+    public abstract class BaseVO : IValidationModel<BaseVO>
     {
         #region [ Equality ]
         /// <summary>
@@ -86,16 +85,17 @@ namespace Mvp24Hours.Core.ValueObjects
         #region [ Valid ]
 
         /// <summary>
-        /// Specification for model
-        /// </summary>
-        protected ISpecificationModel<BaseVO> ValidSpecification = null;
-        /// <summary>
-        /// Checks whether the model meets specifications
+        /// Checks whether the model meets specifications (default true)
         /// </summary>
         /// <returns>true|false</returns>
-        public bool IsValid()
+        public virtual bool IsValid()
         {
-            return ValidSpecification?.IsSatisfiedBy(this) ?? true;
+            return true;
+        }
+
+        public virtual bool IsValid(IValidatorNotify<BaseVO> validatorNotify)
+        {
+            return IsValid();
         }
 
         #endregion

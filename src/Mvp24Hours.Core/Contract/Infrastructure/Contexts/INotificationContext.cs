@@ -33,23 +33,50 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Contexts
         /// </summary>
         /// <param name="key">Reference key</param>
         /// <param name="message">Message for notification</param>
-        void AddNotification(string key, string message);
+        void Add(string key, string message);
         /// <summary>
         /// Adds a notification to the context from the key and message reference
         /// </summary>
         /// <param name="key">Reference key</param>
         /// <param name="message">Message for notification</param>
         /// <param name="type">Type of feedback to the client</param>
-        void AddNotification(string key, string message, MessageType type);
+        void Add(string key, string message, MessageType type);
         /// <summary>
         /// Adds a notification to the context
         /// </summary>
         /// <param name="notification">Notification</param>
-        void AddNotification(Notification notification);
+        void Add(Notification notification);
         /// <summary>
         /// Adds a list of notifications to the context
         /// </summary>
         /// <param name="notifications">Notification list</param>
-        void AddNotifications(IEnumerable<Notification> notifications);
+        void Add(IEnumerable<Notification> notifications);
+        /// <summary>
+        /// Adds a notification to the context from the key and message reference
+        /// </summary>
+        /// <param name="condition">Parameter for conditional notification</param>
+        /// <param name="key">Reference key</param>
+        /// <param name="message">Message for notification</param>
+        void AddIfTrue(bool condition, string key, string message);
+        /// <summary>
+        /// Adds a notification to the context from the key and message reference
+        /// </summary>
+        /// <param name="condition">Parameter for conditional notification</param>
+        /// <param name="key">Reference key</param>
+        /// <param name="message">Message for notification</param>
+        /// <param name="type">Type of feedback to the client</param>
+        void AddIfTrue(bool condition, string key, string message, MessageType type);
+        /// <summary>
+        /// Adds a notification to the context
+        /// </summary>
+        /// <param name="condition">Parameter for conditional notification</param>
+        /// <param name="notification">Notification</param>
+        void AddIfTrue(bool condition, Notification notification);
+        /// <summary>
+        /// Adds a list of notifications to the context
+        /// </summary>
+        /// <param name="condition">Parameter for conditional notification</param>
+        /// <param name="notifications">Notification list</param>
+        void AddIfTrue(bool condition, IEnumerable<Notification> notifications);
     }
 }

@@ -17,11 +17,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Mvp24Hours.Core.Contract.Data;
+using Mvp24Hours.Core.Contract.Domain.Validations;
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Extensions;
 using Mvp24Hours.Core.Mappings;
 using Mvp24Hours.Infrastructure.Contexts;
 using Mvp24Hours.Infrastructure.Data;
+using Mvp24Hours.Infrastructure.Validations;
 using Mvp24Hours.WebAPI.Filters;
 using Mvp24Hours.WebAPI.Filters.Swagger;
 using Newtonsoft.Json;
@@ -117,6 +119,9 @@ namespace Mvp24Hours.WebAPI.Extensions
                 .AddScoped<IUrlHelper>(x => x.GetRequiredService<IUrlHelperFactory>()
                 .GetUrlHelper(x.GetRequiredService<IActionContextAccessor>().ActionContext));
             #endregion
+
+            // notification
+            services.AddScoped(typeof(IValidatorNotify<>), typeof(ValidatorNotify<>));
 
             return services;
         }

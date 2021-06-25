@@ -6,8 +6,8 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Domain.Entity;
-using Mvp24Hours.Core.Contract.Domain.Specifications;
 using Mvp24Hours.Core.Contract.Domain.Validations;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
@@ -18,7 +18,7 @@ namespace Mvp24Hours.Core.Entities
     /// <summary>
     /// Represents an entity
     /// </summary>
-    public abstract class EntityBase<T> : IEntityBase, IValidationModel
+    public abstract class EntityBase<T> : IEntityBase
     {
         #region [ Primitive members ]
 
@@ -40,16 +40,30 @@ namespace Mvp24Hours.Core.Entities
         #region [ Valid ]
 
         /// <summary>
-        /// Specification for entity
-        /// </summary>
-        protected ISpecificationModel<IEntityBase> ValidSpecification = null;
-        /// <summary>
-        /// Checks whether the entity meets the specification
+        /// Checks whether the entity meets the specification (default true)
         /// </summary>
         /// <returns>true|false</returns>
+        public virtual bool IsValid(IValidatorNotify<IEntityBase> validatorNotify)
+        {
+            var results = new List<ValidationResult>();
+            var contexto = new ValidationContext(this, null, null);
+            if (!Validator.TryValidateObject(this, contexto, results, true))
+            {
+                if (validatorNotify != null)
+                {
+                    foreach (var item in results)
+                    {
+                        validatorNotify.Context.Add(string.Join("|", item.MemberNames), item.ErrorMessage, Enums.MessageType.Error);
+                    }
+                }
+                return false;
+            }
+            return true;
+        }
+
         public bool IsValid()
         {
-            return ValidSpecification?.IsSatisfiedBy(this) ?? true;
+            return IsValid(null);
         }
 
         #endregion

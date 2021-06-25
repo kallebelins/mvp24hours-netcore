@@ -14,7 +14,7 @@ using System;
 
 namespace Mvp24Hours.Infrastructure.Validations
 {
-    public class ValidatorEntityNotify<T> : ValidatorNotify<T>, IValidatorNotify<T>, IValidator<T>
+    public class ValidatorEntityNotify<T> : ValidatorNotify<T>, IValidatorNotify<T>
         where T : class, IEntityBase
     {
         #region [ Props ]
@@ -55,11 +55,11 @@ namespace Mvp24Hours.Infrastructure.Validations
                 {
                     if (!string.IsNullOrEmpty(item.KeyValidation))
                     {
-                        Context.AddNotification(item.KeyValidation, item.MessageValidation);
+                        Context.Add(item.KeyValidation, item.MessageValidation);
                     }
                     else
                     {
-                        Context.AddNotification(Guid.NewGuid().ToString(), specification.ToString());
+                        Context.Add(Guid.NewGuid().ToString(), specification.ToString());
                     }
                 }
             }

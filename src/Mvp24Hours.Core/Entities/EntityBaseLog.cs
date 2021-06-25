@@ -18,7 +18,7 @@ namespace Mvp24Hours.Core.Entities
     /// </summary>
     /// <typeparam name="T">Represents entity</typeparam>
     /// <typeparam name="U">Represents data type used to log</typeparam>
-    public abstract class EntityBaseLog<T, U> : EntityBase<T>, IEntityBase, IValidationModel, IEntityLog<U>
+    public abstract class EntityBaseLog<T, U> : EntityBase<T>, IEntityBase, IValidationModel<IEntityBase>, IEntityLog<U>
     {
         #region [ Log ]
         /// <summary>

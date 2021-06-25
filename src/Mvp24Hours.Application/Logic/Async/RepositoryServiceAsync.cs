@@ -10,8 +10,10 @@ using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.Domain.Validations;
 using Mvp24Hours.Core.Contract.Logic;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
+using Mvp24Hours.Infrastructure.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -172,8 +174,11 @@ namespace Mvp24Hours.Business.Logic
         {
             try
             {
-                if (typeof(T) == typeof(IValidationModel)
-                    && !(entity as IValidationModel).IsValid())
+                bool isValidationModel = entity.GetType()?.GetInterfaces()?.Any(x => x == typeof(IValidationModel<IEntityBase>)) ?? false;
+                isValidationModel = isValidationModel || (entity.GetType()?.BaseType?.GetInterfaces()?.Any(x => x == typeof(IValidationModel<IEntityBase>)) ?? false);
+
+                var validator = ServiceProviderHelper.GetService<IValidatorNotify<IEntityBase>>();
+                if (isValidationModel && !entity.IsValid(validator))
                 {
                     return Task.FromResult(0);
                 }
@@ -195,8 +200,11 @@ namespace Mvp24Hours.Business.Logic
         {
             try
             {
-                if (typeof(T) == typeof(IValidationModel)
-                    && !(entity as IValidationModel).IsValid())
+                bool isValidationModel = entity.GetType()?.GetInterfaces()?.Any(x => x == typeof(IValidationModel<IEntityBase>)) ?? false;
+                isValidationModel = isValidationModel || (entity.GetType()?.BaseType?.GetInterfaces()?.Any(x => x == typeof(IValidationModel<IEntityBase>)) ?? false);
+
+                var validator = ServiceProviderHelper.GetService<IValidatorNotify<IEntityBase>>();
+                if (isValidationModel && !entity.IsValid(validator))
                 {
                     return Task.FromResult(0);
                 }
