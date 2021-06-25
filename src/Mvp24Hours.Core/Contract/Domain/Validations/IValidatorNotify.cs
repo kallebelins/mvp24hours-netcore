@@ -54,18 +54,14 @@ namespace Mvp24Hours.Core.Contract.Domain.Validations
         /// <summary>
         /// Adds specification for testing
         /// </summary>
-        /// <typeparam name="U">Test model</typeparam>
         /// <param name="specification">Specification for testing model</param>
         /// <returns>IValidatorNotify{T}</returns>
-        IValidatorNotify<T> AddSpecification<U>(ISpecification<T> specification)
-            where U : ISpecification<T>;
+        IValidatorNotify<T> AddSpecification(ISpecification<T> specification);
         /// <summary>
         /// Adds specification for testing
         /// </summary>
-        /// <typeparam name="U">Test model</typeparam>
         /// <param name="specificationValidator">Validation specification</param>
         /// <returns>IValidatorNotify{T}</returns>
-        IValidatorNotify<T> AddSpecification<U>(ISpecificationValidator<T> specificationValidator)
-            where U : ISpecificationValidator<T>;
+        IValidatorNotify<T> AddSpecification(ISpecificationValidator<T> specificationValidator);
     }
 }
