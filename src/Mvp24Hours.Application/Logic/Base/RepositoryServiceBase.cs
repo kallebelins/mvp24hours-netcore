@@ -15,10 +15,10 @@ namespace Mvp24Hours.Business.Logic
     /// <summary>
     /// Base service for using repository and unit of work
     /// </summary>
-    /// <typeparam name="T">Represents an entity</typeparam>
-    public abstract class RepositoryServiceBase<T, U>
-        where T : class, IEntityBase
-        where U : IUnitOfWork
+    /// <typeparam name="TEntity">Represents an entity</typeparam>
+    public abstract class RepositoryServiceBase<TEntity, TUoW>
+        where TEntity : class, IEntityBase
+        where TUoW : IUnitOfWork
     {
         #region [ Properties ]
 
@@ -28,9 +28,9 @@ namespace Mvp24Hours.Business.Logic
         /// Gets repository instance
         /// </summary>
         /// <returns>T</returns>
-        protected virtual U UnitOfWork
+        protected virtual TUoW UnitOfWork
         {
-            get { return (U)(unitOfWork ?? (unitOfWork = ServiceProviderHelper.GetService<U>())); }
+            get { return (TUoW)(unitOfWork ?? (unitOfWork = ServiceProviderHelper.GetService<TUoW>())); }
         }
 
         ILoggingService logger = null;

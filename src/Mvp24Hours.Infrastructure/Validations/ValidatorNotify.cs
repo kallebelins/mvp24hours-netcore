@@ -62,8 +62,7 @@ namespace Mvp24Hours.Infrastructure.Validations
             return this;
         }
 
-        public IValidatorNotify<T> AddSpecification<U>(ISpecification<T> specification)
-            where U : ISpecification<T>
+        public IValidatorNotify<T> AddSpecification(ISpecification<T> specification)
         {
             if (specification is ISpecificationValidator<T>)
             {
@@ -77,8 +76,7 @@ namespace Mvp24Hours.Infrastructure.Validations
             return this;
         }
 
-        public IValidatorNotify<T> AddSpecification<U>(ISpecificationValidator<T> specification)
-            where U : ISpecificationValidator<T>
+        public IValidatorNotify<T> AddSpecification(ISpecificationValidator<T> specification)
         {
             NotifySpecifications.Add(new NotifySpecification<T>(specification.KeyValidation, specification.MessageValidation, specification));
             return this;

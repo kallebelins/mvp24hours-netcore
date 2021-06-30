@@ -21,10 +21,10 @@ namespace Mvp24Hours.Business.Logic
     /// <summary>
     /// Base service for using repository and unit of work
     /// </summary>
-    /// <typeparam name="T">Represents an entity</typeparam>
-    public class RepositoryService<T, U> : RepositoryServiceBase<T, U>, IQueryService<T>, ICommandService<T>
-        where T : class, IEntityBase
-        where U : IUnitOfWork
+    /// <typeparam name="TEntity">Represents an entity</typeparam>
+    public class RepositoryService<TEntity, TUoW> : RepositoryServiceBase<TEntity, TUoW>, IQueryService<TEntity>, ICommandService<TEntity>
+        where TEntity : class, IEntityBase
+        where TUoW : IUnitOfWork
     {
         #region [ Implements IBaseBO ]
 
@@ -35,7 +35,7 @@ namespace Mvp24Hours.Business.Logic
         {
             try
             {
-                return this.UnitOfWork.GetRepository<T>().ListAny();
+                return this.UnitOfWork.GetRepository<TEntity>().ListAny();
             }
             catch (Exception ex)
             {
@@ -51,7 +51,7 @@ namespace Mvp24Hours.Business.Logic
         {
             try
             {
-                return this.UnitOfWork.GetRepository<T>().ListCount();
+                return this.UnitOfWork.GetRepository<TEntity>().ListCount();
             }
             catch (Exception ex)
             {
@@ -63,7 +63,7 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.List()"/>
         /// </summary>
-        public IList<T> List()
+        public IList<TEntity> List()
         {
             return this.List(null);
         }
@@ -71,11 +71,11 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.List(IPagingCriteria)"/>
         /// </summary>
-        public virtual IList<T> List(IPagingCriteria criteria)
+        public virtual IList<TEntity> List(IPagingCriteria criteria)
         {
             try
             {
-                return this.UnitOfWork.GetRepository<T>().List(criteria);
+                return this.UnitOfWork.GetRepository<TEntity>().List(criteria);
             }
             catch (Exception ex)
             {
@@ -87,11 +87,11 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.GetByCount(Expression{Func{T, bool}})()"/>
         /// </summary>
-        public virtual int GetByCount(Expression<Func<T, bool>> clause)
+        public virtual int GetByCount(Expression<Func<TEntity, bool>> clause)
         {
             try
             {
-                return this.UnitOfWork.GetRepository<T>().GetByCount(clause);
+                return this.UnitOfWork.GetRepository<TEntity>().GetByCount(clause);
             }
             catch (Exception ex)
             {
@@ -103,7 +103,7 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.GetBy(Expression{Func{T, bool}})"/>
         /// </summary>
-        public IList<T> GetBy(Expression<Func<T, bool>> clause)
+        public IList<TEntity> GetBy(Expression<Func<TEntity, bool>> clause)
         {
             return GetBy(clause, null);
         }
@@ -111,11 +111,11 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.GetBy(Expression{Func{T, bool}}, IPagingCriteria)"/>
         /// </summary>
-        public virtual IList<T> GetBy(Expression<Func<T, bool>> clause, IPagingCriteria criteria)
+        public virtual IList<TEntity> GetBy(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria)
         {
             try
             {
-                return UnitOfWork.GetRepository<T>().GetBy(clause, criteria);
+                return UnitOfWork.GetRepository<TEntity>().GetBy(clause, criteria);
             }
             catch (Exception ex)
             {
@@ -127,7 +127,7 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.GetById(int)"/>
         /// </summary>
-        public T GetById(object id)
+        public TEntity GetById(object id)
         {
             return this.GetById(id, null);
         }
@@ -135,11 +135,11 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.GetById(int, IPagingCriteria)"/>
         /// </summary>
-        public virtual T GetById(object id, IPagingCriteria criteria)
+        public virtual TEntity GetById(object id, IPagingCriteria criteria)
         {
             try
             {
-                return this.UnitOfWork.GetRepository<T>().GetById(id, criteria);
+                return this.UnitOfWork.GetRepository<TEntity>().GetById(id, criteria);
             }
             catch (Exception ex)
             {
@@ -155,20 +155,20 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.Add(T)"/>
         /// </summary>
-        public virtual int Add(T entity)
+        public virtual int Add(TEntity entity)
         {
             try
             {
-                bool isValidationModel = entity.GetType()?.GetInterfaces()?.Any(x => x == typeof(IValidationModel<IEntityBase>)) ?? false;
-                isValidationModel = isValidationModel || (entity.GetType()?.BaseType?.GetInterfaces()?.Any(x => x == typeof(IValidationModel<IEntityBase>)) ?? false);
+                bool isValidationModel = entity.GetType()?.GetInterfaces()?.Any(x => x == typeof(IValidationModel<TEntity>)) ?? false;
+                isValidationModel = isValidationModel || (entity.GetType()?.BaseType?.GetInterfaces()?.Any(x => x == typeof(IValidationModel<TEntity>)) ?? false);
 
-                var validator = ServiceProviderHelper.GetService<IValidatorNotify<IEntityBase>>();
-                if (isValidationModel && !entity.IsValid(validator))
+                var validator = ServiceProviderHelper.GetService<IValidatorNotify<TEntity>>();
+                if (isValidationModel && !((IValidationModel<TEntity>)entity).IsValid(validator))
                 {
                     return 0;
                 }
 
-                this.UnitOfWork.GetRepository<T>().Add(entity);
+                this.UnitOfWork.GetRepository<TEntity>().Add(entity);
                 return this.SaveChanges();
             }
             catch (Exception ex)
@@ -181,20 +181,20 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.Modify(T)"/>
         /// </summary>
-        public virtual int Modify(T entity)
+        public virtual int Modify(TEntity entity)
         {
             try
             {
-                bool isValidationModel = entity.GetType()?.GetInterfaces()?.Any(x => x == typeof(IValidationModel<IEntityBase>)) ?? false;
-                isValidationModel = isValidationModel || (entity.GetType()?.BaseType?.GetInterfaces()?.Any(x => x == typeof(IValidationModel<IEntityBase>)) ?? false);
+                bool isValidationModel = entity.GetType()?.GetInterfaces()?.Any(x => x == typeof(IValidationModel<TEntity>)) ?? false;
+                isValidationModel = isValidationModel || (entity.GetType()?.BaseType?.GetInterfaces()?.Any(x => x == typeof(IValidationModel<TEntity>)) ?? false);
 
-                var validator = ServiceProviderHelper.GetService<IValidatorNotify<IEntityBase>>();
-                if (isValidationModel && !entity.IsValid(validator))
+                var validator = ServiceProviderHelper.GetService<IValidatorNotify<TEntity>>();
+                if (isValidationModel && !((IValidationModel<TEntity>)entity).IsValid(validator))
                 {
                     return 0;
                 }
 
-                this.UnitOfWork.GetRepository<T>().Modify(entity);
+                this.UnitOfWork.GetRepository<TEntity>().Modify(entity);
                 return this.SaveChanges();
             }
             catch (Exception ex)
@@ -207,11 +207,11 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.Remove(T)"/>
         /// </summary>
-        public virtual int Remove(T entity)
+        public virtual int Remove(TEntity entity)
         {
             try
             {
-                this.UnitOfWork.GetRepository<T>().Remove(entity);
+                this.UnitOfWork.GetRepository<TEntity>().Remove(entity);
                 return this.SaveChanges();
             }
             catch (Exception ex)
@@ -228,7 +228,7 @@ namespace Mvp24Hours.Business.Logic
         {
             try
             {
-                var entity = this.UnitOfWork.GetRepository<T>().GetById(id);
+                var entity = this.UnitOfWork.GetRepository<TEntity>().GetById(id);
                 return this.Remove(entity);
             }
             catch (Exception ex)

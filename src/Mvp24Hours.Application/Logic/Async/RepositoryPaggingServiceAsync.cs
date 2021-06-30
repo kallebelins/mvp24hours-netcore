@@ -20,14 +20,14 @@ namespace Mvp24Hours.Business.Logic
     /// <summary>
     /// Asynchronous service for using repository with paginated results and unit of work
     /// </summary>
-    /// <typeparam name="T">Represents an entity</typeparam>
-    public class RepositoryPagingServiceAsync<T, U> : RepositoryServiceAsync<T, U>, IQueryServiceAsync<T>, ICommandServiceAsync<T>, IQueryPagingServiceAsync<T>
-        where T : class, IEntityBase
-        where U : IUnitOfWorkAsync
+    /// <typeparam name="TEntity">Represents an entity</typeparam>
+    public class RepositoryPagingServiceAsync<TEntity, TUoW> : RepositoryServiceAsync<TEntity, TUoW>, IQueryServiceAsync<TEntity>, ICommandServiceAsync<TEntity>, IQueryPagingServiceAsync<TEntity>
+        where TEntity : class, IEntityBase
+        where TUoW : IUnitOfWorkAsync
     {
         #region [ Implements IPagingBaseAsyncBO ]
 
-        public Task<IPagingResult<T>> PagingGetByAsync(Expression<Func<T, bool>> clause)
+        public Task<IPagingResult<TEntity>> PagingGetByAsync(Expression<Func<TEntity, bool>> clause)
         {
             return PagingGetByAsync(clause, null);
         }
@@ -35,7 +35,7 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.GetByAsync(Expression{Func{T, bool}}, IPagingCriteria)"/>
         /// </summary>
-        public virtual async Task<IPagingResult<T>> PagingGetByAsync(Expression<Func<T, bool>> clause, IPagingCriteria criteria)
+        public virtual async Task<IPagingResult<TEntity>> PagingGetByAsync(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria)
         {
             try
             {
@@ -48,7 +48,7 @@ namespace Mvp24Hours.Business.Logic
                     offset = criteria.Offset;
                 }
 
-                var repo = UnitOfWork.GetRepositoryAsync<T>();
+                var repo = UnitOfWork.GetRepositoryAsync<TEntity>();
 
                 var totalCount = await repo.GetByCountAsync(clause);
                 var totalPages = (int)Math.Ceiling((double)totalCount / limit);
@@ -72,7 +72,7 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.ListAsync()"/>
         /// </summary>
-        public Task<IPagingResult<T>> PagingListAsync()
+        public Task<IPagingResult<TEntity>> PagingListAsync()
         {
             return this.PagingListAsync(null);
         }
@@ -80,7 +80,7 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.ListAsync(IPagingCriteria)"/>
         /// </summary>
-        public virtual async Task<IPagingResult<T>> PagingListAsync(IPagingCriteria criteria)
+        public virtual async Task<IPagingResult<TEntity>> PagingListAsync(IPagingCriteria criteria)
         {
             try
             {
@@ -93,7 +93,7 @@ namespace Mvp24Hours.Business.Logic
                     offset = criteria.Offset;
                 }
 
-                var repo = UnitOfWork.GetRepositoryAsync<T>();
+                var repo = UnitOfWork.GetRepositoryAsync<TEntity>();
 
                 var totalCount = await repo.ListCountAsync();
                 var totalPages = (int)Math.Ceiling((double)totalCount / limit);

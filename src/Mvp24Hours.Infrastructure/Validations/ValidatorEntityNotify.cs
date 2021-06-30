@@ -14,8 +14,8 @@ using System;
 
 namespace Mvp24Hours.Infrastructure.Validations
 {
-    public class ValidatorEntityNotify<T> : ValidatorNotify<T>, IValidatorNotify<T>
-        where T : class, IEntityBase
+    public class ValidatorEntityNotify<TEntity> : ValidatorNotify<TEntity>, IValidatorNotify<TEntity>
+        where TEntity : class, IEntityBase
     {
         #region [ Props ]
         private IUnitOfWork unitOfWork = null;
@@ -33,21 +33,21 @@ namespace Mvp24Hours.Infrastructure.Validations
         #endregion
 
         #region [ Validate ]
-        public override bool Validate(T Candidate)
+        public override bool Validate(TEntity Candidate)
         {
             foreach (var item in NotifySpecifications)
             {
                 bool satisfiedBy = true;
                 var specification = item.Specification;
 
-                if (specification is ISpecificationQuery<T>)
+                if (specification is ISpecificationQuery<TEntity>)
                 {
-                    var specificationQuery = specification as ISpecificationQuery<T>;
-                    satisfiedBy = UnitOfWork.GetRepository<T>().GetByAny(specificationQuery.IsSatisfiedByExpression);
+                    var specificationQuery = specification as ISpecificationQuery<TEntity>;
+                    satisfiedBy = UnitOfWork.GetRepository<TEntity>().GetByAny(specificationQuery.IsSatisfiedByExpression);
                 }
-                else if (specification is ISpecificationModel<T>)
+                else if (specification is ISpecificationModel<TEntity>)
                 {
-                    var specificationModel = specification as ISpecificationModel<T>;
+                    var specificationModel = specification as ISpecificationModel<TEntity>;
                     satisfiedBy = specificationModel.IsSatisfiedBy(Candidate);
                 }
 

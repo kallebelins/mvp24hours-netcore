@@ -93,7 +93,7 @@ namespace Mvp24Hours.Infrastructure.Data
             foreach (var entry in this.ChangeTracker
                 .Entries()
                 .Where(e =>
-                    (e.Entity.GetType().BaseType.Name == typeof(IEntityLog<>).Name || e.Entity.GetType().BaseType.Name == typeof(EntityBaseLog<,>).Name)
+                    (e.Entity.GetType().BaseType.Name == typeof(IEntityLog<>).Name || e.Entity.GetType().BaseType.Name == typeof(EntityBaseLog<,,>).Name)
                     && (e.State == EntityState.Added || e.State == EntityState.Modified || e.State == EntityState.Deleted)))
             {
                 var e = (dynamic)entry.Entity;

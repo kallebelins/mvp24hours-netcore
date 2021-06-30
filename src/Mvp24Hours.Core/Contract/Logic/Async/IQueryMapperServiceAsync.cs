@@ -16,61 +16,41 @@ namespace Mvp24Hours.Core.Contract.Logic
     /// <summary>
     /// Standard contract with methods for data projection.
     /// </summary>
-    public interface IQueryServiceAsync<TEntity> where TEntity : class
+    public interface IQueryMapperServiceAsync<TEntity> where TEntity : class
     {
-        /// <summary>
-        /// Checks whether any records returned by the List() method
-        /// </summary>
-        /// <returns>Number of representations</returns>
-        Task<bool> ListAnyAsync();
-        /// <summary>
-        /// Gets the amount of representations returned by the List() method.
-        /// </summary>
-        /// <returns>Number of representations</returns>
-        Task<int> ListCountAsync();
         /// <summary>
         /// Gets all representations of the typed entity.
         /// </summary>
         /// <returns>List of entities</returns>
-        Task<IList<TEntity>> ListAsync();
+        Task<IList<TMapper>> MapperListAsync<TMapper>() where TMapper : class;
         /// <summary>
         /// Gets all representations of the entity typed with criteria.
         /// </summary>
         /// <returns>List of entities</returns>
-        Task<IList<TEntity>> ListAsync(IPagingCriteria criteria);
-        /// <summary>
-        /// Checks whether any records returned by the GetBy() method.
-        /// </summary>
-        /// <returns>Indicates whether there is a record</returns>
-        Task<bool> GetByAnyAsync(Expression<Func<TEntity, bool>> clause);
-        /// <summary>
-        /// Gets the amount of representations returned by the GetBy() method.
-        /// </summary>
-        /// <returns>Number of representations</returns>
-        Task<int> GetByCountAsync(Expression<Func<TEntity, bool>> clause);
+        Task<IList<TMapper>> MapperListAsync<TMapper>(IPagingCriteria criteria) where TMapper : class;
         /// <summary>
         /// Gets the representations based on the filter of the typed entity.
         /// </summary>
         /// <param name="clause">Filter</param>
         /// <returns>Number of representations</returns>
-        Task<IList<TEntity>> GetByAsync(Expression<Func<TEntity, bool>> clause);
+        Task<IList<TMapper>> MapperGetByAsync<TMapper>(Expression<Func<TEntity, bool>> clause) where TMapper : class;
         /// <summary>
         /// Gets the filter-based representations of the entity typed with criteria.
         /// </summary>
         /// <param name="clause">Filter</param>
         /// <returns>Number of representations</returns>
-        Task<IList<TEntity>> GetByAsync(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria);
+        Task<IList<TMapper>> MapperGetByAsync<TMapper>(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria) where TMapper : class;
         /// <summary>
         /// Gets a representation of the typed entity.
         /// </summary>
         /// <param name="id">Identifier of entity</param>
         /// <returns>A representation of the entity</returns>
-        Task<TEntity> GetByIdAsync(object id);
+        Task<TMapper> MapperGetByIdAsync<TMapper>(object id) where TMapper : class;
         /// <summary>
         /// Gets a representation of the entity typed with criteria.
         /// </summary>
         /// <param name="id">Identifier of entity</param>
         /// <returns>A representation of the entity</returns>
-        Task<TEntity> GetByIdAsync(object id, IPagingCriteria criteria);
+        Task<TMapper> MapperGetByIdAsync<TMapper>(object id, IPagingCriteria criteria) where TMapper : class;
     }
 }

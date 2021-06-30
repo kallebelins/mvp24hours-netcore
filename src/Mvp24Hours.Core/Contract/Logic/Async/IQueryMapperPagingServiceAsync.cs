@@ -15,23 +15,23 @@ namespace Mvp24Hours.Core.Contract.Logic
     /// <summary>
     /// Standard contract with methods for data projection.
     /// </summary>
-    public interface IQueryPagingServiceAsync<TEntity> where TEntity : class
+    public interface IQueryMapperPagingServiceAsync<TEntity> where TEntity : class
     {
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync{TEntity}.ListAsync()"/>
         /// </summary>
-        Task<IPagingResult<TEntity>> PagingListAsync();
+        Task<IPagingResult<TMapper>> MapperPagingListAsync<TMapper>() where TMapper : class;
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync{TEntity}.ListAsync(IPagingCriteria)"/>
         /// </summary>
-        Task<IPagingResult<TEntity>> PagingListAsync(IPagingCriteria clause);
+        Task<IPagingResult<TMapper>> MapperPagingListAsync<TMapper>(IPagingCriteria clause) where TMapper : class;
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync{TEntity}.GetByAsync(Expression{Func{TEntity, bool}})"/>
         /// </summary>
-        Task<IPagingResult<TEntity>> PagingGetByAsync(Expression<Func<TEntity, bool>> clause);
+        Task<IPagingResult<TMapper>> MapperPagingGetByAsync<TMapper>(Expression<Func<TEntity, bool>> clause) where TMapper : class;
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync{TEntity}.GetByAsync(Expression{Func{TEntity, bool}}, IPagingCriteria)"/>
         /// </summary>
-        Task<IPagingResult<TEntity>> PagingGetByAsync(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria);
+        Task<IPagingResult<TMapper>> MapperPagingGetByAsync<TMapper>(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria) where TMapper : class;
     }
 }

@@ -12,7 +12,7 @@ namespace Mvp24Hours.Core.Contract.Domain.Entity
     /// <summary>
     /// In terms of programing language, An entity can be any container class that has few properties with unique Id on it. Where Id represents the uniqueness of the entity class.
     /// </summary>
-    public interface IEntityBase : IValidationModel<IEntityBase>
+    public interface IEntityBase
     {
         /// <summary>
         /// Represents the entity's unique identifier

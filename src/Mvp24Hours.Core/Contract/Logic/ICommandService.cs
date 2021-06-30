@@ -11,22 +11,22 @@ namespace Mvp24Hours.Core.Contract.Logic
     /// <summary>
     /// Standard contract with methods for data manipulation.
     /// </summary>
-    public interface ICommandService<T>
+    public interface ICommandService<TEntity>
     {
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{T}.Add(T)"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{TEntity}.Add(TEntity)"/>
         /// </summary>
-        int Add(T entity);
+        int Add(TEntity entity);
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{T}.Modify(T)"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{TEntity}.Modify(TEntity)"/>
         /// </summary>
-        int Modify(T entity);
+        int Modify(TEntity entity);
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{T}.Remove(T)"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{TEntity}.Remove(TEntity)"/>
         /// </summary>
-        int Remove(T entity);
+        int Remove(TEntity entity);
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.ICommand{T}.RemoveById(object)"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Data.ICommand{TEntity}.RemoveById(object)"/>
         /// </summary>
         int RemoveById(object id);
         /// <summary>

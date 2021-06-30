@@ -16,9 +16,9 @@ namespace Mvp24Hours.Core.Entities
     /// <summary>
     /// Represents an entity with characteristics for logging (creation, modification and logical exclusion)
     /// </summary>
-    /// <typeparam name="T">Represents entity</typeparam>
-    /// <typeparam name="U">Represents data type used to log</typeparam>
-    public abstract class EntityBaseLog<T, U> : EntityBase<T>, IEntityBase, IValidationModel<IEntityBase>, IEntityLog<U>
+    /// <typeparam name="TKey">Represents entity</typeparam>
+    /// <typeparam name="TForeignKey">Represents data type used to log</typeparam>
+    public abstract class EntityBaseLog<TObject, TKey, TForeignKey> : EntityBase<TObject, TKey>, IEntityBase, IValidationModel<TObject>, IEntityLog<TForeignKey>
     {
         #region [ Log ]
         /// <summary>
@@ -31,7 +31,7 @@ namespace Mvp24Hours.Core.Entities
         /// </summary>
         [JsonIgnore]
         [IgnoreDataMember]
-        public U CreatedBy { get; set; }
+        public TForeignKey CreatedBy { get; set; }
         /// <summary>
         /// Modified date
         /// </summary>
@@ -42,7 +42,7 @@ namespace Mvp24Hours.Core.Entities
         /// </summary>
         [JsonIgnore]
         [IgnoreDataMember]
-        public U ModifiedBy { get; set; }
+        public TForeignKey ModifiedBy { get; set; }
         /// <summary>
         /// Logical exclusion date
         /// </summary>
@@ -54,7 +54,7 @@ namespace Mvp24Hours.Core.Entities
         /// </summary>
         [JsonIgnore]
         [IgnoreDataMember]
-        public U RemovedBy { get; set; }
+        public TForeignKey RemovedBy { get; set; }
         #endregion
     }
 }

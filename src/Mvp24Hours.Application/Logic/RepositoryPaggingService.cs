@@ -19,17 +19,17 @@ namespace Mvp24Hours.Business.Logic
     /// <summary>
     /// Base service for using repository with paginated results and unit of work
     /// </summary>
-    /// <typeparam name="T">Represents an entity</typeparam>
-    public class RepositoryPagingService<T, U> : RepositoryService<T, U>, IQueryService<T>, ICommandService<T>, IQueryPagingService<T>
-        where T : class, IEntityBase
-        where U : IUnitOfWork
+    /// <typeparam name="TEntity">Represents an entity</typeparam>
+    public class RepositoryPagingService<TEntity, TUoW> : RepositoryService<TEntity, TUoW>, IQueryService<TEntity>, ICommandService<TEntity>, IQueryPagingService<TEntity>
+        where TEntity : class, IEntityBase
+        where TUoW : IUnitOfWork
     {
         #region [ Implements IPagingBaseBO ]
 
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.GetBy(Expression{Func{T, bool}})"/>
         /// </summary>
-        public IPagingResult<T> PagingGetBy(Expression<Func<T, bool>> clause)
+        public IPagingResult<TEntity> PagingGetBy(Expression<Func<TEntity, bool>> clause)
         {
             return PagingGetBy(clause, null);
         }
@@ -37,7 +37,7 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.GetBy(Expression{Func{T, bool}}, IPagingCriteria)"/>
         /// </summary>
-        public virtual IPagingResult<T> PagingGetBy(Expression<Func<T, bool>> clause, IPagingCriteria criteria)
+        public virtual IPagingResult<TEntity> PagingGetBy(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria)
         {
             try
             {
@@ -50,7 +50,7 @@ namespace Mvp24Hours.Business.Logic
                     offset = criteria.Offset;
                 }
 
-                var repo = UnitOfWork.GetRepository<T>();
+                var repo = UnitOfWork.GetRepository<TEntity>();
 
                 var totalCount = repo.GetByCount(clause);
                 var totalPages = (int)Math.Ceiling((double)totalCount / limit);
@@ -74,7 +74,7 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.List()"/>
         /// </summary>
-        public IPagingResult<T> PagingList()
+        public IPagingResult<TEntity> PagingList()
         {
             return this.PagingList(null);
         }
@@ -82,7 +82,7 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.List(IPagingCriteria)"/>
         /// </summary>
-        public virtual IPagingResult<T> PagingList(IPagingCriteria criteria)
+        public virtual IPagingResult<TEntity> PagingList(IPagingCriteria criteria)
         {
             try
             {
@@ -95,7 +95,7 @@ namespace Mvp24Hours.Business.Logic
                     offset = criteria.Offset;
                 }
 
-                var repo = UnitOfWork.GetRepository<T>();
+                var repo = UnitOfWork.GetRepository<TEntity>();
 
                 var totalCount = repo.ListCount();
                 var totalPages = (int)Math.Ceiling((double)totalCount / limit);

@@ -15,43 +15,31 @@ namespace Mvp24Hours.Core.Contract.Logic
     /// <summary>
     /// Standard contract with methods for data projection.
     /// </summary>
-    public interface IQueryService<TEntity> where TEntity : class
+    public interface IQueryMapperService<TEntity> where TEntity : class
     {
-        /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{TEntity}.ListAny()"/>
-        /// </summary>
-        bool ListAny();
-        /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{TEntity}.ListCount()"/>
-        /// </summary>
-        int ListCount();
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{TEntity}.List()"/>
         /// </summary>
-        IList<TEntity> List();
+        IList<TMapper> MapperList<TMapper>() where TMapper : class;
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{TEntity}.List(IPagingCriteria)"/>
         /// </summary>
-        IList<TEntity> List(IPagingCriteria criteria);
-        /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{TEntity}.GetByCount(Expression{Func{TEntity, bool}})"/>
-        /// </summary>
-        int GetByCount(Expression<Func<TEntity, bool>> clause);
+        IList<TMapper> MapperList<TMapper>(IPagingCriteria criteria) where TMapper : class;
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{TEntity}.GetBy(Expression{Func{TEntity, bool}})"/>
         /// </summary>
-        IList<TEntity> GetBy(Expression<Func<TEntity, bool>> clause);
+        IList<TMapper> MapperGetBy<TMapper>(Expression<Func<TEntity, bool>> clause) where TMapper : class;
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{TEntity}.GetBy(Expression{Func{TEntity, bool}}, IPagingCriteria)"/>
         /// </summary>
-        IList<TEntity> GetBy(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria);
+        IList<TMapper> MapperGetBy<TMapper>(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria) where TMapper : class;
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{TEntity}.GetById(int)"/>
         /// </summary>
-        TEntity GetById(object id);
+        TMapper MapperGetById<TMapper>(object id) where TMapper : class;
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{TEntity}.GetById(int, IPagingCriteria)"/>
         /// </summary>
-        TEntity GetById(object id, IPagingCriteria criteria);
+        TMapper MapperGetById<TMapper>(object id, IPagingCriteria criteria) where TMapper : class;
     }
 }

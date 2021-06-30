@@ -11,19 +11,19 @@ namespace Mvp24Hours.Core.Contract.Domain.Entity
     /// Represents an entity with data to log
     ///  <see cref="Mvp24Hours.Core.Contract.Domain.Entity.IEntityBase"/>
     /// </summary>
-    public interface IEntityLog<T> : IEntityDateLog
+    public interface IEntityLog<TForeignKey> : IEntityDateLog
     {
         /// <summary>
         /// Registration of who requested the creation of this entity
         /// </summary>
-        T CreatedBy { get; set; }
+        TForeignKey CreatedBy { get; set; }
         /// <summary>
         /// Registration of who requested the modification of this entity
         /// </summary>
-        T ModifiedBy { get; set; }
+        TForeignKey ModifiedBy { get; set; }
         /// <summary>
         /// Record of who requested the logical exclusion of that entity
         /// </summary>
-        T RemovedBy { get; set; }
+        TForeignKey RemovedBy { get; set; }
     }
 }

@@ -23,10 +23,10 @@ namespace Mvp24Hours.Business.Logic
     /// <summary>
     /// Asynchronous service for using repository and unit of work
     /// </summary>
-    /// <typeparam name="T">Represents an entity</typeparam>
-    public class RepositoryServiceAsync<T, U> : RepositoryServiceAsyncBase<T, U>, IQueryServiceAsync<T>, ICommandServiceAsync<T>
-        where T : class, IEntityBase
-        where U : IUnitOfWorkAsync
+    /// <typeparam name="TEntity">Represents an entity</typeparam>
+    public class RepositoryServiceAsync<TEntity, TUoW> : RepositoryServiceAsyncBase<TEntity, TUoW>, IQueryServiceAsync<TEntity>, ICommandServiceAsync<TEntity>
+        where TEntity : class, IEntityBase
+        where TUoW : IUnitOfWorkAsync
     {
         #region [ Implements IBaseAsyncBO ]
 
@@ -34,7 +34,7 @@ namespace Mvp24Hours.Business.Logic
         {
             try
             {
-                return this.UnitOfWork.GetRepositoryAsync<T>().ListAnyAsync();
+                return this.UnitOfWork.GetRepositoryAsync<TEntity>().ListAnyAsync();
             }
             catch (Exception ex)
             {
@@ -50,7 +50,7 @@ namespace Mvp24Hours.Business.Logic
         {
             try
             {
-                return this.UnitOfWork.GetRepositoryAsync<T>().ListCountAsync();
+                return this.UnitOfWork.GetRepositoryAsync<TEntity>().ListCountAsync();
             }
             catch (Exception ex)
             {
@@ -62,7 +62,7 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.ListAsync()"/>
         /// </summary>
-        public Task<IList<T>> ListAsync()
+        public Task<IList<TEntity>> ListAsync()
         {
             return this.ListAsync(null);
         }
@@ -70,11 +70,11 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.ListAsync(IPagingCriteria)"/>
         /// </summary>
-        public virtual Task<IList<T>> ListAsync(IPagingCriteria criteria)
+        public virtual Task<IList<TEntity>> ListAsync(IPagingCriteria criteria)
         {
             try
             {
-                return this.UnitOfWork.GetRepositoryAsync<T>().ListAsync(criteria);
+                return this.UnitOfWork.GetRepositoryAsync<TEntity>().ListAsync(criteria);
             }
             catch (Exception ex)
             {
@@ -86,11 +86,11 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.GetByAnyAsync(Expression{Func{T, bool}})"/>
         /// </summary>
-        public Task<bool> GetByAnyAsync(Expression<Func<T, bool>> clause)
+        public Task<bool> GetByAnyAsync(Expression<Func<TEntity, bool>> clause)
         {
             try
             {
-                return this.UnitOfWork.GetRepositoryAsync<T>().GetByAnyAsync(clause);
+                return this.UnitOfWork.GetRepositoryAsync<TEntity>().GetByAnyAsync(clause);
             }
             catch (Exception ex)
             {
@@ -102,11 +102,11 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.GetByCountAsync(Expression{Func{T, bool}})()"/>
         /// </summary>
-        public virtual Task<int> GetByCountAsync(Expression<Func<T, bool>> clause)
+        public virtual Task<int> GetByCountAsync(Expression<Func<TEntity, bool>> clause)
         {
             try
             {
-                return this.UnitOfWork.GetRepositoryAsync<T>().GetByCountAsync(clause);
+                return this.UnitOfWork.GetRepositoryAsync<TEntity>().GetByCountAsync(clause);
             }
             catch (Exception ex)
             {
@@ -118,7 +118,7 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.GetByAsync(Expression{Func{T, bool}})"/>
         /// </summary>
-        public Task<IList<T>> GetByAsync(Expression<Func<T, bool>> clause)
+        public Task<IList<TEntity>> GetByAsync(Expression<Func<TEntity, bool>> clause)
         {
             return GetByAsync(clause, null);
         }
@@ -126,11 +126,11 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.GetByAsync(Expression{Func{T, bool}}, IPagingCriteria)"/>
         /// </summary>
-        public virtual Task<IList<T>> GetByAsync(Expression<Func<T, bool>> clause, IPagingCriteria criteria)
+        public virtual Task<IList<TEntity>> GetByAsync(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria)
         {
             try
             {
-                return UnitOfWork.GetRepositoryAsync<T>().GetByAsync(clause, criteria);
+                return UnitOfWork.GetRepositoryAsync<TEntity>().GetByAsync(clause, criteria);
             }
             catch (Exception ex)
             {
@@ -142,7 +142,7 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.GetByIdAsync(int)"/>
         /// </summary>
-        public Task<T> GetByIdAsync(object id)
+        public Task<TEntity> GetByIdAsync(object id)
         {
             return this.GetByIdAsync(id, null);
         }
@@ -150,11 +150,11 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.GetByIdAsync(int, IPagingCriteria)"/>
         /// </summary>
-        public virtual Task<T> GetByIdAsync(object id, IPagingCriteria criteria)
+        public virtual Task<TEntity> GetByIdAsync(object id, IPagingCriteria criteria)
         {
             try
             {
-                return this.UnitOfWork.GetRepositoryAsync<T>().GetByIdAsync(id, criteria);
+                return this.UnitOfWork.GetRepositoryAsync<TEntity>().GetByIdAsync(id, criteria);
             }
             catch (Exception ex)
             {
@@ -170,20 +170,20 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.AddAsync(T)"/>
         /// </summary>
-        public virtual Task<int> AddAsync(T entity)
+        public virtual Task<int> AddAsync(TEntity entity)
         {
             try
             {
-                bool isValidationModel = entity.GetType()?.GetInterfaces()?.Any(x => x == typeof(IValidationModel<IEntityBase>)) ?? false;
-                isValidationModel = isValidationModel || (entity.GetType()?.BaseType?.GetInterfaces()?.Any(x => x == typeof(IValidationModel<IEntityBase>)) ?? false);
+                bool isValidationModel = entity.GetType()?.GetInterfaces()?.Any(x => x == typeof(IValidationModel<TEntity>)) ?? false;
+                isValidationModel = isValidationModel || (entity.GetType()?.BaseType?.GetInterfaces()?.Any(x => x == typeof(IValidationModel<TEntity>)) ?? false);
 
-                var validator = ServiceProviderHelper.GetService<IValidatorNotify<IEntityBase>>();
-                if (isValidationModel && !entity.IsValid(validator))
+                var validator = ServiceProviderHelper.GetService<IValidatorNotify<TEntity>>();
+                if (isValidationModel && !((IValidationModel<TEntity>)entity).IsValid(validator))
                 {
                     return Task.FromResult(0);
                 }
 
-                this.UnitOfWork.GetRepositoryAsync<T>().AddAsync(entity);
+                this.UnitOfWork.GetRepositoryAsync<TEntity>().AddAsync(entity);
                 return this.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -196,20 +196,20 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.ModifyAsync(T)"/>
         /// </summary>
-        public virtual Task<int> ModifyAsync(T entity)
+        public virtual Task<int> ModifyAsync(TEntity entity)
         {
             try
             {
-                bool isValidationModel = entity.GetType()?.GetInterfaces()?.Any(x => x == typeof(IValidationModel<IEntityBase>)) ?? false;
-                isValidationModel = isValidationModel || (entity.GetType()?.BaseType?.GetInterfaces()?.Any(x => x == typeof(IValidationModel<IEntityBase>)) ?? false);
+                bool isValidationModel = entity.GetType()?.GetInterfaces()?.Any(x => x == typeof(IValidationModel<TEntity>)) ?? false;
+                isValidationModel = isValidationModel || (entity.GetType()?.BaseType?.GetInterfaces()?.Any(x => x == typeof(IValidationModel<TEntity>)) ?? false);
 
-                var validator = ServiceProviderHelper.GetService<IValidatorNotify<IEntityBase>>();
-                if (isValidationModel && !entity.IsValid(validator))
+                var validator = ServiceProviderHelper.GetService<IValidatorNotify<TEntity>>();
+                if (isValidationModel && !((IValidationModel<TEntity>)entity).IsValid(validator))
                 {
                     return Task.FromResult(0);
                 }
 
-                this.UnitOfWork.GetRepositoryAsync<T>().ModifyAsync(entity);
+                this.UnitOfWork.GetRepositoryAsync<TEntity>().ModifyAsync(entity);
                 return this.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -222,11 +222,11 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.RemoveAsync(T)"/>
         /// </summary>
-        public virtual Task<int> RemoveAsync(T entity)
+        public virtual Task<int> RemoveAsync(TEntity entity)
         {
             try
             {
-                this.UnitOfWork.GetRepositoryAsync<T>().RemoveAsync(entity);
+                this.UnitOfWork.GetRepositoryAsync<TEntity>().RemoveAsync(entity);
                 return this.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -243,7 +243,7 @@ namespace Mvp24Hours.Business.Logic
         {
             try
             {
-                var entity = await this.UnitOfWork.GetRepositoryAsync<T>().GetByIdAsync(id);
+                var entity = await this.UnitOfWork.GetRepositoryAsync<TEntity>().GetByIdAsync(id);
                 return await this.RemoveAsync(entity);
             }
             catch (Exception ex)

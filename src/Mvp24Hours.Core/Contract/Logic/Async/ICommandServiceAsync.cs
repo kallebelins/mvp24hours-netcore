@@ -13,22 +13,22 @@ namespace Mvp24Hours.Core.Contract.Logic
     /// <summary>
     /// Standard contract with methods for data manipulation.
     /// </summary>
-    public interface ICommandServiceAsync<T>
+    public interface ICommandServiceAsync<TEntity>
     {
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync{T}.AddAsync(T)"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync{TEntity}.AddAsync(TEntity)"/>
         /// </summary>
-        Task<int> AddAsync(T entity);
+        Task<int> AddAsync(TEntity entity);
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync{T}.ModifyAsync(T)"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync{TEntity}.ModifyAsync(TEntity)"/>
         /// </summary>
-        Task<int> ModifyAsync(T entity);
+        Task<int> ModifyAsync(TEntity entity);
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync{T}.RemoveAsync(T)"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync{TEntity}.RemoveAsync(TEntity)"/>
         /// </summary>
-        Task<int> RemoveAsync(T entity);
+        Task<int> RemoveAsync(TEntity entity);
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.ICommandAsync{T}.RemoveByIdAsync(object)"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Data.ICommandAsync{TEntity}.RemoveByIdAsync(object)"/>
         /// </summary>
         Task<int> RemoveByIdAsync(object id);
         /// <summary>

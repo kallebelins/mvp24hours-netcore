@@ -14,23 +14,23 @@ namespace Mvp24Hours.Core.Contract.Logic
     /// <summary>
     /// Standard contract with methods for data projection.
     /// </summary>
-    public interface IQueryPagingService<T> where T : class
+    public interface IQueryPagingService<TEntity> where TEntity : class
     {
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{T}.List()"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{TEntity}.List()"/>
         /// </summary>
-        IPagingResult<T> PagingList();
+        IPagingResult<TEntity> PagingList();
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{T}.List(IPagingCriteria)"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{TEntity}.List(IPagingCriteria)"/>
         /// </summary>
-        IPagingResult<T> PagingList(IPagingCriteria clause);
+        IPagingResult<TEntity> PagingList(IPagingCriteria clause);
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{T}.GetBy(Expression{Func{T, bool}})"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{TEntity}.GetBy(Expression{Func{TEntity, bool}})"/>
         /// </summary>
-        IPagingResult<T> PagingGetBy(Expression<Func<T, bool>> clause);
+        IPagingResult<TEntity> PagingGetBy(Expression<Func<TEntity, bool>> clause);
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{T}.GetBy(Expression{Func{T, bool}}, IPagingCriteria)"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{TEntity}.GetBy(Expression{Func{TEntity, bool}}, IPagingCriteria)"/>
         /// </summary>
-        IPagingResult<T> PagingGetBy(Expression<Func<T, bool>> clause, IPagingCriteria criteria);
+        IPagingResult<TEntity> PagingGetBy(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria);
     }
 }

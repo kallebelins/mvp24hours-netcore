@@ -18,7 +18,7 @@ namespace Mvp24Hours.Core.Entities
     /// <summary>
     /// Represents an entity
     /// </summary>
-    public abstract class EntityBase<T> : IEntityBase
+    public abstract class EntityBase<TObject, TKey> : IEntityBase, IValidationModel<TObject>
     {
         #region [ Primitive members ]
 
@@ -33,7 +33,7 @@ namespace Mvp24Hours.Core.Entities
         /// </summary>
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [DataMember]
-        public virtual T Id { get; set; }
+        public virtual TKey Id { get; set; }
 
         #endregion
 
@@ -43,7 +43,7 @@ namespace Mvp24Hours.Core.Entities
         /// Checks whether the entity meets the specification (default true)
         /// </summary>
         /// <returns>true|false</returns>
-        public virtual bool IsValid(IValidatorNotify<IEntityBase> validatorNotify)
+        public virtual bool IsValid(IValidatorNotify<TObject> validatorNotify)
         {
             var results = new List<ValidationResult>();
             var contexto = new ValidationContext(this, null, null);
