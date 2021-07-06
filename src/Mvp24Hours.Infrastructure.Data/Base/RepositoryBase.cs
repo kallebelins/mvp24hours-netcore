@@ -84,33 +84,6 @@ namespace Mvp24Hours.Infrastructure.Data
         {
             var ordered = false;
 
-            if (clause != null)
-            {
-                // navigation
-                if (clause is IPagingCriteriaExpression<T>)
-                {
-                    var clauseExpr = clause as IPagingCriteriaExpression<T>;
-                    // navigation by expression
-                    if (clauseExpr.NavigationExpr.AnyOrNotNull())
-                    {
-                        foreach (var nav in clauseExpr.NavigationExpr)
-                        {
-                            query = query.Include(nav);
-                        }
-                    }
-                }
-
-                // navigation by string
-                if (clause.Navigation.AnyOrNotNull())
-                {
-                    foreach (var nav in clause.Navigation)
-                    {
-                        query = query.Include(nav);
-                    }
-                }
-            }
-
-
             if (!onlyNavigation)
             {
                 int offset = 0;
@@ -197,8 +170,35 @@ namespace Mvp24Hours.Infrastructure.Data
                 query = query.Take(limit);
             }
 
+            if (clause != null)
+            {
+                // navigation
+                if (clause is IPagingCriteriaExpression<T>)
+                {
+                    var clauseExpr = clause as IPagingCriteriaExpression<T>;
+                    // navigation by expression
+                    if (clauseExpr.NavigationExpr.AnyOrNotNull())
+                    {
+                        foreach (var nav in clauseExpr.NavigationExpr)
+                        {
+                            query = query.Include(nav);
+                        }
+                    }
+                }
+
+                // navigation by string
+                if (clause.Navigation.AnyOrNotNull())
+                {
+                    foreach (var nav in clause.Navigation)
+                    {
+                        query = query.Include(nav);
+                    }
+                }
+            }
+
             return query;
         }
+
         protected TransactionScope CreateTransactionScope(bool isAggregate = false)
         {
             if (isAggregate || EnableReadUncommitedQuery)

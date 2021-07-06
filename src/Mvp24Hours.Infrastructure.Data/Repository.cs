@@ -20,7 +20,7 @@ namespace Mvp24Hours.Infrastructure.Data
     /// <summary>
     ///  <see cref="Mvp24Hours.Core.Contract.Data.IRepository"/>
     /// </summary>
-    public class Repository<T> : RepositoryBase<T>, IRepository<T>
+    public class Repository<T> : RepositoryBase<T>, IRepository<T>, IQueryRelation<T>
         where T : class, IEntityBase
     {
         #region [ Ctor ]
@@ -165,6 +165,49 @@ namespace Mvp24Hours.Infrastructure.Data
                     this.Add(entity);
                 }
             }
+        }
+
+        #endregion
+
+        #region [ IQueryRelation ]
+
+        public void LoadRelation<TProperty>(T entity, Expression<Func<T, TProperty>> propertyExpression)
+            where TProperty : class
+        {
+            dbContext.Entry(entity).Reference(propertyExpression).Load();
+        }
+
+        public void LoadRelation<TProperty, TKey>(T entity,
+            Expression<Func<T, IEnumerable<TProperty>>> propertyExpression,
+            Expression<Func<TProperty, bool>> clause = null,
+            Expression<Func<TProperty, TKey>> orderKey = null,
+            Expression<Func<TProperty, TKey>> orderDescendingKey = null,
+            int limit = 0)
+            where TProperty : class
+        {
+            var query = dbContext.Entry(entity).Collection(propertyExpression).Query();
+
+            if (clause != null)
+            {
+                query = query.Where(clause);
+            }
+
+            if (orderKey != null)
+            {
+                query = query.OrderBy(orderKey);
+            }
+
+            if (orderDescendingKey != null)
+            {
+                query = query.OrderByDescending(orderDescendingKey);
+            }
+
+            if (limit > 0)
+            {
+                query = query.Take(limit);
+            }
+
+            query.ToList();
         }
 
         #endregion

@@ -21,7 +21,7 @@ namespace Mvp24Hours.Infrastructure.Data
     ///// <summary>
     /////  <see cref="Mvp24Hours.Core.Contract.Data.IRepositoryAsync"/>
     ///// </summary>
-    public class RepositoryAsync<T> : RepositoryBase<T>, IRepositoryAsync<T>
+    public class RepositoryAsync<T> : RepositoryBase<T>, IRepositoryAsync<T>, IQueryRelationAsync<T>
         where T : class, IEntityBase
     {
         #region [ Ctor ]
@@ -79,7 +79,7 @@ namespace Mvp24Hours.Infrastructure.Data
         public async Task<bool> GetByAnyAsync(Expression<Func<T, bool>> clause)
         {
             using var scope = CreateTransactionScope(true);
-            var query = this.dbEntities.AsQueryable();
+            var query = dbEntities.AsQueryable();
             if (clause != null)
             {
                 query = query.Where(clause);
@@ -97,7 +97,7 @@ namespace Mvp24Hours.Infrastructure.Data
         public async Task<int> GetByCountAsync(Expression<Func<T, bool>> clause)
         {
             using var scope = CreateTransactionScope(true);
-            var query = this.dbEntities.AsQueryable();
+            var query = dbEntities.AsQueryable();
             if (clause != null)
             {
                 query = query.Where(clause);
@@ -121,7 +121,7 @@ namespace Mvp24Hours.Infrastructure.Data
         public async Task<IList<T>> GetByAsync(Expression<Func<T, bool>> clause, IPagingCriteria criteria)
         {
             using var scope = CreateTransactionScope();
-            var query = this.dbEntities.AsQueryable();
+            var query = dbEntities.AsQueryable();
             if (clause != null)
             {
                 query = query.Where(clause);
@@ -155,6 +155,49 @@ namespace Mvp24Hours.Infrastructure.Data
 
         #endregion
 
+        #region [ IQueryRelationAsync ]
+
+        public Task LoadRelationAsync<TProperty>(T entity, Expression<Func<T, TProperty>> propertyExpression)
+            where TProperty : class
+        {
+            return dbContext.Entry(entity).Reference(propertyExpression).LoadAsync();
+        }
+
+        public Task LoadRelationAsync<TProperty, TKey>(T entity,
+            Expression<Func<T, IEnumerable<TProperty>>> propertyExpression,
+            Expression<Func<TProperty, bool>> clause = null,
+            Expression<Func<TProperty, TKey>> orderKey = null,
+            Expression<Func<TProperty, TKey>> orderDescendingKey = null,
+            int limit = 0)
+            where TProperty : class
+        {
+            var query = dbContext.Entry(entity).Collection(propertyExpression).Query();
+
+            if (clause != null)
+            {
+                query = query.Where(clause);
+            }
+
+            if (orderKey != null)
+            {
+                query = query.OrderBy(orderKey);
+            }
+
+            if (orderDescendingKey != null)
+            {
+                query = query.OrderByDescending(orderDescendingKey);
+            }
+
+            if (limit > 0)
+            {
+                query = query.Take(limit);
+            }
+
+            return query.ToListAsync();
+        }
+
+        #endregion
+
         #region [ ICommandAsync ]
 
         public void AddAsync(T entity)
@@ -171,7 +214,7 @@ namespace Mvp24Hours.Infrastructure.Data
             }
             else
             {
-                this.dbEntities.AddAsync(entity);
+                dbEntities.AddAsync(entity);
             }
         }
 
@@ -181,7 +224,7 @@ namespace Mvp24Hours.Infrastructure.Data
             {
                 foreach (var entity in entities)
                 {
-                    this.AddAsync(entity);
+                    AddAsync(entity);
                 }
             }
         }
@@ -221,7 +264,7 @@ namespace Mvp24Hours.Infrastructure.Data
             {
                 foreach (var entity in entities)
                 {
-                    this.ModifyAsync(entity);
+                    ModifyAsync(entity);
                 }
             }
         }
@@ -238,11 +281,11 @@ namespace Mvp24Hours.Infrastructure.Data
                 var entityLog = entity as IEntityLog<object>;
                 entityLog.Removed = TimeZoneHelper.GetTimeZoneNow();
                 entityLog.RemovedBy = EntityLogBy;
-                this.ModifyAsync(entity);
+                ModifyAsync(entity);
             }
             else
             {
-                this.ForceRemoveAsync(entity);
+                ForceRemoveAsync(entity);
             }
         }
 
@@ -252,20 +295,20 @@ namespace Mvp24Hours.Infrastructure.Data
             {
                 foreach (var entity in entities)
                 {
-                    this.RemoveAsync(entity);
+                    RemoveAsync(entity);
                 }
             }
         }
 
         public void RemoveByIdAsync(object id)
         {
-            var entity = this.GetByIdAsync(id);
+            var entity = GetByIdAsync(id);
             if (entity == null)
             {
                 return;
             }
 
-            this.RemoveByIdAsync(entity);
+            RemoveByIdAsync(entity);
         }
 
         public void ForceRemoveAsync(T entity)
@@ -282,8 +325,8 @@ namespace Mvp24Hours.Infrastructure.Data
             }
             else
             {
-                this.dbEntities.Attach(entity);
-                this.dbEntities.Remove(entity);
+                dbEntities.Attach(entity);
+                dbEntities.Remove(entity);
             }
         }
 
