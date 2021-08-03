@@ -6,8 +6,11 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using AutoMapper;
+using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Helpers;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace Mvp24Hours.Infrastructure.Extensions
@@ -22,7 +25,6 @@ namespace Mvp24Hours.Infrastructure.Extensions
             Expression<Func<TDestination, object>> selector)
         {
             map.ForMember(selector, config => config.Ignore());
-
             return map;
         }
 
@@ -35,7 +37,6 @@ namespace Mvp24Hours.Infrastructure.Extensions
             Expression<Func<TDestination, object>> targetMember)
         {
             map.ForMember(targetMember, opt => opt.MapFrom(sourceMember));
-
             return map;
         }
 
@@ -44,6 +45,11 @@ namespace Mvp24Hours.Infrastructure.Extensions
         /// </summary>
         public static TDestination MapTo<TDestination>(this object source)
         {
+            if (source == null)
+            {
+                return default(TDestination);
+            }
+
             IMapper mapper = ServiceProviderHelper.GetService<IMapper>();
             if (mapper == null)
             {
@@ -51,6 +57,73 @@ namespace Mvp24Hours.Infrastructure.Extensions
             }
 
             return mapper.Map<TDestination>(source);
+        }
+
+        /// <summary>
+        /// Convert instance to mapped object
+        /// </summary>
+        public static IPagingResult<TDestination> MapPagingTo<TSource, TDestination>(this IPagingResult<TSource> source)
+        {
+            if (source == null)
+            {
+                return default(IPagingResult<TDestination>);
+            }
+
+            IMapper mapper = ServiceProviderHelper.GetService<IMapper>();
+            if (mapper == null)
+            {
+                throw new ArgumentNullException("Profile not registered for AutoMapper.");
+            }
+
+            if (source.Messages.AnyOrNotNull())
+            {
+                return source.Data
+                    .MapTo<IList<TDestination>>()
+                    .ToBusinessPagingWithMessage(
+                        source.Paging,
+                        source.Summary,
+                        source.Messages.ToArray()
+                    );
+            }
+            else
+            {
+                return source.Data
+                    .MapTo<IList<TDestination>>()
+                    .ToBusinessPaging(
+                        source.Paging,
+                        source.Summary
+                    );
+            }
+        }
+
+        /// <summary>
+        /// Convert instance to mapped object
+        /// </summary>
+        public static IBusinessResult<TDestination> MapBusinessTo<TSource, TDestination>(this IBusinessResult<TSource> source)
+        {
+            if (source == null)
+            {
+                return default(IBusinessResult<TDestination>);
+            }
+
+            IMapper mapper = ServiceProviderHelper.GetService<IMapper>();
+            if (mapper == null)
+            {
+                throw new ArgumentNullException("Profile not registered for AutoMapper.");
+            }
+
+            if (source.Messages.AnyOrNotNull())
+            {
+                return source.Data
+                    .MapTo<IList<TDestination>>()
+                    .ToBusinessWithMessage(source.Messages.ToArray());
+            }
+            else
+            {
+                return source.Data
+                    .MapTo<IList<TDestination>>()
+                    .ToBusiness();
+            }
         }
     }
 }

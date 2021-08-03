@@ -31,6 +31,16 @@ namespace Mvp24Hours.Infrastructure.Extensions
             );
         }
 
+        public static IPagingResult<T> ToBusinessPagingWithMessage<T>(this IList<T> data, IPageResult page, ISummaryResult summary, params IMessageResult[] messageResult)
+        {
+            return new PagingResult<T>(
+                page,
+                summary,
+                new ReadOnlyCollection<T>(data ?? new List<T>()),
+                messages: new ReadOnlyCollection<IMessageResult>(messageResult?.ToList() ?? new List<IMessageResult>())
+            );
+        }
+
         public static IPagingResult<T> ToBusinessPagingWithMessage<T>(this IList<T> value, params IMessageResult[] messageResult)
         {
             return ToBusinessPagingWithMessage(value, null, messageResult);

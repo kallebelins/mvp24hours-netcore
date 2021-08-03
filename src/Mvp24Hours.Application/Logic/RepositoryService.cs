@@ -22,7 +22,7 @@ namespace Mvp24Hours.Business.Logic
     /// Base service for using repository and unit of work
     /// </summary>
     /// <typeparam name="TEntity">Represents an entity</typeparam>
-    public class RepositoryService<TEntity, TUoW> : RepositoryServiceBase<TEntity, TUoW>, IQueryService<TEntity>, ICommandService<TEntity>
+    public class RepositoryService<TEntity, TUoW> : RepositoryServiceBase<TEntity, TUoW>, IQueryService<TEntity>, ICommandService<TEntity>, IQueryRelationService<TEntity>
         where TEntity : class, IEntityBase
         where TUoW : IUnitOfWork
     {
@@ -246,6 +246,43 @@ namespace Mvp24Hours.Business.Logic
             try
             {
                 return this.UnitOfWork.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Logging.Error(ex);
+                throw ex;
+            }
+        }
+
+        #endregion
+
+        #region [ Implements IQueryRelationService ]
+
+        public void LoadRelation<TProperty>(TEntity entity, Expression<Func<TEntity, TProperty>> propertyExpression)
+            where TProperty : class
+        {
+            try
+            {
+                this.UnitOfWork.GetRepository<TEntity>().LoadRelation(entity, propertyExpression);
+            }
+            catch (Exception ex)
+            {
+                Logging.Error(ex);
+                throw ex;
+            }
+        }
+
+        public void LoadRelation<TProperty, TKey>(TEntity entity,
+            Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression,
+            Expression<Func<TProperty, bool>> clause = null,
+            Expression<Func<TProperty, TKey>> orderKey = null,
+            Expression<Func<TProperty, TKey>> orderDescendingKey = null,
+            int limit = 0)
+            where TProperty : class
+        {
+            try
+            {
+                this.UnitOfWork.GetRepository<TEntity>().LoadRelation(entity, propertyExpression, clause, orderKey, orderDescendingKey, limit);
             }
             catch (Exception ex)
             {

@@ -24,12 +24,15 @@ namespace Mvp24Hours.Business.Logic
     /// Asynchronous service for using repository and unit of work
     /// </summary>
     /// <typeparam name="TEntity">Represents an entity</typeparam>
-    public class RepositoryServiceAsync<TEntity, TUoW> : RepositoryServiceAsyncBase<TEntity, TUoW>, IQueryServiceAsync<TEntity>, ICommandServiceAsync<TEntity>
+    public class RepositoryServiceAsync<TEntity, TUoW> : RepositoryServiceAsyncBase<TEntity, TUoW>, IQueryServiceAsync<TEntity>, ICommandServiceAsync<TEntity>, IQueryRelationServiceAsync<TEntity>
         where TEntity : class, IEntityBase
         where TUoW : IUnitOfWorkAsync
     {
         #region [ Implements IBaseAsyncBO ]
 
+        /// <summary>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.ListAnyAsync()"/>
+        /// </summary>
         public virtual Task<bool> ListAnyAsync()
         {
             try
@@ -261,6 +264,43 @@ namespace Mvp24Hours.Business.Logic
             try
             {
                 return this.UnitOfWork.SaveChangesAsync(cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                Logging.Error(ex);
+                throw ex;
+            }
+        }
+
+        #endregion
+
+        #region [ Implements IQueryRelationService ]
+
+        public Task LoadRelationAsync<TProperty>(TEntity entity, Expression<Func<TEntity, TProperty>> propertyExpression)
+            where TProperty : class
+        {
+            try
+            {
+                return this.UnitOfWork.GetRepositoryAsync<TEntity>().LoadRelationAsync(entity, propertyExpression);
+            }
+            catch (Exception ex)
+            {
+                Logging.Error(ex);
+                throw ex;
+            }
+        }
+
+        public Task LoadRelationAsync<TProperty, TKey>(TEntity entity,
+            Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression,
+            Expression<Func<TProperty, bool>> clause = null,
+            Expression<Func<TProperty, TKey>> orderKey = null,
+            Expression<Func<TProperty, TKey>> orderDescendingKey = null,
+            int limit = 0)
+            where TProperty : class
+        {
+            try
+            {
+                return this.UnitOfWork.GetRepositoryAsync<TEntity>().LoadRelationAsync(entity, propertyExpression, clause, orderKey, orderDescendingKey, limit);
             }
             catch (Exception ex)
             {
