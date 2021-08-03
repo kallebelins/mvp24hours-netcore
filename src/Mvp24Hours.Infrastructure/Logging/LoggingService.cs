@@ -134,6 +134,7 @@ namespace Mvp24Hours.Infrastructure.Logging
             string methodProp = string.Empty;
             string messageProp = string.Empty;
             string innerMessageProp = string.Empty;
+            string stackTraceProp = string.Empty;
 
             var logEvent = new LogEventInfo
                 (level, loggerName, string.Format(format, args));
@@ -144,6 +145,7 @@ namespace Mvp24Hours.Infrastructure.Logging
                 classProp = exception.TargetSite.DeclaringType?.FullName ?? exception.TargetSite.ReflectedType?.FullName;
                 methodProp = exception.TargetSite.Name;
                 messageProp = exception.Message;
+                stackTraceProp = exception.StackTrace;
 
                 if (exception.InnerException != null)
                 {
@@ -156,6 +158,7 @@ namespace Mvp24Hours.Infrastructure.Logging
             logEvent.Properties["error-method"] = methodProp;
             logEvent.Properties["error-message"] = messageProp;
             logEvent.Properties["inner-error-message"] = innerMessageProp;
+            logEvent.Properties["error-stack-trace"] = stackTraceProp;
 
             return logEvent;
         }

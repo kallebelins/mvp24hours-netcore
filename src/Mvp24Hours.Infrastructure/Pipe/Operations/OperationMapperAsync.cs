@@ -20,6 +20,14 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations
         /// </summary>
         public virtual string MessageContentKey => null;
 
+        /// <summary>
+        /// Get default value for object mapping
+        /// </summary>
+        protected virtual Task<T> GetDefaultValue()
+        {
+            return Task.FromResult<T>(default);
+        }
+
         public override async Task<IPipelineMessage> Execute(IPipelineMessage input)
         {
             var result = await MapperAsync(input);
