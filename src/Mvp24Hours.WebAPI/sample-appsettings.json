@@ -40,7 +40,14 @@
     },
     "Filters": {
       "EnableNotification": true,
-      "EnableHATEOAS": true
+      "EnableHATEOAS": true,
+      "Cors": {
+        "All": "",
+        "Origin": "",
+        "Headers": "",
+        "Methods": "",
+        "Credentials": ""
+      }
     }
   }
 }

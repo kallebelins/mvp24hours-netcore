@@ -6,6 +6,8 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Microsoft.AspNetCore.Http;
+using Mvp24Hours.Core.Extensions;
+using Mvp24Hours.Infrastructure.Helpers;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -25,11 +27,34 @@ namespace Mvp24Hours.Infrastructure.Middlewares
 
         public async Task Invoke(HttpContext context)
         {
-            context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-            context.Response.Headers.Add("Access-Control-Allow-Credentials", "true");
+            string credentialsCors = ConfigurationHelper.GetSettings("Mvp24Hours:Filters:Cors:Credentials");
+
+            if (credentialsCors.HasValue())
+                context.Response.Headers.Add("Access-Control-Allow-Credentials", credentialsCors);
+
+            string allCors = ConfigurationHelper.GetSettings("Mvp24Hours:Filters:Cors:All");
+            string originCors, headersCors, methodsCors;
+
+            if (allCors.HasValue())
+            {
+                originCors = allCors;
+                headersCors = allCors;
+                methodsCors = allCors;
+            }
+            else
+            {
+                originCors = ConfigurationHelper.GetSettings("Mvp24Hours:Filters:Cors:Origin");
+                headersCors = ConfigurationHelper.GetSettings("Mvp24Hours:Filters:Cors:Headers");
+                methodsCors = ConfigurationHelper.GetSettings("Mvp24Hours:Filters:Cors:Methods");
+            }
+
+            if (originCors.HasValue())
+                context.Response.Headers.Add("Access-Control-Allow-Origin", originCors);
             // Added "Accept-Encoding" to this list
-            context.Response.Headers.Add("Access-Control-Allow-Headers", "*");
-            context.Response.Headers.Add("Access-Control-Allow-Methods", "*");
+            if (headersCors.HasValue())
+                context.Response.Headers.Add("Access-Control-Allow-Headers", headersCors);
+            if (methodsCors.HasValue())
+                context.Response.Headers.Add("Access-Control-Allow-Methods", methodsCors);
 
             // New Code Starts here
             if (context.Request.Method == "OPTIONS")

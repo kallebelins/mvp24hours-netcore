@@ -362,7 +362,5 @@ namespace Mvp24Hours.WebAPI.Extensions
 
             return services;
         }
-
-
     }
 }

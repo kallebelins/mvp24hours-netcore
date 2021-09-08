@@ -8,6 +8,7 @@
 using Microsoft.EntityFrameworkCore;
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
+using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Infrastructure.Helpers;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,7 @@ namespace Mvp24Hours.Infrastructure.Data
         {
             this.DbContext = ServiceProviderHelper.GetService<DbContext>();
             this.repositories = new Dictionary<Type, object>();
+            NotificationContext = ServiceProviderHelper.GetService<INotificationContext>();
         }
 
         #endregion
@@ -32,6 +34,7 @@ namespace Mvp24Hours.Infrastructure.Data
         #region [ Properties ]
 
         protected DbContext DbContext { get; private set; }
+        protected INotificationContext NotificationContext { get; private set; }
 
         readonly Dictionary<Type, object> repositories;
 
@@ -70,9 +73,14 @@ namespace Mvp24Hours.Infrastructure.Data
 
         #region [ Unit of Work ]
 
-        public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            return this.DbContext.SaveChangesAsync(cancellationToken);
+            if (NotificationContext == null || !NotificationContext.HasErrorNotifications)
+            {
+                return await this.DbContext.SaveChangesAsync(cancellationToken);
+            }
+            RollbackAsync();
+            return default;
         }
         public void RollbackAsync()
         {

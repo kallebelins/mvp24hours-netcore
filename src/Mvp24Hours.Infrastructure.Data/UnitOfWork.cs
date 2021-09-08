@@ -8,6 +8,7 @@
 using Microsoft.EntityFrameworkCore;
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
+using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Infrastructure.Helpers;
 using System;
 using System.Collections.Generic;
@@ -24,8 +25,9 @@ namespace Mvp24Hours.Infrastructure.Data
 
         public UnitOfWork()
         {
-            this.DbContext = ServiceProviderHelper.GetService<DbContext>();
-            this.repositories = new Dictionary<Type, object>();
+            DbContext = ServiceProviderHelper.GetService<DbContext>();
+            repositories = new Dictionary<Type, object>();
+            NotificationContext = ServiceProviderHelper.GetService<INotificationContext>();
         }
 
         #endregion
@@ -33,6 +35,7 @@ namespace Mvp24Hours.Infrastructure.Data
         #region [ Properties ]
 
         protected DbContext DbContext { get; private set; }
+        protected INotificationContext NotificationContext { get; private set; }
 
         readonly Dictionary<Type, object> repositories;
 
@@ -79,7 +82,12 @@ namespace Mvp24Hours.Infrastructure.Data
         /// </summary>
         public int SaveChanges()
         {
-            return this.DbContext.SaveChanges();
+            if (NotificationContext == null || !NotificationContext.HasErrorNotifications)
+            {
+                return this.DbContext.SaveChanges();
+            }
+            Rollback();
+            return default;
         }
 
         /// <summary>

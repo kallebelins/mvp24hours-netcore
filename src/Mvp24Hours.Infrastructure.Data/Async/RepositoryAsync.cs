@@ -112,7 +112,6 @@ namespace Mvp24Hours.Infrastructure.Data
             return result;
         }
 
-
         public Task<IList<T>> GetByAsync(Expression<Func<T, bool>> clause)
         {
             return GetByAsync(clause, null);
