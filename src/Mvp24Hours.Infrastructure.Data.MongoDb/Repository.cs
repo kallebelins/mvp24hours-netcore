@@ -1,31 +1,28 @@
-//=====================================================================================
+﻿//=====================================================================================
 // Developed by Kallebe Lins (kallebe.santos@outlook.com)
 // Teacher, Architect, Consultant and Project Leader
 // Virtual Card: https://www.linkedin.com/in/kallebelins
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-using Microsoft.EntityFrameworkCore;
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
+using Mvp24Hours.Infrastructure.Data.MongoDb.Base;
 using Mvp24Hours.Infrastructure.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace Mvp24Hours.Infrastructure.Data
+namespace Mvp24Hours.Infrastructure.Data.MongoDb
 {
-    /// <summary>
-    ///  <see cref="Mvp24Hours.Core.Contract.Data.IRepository"/>
-    /// </summary>
     public class Repository<T> : RepositoryBase<T>, IRepository<T>, IQueryRelation<T>
         where T : class, IEntityBase
     {
         #region [ Ctor ]
 
-        public Repository(DbContext dbContext)
+        public Repository(Mvp24HoursMongoDbContext dbContext)
             : base(dbContext)
         {
         }

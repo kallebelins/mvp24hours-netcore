@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Kallebe Lins</Authors>
@@ -11,9 +11,9 @@
     <PackageProjectUrl>https://github.com/kallebelins</PackageProjectUrl>
     <Company>Kallebe Lins</Company>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>1.9.81</Version>
-    <AssemblyVersion>1.9.8.1</AssemblyVersion>
-    <FileVersion>1.9.8.1</FileVersion>
+    <Version>2.9.251</Version>
+    <AssemblyVersion>2.9.25.1</AssemblyVersion>
+    <FileVersion>2.9.25.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using System.Linq;
 
 namespace Mvp24Hours.Infrastructure.Helpers

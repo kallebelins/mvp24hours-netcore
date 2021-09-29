@@ -16,7 +16,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Mvp24Hours.Infrastructure.Data
+namespace Mvp24Hours.Infrastructure.Data.EFCore
 {
     ///// <summary>
     /////  <see cref="Mvp24Hours.Core.Contract.Data.IRepositoryAsync"/>

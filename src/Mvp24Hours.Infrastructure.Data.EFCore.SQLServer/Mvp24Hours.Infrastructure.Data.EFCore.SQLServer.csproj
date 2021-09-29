@@ -1,24 +1,24 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Kallebe Lins</Authors>
     <Description>Series architectures for fast product construction.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/kallebelins</PackageProjectUrl>
-    <Version>1.9.81</Version>
-    <AssemblyVersion>1.9.8.1</AssemblyVersion>
-    <FileVersion>1.9.8.1</FileVersion>
+    <Version>2.9.251</Version>
+    <AssemblyVersion>2.9.25.1</AssemblyVersion>
+    <FileVersion>2.9.25.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.10" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Mvp24Hours.Core\Mvp24Hours.Core.csproj" />
-    <ProjectReference Include="..\Mvp24Hours.Infrastructure.Data\Mvp24Hours.Infrastructure.Data.csproj" />
+    <ProjectReference Include="..\Mvp24Hours.Infrastructure.Data.EFCore\Mvp24Hours.Infrastructure.Data.EFCore.csproj" />
     <ProjectReference Include="..\Mvp24Hours.Infrastructure\Mvp24Hours.Infrastructure.csproj" />
   </ItemGroup>
 

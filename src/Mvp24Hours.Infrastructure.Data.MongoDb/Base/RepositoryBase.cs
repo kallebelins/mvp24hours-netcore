@@ -5,7 +5,7 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Core.Extensions;
@@ -18,20 +18,20 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Transactions;
 
-namespace Mvp24Hours.Infrastructure.Data
+namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
 {
     /// <summary>
-    ///  <see cref="Mvp24Hours.Core.Contract.Data.IRepository"/>
+    ///  <see cref="Core.Contract.Data.IRepository"/>
     /// </summary>
     public abstract class RepositoryBase<T>
         where T : class, IEntityBase
     {
         #region [ Ctor ]
 
-        public RepositoryBase(DbContext dbContext)
+        public RepositoryBase(Mvp24HoursMongoDbContext dbContext)
         {
             this.dbContext = dbContext ?? throw new ArgumentNullException("dbContext");
-            this.dbEntities = dbContext.Set<T>();
+            dbEntities = dbContext.Set<T>();
         }
 
         #endregion
@@ -41,29 +41,15 @@ namespace Mvp24Hours.Infrastructure.Data
         /// <summary>
         /// Database context
         /// </summary>
-        protected readonly DbContext dbContext;
+        protected readonly Mvp24HoursMongoDbContext dbContext;
         /// <summary>
         /// Represents relationship with entities in the database
         /// </summary>
-        protected DbSet<T> dbEntities;
+        protected IMongoCollection<T> dbEntities;
         /// <summary>
         /// Gets the value of the user logged in the context or logged into the database
         /// </summary>
         protected abstract object EntityLogBy { get; }
-
-        private static bool? _enableReadUncommitedQuery;
-        private static bool EnableReadUncommitedQuery
-        {
-            get
-            {
-                if (_enableReadUncommitedQuery == null)
-                {
-                    string value = ConfigurationHelper.GetSettings("Mvp24Hours:Persistence:ReadUncommitedQuery");
-                    _enableReadUncommitedQuery = value.ToBoolean(false);
-                }
-                return (bool)_enableReadUncommitedQuery;
-            }
-        }
 
         #endregion
 
@@ -74,7 +60,7 @@ namespace Mvp24Hours.Infrastructure.Data
         protected IQueryable<T> GetQuery(IPagingCriteria clause, bool onlyNavigation = false)
         {
             // cria query
-            var query = this.dbEntities.AsQueryable();
+            var query = dbEntities.AsQueryable();
             return GetQuery(query, clause, onlyNavigation);
         }
         /// <summary>
@@ -199,19 +185,6 @@ namespace Mvp24Hours.Infrastructure.Data
             return query;
         }
 
-        protected TransactionScope CreateTransactionScope(bool isAggregate = false)
-        {
-            if (isAggregate || EnableReadUncommitedQuery)
-            {
-                return new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
-                {
-                    IsolationLevel = IsolationLevel.ReadUncommitted,
-                    Timeout = TransactionManager.MaximumTimeout
-                }, TransactionScopeAsyncFlowOption.Enabled);
-            }
-            return null;
-        }
-
         #endregion
 
         #region [ Properties ]
@@ -263,9 +236,9 @@ namespace Mvp24Hours.Infrastructure.Data
                 Expression.Lambda<Func<T, bool>>(
                     Expression.Equal(
                         Expression.Property(entityParameter, key),
-                        ((value != null && value.GetType() == key.PropertyType) || typeof(TValue) == key.PropertyType)
+                        value != null && value.GetType() == key.PropertyType || typeof(TValue) == key.PropertyType
                             ? Expression.Constant(value)
-                                : (Expression)Expression.Convert(Expression.Constant(value), key.PropertyType)),
+                                : Expression.Convert(Expression.Constant(value), key.PropertyType)),
                         entityParameter);
 
             return query.Where(lambda);

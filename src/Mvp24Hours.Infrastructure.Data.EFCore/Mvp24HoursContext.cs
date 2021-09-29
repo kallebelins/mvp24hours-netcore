@@ -1,4 +1,4 @@
-﻿//=====================================================================================
+//=====================================================================================
 // Developed by Kallebe Lins (kallebe.santos@outlook.com)
 // Teacher, Architect, Consultant and Project Leader
 // Virtual Card: https://www.linkedin.com/in/kallebelins
@@ -14,7 +14,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Mvp24Hours.Infrastructure.Data
+namespace Mvp24Hours.Infrastructure.Data.EFCore
 {
     /// <summary>
     /// 

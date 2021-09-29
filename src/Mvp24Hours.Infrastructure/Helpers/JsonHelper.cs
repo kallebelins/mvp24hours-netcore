@@ -1,4 +1,4 @@
-﻿using Mvp24Hours.Core.Contract.ValueObjects.Logic;
+using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Core.Converters;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using Newtonsoft.Json;

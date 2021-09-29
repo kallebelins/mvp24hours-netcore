@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <Authors>Kallebe Lins</Authors>
     <Description>Series architectures for fast product construction.</Description>
     <Copyright></Copyright>
@@ -9,13 +9,13 @@
     <Company>Kallebe Lins</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>1.9.81</Version>
-    <AssemblyVersion>1.9.8.1</AssemblyVersion>
-    <FileVersion>1.9.8.1</FileVersion>
+    <Version>2.9.251</Version>
+    <AssemblyVersion>2.9.25.1</AssemblyVersion>
+    <FileVersion>2.9.25.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.10" />
   </ItemGroup>
 
   <ItemGroup>

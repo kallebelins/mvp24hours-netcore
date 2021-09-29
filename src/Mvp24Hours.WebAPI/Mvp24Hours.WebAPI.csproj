@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <Authors>Kallebe Lins</Authors>
     <Description>Series architectures for fast product construction.</Description>
     <Copyright></Copyright>
@@ -9,9 +9,9 @@
     <Company>Kallebe Lins</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>1.9.81</Version>
-    <AssemblyVersion>1.9.8.1</AssemblyVersion>
-    <FileVersion>1.9.8.1</FileVersion>
+    <Version>2.9.251</Version>
+    <AssemblyVersion>2.9.25.1</AssemblyVersion>
+    <FileVersion>2.9.25.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -31,17 +31,17 @@
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.10" />
     <PackageReference Include="Microsoft.Extensions.Caching.Redis" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.2" />
     <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="7.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Mvp24Hours.Application\Mvp24Hours.Application.csproj" />
     <ProjectReference Include="..\Mvp24Hours.Core\Mvp24Hours.Core.csproj" />
-    <ProjectReference Include="..\Mvp24Hours.Infrastructure.Data\Mvp24Hours.Infrastructure.Data.csproj" />
+    <ProjectReference Include="..\Mvp24Hours.Infrastructure.Data.EFCore\Mvp24Hours.Infrastructure.Data.EFCore.csproj" />
     <ProjectReference Include="..\Mvp24Hours.Infrastructure\Mvp24Hours.Infrastructure.csproj" />
   </ItemGroup>
 

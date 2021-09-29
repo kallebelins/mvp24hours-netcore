@@ -1,4 +1,4 @@
-﻿//=====================================================================================
+//=====================================================================================
 // Developed by Kallebe Lins (kallebe.santos@outlook.com)
 // Teacher, Architect, Consultant and Project Leader
 // Virtual Card: https://www.linkedin.com/in/kallebelins
@@ -14,6 +14,9 @@ namespace Mvp24Hours.Core.Contract.Mappings
     /// </summary>
     public interface IMapFrom<T>
     {
+        /// <summary>
+        /// Apply mapping
+        /// </summary>
         void Mapping(Profile profile) => profile.CreateMap(typeof(T), GetType());
     }
 }

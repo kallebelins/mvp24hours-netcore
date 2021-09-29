@@ -1,4 +1,4 @@
-﻿namespace Mvp24Hours.Core.Contract.Domain.Validations
+namespace Mvp24Hours.Core.Contract.Domain.Validations
 {
     /// <summary>
     /// Specification testing

@@ -1,4 +1,4 @@
-﻿//=====================================================================================
+//=====================================================================================
 // Developed by Kallebe Lins (kallebe.santos@outlook.com)
 // Teacher, Architect, Consultant and Project Leader
 // Virtual Card: https://www.linkedin.com/in/kallebelins
@@ -22,7 +22,7 @@ using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Extensions;
 using Mvp24Hours.Core.Mappings;
 using Mvp24Hours.Infrastructure.Contexts;
-using Mvp24Hours.Infrastructure.Data;
+using Mvp24Hours.Infrastructure.Data.EFCore;
 using Mvp24Hours.Infrastructure.Validations;
 using Mvp24Hours.WebAPI.Filters;
 using Mvp24Hours.WebAPI.Filters.Swagger;

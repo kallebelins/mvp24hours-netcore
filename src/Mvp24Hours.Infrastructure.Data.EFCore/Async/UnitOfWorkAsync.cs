@@ -13,20 +13,19 @@ using Mvp24Hours.Infrastructure.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace Mvp24Hours.Infrastructure.Data
+namespace Mvp24Hours.Infrastructure.Data.EFCore
 {
-    /// <summary>
-    ///  <see cref="Mvp24Hours.Core.Contract.Data.IUnitOfWork"/>
-    /// </summary>
-    public class UnitOfWork : IUnitOfWork, IDisposable
+    public class UnitOfWorkAsync : IUnitOfWorkAsync, IDisposable
     {
         #region [ Ctor ]
 
-        public UnitOfWork()
+        public UnitOfWorkAsync()
         {
-            DbContext = ServiceProviderHelper.GetService<DbContext>();
-            repositories = new Dictionary<Type, object>();
+            this.DbContext = ServiceProviderHelper.GetService<DbContext>();
+            this.repositories = new Dictionary<Type, object>();
             NotificationContext = ServiceProviderHelper.GetService<INotificationContext>();
         }
 
@@ -39,17 +38,14 @@ namespace Mvp24Hours.Infrastructure.Data
 
         readonly Dictionary<Type, object> repositories;
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IUnitOfWork"/>
-        /// </summary>
-        public IRepository<T> GetRepository<T>()
+        public IRepositoryAsync<T> GetRepositoryAsync<T>()
             where T : class, IEntityBase
         {
             if (!this.repositories.ContainsKey(typeof(T)))
             {
-                this.repositories.Add(typeof(T), ServiceProviderHelper.GetService<IRepository<T>>());
+                this.repositories.Add(typeof(T), ServiceProviderHelper.GetService<IRepositoryAsync<T>>());
             }
-            return repositories[typeof(T)] as IRepository<T>;
+            return repositories[typeof(T)] as IRepositoryAsync<T>;
         }
 
         #endregion
@@ -77,23 +73,16 @@ namespace Mvp24Hours.Infrastructure.Data
 
         #region [ Unit of Work ]
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IUnitOfWork.SaveChanges()"/>
-        /// </summary>
-        public int SaveChanges()
+        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             if (NotificationContext == null || !NotificationContext.HasErrorNotifications)
             {
-                return this.DbContext.SaveChanges();
+                return await this.DbContext.SaveChangesAsync(cancellationToken);
             }
-            Rollback();
+            RollbackAsync();
             return default;
         }
-
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IUnitOfWork.Rollback()"/>
-        /// </summary>
-        public void Rollback()
+        public void RollbackAsync()
         {
             var changedEntries = this.DbContext.ChangeTracker.Entries()
                 .Where(x => x.State != EntityState.Unchanged).ToList();

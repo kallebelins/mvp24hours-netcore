@@ -1,4 +1,3 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
@@ -7,13 +6,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.Core", "Mvp24Hou
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.Infrastructure", "Mvp24Hours.Infrastructure\Mvp24Hours.Infrastructure.csproj", "{B15CB895-3194-49C3-B292-DEC9095746C5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.Infrastructure.Data", "Mvp24Hours.Infrastructure.Data\Mvp24Hours.Infrastructure.Data.csproj", "{163C3713-21EE-4E4B-B83F-6FD985B9FEE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.Infrastructure.Data.EFCore", "Mvp24Hours.Infrastructure.Data.EFCore\Mvp24Hours.Infrastructure.Data.EFCore.csproj", "{163C3713-21EE-4E4B-B83F-6FD985B9FEE0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.Application", "Mvp24Hours.Application\Mvp24Hours.Application.csproj", "{B14D6BDF-D8EF-491B-80CF-C3EBB5A77F11}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.WebAPI", "Mvp24Hours.WebAPI\Mvp24Hours.WebAPI.csproj", "{B29C21E9-0F09-41EA-BAA4-972428070205}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.Infrastructure.Data.SQLServer", "Mvp24Hours.Infrastructure.Data.SQLServer\Mvp24Hours.Infrastructure.Data.SQLServer.csproj", "{6A2D5E26-E17F-4EBD-AE43-CD859E829897}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.Infrastructure.Data.EFCore.SQLServer", "Mvp24Hours.Infrastructure.Data.EFCore.SQLServer\Mvp24Hours.Infrastructure.Data.EFCore.SQLServer.csproj", "{6A2D5E26-E17F-4EBD-AE43-CD859E829897}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mvp24Hours.Infrastructure.Data.MongoDb", "Mvp24Hours.Infrastructure.Data.MongoDb\Mvp24Hours.Infrastructure.Data.MongoDb.csproj", "{E4209472-27FC-43DB-A840-0E72CA9D6E5F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +46,10 @@ Global
 		{6A2D5E26-E17F-4EBD-AE43-CD859E829897}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A2D5E26-E17F-4EBD-AE43-CD859E829897}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A2D5E26-E17F-4EBD-AE43-CD859E829897}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4209472-27FC-43DB-A840-0E72CA9D6E5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4209472-27FC-43DB-A840-0E72CA9D6E5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4209472-27FC-43DB-A840-0E72CA9D6E5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4209472-27FC-43DB-A840-0E72CA9D6E5F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

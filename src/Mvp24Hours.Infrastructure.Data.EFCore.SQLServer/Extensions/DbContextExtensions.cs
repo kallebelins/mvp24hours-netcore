@@ -1,4 +1,4 @@
-﻿//=====================================================================================
+//=====================================================================================
 // Developed by Kallebe Lins (kallebe.santos@outlook.com)
 // Teacher, Architect, Consultant and Project Leader
 // Virtual Card: https://www.linkedin.com/in/kallebelins
@@ -8,7 +8,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
-namespace Mvp24Hours.Infrastructure.Data.Extensions
+namespace Mvp24Hours.Infrastructure.Data.EFCore.Extensions
 {
     public static class DbContextExtensions
     {

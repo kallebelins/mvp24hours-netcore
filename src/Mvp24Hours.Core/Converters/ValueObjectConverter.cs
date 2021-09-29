@@ -1,4 +1,4 @@
-﻿//=====================================================================================
+//=====================================================================================
 // Developed by Kallebe Lins (kallebe.santos@outlook.com)
 // Teacher, Architect, Consultant and Project Leader
 // Virtual Card: https://www.linkedin.com/in/kallebelins
@@ -10,6 +10,11 @@ using System;
 
 namespace Mvp24Hours.Core.Converters
 {
+    /// <summary>
+    /// Concrete object interface converter.
+    /// </summary>
+    /// <typeparam name="TInterface">Interface</typeparam>
+    /// <typeparam name="TConcrete">Class</typeparam>
     public class ValueObjectConverter<TInterface, TConcrete> : JsonConverter
     {
         public override bool CanConvert(Type objectType)

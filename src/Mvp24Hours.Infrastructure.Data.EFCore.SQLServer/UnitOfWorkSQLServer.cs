@@ -1,4 +1,4 @@
-﻿//=====================================================================================
+//=====================================================================================
 // Developed by Kallebe Lins (kallebe.santos@outlook.com)
 // Teacher, Architect, Consultant and Project Leader
 // Virtual Card: https://www.linkedin.com/in/kallebelins
@@ -7,12 +7,12 @@
 //=====================================================================================
 using Microsoft.EntityFrameworkCore;
 using Mvp24Hours.Core.Contract.Data;
-using Mvp24Hours.Infrastructure.Data.Extensions;
+using Mvp24Hours.Infrastructure.Data.EFCore.Extensions;
 using System.Collections.Generic;
 
-namespace Mvp24Hours.Infrastructure.Data.SQLServer
+namespace Mvp24Hours.Infrastructure.Data.EFCore.SQLServer
 {
-    public class UnitOfWorkSQLServer : Data.UnitOfWork, ISQL
+    public class UnitOfWorkSQLServer : UnitOfWork, ISQL
     {
         public UnitOfWorkSQLServer()
             : base()
