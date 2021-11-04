@@ -40,7 +40,7 @@ namespace Mvp24Hours.Business.Logic
             catch (Exception ex)
             {
                 Logging.Error(ex);
-                throw ex;
+                throw;
             }
         }
 
@@ -56,7 +56,7 @@ namespace Mvp24Hours.Business.Logic
             catch (Exception ex)
             {
                 Logging.Error(ex);
-                throw ex;
+                throw;
             }
         }
 
@@ -80,7 +80,7 @@ namespace Mvp24Hours.Business.Logic
             catch (Exception ex)
             {
                 Logging.Error(ex);
-                throw ex;
+                throw;
             }
         }
 
@@ -96,7 +96,7 @@ namespace Mvp24Hours.Business.Logic
             catch (Exception ex)
             {
                 Logging.Error(ex);
-                throw ex;
+                throw;
             }
         }
 
@@ -120,7 +120,7 @@ namespace Mvp24Hours.Business.Logic
             catch (Exception ex)
             {
                 Logging.Error(ex);
-                throw ex;
+                throw;
             }
         }
 
@@ -144,7 +144,7 @@ namespace Mvp24Hours.Business.Logic
             catch (Exception ex)
             {
                 Logging.Error(ex);
-                throw ex;
+                throw;
             }
         }
 
@@ -174,7 +174,7 @@ namespace Mvp24Hours.Business.Logic
             catch (Exception ex)
             {
                 Logging.Error(ex);
-                throw ex;
+                throw;
             }
         }
 
@@ -200,7 +200,7 @@ namespace Mvp24Hours.Business.Logic
             catch (Exception ex)
             {
                 Logging.Error(ex);
-                throw ex;
+                throw;
             }
         }
 
@@ -217,7 +217,7 @@ namespace Mvp24Hours.Business.Logic
             catch (Exception ex)
             {
                 Logging.Error(ex);
-                throw ex;
+                throw;
             }
         }
 
@@ -234,7 +234,7 @@ namespace Mvp24Hours.Business.Logic
             catch (Exception ex)
             {
                 Logging.Error(ex);
-                throw ex;
+                throw;
             }
         }
 
@@ -250,7 +250,7 @@ namespace Mvp24Hours.Business.Logic
             catch (Exception ex)
             {
                 Logging.Error(ex);
-                throw ex;
+                throw;
             }
         }
 
@@ -263,12 +263,12 @@ namespace Mvp24Hours.Business.Logic
         {
             try
             {
-                this.UnitOfWork.GetRepository<TEntity>().LoadRelation(entity, propertyExpression);
+                (this.UnitOfWork.GetRepository<TEntity>() as IQueryRelation<TEntity>)?.LoadRelation(entity, propertyExpression);
             }
             catch (Exception ex)
             {
                 Logging.Error(ex);
-                throw ex;
+                throw;
             }
         }
 
@@ -282,12 +282,12 @@ namespace Mvp24Hours.Business.Logic
         {
             try
             {
-                this.UnitOfWork.GetRepository<TEntity>().LoadRelation(entity, propertyExpression, clause, orderKey, orderDescendingKey, limit);
+                (this.UnitOfWork.GetRepository<TEntity>() as IQueryRelation<TEntity>)?.LoadRelation(entity, propertyExpression, clause, orderKey, orderDescendingKey, limit);
             }
             catch (Exception ex)
             {
                 Logging.Error(ex);
-                throw ex;
+                throw;
             }
         }
 

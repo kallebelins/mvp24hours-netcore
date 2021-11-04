@@ -14,7 +14,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.WebAPI", "Mvp24H
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.Infrastructure.Data.EFCore.SQLServer", "Mvp24Hours.Infrastructure.Data.EFCore.SQLServer\Mvp24Hours.Infrastructure.Data.EFCore.SQLServer.csproj", "{6A2D5E26-E17F-4EBD-AE43-CD859E829897}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mvp24Hours.Infrastructure.Data.MongoDb", "Mvp24Hours.Infrastructure.Data.MongoDb\Mvp24Hours.Infrastructure.Data.MongoDb.csproj", "{E4209472-27FC-43DB-A840-0E72CA9D6E5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.Infrastructure.Data.MongoDb", "Mvp24Hours.Infrastructure.Data.MongoDb\Mvp24Hours.Infrastructure.Data.MongoDb.csproj", "{E4209472-27FC-43DB-A840-0E72CA9D6E5F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B19FC8A6-B1BB-4E0B-8150-E4CC0C55D05C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.Infrastructure.Data.MongoDb.Test", "Mvp24Hours.Infrastructure.Data.MongoDb.Test\Mvp24Hours.Infrastructure.Data.MongoDb.Test.csproj", "{55C6E560-0243-4304-8D2E-0A00723D1E7F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,9 +54,16 @@ Global
 		{E4209472-27FC-43DB-A840-0E72CA9D6E5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E4209472-27FC-43DB-A840-0E72CA9D6E5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E4209472-27FC-43DB-A840-0E72CA9D6E5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55C6E560-0243-4304-8D2E-0A00723D1E7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55C6E560-0243-4304-8D2E-0A00723D1E7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55C6E560-0243-4304-8D2E-0A00723D1E7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55C6E560-0243-4304-8D2E-0A00723D1E7F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{55C6E560-0243-4304-8D2E-0A00723D1E7F} = {B19FC8A6-B1BB-4E0B-8150-E4CC0C55D05C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1CAAF17E-39C7-40C6-A4BE-09BC5EE90B95}

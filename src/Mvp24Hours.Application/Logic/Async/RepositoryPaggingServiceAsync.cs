@@ -65,7 +65,7 @@ namespace Mvp24Hours.Business.Logic
             catch (Exception ex)
             {
                 Logging.Error(ex);
-                throw ex;
+                throw;
             }
         }
 
@@ -110,7 +110,7 @@ namespace Mvp24Hours.Business.Logic
             catch (Exception ex)
             {
                 Logging.Error(ex);
-                throw ex;
+                throw;
             }
         }
 

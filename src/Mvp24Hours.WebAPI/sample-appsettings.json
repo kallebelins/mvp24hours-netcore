@@ -1,7 +1,6 @@
 {
   "ConnectionStrings": {
-    "MongoDbContext": null,
-    "MongoDbSSL": false
+    "MongoDbContext": null
   },
   "Mvp24Hours": {
     "General": {
@@ -11,6 +10,10 @@
       "MaxQtyByQueryPage": 30,
       "ReadUncommitedQuery": false,
       "EnableRedis": true,
+      "MongoDb": {
+        "EnableTls": false,
+        "EnableTransaction": false
+      },
       "Redis": {
         "Hosts": [ "localhost:6379" ],
         "InstanceName": null,

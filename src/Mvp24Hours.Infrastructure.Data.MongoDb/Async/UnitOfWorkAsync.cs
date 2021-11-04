@@ -12,23 +12,24 @@ using Mvp24Hours.Infrastructure.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Mvp24Hours.Infrastructure.Data.MongoDb
 {
     /// <summary>
-    ///  <see cref="Mvp24Hours.Core.Contract.Data.IUnitOfWork"/>
+    ///  <see cref="IUnitOfWorkAsync"/>
     /// </summary>
-    public class UnitOfWork : IUnitOfWork, IDisposable
+    public class UnitOfWorkAsync : IUnitOfWorkAsync, IDisposable
     {
         #region [ Ctor ]
 
-        public UnitOfWork()
+        public UnitOfWorkAsync()
         {
             DbContext = ServiceProviderHelper.GetService<Mvp24HoursMongoDbContext>();
             repositories = new Dictionary<Type, object>();
             NotificationContext = ServiceProviderHelper.GetService<INotificationContext>();
 
-            DbContext.StartSession();
+            DbContext.StartSessionAsync().Wait();
         }
 
         #endregion
@@ -41,16 +42,16 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         protected INotificationContext NotificationContext { get; private set; }
 
         /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IUnitOfWork"/>
+        ///  <see cref="IUnitOfWorkAsync"/>
         /// </summary>
-        public IRepository<T> GetRepository<T>()
+        public IRepositoryAsync<T> GetRepositoryAsync<T>()
             where T : class, IEntityBase
         {
-            if (!this.repositories.ContainsKey(typeof(T)))
+            if (!repositories.ContainsKey(typeof(T)))
             {
-                this.repositories.Add(typeof(T), ServiceProviderHelper.GetService<IRepository<T>>());
+                repositories.Add(typeof(T), ServiceProviderHelper.GetService<IRepositoryAsync<T>>());
             }
-            return repositories[typeof(T)] as IRepository<T>;
+            return repositories[typeof(T)] as IRepositoryAsync<T>;
         }
 
         #endregion
@@ -67,9 +68,9 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         {
             if (disposing)
             {
-                if (this.DbContext != null)
+                if (DbContext != null)
                 {
-                    this.DbContext = null;
+                    DbContext = null;
                 }
             }
         }
@@ -79,25 +80,25 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         #region [ Unit of Work ]
 
         /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IUnitOfWork.SaveChanges()"/>
+        ///  <see cref="IUnitOfWorkAsync.SaveChangesAsync()"/>
         /// </summary>
-        public int SaveChanges(CancellationToken cancellationToken = default)
+        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             if (NotificationContext == null || !NotificationContext.HasErrorNotifications)
             {
-                DbContext.SaveChanges(cancellationToken);
+                await DbContext.SaveChangesAsync(cancellationToken);
                 return 1;
             }
-            Rollback(cancellationToken);
+            await RollbackAsync(cancellationToken);
             return 0;
         }
 
         /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IUnitOfWork.Rollback()"/>
+        ///  <see cref="IUnitOfWorkAsync.RollbackAsync()"/>
         /// </summary>
-        public void Rollback(CancellationToken cancellationToken = default)
+        public async Task RollbackAsync(CancellationToken cancellationToken = default)
         {
-            DbContext.Rollback(cancellationToken);
+            await DbContext.RollbackAsync(cancellationToken);
         }
 
         #endregion

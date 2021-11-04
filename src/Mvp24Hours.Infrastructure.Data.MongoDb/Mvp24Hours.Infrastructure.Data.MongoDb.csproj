@@ -5,11 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MongoDB.Driver" Version="2.13.1" />
+    <Compile Remove="Contract\**" />
+    <EmbeddedResource Remove="Contract\**" />
+    <None Remove="Contract\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Contract\Data\" />
+    <PackageReference Include="MongoDB.Driver" Version="2.13.2" />
   </ItemGroup>
 
   <ItemGroup>

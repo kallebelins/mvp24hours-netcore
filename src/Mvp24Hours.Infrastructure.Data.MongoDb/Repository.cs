@@ -5,6 +5,8 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
@@ -17,7 +19,7 @@ using System.Linq.Expressions;
 
 namespace Mvp24Hours.Infrastructure.Data.MongoDb
 {
-    public class Repository<T> : RepositoryBase<T>, IRepository<T>, IQueryRelation<T>
+    public class Repository<T> : RepositoryBase<T>, IRepository<T>
         where T : class, IEntityBase
     {
         #region [ Ctor ]
@@ -129,6 +131,10 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
             return GetDynamicFilter(GetQuery(clause, true), GetKeyInfo(), id).SingleOrDefault();
         }
 
+        #endregion
+
+        #region [ ICommand ]
+
         /// <summary>
         ///  <see cref="Mvp24Hours.Core.Contract.Data.IQuery.Add(T)"/>
         /// </summary>
@@ -138,16 +144,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
             {
                 return;
             }
-
-            var entry = dbContext.Entry(entity);
-            if (entry.State != EntityState.Detached)
-            {
-                entry.State = EntityState.Added;
-            }
-            else
-            {
-                this.dbEntities.Add(entity);
-            }
+            dbEntities.InsertOne(entity);
         }
 
         /// <summary>
@@ -164,53 +161,6 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
             }
         }
 
-        #endregion
-
-        #region [ IQueryRelation ]
-
-        public void LoadRelation<TProperty>(T entity, Expression<Func<T, TProperty>> propertyExpression)
-            where TProperty : class
-        {
-            dbContext.Entry(entity).Reference(propertyExpression).Load();
-        }
-
-        public void LoadRelation<TProperty, TKey>(T entity,
-            Expression<Func<T, IEnumerable<TProperty>>> propertyExpression,
-            Expression<Func<TProperty, bool>> clause = null,
-            Expression<Func<TProperty, TKey>> orderKey = null,
-            Expression<Func<TProperty, TKey>> orderDescendingKey = null,
-            int limit = 0)
-            where TProperty : class
-        {
-            var query = dbContext.Entry(entity).Collection(propertyExpression).Query();
-
-            if (clause != null)
-            {
-                query = query.Where(clause);
-            }
-
-            if (orderKey != null)
-            {
-                query = query.OrderBy(orderKey);
-            }
-
-            if (orderDescendingKey != null)
-            {
-                query = query.OrderByDescending(orderDescendingKey);
-            }
-
-            if (limit > 0)
-            {
-                query = query.Take(limit);
-            }
-
-            query.ToList();
-        }
-
-        #endregion
-
-        #region [ ICommand ]
-
         /// <summary>
         ///  <see cref="Mvp24Hours.Core.Contract.Data.ICommand.Modify(T)"/>
         /// </summary>
@@ -221,7 +171,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
                 return;
             }
 
-            var entityDb = dbContext.Set<T>().Find(entity.EntityKey);
+            var entityDb = dbContext.Set<T>().Find(GetKeyFilter(entity)).FirstOrDefault();
 
             if (entityDb == null)
             {
@@ -240,7 +190,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
                 entityLog.ModifiedBy = entityDbLog.ModifiedBy;
             }
 
-            dbContext.Entry(entityDb).CurrentValues.SetValues(entity);
+            this.dbEntities.ReplaceOne(GetKeyFilter(entity), entity);
         }
 
         /// <summary>
@@ -317,17 +267,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
             {
                 return;
             }
-
-            var entry = dbContext.Entry(entity);
-            if (entry.State != EntityState.Deleted)
-            {
-                entry.State = EntityState.Deleted;
-            }
-            else
-            {
-                this.dbEntities.Attach(entity);
-                this.dbEntities.Remove(entity);
-            }
+            this.dbEntities.DeleteOne(GetKeyFilter(entity));
         }
 
         #endregion

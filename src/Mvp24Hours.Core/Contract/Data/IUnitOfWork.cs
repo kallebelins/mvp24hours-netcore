@@ -7,6 +7,7 @@
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using System;
+using System.Threading;
 
 namespace Mvp24Hours.Core.Contract.Data
 {
@@ -21,11 +22,11 @@ namespace Mvp24Hours.Core.Contract.Data
         /// <summary>
         /// Persists the actions taken in the transaction
         /// </summary>
-        int SaveChanges();
+        int SaveChanges(CancellationToken cancellationToken = default);
         /// <summary>
         /// Discard changes in transaction
         /// </summary>
-        void Rollback();
+        void Rollback(CancellationToken cancellationToken = default);
         /// <summary>
         /// Gets a repository
         /// </summary>

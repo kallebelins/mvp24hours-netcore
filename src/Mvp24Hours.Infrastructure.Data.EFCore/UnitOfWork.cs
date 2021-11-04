@@ -13,6 +13,7 @@ using Mvp24Hours.Infrastructure.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace Mvp24Hours.Infrastructure.Data.EFCore
 {
@@ -80,21 +81,24 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
         /// <summary>
         ///  <see cref="Mvp24Hours.Core.Contract.Data.IUnitOfWork.SaveChanges()"/>
         /// </summary>
-        public int SaveChanges()
+        public int SaveChanges(CancellationToken cancellationToken = default)
         {
-            if (NotificationContext == null || !NotificationContext.HasErrorNotifications)
+            if ((NotificationContext == null || !NotificationContext.HasErrorNotifications) && !cancellationToken.IsCancellationRequested)
             {
                 return this.DbContext.SaveChanges();
             }
-            Rollback();
+            Rollback(cancellationToken);
             return default;
         }
 
         /// <summary>
         ///  <see cref="Mvp24Hours.Core.Contract.Data.IUnitOfWork.Rollback()"/>
         /// </summary>
-        public void Rollback()
+        public void Rollback(CancellationToken cancellationToken = default)
         {
+            if (cancellationToken.IsCancellationRequested)
+                return;
+
             var changedEntries = this.DbContext.ChangeTracker.Entries()
                 .Where(x => x.State != EntityState.Unchanged).ToList();
 

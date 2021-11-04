@@ -75,15 +75,18 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
 
         public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            if (NotificationContext == null || !NotificationContext.HasErrorNotifications)
+            if (NotificationContext == null || !NotificationContext.HasErrorNotifications || !cancellationToken.IsCancellationRequested)
             {
                 return await this.DbContext.SaveChangesAsync(cancellationToken);
             }
-            RollbackAsync();
+            await RollbackAsync(cancellationToken);
             return default;
         }
-        public void RollbackAsync()
+        public Task RollbackAsync(CancellationToken cancellationToken = default)
         {
+            if (cancellationToken.IsCancellationRequested)
+                return default;
+
             var changedEntries = this.DbContext.ChangeTracker.Entries()
                 .Where(x => x.State != EntityState.Unchanged).ToList();
 
@@ -103,6 +106,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                         break;
                 }
             }
+            return default;
         }
 
         #endregion

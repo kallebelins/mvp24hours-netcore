@@ -42,21 +42,19 @@ namespace Mvp24Hours.Infrastructure.Helpers
 
         private static IConfigurationRoot _appSettings;
 
-        internal static IConfigurationRoot AppSettings
+        public static IConfigurationRoot AppSettings
         {
             get
             {
                 if (_appSettings == null)
                 {
-                    var env = GetEnvironment();
-                    if (env == null)
-                    {
-                        return null;
-                    }
-
                     IConfigurationBuilder builder = new ConfigurationBuilder();
                     builder.AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json"), optional: true, reloadOnChange: true);
-                    builder.AddJsonFile($"appsettings.{GetEnvironment().EnvironmentName}.json", optional: true, reloadOnChange: true);
+                    var env = GetEnvironment();
+                    if (env != null)
+                    {
+                        builder.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+                    }
                     _appSettings = builder.Build();
                 }
                 return _appSettings;

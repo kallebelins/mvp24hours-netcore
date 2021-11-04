@@ -5,18 +5,17 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
-using Mvp24Hours.Core.Extensions;
 using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Transactions;
 
 namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
 {
@@ -120,6 +119,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
                         }
                     }
 
+                    /*
                     // ordination by string
                     if (clause.OrderBy.AnyOrNotNull())
                     {
@@ -138,6 +138,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
                         }
                         query = queryOrdered ?? query;
                     }
+                    */
 
                     // Paging
                     offset = clause.Offset;
@@ -156,6 +157,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
                 query = query.Take(limit);
             }
 
+            /*
             if (clause != null)
             {
                 // navigation
@@ -181,6 +183,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
                     }
                 }
             }
+            */
 
             return query;
         }
@@ -204,6 +207,12 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
 
         #region [ Supports ]
 
+        protected FilterDefinition<T> GetKeyFilter(T entity)
+        {
+            var key = GetKeyInfo();
+            return Builders<T>.Filter.Eq(key.Name, entity.EntityKey);
+        }
+
         PropertyInfo _keyInfo;
         /// <summary>
         /// 
@@ -214,7 +223,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
             {
                 _keyInfo = typeof(T).GetTypeInfo()
                     .GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                    .Where(x => x.GetCustomAttribute<KeyAttribute>() != null)
+                    .Where(x => x.GetCustomAttribute<BsonIdAttribute>() != null)
                     .FirstOrDefault();
 
                 if (_keyInfo == null)

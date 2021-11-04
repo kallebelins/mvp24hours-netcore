@@ -16,7 +16,7 @@ namespace Mvp24Hours.Core.Contract.Data
     /// Learn more: http://martinfowler.com/eaaCatalog/repository.html
     /// </summary>
     /// <typeparam name="T">Represents an entity</typeparam>
-    public interface IRepository<T> : IQuery<T>, ICommand<T>, IQueryRelation<T>
+    public interface IRepository<T> : IQuery<T>, ICommand<T>
         where T : IEntityBase
     {
     }
