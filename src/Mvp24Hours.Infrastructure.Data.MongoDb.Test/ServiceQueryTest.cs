@@ -6,11 +6,14 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using MongoDB.Bson;
+using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Data.MongoDb.Test.Data;
 using Mvp24Hours.Infrastructure.Data.MongoDb.Test.Entities;
 using Mvp24Hours.Infrastructure.Data.MongoDb.Test.Helpers;
 using Mvp24Hours.Infrastructure.Helpers;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Xunit;
 using Xunit.Priority;
 
@@ -50,6 +53,48 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Test
         }
 
         [Fact, Priority(2)]
+        public void Get_Filter_Customer_List()
+        {
+            var service = ServiceProviderHelper.GetService<CustomerService>();
+            var customer = service.List();
+            Assert.True(customer != null && customer.Count > 0);
+        }
+
+        [Fact, Priority(3)]
+        public void Get_Filter_Customer_List_Any()
+        {
+            var service = ServiceProviderHelper.GetService<CustomerService>();
+            bool any = service.ListAny();
+            Assert.True(any);
+        }
+
+        [Fact, Priority(4)]
+        public void Get_Filter_Customer_List_Count()
+        {
+            var service = ServiceProviderHelper.GetService<CustomerService>();
+            int count = service.ListCount();
+            Assert.True(count > 0);
+        }
+
+        [Fact, Priority(5)]
+        public void Get_Filter_Customer_List_Pagging()
+        {
+            var service = ServiceProviderHelper.GetService<CustomerService>();
+            var paging = new PagingCriteria(3,1);
+            var customers = service.List(paging);
+            Assert.True(customers != null && customers.Count == 3);
+        }
+
+        [Fact, Priority(6)]
+        public void Get_Filter_Customer_List_Order()
+        {
+            var service = ServiceProviderHelper.GetService<CustomerService>();
+            var paging = new PagingCriteria(3, 1, new List<string> { "Name desc" });
+            var customers = service.List(paging);
+            Assert.True(customers != null && customers.Count == 3);
+        }
+
+        [Fact, Priority(7)]
         public void Get_Filter_Customer_By_Name()
         {
             var service = ServiceProviderHelper.GetService<CustomerService>();

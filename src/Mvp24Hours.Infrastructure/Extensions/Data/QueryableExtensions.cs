@@ -11,7 +11,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Mvp24Hours.Infrastructure.Extensions
+namespace Mvp24Hours.Infrastructure.Extensions.Data
 {
     public static class QueryableExtensions
     {
@@ -20,20 +20,20 @@ namespace Mvp24Hours.Infrastructure.Extensions
         /// </summary>
         public static IOrderedQueryable<T> OrderBy<T>(this IQueryable<T> source, string propertyName)
         {
-            return OrderExpression(source, propertyName, false);
+            return source.OrderExpression(propertyName, false);
         }
         /// <summary>
         /// Adds sort expression
         /// </summary>
         public static IOrderedQueryable<T> ThenBy<T>(this IOrderedQueryable<T> source, string propertyName)
         {
-            return OrderExpression(source, propertyName, true);
+            return source.OrderExpression(propertyName, true);
         }
 
         /// <summary>
         /// Sorting expression
         /// </summary>
-        static IOrderedQueryable<T> OrderExpression<T>(this IQueryable<T> source, string propertyName, Boolean isThenBy)
+        static IOrderedQueryable<T> OrderExpression<T>(this IQueryable<T> source, string propertyName, bool isThenBy)
         {
             if (source == null)
             {
@@ -71,7 +71,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
             Type delegateType = typeof(Func<,>).MakeGenericType(typeof(T), type);
             LambdaExpression lambda = Expression.Lambda(delegateType, expr, arg);
 
-            String methodName = isDescending ? "OrderByDescending" : "OrderBy";
+            string methodName = isDescending ? "OrderByDescending" : "OrderBy";
             object result = typeof(Queryable).GetMethods().Single(
                 method => method.Name == methodName
                         && method.IsGenericMethodDefinition

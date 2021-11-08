@@ -11,6 +11,7 @@ using MongoDB.Driver.Linq;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Extensions;
+using Mvp24Hours.Infrastructure.Extensions.Data;
 using Mvp24Hours.Infrastructure.Helpers;
 using System;
 using System.Linq;
@@ -119,7 +120,6 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
                         }
                     }
 
-                    /*
                     // ordination by string
                     if (clause.OrderBy.AnyOrNotNull())
                     {
@@ -138,7 +138,6 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
                         }
                         query = queryOrdered ?? query;
                     }
-                    */
 
                     // Paging
                     offset = clause.Offset;
