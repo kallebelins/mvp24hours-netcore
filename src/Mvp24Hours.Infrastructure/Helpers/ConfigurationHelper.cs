@@ -14,7 +14,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
     /// <summary>
     /// Class that helps reading API settings
     /// </summary>
-    public class ConfigurationHelper
+    public static class ConfigurationHelper
     {
         #region [ Envionment ]
 
@@ -66,15 +66,31 @@ namespace Mvp24Hours.Infrastructure.Helpers
         /// </summary>
         public static string GetSettings(string key)
         {
+            return GetSection(key)?.Value;
+        }
+
+        /// <summary>
+        /// Get an instance of the settings of the running application
+        /// </summary>
+        public static T GetSettings<T>(string key)
+        {
+            return GetSection(key).Get<T>();
+        }
+
+        /// <summary>
+        /// Get the section of the application that is running
+        /// </summary>
+        public static IConfigurationSection GetSection(string key)
+        {
             if (AppSettings != null)
             {
-                return AppSettings?.GetSection(key)?.Value;
+                return AppSettings?.GetSection(key);
             }
             else if (_configuration != null)
             {
-                return _configuration.GetSection(key)?.Value;
+                return _configuration.GetSection(key);
             }
-            return string.Empty;
+            return default;
         }
 
         #region [ Configuration Settings ]

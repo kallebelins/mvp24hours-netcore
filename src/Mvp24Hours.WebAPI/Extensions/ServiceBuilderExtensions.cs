@@ -5,30 +5,22 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Validations;
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Extensions;
-using Mvp24Hours.Core.Mappings;
 using Mvp24Hours.Infrastructure.Contexts;
-using Mvp24Hours.Infrastructure.Data.EFCore;
 using Mvp24Hours.Infrastructure.Validations;
 using Mvp24Hours.WebAPI.Filters;
 using Mvp24Hours.WebAPI.Filters.Swagger;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using StackExchange.Redis;
 using Swashbuckle.AspNetCore.Filters;
 using System;
 using System.Collections.Generic;
@@ -44,58 +36,6 @@ namespace Mvp24Hours.WebAPI.Extensions
     /// </summary>
     public static class ServiceBuilderExtensions
     {
-        /// <summary>
-        /// Add all services
-        /// </summary>
-        [Obsolete]
-        public static IServiceCollection AddMvp24HoursAll<TDbContext>(this IServiceCollection services, Func<IServiceProvider, TDbContext> dbFactory = null, Assembly assemblyMap = null)
-            where TDbContext : DbContext
-        {
-            services.AddMvp24HoursService();
-            services.AddMvp24HoursDbService(dbFactory);
-            services.AddMvp24HoursMapService(assemblyMap);
-            services.AddMvp24HoursJsonService();
-            return services;
-        }
-
-        /// <summary>
-        /// Add all services
-        /// </summary>
-        [Obsolete]
-        public static IServiceCollection AddMvp24HoursAll(this IServiceCollection services, Assembly assemblyMap = null)
-        {
-            services.AddMvp24HoursService();
-            services.AddMvp24HoursMapService(assemblyMap);
-            services.AddMvp24HoursJsonService();
-            return services;
-        }
-
-        /// <summary>
-        /// Add all services async
-        /// </summary>
-        [Obsolete]
-        public static IServiceCollection AddMvp24HoursAllAsync<TDbContext>(this IServiceCollection services, Func<IServiceProvider, TDbContext> dbFactory = null, Assembly assemblyMap = null)
-            where TDbContext : DbContext
-        {
-            services.AddMvp24HoursService();
-            services.AddMvp24HoursDbAsyncService(dbFactory);
-            services.AddMvp24HoursMapService(assemblyMap);
-            services.AddMvp24HoursJsonService();
-            return services;
-        }
-
-        /// <summary>
-        /// Add all services async
-        /// </summary>
-        [Obsolete]
-        public static IServiceCollection AddMvp24HoursAllAsync(this IServiceCollection services, Assembly assemblyMap = null)
-        {
-            services.AddMvp24HoursService();
-            services.AddMvp24HoursMapService(assemblyMap);
-            services.AddMvp24HoursJsonService();
-            return services;
-        }
-
         /// <summary>
         /// Adds essential services
         /// </summary>
@@ -127,99 +67,6 @@ namespace Mvp24Hours.WebAPI.Extensions
         }
 
         /// <summary>
-        /// Add database context services
-        /// </summary>
-        public static IServiceCollection AddMvp24HoursDbAsyncService<TDbContext>(this IServiceCollection services, Func<IServiceProvider, TDbContext> dbFactory = null, Type repositoryAsync = null)
-            where TDbContext : DbContext
-        {
-            services.AddScoped<IUnitOfWorkAsync>(x => new UnitOfWorkAsync());
-
-            if (repositoryAsync != null)
-            {
-                services.AddScoped(typeof(IRepositoryAsync<>), repositoryAsync);
-            }
-            else
-            {
-                services.AddScoped(typeof(IRepositoryAsync<>), typeof(RepositoryAsync<>));
-            }
-
-            if (dbFactory != null)
-            {
-                services.AddScoped<DbContext>(dbFactory);
-            }
-            else
-            {
-                services.AddScoped<DbContext, TDbContext>();
-            }
-
-            return services;
-        }
-
-        /// <summary>
-        /// Add database context services
-        /// </summary>
-        public static IServiceCollection AddMvp24HoursDbService<TDbContext>(this IServiceCollection services, Func<IServiceProvider, TDbContext> dbFactory = null, Type repository = null)
-               where TDbContext : DbContext
-        {
-            services.AddScoped<IUnitOfWork>(x => new UnitOfWork());
-
-            if (repository != null)
-            {
-                services.AddScoped(typeof(IRepository<>), repository);
-            }
-            else
-            {
-                services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            }
-
-            if (dbFactory != null)
-            {
-                services.AddScoped<DbContext>(dbFactory);
-            }
-            else
-            {
-                services.AddScoped<DbContext, TDbContext>();
-            }
-
-            return services;
-        }
-
-        /// <summary>
-        /// Add mapping services
-        /// </summary>
-        public static IServiceCollection AddMvp24HoursMapService(this IServiceCollection services, Assembly assemblyMap)
-        {
-            Assembly local = assemblyMap ?? Assembly.GetExecutingAssembly();
-            var mapperConfig = new MapperConfiguration(mc =>
-            {
-                mc.AddProfile(new MappingProfile(local));
-            });
-
-            IMapper mapper = mapperConfig.CreateMapper();
-            services.AddSingleton(mapper);
-
-            return services;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public static IServiceCollection AddMvp24HoursJsonService(this IServiceCollection services)
-        {
-            services.AddControllers().AddJsonOptions(options =>
-            {
-                options.JsonSerializerOptions.IgnoreNullValues = true;
-            });
-            JsonConvert.DefaultSettings = () => new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                DateFormatHandling = DateFormatHandling.MicrosoftDateFormat,
-                DateFormatString = "yyyy-MM-dd"
-            };
-            return services;
-        }
-
-        /// <summary>
         /// 
         /// </summary>
         public static IServiceCollection AddMvp24HoursZipService(this IServiceCollection services, IConfiguration configuration)
@@ -233,56 +80,6 @@ namespace Mvp24Hours.WebAPI.Extensions
             {
                 options.EnableForHttps = (bool)configuration.GetSection("Mvp24Hours:Web:ResponseCompressionForHttps")?.ToString()?.ToBoolean(false);
                 options.Providers.Add<GzipCompressionProvider>();
-            });
-
-            return services;
-        }
-
-        /// <summary>
-        /// See settings at: https://stackexchange.github.io/StackExchange.Redis/Configuration.html
-        /// </summary>
-        public static IServiceCollection AddMvp24HoursRedisCache(this IServiceCollection services, IConfiguration configuration)
-        {
-            var redisConfiguration = configuration.GetSection("Mvp24Hours:Persistence:Redis")?.Get<ConfigurationOptions>();
-
-            if (redisConfiguration == null)
-            {
-                throw new ArgumentNullException("Redis configuration not defined. [Mvp24Hours:Persistence:Redis]");
-            }
-
-            var hosts = configuration.GetSection("Mvp24Hours:Persistence:Redis:Hosts")?.Get<List<string>>();
-
-            if (hosts == null)
-            {
-                throw new ArgumentNullException("Redis hosts configuration not defined. [Mvp24Hours:Persistence:Redis:Hosts]");
-            }
-
-            foreach (var h in hosts)
-            {
-                redisConfiguration.EndPoints.Add(h);
-            }
-
-            string instanceName = configuration.GetSection("Mvp24Hours:Persistence:Redis:InstanceName")?.Value
-                ?? Assembly.GetEntryAssembly().GetName().Name.Replace(".", "_");
-
-            services.AddDistributedRedisCache(options =>
-            {
-                options.ConfigurationOptions = redisConfiguration;
-                options.InstanceName = $"{instanceName}_".ToLower();
-            });
-
-            return services;
-        }
-
-        /// <summary>
-        /// See settings at: https://stackexchange.github.io/StackExchange.Redis/Configuration.html
-        /// </summary>
-        public static IServiceCollection AddMvp24HoursRedisCache(this IServiceCollection services, IConfiguration configuration, string connectionStringName, string instanceName = null)
-        {
-            services.AddDistributedRedisCache(options =>
-            {
-                options.Configuration = configuration.GetConnectionString(connectionStringName);
-                options.InstanceName = $"{instanceName ?? Assembly.GetEntryAssembly().GetName().Name.Replace(".", "_")}_".ToLower();
             });
 
             return services;

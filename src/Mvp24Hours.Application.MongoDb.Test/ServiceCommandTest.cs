@@ -6,15 +6,15 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using MongoDB.Bson;
-using Mvp24Hours.Infrastructure.Data.MongoDb.Test.Data;
-using Mvp24Hours.Infrastructure.Data.MongoDb.Test.Entities;
-using Mvp24Hours.Infrastructure.Data.MongoDb.Test.Helpers;
+using Mvp24Hours.Application.MongoDb.Test.Entities;
+using Mvp24Hours.Application.MongoDb.Test.Helpers;
+using Mvp24Hours.Application.MongoDb.Test.Services;
 using Mvp24Hours.Infrastructure.Helpers;
 using System;
 using Xunit;
 using Xunit.Priority;
 
-namespace Mvp24Hours.Infrastructure.Data.MongoDb.Test
+namespace Mvp24Hours.Application.MongoDb.Test
 {
     /// <summary>
     /// 
@@ -22,7 +22,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Test
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
     public class ServiceCommandTest
     {
-        private ObjectId _oid = ObjectId.GenerateNewId();
+        private readonly ObjectId _oid = ObjectId.GenerateNewId();
 
         public ServiceCommandTest()
         {

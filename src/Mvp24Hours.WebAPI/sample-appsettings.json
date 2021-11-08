@@ -9,12 +9,13 @@
     "Persistence": {
       "MaxQtyByQueryPage": 30,
       "ReadUncommitedQuery": false,
-      "EnableRedis": true,
       "MongoDb": {
         "EnableTls": false,
         "EnableTransaction": false
       },
       "Redis": {
+        "Enable": true,
+        "DefaultExpiration": null,
         "Hosts": [ "localhost:6379" ],
         "InstanceName": null,
         "DefaultDatabase": 0,

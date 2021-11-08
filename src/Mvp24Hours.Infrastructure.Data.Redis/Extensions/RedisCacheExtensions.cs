@@ -17,34 +17,51 @@ namespace Mvp24Hours.Infrastructure.Extensions
 {
     public static class RedisCacheExtensions
     {
-        private static bool? _enableRedis;
+        private static bool? _enable;
+        private static DateTimeOffset? _defaultExpiration;
         private static readonly ILoggingService _logger;
+
+#pragma warning disable S3963 // "static" fields should be initialized inline
         static RedisCacheExtensions()
         {
             _logger = LoggingService.GetLoggingService();
         }
+#pragma warning restore S3963 // "static" fields should be initialized inline
 
-        private static bool EnableRedis
+        private static bool Enable
         {
             get
             {
-                if (_enableRedis == null)
+                if (_enable == null)
                 {
-                    string value = ConfigurationHelper.GetSettings("Mvp24Hours:Persistence:EnableRedis");
-                    _enableRedis = value.ToBoolean(true);
+                    string value = ConfigurationHelper.GetSettings("Mvp24Hours:Persistence:Redis:Enable");
+                    _enable = value.ToBoolean(true);
                 }
-                return (bool)_enableRedis;
+                return (bool)_enable;
+            }
+        }
+
+        private static DateTimeOffset? DefaultExpiration
+        {
+            get
+            {
+                if (_defaultExpiration == null)
+                {
+                    string value = ConfigurationHelper.GetSettings("Mvp24Hours:Persistence:Redis:DefaultExpiration");
+                    _defaultExpiration = value.ToDateTime();
+                }
+                return _defaultExpiration;
             }
         }
 
         public static DistributedCacheEntryOptions GetRedisCacheOptions(DateTimeOffset? time = default)
         {
-            return new DistributedCacheEntryOptions { AbsoluteExpiration = time ?? DateTimeOffset.Now.AddMinutes(5) };
+            return new DistributedCacheEntryOptions { AbsoluteExpiration = time ?? DefaultExpiration };
         }
 
         public static async Task<string> GetRedisStringAsync(this IDistributedCache cache, string key, CancellationToken token = default)
         {
-            if (!EnableRedis)
+            if (cache == null || !Enable)
             {
                 return null;
             }
@@ -62,14 +79,14 @@ namespace Mvp24Hours.Infrastructure.Extensions
 
         public static async Task SetRedisStringAsync(this IDistributedCache cache, string key, string value, CancellationToken token = default)
         {
-            if (!EnableRedis)
+            if (cache == null || !Enable)
             {
                 return;
             }
 
             try
             {
-                await cache.SetRedisStringAsync(key, value, DateTimeOffset.Now.AddMinutes(5), token);
+                await cache.SetStringAsync(key, value, GetRedisCacheOptions(), token);
             }
             catch (Exception ex)
             {
@@ -79,7 +96,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
 
         public static async Task SetRedisStringAsync(this IDistributedCache cache, string key, string value, int minutes, CancellationToken token = default)
         {
-            if (!EnableRedis)
+            if (cache == null || !Enable)
             {
                 return;
             }
@@ -96,7 +113,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
 
         public static async Task SetRedisStringAsync(this IDistributedCache cache, string key, string value, DateTimeOffset time, CancellationToken token = default)
         {
-            if (!EnableRedis)
+            if (cache == null || !Enable)
             {
                 return;
             }
@@ -113,7 +130,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
 
         public static async Task RemoveRedisStringAsync(this IDistributedCache cache, string key, CancellationToken token = default)
         {
-            if (!EnableRedis)
+            if (cache == null || !Enable)
             {
                 return;
             }

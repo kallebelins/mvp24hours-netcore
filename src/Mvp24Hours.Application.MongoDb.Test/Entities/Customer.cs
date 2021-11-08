@@ -10,7 +10,7 @@ using MongoDB.Bson.Serialization.Attributes;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using System;
 
-namespace Mvp24Hours.Infrastructure.Data.MongoDb.Test.Entities
+namespace Mvp24Hours.Application.MongoDb.Test.Entities
 {
     public class Customer : IEntityBase
     {

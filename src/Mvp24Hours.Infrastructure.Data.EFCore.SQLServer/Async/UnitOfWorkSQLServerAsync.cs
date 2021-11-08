@@ -24,6 +24,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore.SQLServer.Async
         {
             return this.DbContext.SqlQueryAsync<T>(sqlQuery, parameters);
         }
+
         public Task<int> ExecuteCommandAsync(string sqlCommand, params object[] parameters)
         {
             return this.DbContext.Database.ExecuteSqlRawAsync(sqlCommand, parameters);

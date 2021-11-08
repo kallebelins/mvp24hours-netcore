@@ -5,11 +5,11 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Mvp24Hours.Application.MongoDb.Test.Entities;
 using Mvp24Hours.Business.Logic;
 using Mvp24Hours.Core.Contract.Data;
-using Mvp24Hours.Infrastructure.Data.MongoDb.Test.Entities;
 
-namespace Mvp24Hours.Infrastructure.Data.MongoDb.Test.Data
+namespace Mvp24Hours.Application.MongoDb.Test.Services
 {
     public class CustomerService : RepositoryService<Customer, IUnitOfWork>
     {

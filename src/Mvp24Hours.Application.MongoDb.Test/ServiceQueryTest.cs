@@ -6,18 +6,17 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using MongoDB.Bson;
+using Mvp24Hours.Application.MongoDb.Test.Entities;
+using Mvp24Hours.Application.MongoDb.Test.Helpers;
+using Mvp24Hours.Application.MongoDb.Test.Services;
 using Mvp24Hours.Core.ValueObjects.Logic;
-using Mvp24Hours.Infrastructure.Data.MongoDb.Test.Data;
-using Mvp24Hours.Infrastructure.Data.MongoDb.Test.Entities;
-using Mvp24Hours.Infrastructure.Data.MongoDb.Test.Helpers;
 using Mvp24Hours.Infrastructure.Helpers;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Xunit;
 using Xunit.Priority;
 
-namespace Mvp24Hours.Infrastructure.Data.MongoDb.Test
+namespace Mvp24Hours.Application.MongoDb.Test
 {
     /// <summary>
     /// 
@@ -56,8 +55,8 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Test
         public void Get_Filter_Customer_List()
         {
             var service = ServiceProviderHelper.GetService<CustomerService>();
-            var customer = service.List();
-            Assert.True(customer != null && customer.Count > 0);
+            var customers = service.List();
+            Assert.True(customers != null && customers.Count > 0);
         }
 
         [Fact, Priority(3)]
@@ -80,7 +79,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Test
         public void Get_Filter_Customer_List_Pagging()
         {
             var service = ServiceProviderHelper.GetService<CustomerService>();
-            var paging = new PagingCriteria(3,1);
+            var paging = new PagingCriteria(3, 0);
             var customers = service.List(paging);
             Assert.True(customers != null && customers.Count == 3);
         }
@@ -89,7 +88,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Test
         public void Get_Filter_Customer_List_Order()
         {
             var service = ServiceProviderHelper.GetService<CustomerService>();
-            var paging = new PagingCriteria(3, 1, new List<string> { "Name desc" });
+            var paging = new PagingCriteria(3, 0, new List<string> { "Name desc" });
             var customers = service.List(paging);
             Assert.True(customers != null && customers.Count == 3);
         }

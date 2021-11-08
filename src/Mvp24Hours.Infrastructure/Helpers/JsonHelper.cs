@@ -10,33 +10,19 @@ namespace Mvp24Hours.Infrastructure.Helpers
 {
     public static class JsonHelper
     {
-        private static JsonSerializerSettings _jsonDefaultSettings;
-
         static JsonHelper()
         {
-            _jsonDefaultSettings = new JsonSerializerSettings
+            JsonDefaultSettings = new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
                 Converters = new List<JsonConverter> { new StringEnumConverter() },
+                DateFormatHandling = DateFormatHandling.MicrosoftDateFormat,
+                DateFormatString = "yyyy-MM-dd",
                 NullValueHandling = NullValueHandling.Ignore
             };
         }
 
-        public static JsonSerializerSettings JsonDefaultSettings
-        {
-            get
-            {
-                return _jsonDefaultSettings;
-            }
-            set
-            {
-                if (value != null)
-                {
-                    _jsonDefaultSettings = value;
-                }
-            }
-        }
-
+        public static JsonSerializerSettings JsonDefaultSettings { get; set; }
 
         public static string Serialize<T>(T dto, JsonSerializerSettings jsonSerializerSettings = null)
         {

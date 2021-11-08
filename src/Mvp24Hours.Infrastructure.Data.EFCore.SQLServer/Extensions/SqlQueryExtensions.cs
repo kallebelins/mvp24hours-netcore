@@ -20,20 +20,16 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore.Extensions
         /// </summary>
         public static IList<T> SqlQuery<T>(this DbContext db, string sql, params object[] parameters) where T : class
         {
-            using (var db2 = new ContextForQueryType<T>(db.Database.GetDbConnection()))
-            {
-                return db2.Set<T>().FromSqlRaw(sql, parameters).ToList();
-            }
+            using var db2 = new ContextForQueryType<T>(db.Database.GetDbConnection());
+            return db2.Set<T>().FromSqlRaw(sql, parameters).ToList();
         }
         /// <summary>
         /// Executes asynchronous query commands in context
         /// </summary>
         public static async Task<IList<T>> SqlQueryAsync<T>(this DbContext db, string sql, params object[] parameters) where T : class
         {
-            using (var db2 = new ContextForQueryType<T>(db.Database.GetDbConnection()))
-            {
-                return await db2.Set<T>().FromSqlRaw(sql, parameters).ToListAsync();
-            }
+            using var db2 = new ContextForQueryType<T>(db.Database.GetDbConnection());
+            return await db2.Set<T>().FromSqlRaw(sql, parameters).ToListAsync();
         }
         /// <summary>
         /// Context for typed query
