@@ -9,11 +9,17 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using System;
+using System.Collections.Generic;
 
 namespace Mvp24Hours.Application.MongoDb.Test.Entities
 {
     public class Customer : IEntityBase
     {
+        public Customer()
+        {
+            Contacts = new List<ObjectId>();
+        }
+
         [BsonIgnore()]
         public object EntityKey => Oid;
 
@@ -32,5 +38,9 @@ namespace Mvp24Hours.Application.MongoDb.Test.Entities
         [BsonRequired()]
         public bool Active { get; set; }
 
+        // collections
+
+        [BsonElement("contacts")]
+        public ICollection<ObjectId> Contacts { get; set; }
     }
 }

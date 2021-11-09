@@ -156,7 +156,6 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
                 query = query.Take(limit);
             }
 
-            /*
             if (clause != null)
             {
                 // navigation
@@ -166,23 +165,24 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
                     // navigation by expression
                     if (clauseExpr.NavigationExpr.AnyOrNotNull())
                     {
-                        foreach (var nav in clauseExpr.NavigationExpr)
-                        {
-                            query = query.Include(nav);
-                        }
+                        throw new NotSupportedException("Relationship loading via navigation not available for mongodb. Do data structure analysis or implement your custom repository.");
+                        //foreach (var nav in clauseExpr.NavigationExpr)
+                        //{
+                        //    query = query.Include(nav);
+                        //}
                     }
                 }
 
                 // navigation by string
                 if (clause.Navigation.AnyOrNotNull())
                 {
-                    foreach (var nav in clause.Navigation)
-                    {
-                        query = query.Include(nav);
-                    }
+                    throw new NotSupportedException("Relationship loading via navigation not available for mongodb. Do data structure analysis or implement your custom repository.");
+                    //foreach (var nav in clause.Navigation)
+                    //{
+                    //    query = query.Include(nav);
+                    //}
                 }
             }
-            */
 
             return query;
         }

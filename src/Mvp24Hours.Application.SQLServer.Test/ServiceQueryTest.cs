@@ -5,13 +5,11 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-using MongoDB.Bson;
-using Mvp24Hours.Application.MongoDb.Test.Entities;
 using Mvp24Hours.Application.MongoDb.Test.Helpers;
 using Mvp24Hours.Application.MongoDb.Test.Services;
+using Mvp24Hours.Application.SQLServer.Test.Entities;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Helpers;
-using System;
 using System.Collections.Generic;
 using Xunit;
 using Xunit.Priority;
@@ -38,8 +36,6 @@ namespace Mvp24Hours.Application.MongoDb.Test
             {
                 service.Add(new Customer
                 {
-                    Oid = ObjectId.GenerateNewId(),
-                    Created = DateTime.Now,
                     Name = $"Test {i}",
                     Active = true
                 });

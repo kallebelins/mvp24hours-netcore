@@ -130,11 +130,11 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
         /// <summary>
         /// Indicates whether log control can be performed by the base context of Mvp24Hours.
         /// </summary>
-        protected abstract bool CanApplyEntityLog { get; }
+        protected virtual bool CanApplyEntityLog { get; }
         /// <summary>
         /// Gets the value of the user logged in the context or logged into the database
         /// </summary>
-        protected abstract object EntityLogBy { get; }
+        protected virtual object EntityLogBy { get; }
 
         #endregion
     }
