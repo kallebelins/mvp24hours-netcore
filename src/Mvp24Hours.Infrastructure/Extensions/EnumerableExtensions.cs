@@ -11,8 +11,14 @@ using System.Linq;
 
 namespace Mvp24Hours.Infrastructure.Extensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class EnumerableExtensions
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public static IEnumerable<T> ForEach<T>(this IEnumerable<T> list, Action<T> action)
         {
             foreach (T t in list)
@@ -22,6 +28,9 @@ namespace Mvp24Hours.Infrastructure.Extensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static bool AnyOrNotNull<T>(this IEnumerable<T> source)
         {
             if (source != null && source.Any())

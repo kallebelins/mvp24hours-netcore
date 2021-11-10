@@ -14,6 +14,9 @@ using System;
 
 namespace Mvp24Hours.Infrastructure.Validations
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class ValidatorEntityNotify<TEntity> : ValidatorNotify<TEntity>, IValidatorNotify<TEntity>
         where TEntity : class, IEntityBase
     {

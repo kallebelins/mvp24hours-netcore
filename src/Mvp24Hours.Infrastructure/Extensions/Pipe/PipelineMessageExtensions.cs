@@ -12,6 +12,9 @@ using Mvp24Hours.Infrastructure.Pipe;
 
 namespace Mvp24Hours.Infrastructure.Extensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class PipelineMessageExtensions
     {
         /// <summary>

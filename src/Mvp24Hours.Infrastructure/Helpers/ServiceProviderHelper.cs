@@ -2,21 +2,33 @@ using System;
 
 namespace Mvp24Hours.Infrastructure.Helpers
 {
-    public class ServiceProviderHelper
+    /// <summary>
+    /// 
+    /// </summary>
+    public static class ServiceProviderHelper
     {
         private static IServiceProvider _serviceProvider;
         private static bool? isHttpContext;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static void SetProvider(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static T GetService<T>()
         {
             return (T)GetService(typeof(T));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static object GetService(Type type)
         {
             if (IsHttpContext)
@@ -29,6 +41,9 @@ namespace Mvp24Hours.Infrastructure.Helpers
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static bool IsHttpContext
         {
             get

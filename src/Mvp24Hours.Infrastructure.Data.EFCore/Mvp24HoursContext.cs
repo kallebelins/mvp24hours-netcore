@@ -23,12 +23,12 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
     {
         #region [ Ctor ]
 
-        public Mvp24HoursContext()
+        protected Mvp24HoursContext()
             : base()
         {
         }
 
-        public Mvp24HoursContext(DbContextOptions options)
+        protected Mvp24HoursContext(DbContextOptions options)
             : base(options)
         {
         }

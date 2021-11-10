@@ -17,7 +17,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
     /// <summary>
     /// Contains functions to transform object (clone, serialize, ...)
     /// </summary>
-    public class ObjectHelper
+    public static class ObjectHelper
     {
         /// <summary>
         /// Clone object instance with binary method in memory
@@ -44,6 +44,9 @@ namespace Mvp24Hours.Infrastructure.Helpers
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static dynamic ConvertToDynamic(object obj)
         {
             var json = obj.ToSerialize();

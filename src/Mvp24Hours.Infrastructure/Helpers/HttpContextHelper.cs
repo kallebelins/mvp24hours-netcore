@@ -13,7 +13,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
     /// <summary>
     /// Contains functions to register and obtain context of the application that is running
     /// </summary>
-    public class HttpContextHelper
+    public static class HttpContextHelper
     {
         private static IHttpContextAccessor httpContextAccessor;
 
@@ -67,7 +67,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
         /// </summary>
         public static string GetBaseUrl()
         {
-            return $"{GetContext().Request.Scheme}://{GetContext().Request.Host.Value.ToString()}{GetContext().Request.PathBase.Value.ToString()}";
+            return $"{GetContext().Request.Scheme}://{GetContext().Request.Host.Value}{GetContext().Request.PathBase.Value}";
         }
     }
 }

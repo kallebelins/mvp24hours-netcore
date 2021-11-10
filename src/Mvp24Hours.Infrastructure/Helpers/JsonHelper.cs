@@ -8,6 +8,9 @@ using System.Collections.Generic;
 
 namespace Mvp24Hours.Infrastructure.Helpers
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class JsonHelper
     {
         static JsonHelper()
@@ -22,18 +25,30 @@ namespace Mvp24Hours.Infrastructure.Helpers
             };
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static JsonSerializerSettings JsonDefaultSettings { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static string Serialize<T>(T dto, JsonSerializerSettings jsonSerializerSettings = null)
         {
             return JsonConvert.SerializeObject(dto, jsonSerializerSettings ?? JsonDefaultSettings);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static T Deserialize<T>(string value, JsonSerializerSettings jsonSerializerSettings = null)
         {
             return JsonConvert.DeserializeObject<T>(value, jsonSerializerSettings ?? JsonDefaultSettings);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static JsonSerializerSettings JsonPagingResultSettings<T>(JsonSerializerSettings jsonSerializerSettings = null)
         {
             var settings = jsonSerializerSettings ?? JsonDefaultSettings;
@@ -45,6 +60,9 @@ namespace Mvp24Hours.Infrastructure.Helpers
             return settings;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static JsonSerializerSettings JsonBusinessResultSettings<T>(JsonSerializerSettings jsonSerializerSettings = null)
         {
             var settings = jsonSerializerSettings ?? JsonDefaultSettings;

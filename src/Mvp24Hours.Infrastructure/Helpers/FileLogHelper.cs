@@ -16,7 +16,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
     /// <summary>
     /// Contains functions to handle log files
     /// </summary>
-    public class FileLogHelper
+    public static class FileLogHelper
     {
         private static readonly ILoggingService _logger;
 
@@ -42,13 +42,13 @@ namespace Mvp24Hours.Infrastructure.Helpers
                     return;
                 }
 
-                string filename = $"{DateTime.Today:yyyy_MM_dd}_{Guid.NewGuid().ToString()}.log";
+                string filename = $"{DateTime.Today:yyyy_MM_dd}_{Guid.NewGuid()}.log";
                 if (!string.IsNullOrEmpty(suffixFilename))
                 {
                     filename = $"{suffixFilename.ToLower()}_{filename}";
                 }
                 var folder = $"{logPath}/{DateTime.Today:yyyy_MM_dd}/";
-                WriteDisk(dto, folder, filename, $"{header} Hora : {DateTime.Now.ToString("HH:mm:ss.fff")}", true);
+                WriteDisk(dto, folder, filename, $"{header} Hora : {DateTime.Now:HH:mm:ss.fff}", true);
             }
             catch (Exception ex)
             {
@@ -101,7 +101,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
                 var fullPath = $"{logPath}/{token}/{fileName}.json";
                 if (!File.Exists(fullPath))
                 {
-                    return default(T);
+                    return default;
                 }
 
                 return JsonConvert.DeserializeObject<T>(File.ReadAllText(fullPath));
@@ -110,7 +110,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
             {
                 _logger.Error(ex);
             }
-            return default(T);
+            return default;
         }
         private static void WriteDisk<T>(T obj, string folder, string fileName, string header = null, bool append = false)
         {
@@ -118,15 +118,13 @@ namespace Mvp24Hours.Infrastructure.Helpers
             {
                 Directory.CreateDirectory(folder);
                 string fullpath = folder + fileName;
-                using (var sw = new StreamWriter(fullpath, append))
+                using var sw = new StreamWriter(fullpath, append);
+                if (!string.IsNullOrEmpty(header))
                 {
-                    if (!string.IsNullOrEmpty(header))
-                    {
-                        sw.Write(header.PadLeft(5, '-').PadRight(5, '-') + "\r\n");
-                    }
-
-                    sw.Write(JsonConvert.SerializeObject(obj) + "\r\n");
+                    sw.Write(header.PadLeft(5, '-').PadRight(5, '-') + "\r\n");
                 }
+
+                sw.Write(JsonConvert.SerializeObject(obj) + "\r\n");
             }
         }
     }

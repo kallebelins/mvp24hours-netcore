@@ -32,63 +32,58 @@ namespace Mvp24Hours.Infrastructure.Helpers
         {
             try
             {
-                var _mailTo = ConfigurationHelper.GetSettings("Mvp24Hours:SmtpMail:MailTo");
                 var _mailFrom = ConfigurationHelper.GetSettings("Mvp24Hours:SmtpMail:MailFrom");
                 var _mailFromName = ConfigurationHelper.GetSettings("Mvp24Hours:SmtpMail:MailFromName");
                 var _rplyTo = ConfigurationHelper.GetSettings("Mvp24Hours:SmtpMail:ReplyTo");
                 var _rplyToName = ConfigurationHelper.GetSettings("Mvp24Hours:SmtpMail:ReplyToName");
 
-                using (System.Net.Mail.MailMessage m = new System.Net.Mail.MailMessage())
+                using System.Net.Mail.MailMessage m = new();
+                using SmtpClient smtpCli = SmtpLoad();
+                m.IsBodyHtml = true;
+                m.Body = dto.Body;
+                m.Subject = dto.Subject;
+                if (string.IsNullOrEmpty(dto.From))
                 {
-                    using (SmtpClient smtpCli = SmtpLoad())
+                    m.From = new MailAddress(_mailFrom, (string.IsNullOrEmpty(dto.FromName) ? _mailFromName : dto.FromName));
+                    if (!string.IsNullOrEmpty(_rplyTo))
                     {
-                        m.IsBodyHtml = true;
-                        m.Body = dto.Body;
-                        m.Subject = dto.Subject;
-                        if (string.IsNullOrEmpty(dto.From))
-                        {
-                            m.From = new MailAddress(_mailFrom, (string.IsNullOrEmpty(dto.FromName) ? _mailFromName : dto.FromName));
-                            if (!string.IsNullOrEmpty(_rplyTo))
-                            {
-                                m.ReplyToList.Add(new MailAddress(_rplyTo, (string.IsNullOrEmpty(_rplyToName) ? _rplyTo : _rplyToName)));
-                            }
-                            else if (!string.IsNullOrEmpty(dto.ReplyTo))
-                            {
-                                m.ReplyToList.Add(new MailAddress(dto.ReplyTo));
-                            }
-                            else
-                            {
-                                m.ReplyToList.Add(new MailAddress(_mailFrom));
-                            }
-                        }
-                        else
-                        {
-                            m.From = new MailAddress(dto.From);
-                            m.ReplyToList.Add(new MailAddress(dto.From));
-                        }
-                        if (dto.CopyToBackground != null)
-                        {
-                            m.Bcc.Add(string.Join(",", dto.CopyToBackground));
-                        }
-
-                        if (dto.Attachments != null)
-                        {
-                            dto.Attachments.ForEach(p => m.Attachments.Add(p));
-                        }
-
-                        foreach (string email in dto.To)
-                        {
-                            m.To.Add(new MailAddress(email));
-                        }
-
-                        if (dto.CopyTo != null)
-                        {
-                            m.CC.Add(string.Join(",", dto.CopyTo));
-                        }
-
-                        smtpCli.Send(m);
+                        m.ReplyToList.Add(new MailAddress(_rplyTo, (string.IsNullOrEmpty(_rplyToName) ? _rplyTo : _rplyToName)));
+                    }
+                    else if (!string.IsNullOrEmpty(dto.ReplyTo))
+                    {
+                        m.ReplyToList.Add(new MailAddress(dto.ReplyTo));
+                    }
+                    else
+                    {
+                        m.ReplyToList.Add(new MailAddress(_mailFrom));
                     }
                 }
+                else
+                {
+                    m.From = new MailAddress(dto.From);
+                    m.ReplyToList.Add(new MailAddress(dto.From));
+                }
+                if (dto.CopyToBackground != null)
+                {
+                    m.Bcc.Add(string.Join(",", dto.CopyToBackground));
+                }
+
+                if (dto.Attachments != null)
+                {
+                    dto.Attachments.ForEach(p => m.Attachments.Add(p));
+                }
+
+                foreach (string email in dto.To)
+                {
+                    m.To.Add(new MailAddress(email));
+                }
+
+                if (dto.CopyTo != null)
+                {
+                    m.CC.Add(string.Join(",", dto.CopyTo));
+                }
+
+                smtpCli.Send(m);
             }
             catch (Exception ex)
             {
@@ -102,17 +97,15 @@ namespace Mvp24Hours.Infrastructure.Helpers
             var _mailUser = ConfigurationHelper.GetSettings("Mvp24Hours:SmtpMail:SmtpUser");
             var _mailPassword = ConfigurationHelper.GetSettings("Mvp24Hours:SmtpMail:SmtpPassword");
 
-            int _mailPort = 0;
-            Int32.TryParse(ConfigurationHelper.GetSettings("Mvp24Hours:SmtpMail:SmtpPort"), out _mailPort);
+            int.TryParse(ConfigurationHelper.GetSettings("Mvp24Hours:SmtpMail:SmtpPort"), out int _mailPort);
             if (_mailPort <= 0)
             {
                 _mailPort = 25;
             }
 
-            bool _mailSSL = false;
-            Boolean.TryParse(ConfigurationHelper.GetSettings("Mvp24Hours:SmtpMail:SmtpSSL"), out _mailSSL);
+            bool.TryParse(ConfigurationHelper.GetSettings("Mvp24Hours:SmtpMail:SmtpSSL"), out bool _mailSSL);
 
-            SmtpClient smtpCli = new SmtpClient();
+            SmtpClient smtpCli = new();
 
             smtpCli.Port = _mailPort;
             if (string.IsNullOrEmpty(_mailServer))

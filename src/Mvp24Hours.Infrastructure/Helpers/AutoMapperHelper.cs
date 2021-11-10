@@ -36,7 +36,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
             // If there are no sources just return the destination object
             if (!sources.Any())
             {
-                return default(T);
+                return default;
             }
 
             // Get the inital source and map it

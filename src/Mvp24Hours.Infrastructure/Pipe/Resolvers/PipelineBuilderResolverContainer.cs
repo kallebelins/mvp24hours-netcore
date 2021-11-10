@@ -3,16 +3,25 @@ using System.Collections.Generic;
 
 namespace Mvp24Hours.Infrastructure.Pipe.Resolvers
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class PipelineBuilderResolverContainer<TService>
     {
         private readonly Dictionary<string, PipelineBuilderResolver> _resolvers;
         private readonly string _keyDefault;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public PipelineBuilderResolverContainer()
         : this(null)
         {
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public PipelineBuilderResolverContainer(string keyDefault)
         {
             _resolvers = new Dictionary<string, PipelineBuilderResolver>();
@@ -23,6 +32,9 @@ namespace Mvp24Hours.Infrastructure.Pipe.Resolvers
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public PipelineBuilderResolverContainer<TService> Add(string key, PipelineBuilderResolver obj)
         {
             if (_resolvers.ContainsKey(key))
@@ -36,6 +48,9 @@ namespace Mvp24Hours.Infrastructure.Pipe.Resolvers
             return this;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public PipelineBuilderResolver GetDefault()
         {
             if (_keyDefault.HasValue())
@@ -45,6 +60,9 @@ namespace Mvp24Hours.Infrastructure.Pipe.Resolvers
             return default;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public PipelineBuilderResolver Get(string key)
         {
             if (_resolvers.ContainsKey(key))

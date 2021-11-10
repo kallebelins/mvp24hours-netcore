@@ -29,10 +29,10 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
     {
         #region [ Ctor ]
 
-        public RepositoryBase(DbContext dbContext)
+        protected RepositoryBase(DbContext _dbContext)
         {
-            this.dbContext = dbContext ?? throw new ArgumentNullException("dbContext");
-            this.dbEntities = dbContext.Set<T>();
+            this.dbContext = _dbContext ?? throw new ArgumentNullException("dbContext");
+            this.dbEntities = _dbContext.Set<T>();
         }
 
         #endregion
@@ -53,7 +53,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
         protected abstract object EntityLogBy { get; }
 
         private static bool? _enableReadUncommitedQuery;
-        private static bool EnableReadUncommitedQuery
+        protected static bool EnableReadUncommitedQuery
         {
             get
             {
@@ -241,8 +241,8 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
             if (_keyInfo == null)
             {
                 _keyInfo = typeof(T).GetTypeInfo()
-                    .GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                    .Where(x => x.GetCustomAttribute<KeyAttribute>() != null)
+                        .GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                        .Where(x => x.GetCustomAttribute<KeyAttribute>() != null)
                     .FirstOrDefault();
 
                 if (_keyInfo == null)

@@ -26,7 +26,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
         {
             this.DbContext = ServiceProviderHelper.GetService<DbContext>();
             this.repositories = new Dictionary<Type, object>();
-            NotificationContext = ServiceProviderHelper.GetService<INotificationContext>();
+            this.NotificationContext = ServiceProviderHelper.GetService<INotificationContext>();
         }
 
         #endregion
@@ -36,7 +36,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
         protected DbContext DbContext { get; private set; }
         protected INotificationContext NotificationContext { get; private set; }
 
-        readonly Dictionary<Type, object> repositories;
+        private readonly Dictionary<Type, object> repositories;
 
         public IRepositoryAsync<T> GetRepositoryAsync<T>()
             where T : class, IEntityBase

@@ -102,7 +102,7 @@ namespace Mvp24Hours.Core.Extensions
         {
             string stFormD = input.Normalize(NormalizationForm.FormD);
             int len = stFormD.Length;
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             for (int i = 0; i < len; i++)
             {
                 System.Globalization.UnicodeCategory uc = System.Globalization.CharUnicodeInfo.GetUnicodeCategory(stFormD[i]);
@@ -122,9 +122,9 @@ namespace Mvp24Hours.Core.Extensions
         public static string GetSHA256Hash(this string str)
         {
             byte[] bytes = Encoding.UTF8.GetBytes(str);
-            SHA256Managed hashstring = new SHA256Managed();
+            SHA256Managed hashstring = new();
             byte[] hash = hashstring.ComputeHash(bytes);
-            StringBuilder hashString = new StringBuilder();
+            StringBuilder hashString = new();
             foreach (byte x in hash)
             {
                 hashString.Append(String.Format("{0:x2}", x));
@@ -150,9 +150,9 @@ namespace Mvp24Hours.Core.Extensions
 
         public static byte[] ZipByte(this string str)
         {
-            using MemoryStream memory = new MemoryStream();
-            DeflateStream gzip = new DeflateStream(memory, CompressionMode.Compress);
-            using (StreamWriter writer = new StreamWriter(gzip, System.Text.Encoding.UTF8))
+            using MemoryStream memory = new();
+            DeflateStream gzip = new(memory, CompressionMode.Compress);
+            using (StreamWriter writer = new(gzip, System.Text.Encoding.UTF8))
             {
                 writer.Write(str);
             }
@@ -168,9 +168,9 @@ namespace Mvp24Hours.Core.Extensions
 
         public static string UnZip(this byte[] bty)
         {
-            using MemoryStream inputStream = new MemoryStream(bty);
-            DeflateStream gzip = new DeflateStream(inputStream, CompressionMode.Decompress);
-            using StreamReader reader = new StreamReader(gzip, System.Text.Encoding.UTF8);
+            using MemoryStream inputStream = new(bty);
+            DeflateStream gzip = new(inputStream, CompressionMode.Decompress);
+            using StreamReader reader = new(gzip, System.Text.Encoding.UTF8);
             return reader.ReadToEnd();
         }
     }

@@ -14,8 +14,14 @@ using System;
 
 namespace Mvp24Hours.Infrastructure.Extensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class JsonExtensions
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public static string ToSerialize<T>(this T value, JsonSerializerSettings jsonSerializerSettings = null)
         {
             if (value == null)
@@ -26,6 +32,9 @@ namespace Mvp24Hours.Infrastructure.Extensions
             return JsonHelper.Serialize(value, jsonSerializerSettings);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static T ToDeserialize<T>(this string value, JsonSerializerSettings jsonSerializerSettings = null)
         {
             if (!value.HasValue())
@@ -36,21 +45,33 @@ namespace Mvp24Hours.Infrastructure.Extensions
             return JsonHelper.Deserialize<T>(value, jsonSerializerSettings);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static IPagingResult<T> ToDeserializePagingResult<T>(this string value, JsonSerializerSettings jsonSerializerSettings = null)
         {
             return JsonConvert.DeserializeObject<IPagingResult<T>>(value, JsonHelper.JsonPagingResultSettings<T>(jsonSerializerSettings));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static IBusinessResult<T> ToDeserializeBusinessResult<T>(this string value, JsonSerializerSettings jsonSerializerSettings = null)
         {
             return JsonConvert.DeserializeObject<IBusinessResult<T>>(value, JsonHelper.JsonBusinessResultSettings<T>(jsonSerializerSettings));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static dynamic ToDynamic<T>(this T obj)
         {
             return ObjectHelper.ConvertToDynamic(obj);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static bool IsValidJson(this string src)
         {
             try

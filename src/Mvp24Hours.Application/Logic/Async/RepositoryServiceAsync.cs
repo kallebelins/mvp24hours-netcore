@@ -7,10 +7,9 @@
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
-using Mvp24Hours.Core.Contract.Domain.Validations;
 using Mvp24Hours.Core.Contract.Logic;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
-using Mvp24Hours.Infrastructure.Helpers;
+using Mvp24Hours.Infrastructure.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,10 +27,10 @@ namespace Mvp24Hours.Business.Logic
         where TEntity : class, IEntityBase
         where TUoW : IUnitOfWorkAsync
     {
-        #region [ Implements IBaseAsyncBO ]
+        #region [ Implements IQueryServiceAsync ]
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.ListAnyAsync()"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{TEntity}.ListAnyAsync()"/>
         /// </summary>
         public virtual Task<bool> ListAnyAsync()
         {
@@ -47,7 +46,7 @@ namespace Mvp24Hours.Business.Logic
         }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.ListCountAsync()"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{TEntity}.ListCountAsync()"/>
         /// </summary>
         public virtual Task<int> ListCountAsync()
         {
@@ -63,7 +62,7 @@ namespace Mvp24Hours.Business.Logic
         }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.ListAsync()"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{TEntity}.ListAsync()"/>
         /// </summary>
         public Task<IList<TEntity>> ListAsync()
         {
@@ -71,7 +70,7 @@ namespace Mvp24Hours.Business.Logic
         }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.ListAsync(IPagingCriteria)"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{TEntity}.ListAsync(IPagingCriteria)"/>
         /// </summary>
         public virtual Task<IList<TEntity>> ListAsync(IPagingCriteria criteria)
         {
@@ -87,7 +86,7 @@ namespace Mvp24Hours.Business.Logic
         }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.GetByAnyAsync(Expression{Func{T, bool}})"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{TEntity}.GetByAnyAsync(Expression{Func{T, bool}})"/>
         /// </summary>
         public Task<bool> GetByAnyAsync(Expression<Func<TEntity, bool>> clause)
         {
@@ -103,7 +102,7 @@ namespace Mvp24Hours.Business.Logic
         }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.GetByCountAsync(Expression{Func{T, bool}})()"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{TEntity}.GetByCountAsync(Expression{Func{T, bool}})()"/>
         /// </summary>
         public virtual Task<int> GetByCountAsync(Expression<Func<TEntity, bool>> clause)
         {
@@ -119,7 +118,7 @@ namespace Mvp24Hours.Business.Logic
         }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.GetByAsync(Expression{Func{T, bool}})"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{TEntity}.GetByAsync(Expression{Func{T, bool}})"/>
         /// </summary>
         public Task<IList<TEntity>> GetByAsync(Expression<Func<TEntity, bool>> clause)
         {
@@ -127,7 +126,7 @@ namespace Mvp24Hours.Business.Logic
         }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.GetByAsync(Expression{Func{T, bool}}, IPagingCriteria)"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{TEntity}.GetByAsync(Expression{Func{T, bool}}, IPagingCriteria)"/>
         /// </summary>
         public virtual Task<IList<TEntity>> GetByAsync(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria)
         {
@@ -143,7 +142,7 @@ namespace Mvp24Hours.Business.Logic
         }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.GetByIdAsync(int)"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{TEntity}.GetByIdAsync(int)"/>
         /// </summary>
         public Task<TEntity> GetByIdAsync(object id)
         {
@@ -151,7 +150,7 @@ namespace Mvp24Hours.Business.Logic
         }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.GetByIdAsync(int, IPagingCriteria)"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{TEntity}.GetByIdAsync(int, IPagingCriteria)"/>
         /// </summary>
         public virtual Task<TEntity> GetByIdAsync(object id, IPagingCriteria criteria)
         {
@@ -168,26 +167,20 @@ namespace Mvp24Hours.Business.Logic
 
         #endregion
 
-        #region [ Implements IManipulationBaseBO ]
+        #region [ Implements ICommandServiceAsync ]
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.AddAsync(T)"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.ICommandServiceAsync{TEntity}.AddAsync(TEntity)"/>
         /// </summary>
-        public virtual Task<int> AddAsync(TEntity entity)
+        public virtual async Task AddAsync(TEntity entity)
         {
             try
             {
-                bool isValidationModel = entity.GetType()?.GetInterfaces()?.Any(x => x == typeof(IValidationModel<TEntity>)) ?? false;
-                isValidationModel = isValidationModel || (entity.GetType()?.BaseType?.GetInterfaces()?.Any(x => x == typeof(IValidationModel<TEntity>)) ?? false);
-
-                var validator = ServiceProviderHelper.GetService<IValidatorNotify<TEntity>>();
-                if (isValidationModel && !((IValidationModel<TEntity>)entity).IsValid(validator))
+                if (!(await Validate(entity)))
                 {
-                    return Task.FromResult(0);
+                    await Task.FromResult(false);
                 }
-
-                this.UnitOfWork.GetRepositoryAsync<TEntity>().AddAsync(entity);
-                return this.SaveChangesAsync();
+                await this.UnitOfWork.GetRepositoryAsync<TEntity>().AddAsync(entity);
             }
             catch (Exception ex)
             {
@@ -197,23 +190,28 @@ namespace Mvp24Hours.Business.Logic
         }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.ModifyAsync(T)"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.ICommandServiceAsync{TEntity}.AddAsync(IList{TEntity})"/>
         /// </summary>
-        public virtual Task<int> ModifyAsync(TEntity entity)
+        public virtual Task AddAsync(IList<TEntity> entities)
+        {
+            if (!entities.AnyOrNotNull())
+                return Task.FromResult(false);
+
+            return Task.WhenAll(entities?.Select(x => AddAsync(x)));
+        }
+
+        /// <summary>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.ICommandServiceAsync{TEntity}.ModifyAsync(TEntity)"/>
+        /// </summary>
+        public virtual async Task ModifyAsync(TEntity entity)
         {
             try
             {
-                bool isValidationModel = entity.GetType()?.GetInterfaces()?.Any(x => x == typeof(IValidationModel<TEntity>)) ?? false;
-                isValidationModel = isValidationModel || (entity.GetType()?.BaseType?.GetInterfaces()?.Any(x => x == typeof(IValidationModel<TEntity>)) ?? false);
-
-                var validator = ServiceProviderHelper.GetService<IValidatorNotify<TEntity>>();
-                if (isValidationModel && !((IValidationModel<TEntity>)entity).IsValid(validator))
+                if (!(await Validate(entity)))
                 {
-                    return Task.FromResult(0);
+                    await Task.FromResult(false);
                 }
-
-                this.UnitOfWork.GetRepositoryAsync<TEntity>().ModifyAsync(entity);
-                return this.SaveChangesAsync();
+                await this.UnitOfWork.GetRepositoryAsync<TEntity>().ModifyAsync(entity);
             }
             catch (Exception ex)
             {
@@ -223,14 +221,24 @@ namespace Mvp24Hours.Business.Logic
         }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.RemoveAsync(T)"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.ICommandServiceAsync{TEntity}.ModifyAsync(IList{TEntity})"/>
         /// </summary>
-        public virtual Task<int> RemoveAsync(TEntity entity)
+        public virtual Task ModifyAsync(IList<TEntity> entities)
+        {
+            if (!entities.AnyOrNotNull())
+                return Task.FromResult(false);
+
+            return Task.WhenAll(entities?.Select(x => ModifyAsync(x)));
+        }
+
+        /// <summary>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.ICommandServiceAsync{TEntity}.RemoveAsync(TEntity)"/>
+        /// </summary>
+        public virtual Task RemoveAsync(TEntity entity)
         {
             try
             {
-                this.UnitOfWork.GetRepositoryAsync<TEntity>().RemoveAsync(entity);
-                return this.SaveChangesAsync();
+                return this.UnitOfWork.GetRepositoryAsync<TEntity>().RemoveAsync(entity);
             }
             catch (Exception ex)
             {
@@ -240,14 +248,24 @@ namespace Mvp24Hours.Business.Logic
         }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.RemoveByIdAsync(int)"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.ICommandServiceAsync{TEntity}.RemoveAsync(IList{TEntity})"/>
         /// </summary>
-        public virtual async Task<int> RemoveByIdAsync(object id)
+        public virtual Task RemoveAsync(IList<TEntity> entities)
+        {
+            if (!entities.AnyOrNotNull())
+                return Task.FromResult(false);
+
+            return Task.WhenAll(entities?.Select(x => RemoveAsync(x)));
+        }
+
+        /// <summary>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.ICommandServiceAsync{TEntity}.RemoveByIdAsync(object)"/>
+        /// </summary>
+        public virtual Task RemoveByIdAsync(object id)
         {
             try
             {
-                var entity = await this.UnitOfWork.GetRepositoryAsync<TEntity>().GetByIdAsync(id);
-                return await this.RemoveAsync(entity);
+                return this.UnitOfWork.GetRepositoryAsync<TEntity>().RemoveByIdAsync(id);
             }
             catch (Exception ex)
             {
@@ -257,7 +275,18 @@ namespace Mvp24Hours.Business.Logic
         }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.ICommandService{T}.SaveChangesAsync()"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.ICommandServiceAsync{TEntity}.RemoveByIdAsync(IList{object})"/>
+        /// </summary>
+        public virtual Task RemoveByIdAsync(IList<object> ids)
+        {
+            if (!ids.AnyOrNotNull())
+                return Task.FromResult(false);
+
+            return Task.WhenAll(ids?.Select(x => RemoveByIdAsync(x)));
+        }
+
+        /// <summary>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.ICommandServiceAsync{TEntity}.SaveChangesAsync(CancellationToken)"/>
         /// </summary>
         public virtual Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
@@ -274,7 +303,7 @@ namespace Mvp24Hours.Business.Logic
 
         #endregion
 
-        #region [ Implements IQueryRelationService ]
+        #region [ Implements IQueryRelationServiceAsync ]
 
         public Task LoadRelationAsync<TProperty>(TEntity entity, Expression<Func<TEntity, TProperty>> propertyExpression)
             where TProperty : class

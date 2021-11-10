@@ -13,6 +13,9 @@ using System.Reflection;
 
 namespace Mvp24Hours.Infrastructure.Extensions.Data
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class QueryableExtensions
     {
         /// <summary>
@@ -72,6 +75,10 @@ namespace Mvp24Hours.Infrastructure.Extensions.Data
             LambdaExpression lambda = Expression.Lambda(delegateType, expr, arg);
 
             string methodName = isDescending ? "OrderByDescending" : "OrderBy";
+            if (isThenBy)
+            {
+                methodName = isDescending ? "ThenByDescending" : "ThenBy";
+            }
             object result = typeof(Queryable).GetMethods().Single(
                 method => method.Name == methodName
                         && method.IsGenericMethodDefinition

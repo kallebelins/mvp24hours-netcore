@@ -54,8 +54,8 @@ namespace Mvp24Hours.Infrastructure.Pipe
         #region [ Fields / Properties ]
 
         #region [ Fields ]
-        private List<IOperation> operations = new List<IOperation>();
-        private bool _isBreakOnFail;
+        private readonly IList<IOperation> operations = new List<IOperation>();
+        private readonly bool _isBreakOnFail;
         private string _token;
         #endregion
 
@@ -70,9 +70,14 @@ namespace Mvp24Hours.Infrastructure.Pipe
         #endregion
 
         #region [ Methods ]
-        public IPipeline Add<T>() where T : IOperation, new()
+        public IPipeline Add<T>() where T : IOperation
         {
-            return Add(new T());
+            IOperation instance = ServiceProviderHelper.GetService<T>();
+            if (instance == null)
+            {
+                throw new ArgumentNullException("Operation not found. Check if it has been registered in this context.");
+            }
+            return Add(instance);
         }
         public IPipeline Add(IOperation operation)
         {

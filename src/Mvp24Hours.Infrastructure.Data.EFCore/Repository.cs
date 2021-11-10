@@ -142,7 +142,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                 return;
             }
 
-            var entry = dbContext.Entry(entity);
+            var entry = this.dbContext.Entry(entity);
             if (entry.State != EntityState.Detached)
             {
                 entry.State = EntityState.Added;
@@ -174,7 +174,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
         public void LoadRelation<TProperty>(T entity, Expression<Func<T, TProperty>> propertyExpression)
             where TProperty : class
         {
-            dbContext.Entry(entity).Reference(propertyExpression).Load();
+            this.dbContext.Entry(entity).Reference(propertyExpression).Load();
         }
 
         public void LoadRelation<TProperty, TKey>(T entity,
@@ -185,7 +185,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
             int limit = 0)
             where TProperty : class
         {
-            var query = dbContext.Entry(entity).Collection(propertyExpression).Query();
+            var query = this.dbContext.Entry(entity).Collection(propertyExpression).Query();
 
             if (clause != null)
             {
@@ -224,7 +224,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                 return;
             }
 
-            var entityDb = dbContext.Set<T>().Find(entity.EntityKey);
+            var entityDb = this.dbContext.Set<T>().Find(entity.EntityKey);
 
             if (entityDb == null)
             {
@@ -243,7 +243,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                 entityLog.ModifiedBy = entityDbLog.ModifiedBy;
             }
 
-            dbContext.Entry(entityDb).CurrentValues.SetValues(entity);
+            this.dbContext.Entry(entityDb).CurrentValues.SetValues(entity);
         }
 
         /// <summary>
@@ -321,7 +321,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                 return;
             }
 
-            var entry = dbContext.Entry(entity);
+            var entry = this.dbContext.Entry(entity);
             if (entry.State != EntityState.Deleted)
             {
                 entry.State = EntityState.Deleted;

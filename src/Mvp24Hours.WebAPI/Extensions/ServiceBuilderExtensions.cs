@@ -18,6 +18,7 @@ using Mvp24Hours.Core.Contract.Domain.Validations;
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Extensions;
 using Mvp24Hours.Infrastructure.Contexts;
+using Mvp24Hours.Infrastructure.Helpers;
 using Mvp24Hours.Infrastructure.Validations;
 using Mvp24Hours.WebAPI.Filters;
 using Mvp24Hours.WebAPI.Filters.Swagger;
@@ -69,7 +70,7 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// <summary>
         /// 
         /// </summary>
-        public static IServiceCollection AddMvp24HoursZipService(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddMvp24HoursZipService(this IServiceCollection services)
         {
             services.Configure<GzipCompressionProviderOptions>(options =>
             {
@@ -78,7 +79,7 @@ namespace Mvp24Hours.WebAPI.Extensions
 
             services.AddResponseCompression(options =>
             {
-                options.EnableForHttps = (bool)configuration.GetSection("Mvp24Hours:Web:ResponseCompressionForHttps")?.ToString()?.ToBoolean(false);
+                options.EnableForHttps = ConfigurationHelper.GetSettings<bool>("Mvp24Hours:Web:ResponseCompressionForHttps");
                 options.Providers.Add<GzipCompressionProvider>();
             });
 

@@ -18,8 +18,7 @@ namespace Mvp24Hours.Core.Extensions
 
         public static Guid ToGuid(this string oid)
         {
-            Guid id = Guid.Empty;
-            return Guid.TryParse(oid, out id) ? id : Guid.Empty;
+            return Guid.TryParse(oid, out Guid id) ? id : Guid.Empty;
         }
 
         public static bool IsValidGuid(this string oid)
@@ -29,8 +28,7 @@ namespace Mvp24Hours.Core.Extensions
                 return false;
             }
 
-            Guid id = Guid.Empty;
-            return Guid.TryParse(oid, out id);
+            return Guid.TryParse(oid, out _);
         }
 
         public static bool IsNullOrEmpty(this Guid? oid)

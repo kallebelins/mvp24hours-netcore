@@ -17,12 +17,12 @@ using Xunit.Priority;
 namespace Mvp24Hours.Application.Redis.Test
 {
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
-    public class RedisTest
+    public class RedisServiceTest
     {
         private readonly string _keyString = "string_test";
         private readonly string _keyObject = "object_test";
 
-        public RedisTest()
+        public RedisServiceTest()
         {
             StartupHelper.ConfigureServices();
         }

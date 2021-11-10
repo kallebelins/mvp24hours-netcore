@@ -202,7 +202,7 @@ namespace Mvp24Hours.WebAPI.Extensions
             return result;
         }
 
-        public static IHATEOASContext AddLinkSelf<T>(this IHATEOASContext context, string routeName, object routeValues)
+        public static IHATEOASContext AddLinkSelf(this IHATEOASContext context, string routeName, object routeValues)
         {
             if (context != null && !string.IsNullOrEmpty(routeName))
             {
@@ -215,7 +215,7 @@ namespace Mvp24Hours.WebAPI.Extensions
             return context;
         }
 
-        public static IHATEOASContext AddLinkSelf<T>(this IHATEOASContext context, string routeName, object routeValues, HateoasMethodType method)
+        public static IHATEOASContext AddLinkSelf(this IHATEOASContext context, string routeName, object routeValues, HateoasMethodType method)
         {
             if (context != null && !string.IsNullOrEmpty(routeName))
             {

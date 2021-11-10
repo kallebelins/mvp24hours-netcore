@@ -12,6 +12,9 @@ using System.Reflection;
 
 namespace Mvp24Hours.Infrastructure.Extensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class ServiceCollectionExtensions
     {
         /// <summary>

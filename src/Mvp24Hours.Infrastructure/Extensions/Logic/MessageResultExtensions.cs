@@ -12,8 +12,14 @@ using System.Collections.Generic;
 
 namespace Mvp24Hours.Infrastructure.Extensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class MessageResultExtensions
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public static IEnumerable<IMessageResult> ToMessageResult(this IEnumerable<string> messages, MessageType messageType)
         {
             var messagesResult = new List<IMessageResult>();
@@ -25,11 +31,17 @@ namespace Mvp24Hours.Infrastructure.Extensions
             return messagesResult;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static IMessageResult ToMessageResult(this string message, string key, MessageType messageType)
         {
             return new MessageResult(key, message ?? "Undefined message.", messageType);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static IMessageResult ToMessageResult(this string message, MessageType messageType)
         {
             return new MessageResult(message ?? "Undefined message.", messageType);

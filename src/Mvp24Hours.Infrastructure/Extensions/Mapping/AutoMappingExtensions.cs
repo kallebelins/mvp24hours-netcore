@@ -15,6 +15,9 @@ using System.Linq.Expressions;
 
 namespace Mvp24Hours.Infrastructure.Extensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class AutoMappingExtensions
     {
         /// <summary>
@@ -47,7 +50,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
         {
             if (source == null)
             {
-                return default(TDestination);
+                return default;
             }
 
             IMapper mapper = ServiceProviderHelper.GetService<IMapper>();
@@ -66,7 +69,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
         {
             if (source == null)
             {
-                return default(IPagingResult<TDestination>);
+                return default;
             }
 
             IMapper mapper = ServiceProviderHelper.GetService<IMapper>();
@@ -103,7 +106,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
         {
             if (source == null)
             {
-                return default(IBusinessResult<TDestination>);
+                return default;
             }
 
             IMapper mapper = ServiceProviderHelper.GetService<IMapper>();

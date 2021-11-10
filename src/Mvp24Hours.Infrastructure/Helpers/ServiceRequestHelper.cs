@@ -4,8 +4,14 @@ using System.ServiceModel;
 
 namespace Mvp24Hours.Infrastructure.Helpers
 {
-    public class ServiceRequestHelper
+    /// <summary>
+    /// 
+    /// </summary>
+    public static class ServiceRequestHelper
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public static TClient Client<TClient>(string url)
             where TClient : class
         {
@@ -19,6 +25,9 @@ namespace Mvp24Hours.Infrastructure.Helpers
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static TClient ClientHttps<TClient>(string url)
             where TClient : class
         {
@@ -42,6 +51,9 @@ namespace Mvp24Hours.Infrastructure.Helpers
             return (TClient)Activator.CreateInstance(typeof(TClient), binding, endpoint);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static TClient ClientHttp<TClient>(string url)
             where TClient : class
         {

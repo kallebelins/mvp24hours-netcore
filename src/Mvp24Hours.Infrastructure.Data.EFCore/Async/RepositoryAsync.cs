@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
+using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;
 using System;
 using System.Collections.Generic;
@@ -26,8 +27,8 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
     {
         #region [ Ctor ]
 
-        public RepositoryAsync(DbContext dbContext)
-            : base(dbContext)
+        public RepositoryAsync(DbContext _dbContext)
+            : base(_dbContext)
         {
         }
 
@@ -199,12 +200,10 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
 
         #region [ ICommandAsync ]
 
-        public void AddAsync(T entity)
+        public async Task AddAsync(T entity)
         {
             if (entity == null)
-            {
                 return;
-            }
 
             var entry = dbContext.Entry(entity);
             if (entry.State != EntityState.Detached)
@@ -213,34 +212,27 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
             }
             else
             {
-                dbEntities.AddAsync(entity);
+                await dbEntities.AddAsync(entity);
             }
         }
 
-        public void AddAsync(IList<T> entities)
+        public Task AddAsync(IList<T> entities)
         {
-            if (entities != null && entities.Count > 0)
-            {
-                foreach (var entity in entities)
-                {
-                    AddAsync(entity);
-                }
-            }
+            if (!entities.AnyOrNotNull())
+                return Task.FromResult(false);
+
+            return Task.WhenAll(entities?.Select(x => AddAsync(x)));
         }
 
-        public void ModifyAsync(T entity)
+        public async Task ModifyAsync(T entity)
         {
             if (entity == null)
-            {
                 return;
-            }
 
-            var entityDb = dbContext.Set<T>().Find(entity.EntityKey);
+            var entityDb = await dbContext.Set<T>().FindAsync(entity.EntityKey);
 
             if (entityDb == null)
-            {
                 return;
-            }
 
             // properties that can not be changed
 
@@ -257,65 +249,60 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
             dbContext.Entry(entityDb).CurrentValues.SetValues(entity);
         }
 
-        public void ModifyAsync(IList<T> entities)
+        public Task ModifyAsync(IList<T> entities)
         {
-            if (entities != null && entities.Count > 0)
-            {
-                foreach (var entity in entities)
-                {
-                    ModifyAsync(entity);
-                }
-            }
+            if (!entities.AnyOrNotNull())
+                return Task.FromResult(false);
+
+            return Task.WhenAll(entities?.Select(x => ModifyAsync(x)));
         }
 
-        public void RemoveAsync(T entity)
+        public async Task RemoveAsync(T entity)
         {
             if (entity == null)
-            {
                 return;
-            }
 
             if (entity.GetType() == typeof(IEntityLog<>))
             {
                 var entityLog = entity as IEntityLog<object>;
                 entityLog.Removed = TimeZoneHelper.GetTimeZoneNow();
                 entityLog.RemovedBy = EntityLogBy;
-                ModifyAsync(entity);
+                await ModifyAsync(entity);
             }
             else
             {
-                ForceRemoveAsync(entity);
+                await ForceRemoveAsync(entity);
             }
         }
 
-        public void RemoveAsync(IList<T> entities)
+        public Task RemoveAsync(IList<T> entities)
         {
-            if (entities != null && entities.Count > 0)
-            {
-                foreach (var entity in entities)
-                {
-                    RemoveAsync(entity);
-                }
-            }
+            if (!entities.AnyOrNotNull())
+                return Task.FromResult(false);
+
+            return Task.WhenAll(entities?.Select(x => RemoveAsync(x)));
         }
 
-        public void RemoveByIdAsync(object id)
+        public async Task RemoveByIdAsync(object id)
         {
-            var entity = GetByIdAsync(id);
+            var entity = await GetByIdAsync(id);
             if (entity == null)
-            {
                 return;
-            }
-
-            RemoveByIdAsync(entity);
+            await RemoveAsync(entity);
         }
 
-        public void ForceRemoveAsync(T entity)
+        public Task RemoveByIdAsync(IList<object> ids)
+        {
+            if (!ids.AnyOrNotNull())
+                return Task.FromResult(false);
+
+            return Task.WhenAll(ids?.Select(x => RemoveByIdAsync(x)));
+        }
+
+        public Task ForceRemoveAsync(T entity)
         {
             if (entity == null)
-            {
-                return;
-            }
+                return Task.FromResult(false);
 
             var entry = dbContext.Entry(entity);
             if (entry.State != EntityState.Deleted)
@@ -327,6 +314,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                 dbEntities.Attach(entity);
                 dbEntities.Remove(entity);
             }
+            return Task.FromResult(true);
         }
 
         #endregion

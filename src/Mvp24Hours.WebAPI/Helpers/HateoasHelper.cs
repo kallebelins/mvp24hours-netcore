@@ -163,21 +163,18 @@ namespace Mvp24Hours.Infrastructure.Helpers
         {
             if (type == HateoasType.Self)
             {
-                if (result != null)
+                if (Paging == null)
                 {
-                    if (Paging == null)
-                    {
-                        return CreateLink(routeName, new Dictionary<string, object>(), HateoasType.Self, false, method);
-                    }
-                    else
-                    {
-                        var routeValues = new Dictionary<string, object>()
+                    return CreateLink(routeName, new Dictionary<string, object>(), HateoasType.Self, false, method);
+                }
+                else
+                {
+                    var routeValues = new Dictionary<string, object>()
                         {
                             { "limit", Paging.Limit },
                             { "offset", Paging.Offset }
                         };
-                        return CreateLink(routeName, routeValues, HateoasType.Self, false, method);
-                    }
+                    return CreateLink(routeName, routeValues, HateoasType.Self, false, method);
                 }
             }
 
@@ -215,7 +212,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
             {
                 int offset = (Paging != null ? Paging.Offset : 0);
                 int limit = (Paging != null ? Paging.Limit : ConfigurationPropertiesHelper.MaxQtyByQueryPage);
-                if (result.Summary != null &&
+                if (result?.Summary != null &&
                     offset < result.Summary.TotalPages - 1)
                 {
                     var routeValues = new Dictionary<string, object>()
@@ -231,7 +228,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
             {
                 int offset = (Paging != null ? Paging.Offset : 0);
                 int limit = (Paging != null ? Paging.Limit : ConfigurationPropertiesHelper.MaxQtyByQueryPage);
-                if (result.Summary != null
+                if (result?.Summary != null
                     && offset < result.Summary.TotalPages - 1)
                 {
                     var routeValues = new Dictionary<string, object>()

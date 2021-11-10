@@ -14,6 +14,9 @@ using System.Linq;
 
 namespace Mvp24Hours.Infrastructure.Extensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class BusinessExtensions
     {
         /// <summary>

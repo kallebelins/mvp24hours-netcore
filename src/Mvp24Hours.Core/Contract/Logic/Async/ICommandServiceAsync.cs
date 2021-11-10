@@ -5,6 +5,7 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,23 +17,39 @@ namespace Mvp24Hours.Core.Contract.Logic
     public interface ICommandServiceAsync<TEntity>
     {
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync{TEntity}.AddAsync(TEntity)"/>
+        /// 
         /// </summary>
-        Task<int> AddAsync(TEntity entity);
+        Task AddAsync(TEntity entity);
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync{TEntity}.ModifyAsync(TEntity)"/>
+        /// 
         /// </summary>
-        Task<int> ModifyAsync(TEntity entity);
+        Task AddAsync(IList<TEntity> entities);
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync{TEntity}.RemoveAsync(TEntity)"/>
+        /// 
         /// </summary>
-        Task<int> RemoveAsync(TEntity entity);
+        Task ModifyAsync(TEntity entity);
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.ICommandAsync{TEntity}.RemoveByIdAsync(object)"/>
+        /// 
         /// </summary>
-        Task<int> RemoveByIdAsync(object id);
+        Task ModifyAsync(IList<TEntity> entities);
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IUnitOfWorkAsync.SaveChangesAsync()"/>
+        /// 
+        /// </summary>
+        Task RemoveAsync(TEntity entity);
+        /// <summary>
+        /// 
+        /// </summary>
+        Task RemoveAsync(IList<TEntity> entities);
+        /// <summary>
+        /// 
+        /// </summary>
+        Task RemoveByIdAsync(object id);
+        /// <summary>
+        /// 
+        /// </summary>
+        Task RemoveByIdAsync(IList<object> ids);
+        /// <summary>
+        /// 
         /// </summary>
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 

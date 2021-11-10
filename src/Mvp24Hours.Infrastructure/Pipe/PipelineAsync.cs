@@ -56,8 +56,8 @@ namespace Mvp24Hours.Infrastructure.Pipe
         #region [ Fields / Properties ]
 
         #region [ Fields ]
-        private List<IOperationAsync> _operations = new List<IOperationAsync>();
-        private bool _isBreakOnFail;
+        private readonly IList<IOperationAsync> _operations = new List<IOperationAsync>();
+        private readonly bool _isBreakOnFail;
         private string _token;
         #endregion
 

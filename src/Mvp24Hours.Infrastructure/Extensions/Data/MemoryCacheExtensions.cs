@@ -14,6 +14,9 @@ using System.Reflection;
 
 namespace Mvp24Hours.Infrastructure.Extensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class MemoryCacheExtensions
     {
         private static readonly Func<MemoryCache, object> GetEntriesCollection = Delegate.CreateDelegate(
@@ -21,9 +24,15 @@ namespace Mvp24Hours.Infrastructure.Extensions
             typeof(MemoryCache).GetProperty("EntriesCollection", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true),
             throwOnBindFailure: true) as Func<MemoryCache, object>;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static IEnumerable GetKeys(this IMemoryCache memoryCache) =>
             ((IDictionary)GetEntriesCollection((MemoryCache)memoryCache)).Keys;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static IEnumerable<T> GetKeys<T>(this IMemoryCache memoryCache) =>
             GetKeys(memoryCache).OfType<T>();
     }

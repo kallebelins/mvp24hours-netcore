@@ -15,6 +15,9 @@ using System.Collections.Generic;
 
 namespace Mvp24Hours.Infrastructure.Validations
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class ValidatorNotify<T> : IValidatorNotify<T>
         where T : class
     {
@@ -38,14 +41,12 @@ namespace Mvp24Hours.Infrastructure.Validations
         #endregion
 
         #region [ Specification ]
-
         public IValidatorNotify<T> AddSpecification<U>(string key, string message)
             where U : ISpecification<T>, new()
         {
             NotifySpecifications.Add(new NotifySpecification<T>(key, message, new U()));
             return this;
         }
-
         public IValidatorNotify<T> AddSpecification<U>()
             where U : ISpecification<T>, new()
         {
@@ -61,7 +62,6 @@ namespace Mvp24Hours.Infrastructure.Validations
             }
             return this;
         }
-
         public IValidatorNotify<T> AddSpecification(ISpecification<T> specification)
         {
             if (specification is ISpecificationValidator<T>)
@@ -75,19 +75,15 @@ namespace Mvp24Hours.Infrastructure.Validations
             }
             return this;
         }
-
         public IValidatorNotify<T> AddSpecification(ISpecificationValidator<T> specification)
         {
             NotifySpecifications.Add(new NotifySpecification<T>(specification.KeyValidation, specification.MessageValidation, specification));
             return this;
         }
-
         #endregion
 
         #region [ Lists ]
-
         protected List<NotifySpecification<T>> NotifySpecifications { get; set; }
-
         #endregion
 
         #region [ Validate ]

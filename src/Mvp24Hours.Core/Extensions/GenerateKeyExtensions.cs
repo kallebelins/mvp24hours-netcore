@@ -53,7 +53,7 @@ namespace Mvp24Hours.Core.Extensions
 
         private static class PropertiesOf<T>
         {
-            private static readonly List<Func<T, dynamic>> Properties = new List<Func<T, dynamic>>();
+            private static readonly List<Func<T, dynamic>> Properties = new();
 
             static PropertiesOf()
             {

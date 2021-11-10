@@ -7,8 +7,11 @@
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
+using Mvp24Hours.Core.Contract.Domain.Validations;
 using Mvp24Hours.Infrastructure.Helpers;
 using Mvp24Hours.Infrastructure.Logging;
+using System;
+using System.Linq;
 
 namespace Mvp24Hours.Business.Logic
 {
@@ -28,10 +31,7 @@ namespace Mvp24Hours.Business.Logic
         /// Gets repository instance
         /// </summary>
         /// <returns>T</returns>
-        protected virtual TUoW UnitOfWork
-        {
-            get { return (TUoW)(unitOfWork ?? (unitOfWork = ServiceProviderHelper.GetService<TUoW>())); }
-        }
+        protected virtual TUoW UnitOfWork => (TUoW)(unitOfWork ??= ServiceProviderHelper.GetService<TUoW>());
 
         ILoggingService logger = null;
 
@@ -41,7 +41,7 @@ namespace Mvp24Hours.Business.Logic
         /// <returns>ILoggingService</returns>
         protected virtual ILoggingService Logging
         {
-            get { return logger ?? (logger = LoggingService.GetLoggingService()); }
+            get { return logger ??= LoggingService.GetLoggingService(); }
         }
 
         /// <summary>
@@ -55,6 +55,31 @@ namespace Mvp24Hours.Business.Logic
             }
         }
 
+        #endregion
+
+        #region [ Methods ]
+        protected virtual bool Validate(TEntity entity)
+        {
+            try
+            {
+                bool isValidationModel = entity.GetType()?.GetInterfaces()?.Any(x => x == typeof(IValidationModel<TEntity>)) ?? false;
+                isValidationModel = isValidationModel || (entity.GetType()?.BaseType?.GetInterfaces()?.Any(x => x == typeof(IValidationModel<TEntity>)) ?? false);
+
+                if (isValidationModel)
+                {
+                    var validator = ServiceProviderHelper.GetService<IValidatorNotify<TEntity>>();
+                    if (!((IValidationModel<TEntity>)entity).IsValid(validator))
+                        return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logging.Error(ex);
+                throw;
+            }
+        }
         #endregion
     }
 }

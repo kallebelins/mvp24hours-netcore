@@ -7,8 +7,11 @@
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
+using Mvp24Hours.Core.Contract.Domain.Validations;
 using Mvp24Hours.Infrastructure.Helpers;
 using Mvp24Hours.Infrastructure.Logging;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Mvp24Hours.Business.Logic
@@ -63,6 +66,29 @@ namespace Mvp24Hours.Business.Logic
         protected virtual Task<R> TaskResult<R>(R obj)
         {
             return Task.FromResult<R>(obj);
+        }
+
+        protected virtual Task<bool> Validate(TEntity entity)
+        {
+            try
+            {
+                bool isValidationModel = entity.GetType()?.GetInterfaces()?.Any(x => x == typeof(IValidationModel<TEntity>)) ?? false;
+                isValidationModel = isValidationModel || (entity.GetType()?.BaseType?.GetInterfaces()?.Any(x => x == typeof(IValidationModel<TEntity>)) ?? false);
+
+                if (isValidationModel)
+                {
+                    var validator = ServiceProviderHelper.GetService<IValidatorNotify<TEntity>>();
+                    if (!((IValidationModel<TEntity>)entity).IsValid(validator))
+                        return TaskResult(false);
+                }
+
+                return TaskResult(true);
+            }
+            catch (Exception ex)
+            {
+                Logging.Error(ex);
+                throw;
+            }
         }
 
         #endregion

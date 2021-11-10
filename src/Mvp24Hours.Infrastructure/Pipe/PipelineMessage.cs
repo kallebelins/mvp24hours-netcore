@@ -40,13 +40,12 @@ namespace Mvp24Hours.Infrastructure.Pipe
         #endregion
 
         #region [ Fields ]
-        private Dictionary<string, object> _contents;
+        private readonly Dictionary<string, object> _contents;
         private IList<IMessageResult> _messages;
         private bool isSuccess = true;
         #endregion
 
         #region [ Properties ]
-
         public bool IsSuccess
         {
             get
@@ -54,7 +53,6 @@ namespace Mvp24Hours.Infrastructure.Pipe
                 return !Messages?.Any(x => x.Type == Core.Enums.MessageType.Error) ?? isSuccess;
             }
         }
-
         public IList<IMessageResult> Messages
         {
             get
@@ -62,15 +60,11 @@ namespace Mvp24Hours.Infrastructure.Pipe
                 return _messages ??= new List<IMessageResult>();
             }
         }
-
         public string Token { get; private set; }
-
         public bool IsLocked { get; private set; }
-
         #endregion
 
         #region [ Methods ]
-
         public void AddContent<T>(T obj)
         {
             if (obj == null)
@@ -80,7 +74,6 @@ namespace Mvp24Hours.Infrastructure.Pipe
 
             AddContent<T>(obj.GetType().FullName, obj);
         }
-
         public void AddContent<T>(string key, T obj)
         {
             if (obj == null)
@@ -97,12 +90,10 @@ namespace Mvp24Hours.Infrastructure.Pipe
                 _contents.Add(key, obj);
             }
         }
-
         public T GetContent<T>()
         {
             return GetContent<T>(typeof(T).FullName);
         }
-
         public T GetContent<T>(string key)
         {
             if (_contents.ContainsKey(key))
@@ -111,27 +102,22 @@ namespace Mvp24Hours.Infrastructure.Pipe
             }
             return default;
         }
-
         public bool HasContent<T>()
         {
             return HasContent(typeof(T).FullName);
         }
-
         public bool HasContent(string key)
         {
             return _contents.ContainsKey(key);
         }
-
         public IList<object> GetContentAll()
         {
             return _contents.Values.ToList();
         }
-
         public void SetLock()
         {
             IsLocked = true;
         }
-
         public void SetToken(string token)
         {
             if (string.IsNullOrEmpty(Token)
@@ -140,12 +126,10 @@ namespace Mvp24Hours.Infrastructure.Pipe
                 Token = token;
             }
         }
-
         public void SetFailure()
         {
             isSuccess = false;
         }
-
         #endregion
     }
 }

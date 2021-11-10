@@ -14,13 +14,22 @@ using System.Threading.Tasks;
 
 namespace Mvp24Hours.Infrastructure.Extensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class BusinessPagingExtensions
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public static Task<IPagingResult<T>> ToBusinessPagingAsync<T>(this IList<T> data, IPageResult page, ISummaryResult summary, string tokenDefault = null)
         {
             return Task.FromResult(ToBusinessPaging(data, page, summary, tokenDefault));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static IPagingResult<T> ToBusinessPaging<T>(this IList<T> data, IPageResult page, ISummaryResult summary, string tokenDefault = null)
         {
             return new PagingResult<T>(
@@ -31,6 +40,9 @@ namespace Mvp24Hours.Infrastructure.Extensions
             );
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static IPagingResult<T> ToBusinessPagingWithMessage<T>(this IList<T> data, IPageResult page, ISummaryResult summary, params IMessageResult[] messageResult)
         {
             return new PagingResult<T>(
@@ -41,11 +53,17 @@ namespace Mvp24Hours.Infrastructure.Extensions
             );
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static IPagingResult<T> ToBusinessPagingWithMessage<T>(this IList<T> value, params IMessageResult[] messageResult)
         {
             return ToBusinessPagingWithMessage(value, null, messageResult);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static IPagingResult<T> ToBusinessPagingWithMessage<T>(this IList<T> value, string tokenDefault = null, params IMessageResult[] messageResult)
         {
             if (value != null)
@@ -61,11 +79,17 @@ namespace Mvp24Hours.Infrastructure.Extensions
             return PagingResult<T>.Create(tokenDefault);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static IPagingResult<T> ToBusinessPagingWithMessage<T>(this T value, params IMessageResult[] messageResult)
         {
             return ToBusinessPagingWithMessage(value, null, messageResult);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static IPagingResult<T> ToBusinessPagingWithMessage<T>(this T value, string tokenDefault = null, params IMessageResult[] messageResult)
         {
             if (value != null)

@@ -42,6 +42,9 @@ namespace Mvp24Hours.Infrastructure.Helpers
 
         private static IConfigurationRoot _appSettings;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static IConfigurationRoot AppSettings
         {
             get

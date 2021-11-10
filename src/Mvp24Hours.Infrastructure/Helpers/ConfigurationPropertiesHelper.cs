@@ -25,8 +25,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
             {
                 if (_maxQtyByQueryPage == null)
                 {
-                    int result;
-                    if (int.TryParse((ConfigurationHelper.GetSettings("Mvp24Hours:Persistence:MaxQtyByQueryPage") ?? string.Empty), out result))
+                    if (int.TryParse((ConfigurationHelper.GetSettings("Mvp24Hours:Persistence:MaxQtyByQueryPage") ?? string.Empty), out int result))
                     {
                         _maxQtyByQueryPage = result;
                     }

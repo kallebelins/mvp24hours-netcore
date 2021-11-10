@@ -38,22 +38,18 @@ namespace Mvp24Hours.Infrastructure.Contexts
         {
             _notifications.Add(new Notification(key, message));
         }
-
         public void Add(string key, string message, MessageType type)
         {
             _notifications.Add(new Notification(key, message, type));
         }
-
         public void Add(Notification notification)
         {
             _notifications.Add(notification);
         }
-
         public void Add(IEnumerable<Notification> notifications)
         {
             _notifications.AddRange(notifications);
         }
-
         public void AddIfTrue(bool condition, string key, string message)
         {
             if (condition)
@@ -61,7 +57,6 @@ namespace Mvp24Hours.Infrastructure.Contexts
                 Add(key, message);
             }
         }
-
         public void AddIfTrue(bool condition, string key, string message, MessageType type)
         {
             if (condition)
@@ -69,7 +64,6 @@ namespace Mvp24Hours.Infrastructure.Contexts
                 Add(key, message, type);
             }
         }
-
         public void AddIfTrue(bool condition, Notification notification)
         {
             if (condition)
@@ -77,7 +71,6 @@ namespace Mvp24Hours.Infrastructure.Contexts
                 Add(notification);
             }
         }
-
         public void AddIfTrue(bool condition, IEnumerable<Notification> notifications)
         {
             if (condition)

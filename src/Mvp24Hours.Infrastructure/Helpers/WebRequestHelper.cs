@@ -21,7 +21,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
     /// <summary>
     /// Contains functions for web requests
     /// </summary>
-    public class WebRequestHelper
+    public static class WebRequestHelper
     {
         private static readonly ILoggingService _logger;
 
@@ -35,6 +35,9 @@ namespace Mvp24Hours.Infrastructure.Helpers
         /// </summary>
         public static Encoding EncodingRequest { get; set; } = Encoding.UTF8;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static string ToQueryString(params object[] objs)
         {
             if (objs == null)
@@ -53,8 +56,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
                 foreach (var p in props)
                 {
                     var value = p.GetValue(obj, null);
-                    var enumerable = value as ICollection;
-                    if (enumerable != null)
+                    if (value is ICollection enumerable)
                     {
                         result.AddRange(from object v in enumerable select string.Format("{0}={1}", p.Name, HttpUtility.UrlEncode(v.ToString())));
                     }
@@ -68,20 +70,33 @@ namespace Mvp24Hours.Infrastructure.Helpers
             return string.Join("&", result.ToArray());
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static async Task<string> PostAsync(string urlService, string data = "", Hashtable header = null, ICredentials credentials = null)
         {
             return await SendAsync(urlService, header, credentials, "POST", data);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public static async Task<string> GetAsync(string url, Hashtable header = null, ICredentials credentials = null)
         {
             return await SendAsync(url, header, credentials, "GET", null);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static async Task<string> PutAsync(string urlService, string data = "", Hashtable header = null, ICredentials credentials = null)
         {
             return await SendAsync(urlService, header, credentials, "PUT", data);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static async Task<string> DeleteAsync(string url, Hashtable header = null, ICredentials credentials = null)
         {
             return await SendAsync(url, header, credentials, "DELETE", null);
@@ -139,41 +154,27 @@ namespace Mvp24Hours.Infrastructure.Helpers
                 {
                     if (!hasData)
                     {
-                        using (var response = requisicao.GetResponse())
-                        {
-                            using (var content = response.GetResponseStream())
-                            {
-                                using (var reader = new StreamReader(content, EncodingRequest))
-                                {
-                                    result = await reader.ReadToEndAsync();
-                                }
-                            }
-                        }
+                        using var response = requisicao.GetResponse();
+                        using var content = response.GetResponseStream();
+                        using var reader = new StreamReader(content, EncodingRequest);
+                        result = await reader.ReadToEndAsync();
                     }
                     else
                     {
-                        using (var reqstream = requisicao.GetRequestStream())
-                        {
-                            reqstream.Write(bytes, 0, bytes.Length);
-                            var httpResponse = (HttpWebResponse)requisicao.GetResponse();
-                            using (var streamReader = new StreamReader(httpResponse.GetResponseStream(), EncodingRequest))
-                            {
-                                result = await streamReader.ReadToEndAsync();
-                            }
-                        }
+                        using var reqstream = requisicao.GetRequestStream();
+                        reqstream.Write(bytes, 0, bytes.Length);
+                        var httpResponse = (HttpWebResponse)requisicao.GetResponse();
+                        using var streamReader = new StreamReader(httpResponse.GetResponseStream(), EncodingRequest);
+                        result = await streamReader.ReadToEndAsync();
                     }
                 }
                 catch (WebException we)
                 {
                     if (we.Response != null)
                     {
-                        using (var stream = we.Response.GetResponseStream())
-                        {
-                            using (var reader = new StreamReader(stream))
-                            {
-                                return reader.ReadToEnd();
-                            }
-                        }
+                        using var stream = we.Response.GetResponseStream();
+                        using var reader = new StreamReader(stream);
+                        return reader.ReadToEnd();
                     }
                     else
                     {

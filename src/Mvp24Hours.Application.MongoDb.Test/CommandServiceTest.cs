@@ -20,11 +20,11 @@ namespace Mvp24Hours.Application.MongoDb.Test
     /// 
     /// </summary>
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
-    public class ServiceCommandTest
+    public class CommandServiceTest
     {
         private readonly ObjectId _oid = ObjectId.GenerateNewId();
 
-        public ServiceCommandTest()
+        public CommandServiceTest()
         {
             StartupHelper.ConfigureServices();
         }

@@ -15,6 +15,9 @@ using System.Text;
 
 namespace Mvp24Hours.Infrastructure.Logging.Renderer
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [LayoutRenderer("web_variables")]
     public class WebVariablesRenderer : LayoutRenderer
     {
@@ -27,16 +30,30 @@ namespace Mvp24Hours.Infrastructure.Logging.Renderer
             Culture = CultureInfo.InvariantCulture;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected int GetEstimatedBufferSize(LogEventInfo ev)
         {
+            if (ev.Level == LogLevel.Error)
+                return 0;
             return 10000;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public CultureInfo Culture { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [DefaultParameter]
         public string Format { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             var serverVariables = HttpContextHelper.GetContext()?.Features?.Get<IServerVariablesFeature>();
