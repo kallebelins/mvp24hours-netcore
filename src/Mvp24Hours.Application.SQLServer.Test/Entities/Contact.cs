@@ -5,7 +5,7 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-using Mvp24Hours.Application.MongoDb.Test.Enums;
+using Mvp24Hours.Application.SQLServer.Test.Enums;
 using Mvp24Hours.Core.Entities;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;

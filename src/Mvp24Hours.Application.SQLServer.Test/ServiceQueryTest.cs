@@ -5,16 +5,16 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-using Mvp24Hours.Application.MongoDb.Test.Helpers;
-using Mvp24Hours.Application.MongoDb.Test.Services;
 using Mvp24Hours.Application.SQLServer.Test.Entities;
+using Mvp24Hours.Application.SQLServer.Test.Helpers;
+using Mvp24Hours.Application.SQLServer.Test.Services;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Helpers;
 using System.Collections.Generic;
 using Xunit;
 using Xunit.Priority;
 
-namespace Mvp24Hours.Application.MongoDb.Test
+namespace Mvp24Hours.Application.SQLServer.Test
 {
     /// <summary>
     /// 

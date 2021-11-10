@@ -5,7 +5,8 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-namespace Mvp24Hours.Application.MongoDb.Test.Enums
+
+namespace Mvp24Hours.Application.SQLServer.Test.Enums
 {
     public enum ContactType
     {

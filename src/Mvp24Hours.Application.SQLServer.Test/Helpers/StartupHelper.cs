@@ -8,13 +8,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Mvp24Hours.Application.MongoDb.Test.Services;
 using Mvp24Hours.Application.SQLServer.Test.Data;
+using Mvp24Hours.Application.SQLServer.Test.Services;
 using Mvp24Hours.Application.SQLServer.Test.Services.Async;
 using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;
 
-namespace Mvp24Hours.Application.MongoDb.Test.Helpers
+namespace Mvp24Hours.Application.SQLServer.Test.Helpers
 {
     public class StartupHelper
     {
@@ -32,6 +32,10 @@ namespace Mvp24Hours.Application.MongoDb.Test.Helpers
             services.AddScoped<ContactService, ContactService>();
 
             ServiceProviderHelper.SetProvider(services.BuildServiceProvider());
+
+            // ensure database
+            var db = ServiceProviderHelper.GetService<DataContext>();
+            db.Database.EnsureCreated();
         }
 
         public static void ConfigureServicesAsync()
@@ -48,6 +52,10 @@ namespace Mvp24Hours.Application.MongoDb.Test.Helpers
             services.AddScoped<ContactServiceAsync, ContactServiceAsync>();
 
             ServiceProviderHelper.SetProvider(services.BuildServiceProvider());
+
+            // ensure database
+            var db = ServiceProviderHelper.GetService<DataContext>();
+            db.Database.EnsureCreated();
         }
     }
 }

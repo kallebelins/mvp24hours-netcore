@@ -9,7 +9,7 @@ using Mvp24Hours.Application.SQLServer.Test.Entities;
 using Mvp24Hours.Business.Logic;
 using Mvp24Hours.Core.Contract.Data;
 
-namespace Mvp24Hours.Application.MongoDb.Test.Services
+namespace Mvp24Hours.Application.SQLServer.Test.Services
 {
     public class ContactService : RepositoryService<Customer, IUnitOfWork>
     {
