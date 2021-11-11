@@ -17,10 +17,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mvp24Hours.Application\Mvp24Hours.Application.csproj" />
-    <ProjectReference Include="..\Mvp24Hours.Core\Mvp24Hours.Core.csproj" />
-    <ProjectReference Include="..\Mvp24Hours.Infrastructure.Data.EFCore\Mvp24Hours.Infrastructure.Data.EFCore.csproj" />
-    <ProjectReference Include="..\Mvp24Hours.Infrastructure\Mvp24Hours.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Mvp24Hours.Application\Mvp24Hours.Application.csproj" />
+    <ProjectReference Include="..\..\Mvp24Hours.Core\Mvp24Hours.Core.csproj" />
+    <ProjectReference Include="..\..\Mvp24Hours.Infrastructure.Data.EFCore\Mvp24Hours.Infrastructure.Data.EFCore.csproj" />
+    <ProjectReference Include="..\..\Mvp24Hours.Infrastructure\Mvp24Hours.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

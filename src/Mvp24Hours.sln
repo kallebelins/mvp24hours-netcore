@@ -20,15 +20,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B19FC8A6
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.Infrastructure.Data.Redis", "Mvp24Hours.Infrastructure.Data.Redis\Mvp24Hours.Infrastructure.Data.Redis.csproj", "{C48D8F67-47C0-483D-A872-A97917958CB1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.Application.MongoDb.Test", "Mvp24Hours.Application.MongoDb.Test\Mvp24Hours.Application.MongoDb.Test.csproj", "{812AE7FF-A16A-425A-B416-4458D00F0B45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.Application.MongoDb.Test", "Tests\Mvp24Hours.Application.MongoDb.Test\Mvp24Hours.Application.MongoDb.Test.csproj", "{812AE7FF-A16A-425A-B416-4458D00F0B45}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.Application.Redis.Test", "Mvp24Hours.Application.Redis.Test\Mvp24Hours.Application.Redis.Test.csproj", "{657620A9-4E9D-4760-A178-A2CF25D948D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.Application.Redis.Test", "Tests\Mvp24Hours.Application.Redis.Test\Mvp24Hours.Application.Redis.Test.csproj", "{657620A9-4E9D-4760-A178-A2CF25D948D5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.Application.SQLServer.Test", "Mvp24Hours.Application.SQLServer.Test\Mvp24Hours.Application.SQLServer.Test.csproj", "{4CDB96F3-3482-492D-BA37-FAAF30FF7F7F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.Application.SQLServer.Test", "Tests\Mvp24Hours.Application.SQLServer.Test\Mvp24Hours.Application.SQLServer.Test.csproj", "{4CDB96F3-3482-492D-BA37-FAAF30FF7F7F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.Application.PostgreSql.Test", "Mvp24Hours.Application.PostgreSql.Test\Mvp24Hours.Application.PostgreSql.Test.csproj", "{18E363C0-AEEA-4731-ABC2-7AEDB6B014B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.Application.PostgreSql.Test", "Tests\Mvp24Hours.Application.PostgreSql.Test\Mvp24Hours.Application.PostgreSql.Test.csproj", "{18E363C0-AEEA-4731-ABC2-7AEDB6B014B7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.Application.MySql.Test", "Mvp24Hours.Application.MySql.Test\Mvp24Hours.Application.MySql.Test.csproj", "{6F5F60A6-5B44-4B7B-B696-F63389772F81}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.Application.MySql.Test", "Tests\Mvp24Hours.Application.MySql.Test\Mvp24Hours.Application.MySql.Test.csproj", "{6F5F60A6-5B44-4B7B-B696-F63389772F81}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mvp24Hours.Infrastructure.Pipe", "Mvp24Hours.Infrastructure.Pipe\Mvp24Hours.Infrastructure.Pipe.csproj", "{87D99650-59DC-4878-BA50-57C59F048858}"
 EndProject
