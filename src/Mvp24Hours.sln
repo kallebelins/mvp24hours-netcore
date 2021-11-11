@@ -18,7 +18,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.Infrastructure.D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B19FC8A6-B1BB-4E0B-8150-E4CC0C55D05C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.Infrastructure.Data.Redis", "Tests\Mvp24Hours.Infrastructure.Data.Redis\Mvp24Hours.Infrastructure.Data.Redis.csproj", "{C48D8F67-47C0-483D-A872-A97917958CB1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.Infrastructure.Data.Redis", "Mvp24Hours.Infrastructure.Data.Redis\Mvp24Hours.Infrastructure.Data.Redis.csproj", "{C48D8F67-47C0-483D-A872-A97917958CB1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.Application.MongoDb.Test", "Tests\Mvp24Hours.Application.MongoDb.Test\Mvp24Hours.Application.MongoDb.Test.csproj", "{812AE7FF-A16A-425A-B416-4458D00F0B45}"
 EndProject
