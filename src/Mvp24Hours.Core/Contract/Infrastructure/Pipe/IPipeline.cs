@@ -5,6 +5,8 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using System;
+
 namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
 {
     /// <summary>
@@ -27,10 +29,14 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
         /// <summary>
         /// Records operations
         /// </summary>
+        IPipeline Add(Action<IPipelineMessage> operation, bool isRequired = false);
+        /// <summary>
+        /// Records operations
+        /// </summary>
         IPipeline Add<T>() where T : IOperation;
         /// <summary>
         /// Performs operations
         /// </summary>
-        IPipelineMessage Execute(IPipelineMessage input);
+        IPipelineMessage Execute(IPipelineMessage input = null);
     }
 }

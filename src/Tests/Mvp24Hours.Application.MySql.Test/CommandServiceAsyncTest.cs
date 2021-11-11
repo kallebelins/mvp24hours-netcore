@@ -7,7 +7,6 @@
 //=====================================================================================
 using Mvp24Hours.Application.MySql.Test.Entities;
 using Mvp24Hours.Application.MySql.Test.Helpers;
-using Mvp24Hours.Application.MySql.Test.Services;
 using Mvp24Hours.Application.MySql.Test.Services.Async;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Helpers;
@@ -84,7 +83,10 @@ namespace Mvp24Hours.Application.MySql.Test
             var paging = new PagingCriteria(3, 0);
             var customers = await service.ListAsync(paging);
             foreach (var item in customers)
+            {
                 item.Active = false;
+            }
+
             await service.ModifyAsync(customers);
             await service.SaveChangesAsync();
             int count = await service.GetByCountAsync(x => !x.Active);

@@ -203,7 +203,9 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
         public async Task AddAsync(T entity)
         {
             if (entity == null)
+            {
                 return;
+            }
 
             var entry = dbContext.Entry(entity);
             if (entry.State != EntityState.Detached)
@@ -219,7 +221,9 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
         public Task AddAsync(IList<T> entities)
         {
             if (!entities.AnyOrNotNull())
+            {
                 return Task.FromResult(false);
+            }
 
             return Task.WhenAll(entities?.Select(x => AddAsync(x)));
         }
@@ -227,12 +231,16 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
         public async Task ModifyAsync(T entity)
         {
             if (entity == null)
+            {
                 return;
+            }
 
             var entityDb = await dbContext.Set<T>().FindAsync(entity.EntityKey);
 
             if (entityDb == null)
+            {
                 return;
+            }
 
             // properties that can not be changed
 
@@ -252,7 +260,9 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
         public Task ModifyAsync(IList<T> entities)
         {
             if (!entities.AnyOrNotNull())
+            {
                 return Task.FromResult(false);
+            }
 
             return Task.WhenAll(entities?.Select(x => ModifyAsync(x)));
         }
@@ -260,7 +270,9 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
         public async Task RemoveAsync(T entity)
         {
             if (entity == null)
+            {
                 return;
+            }
 
             if (entity.GetType() == typeof(IEntityLog<>))
             {
@@ -278,7 +290,9 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
         public Task RemoveAsync(IList<T> entities)
         {
             if (!entities.AnyOrNotNull())
+            {
                 return Task.FromResult(false);
+            }
 
             return Task.WhenAll(entities?.Select(x => RemoveAsync(x)));
         }
@@ -287,14 +301,19 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
         {
             var entity = await GetByIdAsync(id);
             if (entity == null)
+            {
                 return;
+            }
+
             await RemoveAsync(entity);
         }
 
         public Task RemoveByIdAsync(IList<object> ids)
         {
             if (!ids.AnyOrNotNull())
+            {
                 return Task.FromResult(false);
+            }
 
             return Task.WhenAll(ids?.Select(x => RemoveByIdAsync(x)));
         }
@@ -302,7 +321,9 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
         public Task ForceRemoveAsync(T entity)
         {
             if (entity == null)
+            {
                 return Task.FromResult(false);
+            }
 
             var entry = dbContext.Entry(entity);
             if (entry.State != EntityState.Deleted)

@@ -161,7 +161,9 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         public void Dispose()
         {
             while (Session != null && Session.IsInTransaction)
+            {
                 Thread.Sleep(TimeSpan.FromMilliseconds(100));
+            }
 
             if (Session != null)
             {

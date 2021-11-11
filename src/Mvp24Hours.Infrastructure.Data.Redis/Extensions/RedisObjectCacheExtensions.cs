@@ -47,7 +47,10 @@ namespace Mvp24Hours.Infrastructure.Extensions
         public static async Task SetRedisObjectAsync<T>(this IDistributedCache cache, string key, T value, JsonSerializerSettings jsonSerializerSettings = null, CancellationToken token = default)
         {
             if (value == null)
+            {
                 return;
+            }
+
             try
             {
                 string result = value.ToSerialize(jsonSerializerSettings);
@@ -62,7 +65,10 @@ namespace Mvp24Hours.Infrastructure.Extensions
         public static async Task SetRedisObjectAsync<T>(this IDistributedCache cache, string key, T value, int minutes, JsonSerializerSettings jsonSerializerSettings = null, CancellationToken token = default)
         {
             if (value == null)
+            {
                 return;
+            }
+
             try
             {
                 string result = value.ToSerialize(jsonSerializerSettings);
@@ -77,7 +83,10 @@ namespace Mvp24Hours.Infrastructure.Extensions
         public static async Task SetRedisObjectAsync(this IDistributedCache cache, string key, string value, DateTimeOffset time, JsonSerializerSettings jsonSerializerSettings = null, CancellationToken token = default)
         {
             if (value == null)
+            {
                 return;
+            }
+
             try
             {
                 string result = value.ToSerialize(jsonSerializerSettings);

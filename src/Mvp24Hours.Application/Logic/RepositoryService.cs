@@ -191,7 +191,9 @@ namespace Mvp24Hours.Business.Logic
         public virtual void Add(IList<TEntity> entities)
         {
             if (!entities.AnyOrNotNull())
+            {
                 return;
+            }
 
             try
             {
@@ -232,7 +234,9 @@ namespace Mvp24Hours.Business.Logic
         public virtual void Modify(IList<TEntity> entities)
         {
             if (!entities.AnyOrNotNull())
+            {
                 return;
+            }
 
             try
             {
@@ -270,7 +274,9 @@ namespace Mvp24Hours.Business.Logic
         public virtual void Remove(IList<TEntity> entities)
         {
             if (!entities.AnyOrNotNull())
+            {
                 return;
+            }
 
             try
             {
@@ -308,7 +314,9 @@ namespace Mvp24Hours.Business.Logic
         public virtual void RemoveById(IList<object> ids)
         {
             if (!ids.AnyOrNotNull())
+            {
                 return;
+            }
 
             try
             {

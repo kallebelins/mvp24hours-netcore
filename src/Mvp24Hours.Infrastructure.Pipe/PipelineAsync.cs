@@ -11,6 +11,7 @@ using Mvp24Hours.Core.Enums;
 using Mvp24Hours.Core.Extensions;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Helpers;
+using Mvp24Hours.Infrastructure.Pipe.Operations;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -72,17 +73,48 @@ namespace Mvp24Hours.Infrastructure.Pipe
         #endregion
 
         #region [ Methods ]
-        public IPipelineAsync AddAsync<T>() where T : IOperationAsync, new()
+        public IPipelineAsync AddAsync<T>() where T : IOperationAsync
         {
-            return AddAsync(new T());
+            IOperationAsync instance = ServiceProviderHelper.GetService<T>();
+            if (instance == null)
+            {
+                Type type = typeof(T);
+                if (type.IsClass && !type.IsAbstract)
+                {
+                    return AddAsync(Activator.CreateInstance<T>());
+                }
+                else
+                {
+                    throw new ArgumentNullException("Operation not found. Check if it has been registered in this context.");
+                }
+            }
+            return AddAsync(instance);
         }
         public IPipelineAsync AddAsync(IOperationAsync operation)
         {
+            if (operation == null)
+            {
+                throw new ArgumentNullException("Operation has not been defined or is null.");
+            }
             this._operations.Add(operation);
             return this;
         }
-        public async Task<IPipelineMessage> Execute(IPipelineMessage input)
+        public IPipelineAsync AddAsync(Action<IPipelineMessage> action, bool isRequired = false)
         {
+            if (action == null)
+            {
+                throw new ArgumentNullException("Action is mandatory.");
+            }
+            this._operations.Add(new OperationActionAsync(action, isRequired));
+            return this;
+        }
+        public async Task<IPipelineMessage> ExecuteAsync(IPipelineMessage input = null)
+        {
+            if (input == null)
+            {
+                input = new PipelineMessage();
+            }
+
             if (!_token.HasValue())
             {
                 _token = input.Token.HasValue() ? input.Token : Guid.NewGuid().ToString();
@@ -97,7 +129,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
                     return result;
                 }
 
-                if (result.IsLocked)
+                if (!operation.IsRequired && result.IsLocked)
                 {
                     return result;
                 }

@@ -69,7 +69,9 @@ namespace Mvp24Hours.Business.Logic
                 {
                     var validator = ServiceProviderHelper.GetService<IValidatorNotify<TEntity>>();
                     if (!((IValidationModel<TEntity>)entity).IsValid(validator))
+                    {
                         return false;
+                    }
                 }
 
                 return true;

@@ -30,7 +30,9 @@ namespace Mvp24Hours.Infrastructure.Middlewares
             string credentialsCors = ConfigurationHelper.GetSettings("Mvp24Hours:Filters:Cors:Credentials");
 
             if (credentialsCors.HasValue())
+            {
                 context.Response.Headers.Add("Access-Control-Allow-Credentials", credentialsCors);
+            }
 
             string allCors = ConfigurationHelper.GetSettings("Mvp24Hours:Filters:Cors:All");
             string originCors, headersCors, methodsCors;
@@ -49,12 +51,19 @@ namespace Mvp24Hours.Infrastructure.Middlewares
             }
 
             if (originCors.HasValue())
+            {
                 context.Response.Headers.Add("Access-Control-Allow-Origin", originCors);
+            }
             // Added "Accept-Encoding" to this list
             if (headersCors.HasValue())
+            {
                 context.Response.Headers.Add("Access-Control-Allow-Headers", headersCors);
+            }
+
             if (methodsCors.HasValue())
+            {
                 context.Response.Headers.Add("Access-Control-Allow-Methods", methodsCors);
+            }
 
             // New Code Starts here
             if (context.Request.Method == "OPTIONS")

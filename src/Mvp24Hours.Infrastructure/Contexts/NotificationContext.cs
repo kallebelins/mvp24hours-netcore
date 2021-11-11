@@ -8,6 +8,7 @@
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Enums;
 using Mvp24Hours.Core.ValueObjects.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -50,12 +51,20 @@ namespace Mvp24Hours.Infrastructure.Contexts
         {
             _notifications.AddRange(notifications);
         }
+        public void AddIfTrue(bool condition, string message)
+        {
+            AddIfTrue(condition, Guid.NewGuid().ToString(), message);
+        }
         public void AddIfTrue(bool condition, string key, string message)
         {
             if (condition)
             {
                 Add(key, message);
             }
+        }
+        public void AddIfTrue(bool condition, string message, MessageType type)
+        {
+            AddIfTrue(condition, Guid.NewGuid().ToString(), message, type);
         }
         public void AddIfTrue(bool condition, string key, string message, MessageType type)
         {
@@ -78,7 +87,6 @@ namespace Mvp24Hours.Infrastructure.Contexts
                 Add(notifications);
             }
         }
-
         #endregion
     }
 }

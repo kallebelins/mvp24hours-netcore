@@ -7,7 +7,11 @@
 //=====================================================================================
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
+using Mvp24Hours.Core.Contract.Domain.Validations;
+using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Mappings;
+using Mvp24Hours.Infrastructure.Contexts;
+using Mvp24Hours.Infrastructure.Validations;
 using System.Reflection;
 
 namespace Mvp24Hours.Infrastructure.Extensions
@@ -17,6 +21,18 @@ namespace Mvp24Hours.Infrastructure.Extensions
     /// </summary>
     public static class ServiceCollectionExtensions
     {
+        /// <summary>
+        /// Adds essential services
+        /// </summary>
+        public static IServiceCollection AddMvp24HoursNotification(this IServiceCollection services)
+        {
+            // notification
+            services.AddScoped<INotificationContext, NotificationContext>();
+            services.AddScoped(typeof(IValidatorNotify<>), typeof(ValidatorNotify<>));
+
+            return services;
+        }
+
         /// <summary>
         /// Add mapping services
         /// </summary>

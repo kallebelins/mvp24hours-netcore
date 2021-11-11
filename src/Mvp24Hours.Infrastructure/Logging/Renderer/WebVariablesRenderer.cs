@@ -36,7 +36,10 @@ namespace Mvp24Hours.Infrastructure.Logging.Renderer
         protected int GetEstimatedBufferSize(LogEventInfo ev)
         {
             if (ev.Level == LogLevel.Error)
+            {
                 return 0;
+            }
+
             return 10000;
         }
 

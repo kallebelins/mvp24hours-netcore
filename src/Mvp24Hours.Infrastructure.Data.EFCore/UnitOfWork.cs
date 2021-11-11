@@ -97,7 +97,9 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
         public void Rollback(CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
+            {
                 return;
+            }
 
             var changedEntries = this.DbContext.ChangeTracker.Entries()
                 .Where(x => x.State != EntityState.Unchanged).ToList();

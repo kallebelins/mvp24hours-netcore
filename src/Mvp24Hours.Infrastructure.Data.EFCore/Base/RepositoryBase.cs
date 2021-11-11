@@ -266,7 +266,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                         Expression.Property(entityParameter, key),
                         ((value != null && value.GetType() == key.PropertyType) || typeof(TValue) == key.PropertyType)
                             ? Expression.Constant(value)
-                                : (Expression)Expression.Convert(Expression.Constant(value), key.PropertyType)),
+                                : Expression.Convert(Expression.Constant(value), key.PropertyType)),
                         entityParameter);
 
             return query.Where(lambda);

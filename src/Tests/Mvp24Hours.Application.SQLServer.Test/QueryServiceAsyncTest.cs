@@ -7,7 +7,6 @@
 //=====================================================================================
 using Mvp24Hours.Application.SQLServer.Test.Entities;
 using Mvp24Hours.Application.SQLServer.Test.Helpers;
-using Mvp24Hours.Application.SQLServer.Test.Services;
 using Mvp24Hours.Application.SQLServer.Test.Services.Async;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Helpers;
@@ -208,7 +207,7 @@ namespace Mvp24Hours.Application.SQLServer.Test
         {
             var service = ServiceProviderHelper.GetService<CustomerServiceAsync>();
             var paging = new PagingCriteriaExpression<Customer>(3, 0);
-            var customers =await service.GetByAsync(x => x.Name.Contains("Test"), paging);
+            var customers = await service.GetByAsync(x => x.Name.Contains("Test"), paging);
             Assert.True(customers != null && customers.Count == 3);
         }
         [Fact, Priority(9)]

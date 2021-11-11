@@ -24,7 +24,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test.Helpers
             var services = new ServiceCollection().AddSingleton(ConfigurationHelper.AppSettings);
 
             services.AddDbContext<DataContext>(
-                options => options.UseNpgsql(ConfigurationHelper.AppSettings.GetConnectionString("DataContext"), 
+                options => options.UseNpgsql(ConfigurationHelper.AppSettings.GetConnectionString("DataContext"),
                 options => options.SetPostgresVersion(new Version(9, 6)))
             );
 

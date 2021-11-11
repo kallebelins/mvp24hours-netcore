@@ -195,7 +195,9 @@ namespace Mvp24Hours.Business.Logic
         public virtual Task AddAsync(IList<TEntity> entities)
         {
             if (!entities.AnyOrNotNull())
+            {
                 return Task.FromResult(false);
+            }
 
             return Task.WhenAll(entities?.Select(x => AddAsync(x)));
         }
@@ -226,7 +228,9 @@ namespace Mvp24Hours.Business.Logic
         public virtual Task ModifyAsync(IList<TEntity> entities)
         {
             if (!entities.AnyOrNotNull())
+            {
                 return Task.FromResult(false);
+            }
 
             return Task.WhenAll(entities?.Select(x => ModifyAsync(x)));
         }
@@ -253,7 +257,9 @@ namespace Mvp24Hours.Business.Logic
         public virtual Task RemoveAsync(IList<TEntity> entities)
         {
             if (!entities.AnyOrNotNull())
+            {
                 return Task.FromResult(false);
+            }
 
             return Task.WhenAll(entities?.Select(x => RemoveAsync(x)));
         }
@@ -280,7 +286,9 @@ namespace Mvp24Hours.Business.Logic
         public virtual Task RemoveByIdAsync(IList<object> ids)
         {
             if (!ids.AnyOrNotNull())
+            {
                 return Task.FromResult(false);
+            }
 
             return Task.WhenAll(ids?.Select(x => RemoveByIdAsync(x)));
         }

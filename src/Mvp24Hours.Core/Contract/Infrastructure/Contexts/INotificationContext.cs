@@ -62,10 +62,23 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Contexts
         /// Adds a notification to the context from the key and message reference
         /// </summary>
         /// <param name="condition">Parameter for conditional notification</param>
+        /// <param name="message">Message for notification</param>
+        void AddIfTrue(bool condition, string message);
+        /// <summary>
+        /// Adds a notification to the context from the key and message reference
+        /// </summary>
+        /// <param name="condition">Parameter for conditional notification</param>
         /// <param name="key">Reference key</param>
         /// <param name="message">Message for notification</param>
         /// <param name="type">Type of feedback to the client</param>
         void AddIfTrue(bool condition, string key, string message, MessageType type);
+        /// <summary>
+        /// Adds a notification to the context from the key and message reference
+        /// </summary>
+        /// <param name="condition">Parameter for conditional notification</param>
+        /// <param name="message">Message for notification</param>
+        /// <param name="type">Type of feedback to the client</param>
+        void AddIfTrue(bool condition, string message, MessageType type);
         /// <summary>
         /// Adds a notification to the context
         /// </summary>

@@ -13,7 +13,6 @@ using Mvp24Hours.Application.MySql.Test.Services;
 using Mvp24Hours.Application.MySql.Test.Services.Async;
 using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;
-using System;
 
 namespace Mvp24Hours.Application.MySql.Test.Helpers
 {
@@ -23,7 +22,7 @@ namespace Mvp24Hours.Application.MySql.Test.Helpers
         {
             var services = new ServiceCollection().AddSingleton(ConfigurationHelper.AppSettings);
 
-            services.AddDbContext<DataContext>(options => 
+            services.AddDbContext<DataContext>(options =>
                 options.UseMySQL(ConfigurationHelper.AppSettings.GetConnectionString("DataContext")));
 
             services.AddMvp24HoursDbService<DataContext>();

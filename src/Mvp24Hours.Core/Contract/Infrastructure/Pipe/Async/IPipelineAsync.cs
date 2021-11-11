@@ -5,12 +5,13 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using System;
 using System.Threading.Tasks;
 
 namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
 {
     /// <summary>
-    /// Defines pipeline engine
+    /// Defines pipeline engine async
     /// </summary>
     /// <example>
     /// <code>
@@ -23,16 +24,20 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
     public interface IPipelineAsync
     {
         /// <summary>
-        /// Records operations
+        /// Records async operations
         /// </summary>
         IPipelineAsync AddAsync(IOperationAsync operation);
         /// <summary>
-        /// Records operations
+        /// Records async operations
         /// </summary>
-        IPipelineAsync AddAsync<T>() where T : IOperationAsync, new();
+        IPipelineAsync AddAsync(Action<IPipelineMessage> operation, bool isRequired = false);
         /// <summary>
-        /// Performs operations
+        /// Records async operations
         /// </summary>
-        Task<IPipelineMessage> Execute(IPipelineMessage input);
+        IPipelineAsync AddAsync<T>() where T : IOperationAsync;
+        /// <summary>
+        /// Performs async operations
+        /// </summary>
+        Task<IPipelineMessage> ExecuteAsync(IPipelineMessage input = null);
     }
 }

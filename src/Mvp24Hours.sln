@@ -30,7 +30,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.Application.Post
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.Application.MySql.Test", "Tests\Mvp24Hours.Application.MySql.Test\Mvp24Hours.Application.MySql.Test.csproj", "{6F5F60A6-5B44-4B7B-B696-F63389772F81}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mvp24Hours.Infrastructure.Pipe", "Mvp24Hours.Infrastructure.Pipe\Mvp24Hours.Infrastructure.Pipe.csproj", "{87D99650-59DC-4878-BA50-57C59F048858}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.Infrastructure.Pipe", "Mvp24Hours.Infrastructure.Pipe\Mvp24Hours.Infrastructure.Pipe.csproj", "{87D99650-59DC-4878-BA50-57C59F048858}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mvp24Hours.Application.Pipe.Test", "Tests\Mvp24Hours.Application.Pipe.Test\Mvp24Hours.Application.Pipe.Test.csproj", "{98754928-13F1-48C4-9E06-1FEC25A5AEAC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -94,6 +96,10 @@ Global
 		{87D99650-59DC-4878-BA50-57C59F048858}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87D99650-59DC-4878-BA50-57C59F048858}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87D99650-59DC-4878-BA50-57C59F048858}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98754928-13F1-48C4-9E06-1FEC25A5AEAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98754928-13F1-48C4-9E06-1FEC25A5AEAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98754928-13F1-48C4-9E06-1FEC25A5AEAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98754928-13F1-48C4-9E06-1FEC25A5AEAC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -104,6 +110,7 @@ Global
 		{4CDB96F3-3482-492D-BA37-FAAF30FF7F7F} = {B19FC8A6-B1BB-4E0B-8150-E4CC0C55D05C}
 		{18E363C0-AEEA-4731-ABC2-7AEDB6B014B7} = {B19FC8A6-B1BB-4E0B-8150-E4CC0C55D05C}
 		{6F5F60A6-5B44-4B7B-B696-F63389772F81} = {B19FC8A6-B1BB-4E0B-8150-E4CC0C55D05C}
+		{98754928-13F1-48C4-9E06-1FEC25A5AEAC} = {B19FC8A6-B1BB-4E0B-8150-E4CC0C55D05C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1CAAF17E-39C7-40C6-A4BE-09BC5EE90B95}
