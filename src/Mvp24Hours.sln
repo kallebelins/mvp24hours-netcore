@@ -30,6 +30,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.Application.Post
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.Application.MySql.Test", "Mvp24Hours.Application.MySql.Test\Mvp24Hours.Application.MySql.Test.csproj", "{6F5F60A6-5B44-4B7B-B696-F63389772F81}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mvp24Hours.Infrastructure.Pipe", "Mvp24Hours.Infrastructure.Pipe\Mvp24Hours.Infrastructure.Pipe.csproj", "{87D99650-59DC-4878-BA50-57C59F048858}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -88,6 +90,10 @@ Global
 		{6F5F60A6-5B44-4B7B-B696-F63389772F81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F5F60A6-5B44-4B7B-B696-F63389772F81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F5F60A6-5B44-4B7B-B696-F63389772F81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87D99650-59DC-4878-BA50-57C59F048858}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87D99650-59DC-4878-BA50-57C59F048858}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87D99650-59DC-4878-BA50-57C59F048858}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87D99650-59DC-4878-BA50-57C59F048858}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
