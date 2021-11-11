@@ -16,6 +16,7 @@ using Microsoft.OpenApi.Models;
 using Mvp24Hours.Core.Contract.Domain.Validations;
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Infrastructure.Contexts;
+using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;
 using Mvp24Hours.Infrastructure.Validations;
 using Mvp24Hours.WebAPI.Filters;
@@ -45,7 +46,6 @@ namespace Mvp24Hours.WebAPI.Extensions
             #endregion
 
             #region [ Filters ]
-            services.AddScoped<INotificationContext, NotificationContext>();
             services.AddScoped<IHATEOASContext, HATEOASContext>();
 
             services.AddMvc(options =>
@@ -60,7 +60,7 @@ namespace Mvp24Hours.WebAPI.Extensions
             #endregion
 
             // notification
-            services.AddScoped(typeof(IValidatorNotify<>), typeof(ValidatorNotify<>));
+            services.AddMvp24HoursNotification();
 
             return services;
         }
