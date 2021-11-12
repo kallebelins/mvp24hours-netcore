@@ -29,13 +29,25 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
         /// <summary>
         /// Records operations
         /// </summary>
-        IPipeline Add(Action<IPipelineMessage> operation, bool isRequired = false);
+        IPipeline Add(Action<IPipelineMessage> action, bool isRequired = false);
         /// <summary>
         /// Records operations
         /// </summary>
         IPipeline Add<T>() where T : IOperation;
         /// <summary>
-        /// Performs operations
+        /// Records operations interceptors
+        /// </summary>
+        IPipeline AddInterceptors(IOperation operation, bool postOperation = false);
+        /// <summary>
+        /// Records operations interceptors
+        /// </summary>
+        IPipeline AddInterceptors(Action<IPipelineMessage> action, bool postOperation = false);
+        /// <summary>
+        /// Records operations interceptors
+        /// </summary>
+        IPipeline AddInterceptors<T>(bool postOperation = false) where T : IOperation;
+        /// <summary>
+        /// Performs operations 
         /// </summary>
         IPipelineMessage Execute(IPipelineMessage input = null);
     }

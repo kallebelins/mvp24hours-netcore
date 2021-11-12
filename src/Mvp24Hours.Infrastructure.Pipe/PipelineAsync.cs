@@ -10,6 +10,7 @@ using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Core.Enums;
 using Mvp24Hours.Core.Extensions;
 using Mvp24Hours.Core.ValueObjects.Logic;
+using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;
 using Mvp24Hours.Infrastructure.Pipe.Operations;
 using System;
@@ -57,7 +58,9 @@ namespace Mvp24Hours.Infrastructure.Pipe
         #region [ Fields / Properties ]
 
         #region [ Fields ]
-        private readonly IList<IOperationAsync> _operations = new List<IOperationAsync>();
+        private readonly IList<IOperationAsync> operations = new List<IOperationAsync>();
+        private readonly IList<IOperationAsync> preOperationsInterceptors = new List<IOperationAsync>();
+        private readonly IList<IOperationAsync> postOperationsInterceptors = new List<IOperationAsync>();
         private readonly bool _isBreakOnFail;
         private string _token;
         #endregion
@@ -96,7 +99,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
             {
                 throw new ArgumentNullException("Operation has not been defined or is null.");
             }
-            this._operations.Add(operation);
+            this.operations.Add(operation);
             return this;
         }
         public IPipelineAsync AddAsync(Action<IPipelineMessage> action, bool isRequired = false)
@@ -105,11 +108,69 @@ namespace Mvp24Hours.Infrastructure.Pipe
             {
                 throw new ArgumentNullException("Action is mandatory.");
             }
-            this._operations.Add(new OperationActionAsync(action, isRequired));
+            this.operations.Add(new OperationActionAsync(action, isRequired));
+            return this;
+        }
+        public IPipelineAsync AddInterceptorsAsync<T>(bool postOperation = false) where T : IOperationAsync
+        {
+            IOperationAsync instance = ServiceProviderHelper.GetService<T>();
+            if (instance == null)
+            {
+                Type type = typeof(T);
+                if (type.IsClass && !type.IsAbstract)
+                {
+                    return AddInterceptorsAsync(Activator.CreateInstance<T>(), postOperation);
+                }
+                else
+                {
+                    throw new ArgumentNullException("Operation not found. Check if it has been registered in this context.");
+                }
+            }
+            return AddInterceptorsAsync(instance, postOperation);
+        }
+        public IPipelineAsync AddInterceptorsAsync(IOperationAsync operation, bool postOperation = false)
+        {
+            if (operation == null)
+            {
+                throw new ArgumentNullException("Operation has not been defined or is null.");
+            }
+            if (postOperation)
+            {
+                this.postOperationsInterceptors.Add(operation);
+            }
+            else
+            {
+                this.preOperationsInterceptors.Add(operation);
+            }
+            return this;
+        }
+        public IPipelineAsync AddInterceptorsAsync(Action<IPipelineMessage> action, bool postOperation = false)
+        {
+            if (action == null)
+            {
+                throw new ArgumentNullException("Action is mandatory.");
+            }
+            if (postOperation)
+            {
+                this.postOperationsInterceptors.Add(new OperationActionAsync(action));
+            }
+            else
+            {
+                this.preOperationsInterceptors.Add(new OperationActionAsync(action));
+            }
             return this;
         }
         public async Task<IPipelineMessage> ExecuteAsync(IPipelineMessage input = null)
         {
+            return await RunOperationsAsync(this.operations, input);
+        }
+        internal async Task<IPipelineMessage> RunOperationsAsync(IList<IOperationAsync> _operations, IPipelineMessage input = null, bool onlyOperationDefault = false)
+        {
+            if (!_operations.AnyOrNotNull())
+            {
+                return input;
+            }
+
             if (input == null)
             {
                 input = new PipelineMessage();
@@ -120,7 +181,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
                 _token = input.Token.HasValue() ? input.Token : Guid.NewGuid().ToString();
             }
 
-            return await this._operations.Aggregate(Task.FromResult(input), async (current, operation) =>
+            return await _operations.Aggregate(Task.FromResult(input), async (current, operation) =>
             {
                 var result = await current;
                 result.SetToken(this._token);
@@ -136,7 +197,22 @@ namespace Mvp24Hours.Infrastructure.Pipe
 
                 try
                 {
-                    return await operation.Execute(result);
+                    // pre-operation
+                    if (!onlyOperationDefault)
+                    {
+                        await RunOperationsAsync(this.preOperationsInterceptors, result, true);
+                    }
+
+                    // operation
+                    await operation.Execute(result);
+
+                    // post-operation
+                    if (!onlyOperationDefault)
+                    {
+                        await RunOperationsAsync(this.postOperationsInterceptors, result, true);
+                    }
+
+                    return result;
                 }
                 catch (Exception ex)
                 {

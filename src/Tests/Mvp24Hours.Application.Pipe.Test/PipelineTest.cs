@@ -263,5 +263,41 @@ namespace Mvp24Hours.Application.Pipe.Test
 
             Assert.True(notfCtxOut.HasErrorNotifications);
         }
+
+        [Fact, Priority(8)]
+        public void Pipeline_Interceptors()
+        {
+            var pipeline = ServiceProviderHelper.GetService<IPipeline>();
+
+            // operations
+            pipeline.Add(_ =>
+            {
+                Trace.WriteLine("Test 1");
+            });
+            pipeline.Add(_ =>
+            {
+                Trace.WriteLine("Test 2");
+            });
+            pipeline.Add(_ =>
+            {
+                Trace.WriteLine("Test 3");
+            });
+
+            // interceptors -> pre-operation
+            pipeline.AddInterceptors(_ =>
+            {
+                Trace.WriteLine("Pre-Operation");
+            });
+
+            // interceptors -> post-operation
+            pipeline.AddInterceptors(_ =>
+            {
+                Trace.WriteLine("Post-Operation");
+            }, true);
+
+            var result = pipeline.Execute();
+            Assert.True(result != null);
+        }
+
     }
 }
