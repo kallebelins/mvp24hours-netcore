@@ -21,11 +21,12 @@ namespace Mvp24Hours.Application.SQLServer.Test
     /// 
     /// </summary>
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
-    public class QueryServiceTest
+    public class Test1QueryService
     {
-        public QueryServiceTest()
+        public Test1QueryService()
         {
             StartupHelper.ConfigureServices();
+            StartupHelper.LoadData();
         }
 
         #region [ List ]

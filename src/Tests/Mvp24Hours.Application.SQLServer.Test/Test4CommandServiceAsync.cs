@@ -22,9 +22,9 @@ namespace Mvp24Hours.Application.SQLServer.Test
     /// 
     /// </summary>
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
-    public class CommandServiceAsyncTest
+    public class Test4CommandServiceAsync
     {
-        public CommandServiceAsyncTest()
+        public Test4CommandServiceAsync()
         {
             StartupHelper.ConfigureServicesAsync();
         }
