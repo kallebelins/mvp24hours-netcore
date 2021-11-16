@@ -8,7 +8,6 @@
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.Serialization;
 
@@ -23,7 +22,7 @@ namespace Mvp24Hours.Core.ValueObjects.Logic
         #region [ Ctor ]
 
         public BusinessResult(
-            IReadOnlyCollection<T> data = null,
+            T data = default,
             IReadOnlyCollection<IMessageResult> messages = null,
             string token = null
         )
@@ -41,7 +40,7 @@ namespace Mvp24Hours.Core.ValueObjects.Logic
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IBusinessResult{T}.Data"/>
         /// </summary>
         [DataMember]
-        public IReadOnlyCollection<T> Data { get; }
+        public T Data { get; }
 
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IBusinessResult{T}.Messages"/>
@@ -81,40 +80,6 @@ namespace Mvp24Hours.Core.ValueObjects.Logic
             yield return Messages;
         }
 
-        #endregion
-
-        #region [ Static's ]
-
-        public static IBusinessResult<T> Create(params IMessageResult[] messageResult)
-        {
-            return Create(null, messageResult);
-        }
-
-        public static IBusinessResult<T> Create(string tokenDefault, params IMessageResult[] messageResult)
-        {
-            return new BusinessResult<T>(
-                token: tokenDefault,
-                messages: new ReadOnlyCollection<IMessageResult>(messageResult?.ToList() ?? new List<IMessageResult>())
-            );
-        }
-
-        public static IBusinessResult<T> Create(T value, params IMessageResult[] messageResult)
-        {
-            return Create(value, null, messageResult);
-        }
-
-        public static IBusinessResult<T> Create(T value, string tokenDefault, params IMessageResult[] messageResult)
-        {
-            if (value != null)
-            {
-                return new BusinessResult<T>(
-                    token: tokenDefault,
-                    data: new ReadOnlyCollection<T>(new List<T> { value }),
-                    messages: new ReadOnlyCollection<IMessageResult>(messageResult?.ToList() ?? new List<IMessageResult>())
-                );
-            }
-            return new BusinessResult<T>();
-        }
         #endregion
     }
 }

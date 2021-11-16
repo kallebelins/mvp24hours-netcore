@@ -15,23 +15,40 @@ namespace Mvp24Hours.Core.Contract.Data
     /// <summary>
     /// Class with synchronous functions to load entities from instances
     /// </summary>
-    /// <typeparam name="T">Represents an entity</typeparam>
-    public interface IQueryRelation<T>
-        where T : IEntityBase
+    /// <typeparam name="TEntity">Represents an entity</typeparam>
+    public interface IQueryRelation<TEntity>
+        where TEntity : IEntityBase
     {
         /// <summary>
         /// Load entity related to model entity
         /// </summary>
-        void LoadRelation<TProperty>(T entity, Expression<Func<T, TProperty>> propertyExpression)
+        void LoadRelation<TProperty>(TEntity entity,
+            Expression<Func<TEntity, TProperty>> propertyExpression)
             where TProperty : class;
         /// <summary>
-        /// Load entities related to model entity
+        /// Load entities related to model entity with clause
         /// </summary>
-        void LoadRelation<TProperty, TKey>(T entity,
-            Expression<Func<T, IEnumerable<TProperty>>> propertyExpression,
+        void LoadRelation<TProperty>(TEntity entity,
+            Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression,
             Expression<Func<TProperty, bool>> clause = null,
-            Expression<Func<TProperty, TKey>> orderKey = null,
-            Expression<Func<TProperty, TKey>> orderDescendingKey = null,
+            int limit = 0)
+            where TProperty : class;
+        /// <summary>
+        /// Load entities related to model entity sorted by ascending
+        /// </summary>
+        void LoadRelationSortByAscending<TProperty, TKey>(TEntity entity,
+            Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression,
+            Expression<Func<TProperty, TKey>> orderKey,
+            Expression<Func<TProperty, bool>> clause = null,
+            int limit = 0)
+            where TProperty : class;
+        /// <summary>
+        /// Load entities related to model entity sorted by descending
+        /// </summary>
+        void LoadRelationSortByDescending<TProperty, TKey>(TEntity entity,
+            Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression,
+            Expression<Func<TProperty, TKey>> orderKey,
+            Expression<Func<TProperty, bool>> clause = null,
             int limit = 0)
             where TProperty : class;
     }

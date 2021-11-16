@@ -160,18 +160,32 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
         public Task LoadRelationAsync<TProperty>(T entity, Expression<Func<T, TProperty>> propertyExpression)
             where TProperty : class
         {
-            return dbContext.Entry(entity).Reference(propertyExpression).LoadAsync();
+            return this.dbContext.Entry(entity).Reference(propertyExpression).LoadAsync();
         }
 
-        public Task LoadRelationAsync<TProperty, TKey>(T entity,
-            Expression<Func<T, IEnumerable<TProperty>>> propertyExpression,
-            Expression<Func<TProperty, bool>> clause = null,
-            Expression<Func<TProperty, TKey>> orderKey = null,
-            Expression<Func<TProperty, TKey>> orderDescendingKey = null,
+        public Task LoadRelationAsync<TProperty>(T entity,
+            Expression<Func<T, IEnumerable<TProperty>>> propertyExpression, Expression<Func<TProperty, bool>> clause = null,
             int limit = 0)
             where TProperty : class
         {
-            var query = dbContext.Entry(entity).Collection(propertyExpression).Query();
+            var query = this.dbContext.Entry(entity).Collection(propertyExpression).Query();
+
+            if (clause != null)
+            {
+                query = query.Where(clause);
+            }
+
+            if (limit > 0)
+            {
+                query = query.Take(limit);
+            }
+
+            return query.ToListAsync();
+        }
+
+        public Task LoadRelationSortByAscendingAsync<TProperty, TKey>(T entity, Expression<Func<T, IEnumerable<TProperty>>> propertyExpression, Expression<Func<TProperty, TKey>> orderKey, Expression<Func<TProperty, bool>> clause = null, int limit = 0) where TProperty : class
+        {
+            var query = this.dbContext.Entry(entity).Collection(propertyExpression).Query();
 
             if (clause != null)
             {
@@ -183,9 +197,26 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                 query = query.OrderBy(orderKey);
             }
 
-            if (orderDescendingKey != null)
+            if (limit > 0)
             {
-                query = query.OrderByDescending(orderDescendingKey);
+                query = query.Take(limit);
+            }
+
+            return query.ToListAsync();
+        }
+
+        public Task LoadRelationSortByDescendingAsync<TProperty, TKey>(T entity, Expression<Func<T, IEnumerable<TProperty>>> propertyExpression, Expression<Func<TProperty, TKey>> orderKey, Expression<Func<TProperty, bool>> clause = null, int limit = 0) where TProperty : class
+        {
+            var query = this.dbContext.Entry(entity).Collection(propertyExpression).Query();
+
+            if (clause != null)
+            {
+                query = query.Where(clause);
+            }
+
+            if (orderKey != null)
+            {
+                query = query.OrderByDescending(orderKey);
             }
 
             if (limit > 0)

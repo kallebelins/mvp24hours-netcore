@@ -19,7 +19,7 @@ namespace Mvp24Hours.Application.Redis.Test.Helpers
 
             services.AddMvp24HoursRedisCache();
 
-            ServiceProviderHelper.SetProvider(services.BuildServiceProvider());
+            services.BuildMvp24HoursProvider();
         }
     }
 }

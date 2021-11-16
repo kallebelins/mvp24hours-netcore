@@ -5,13 +5,14 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Entities;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Mvp24Hours.Application.SQLServer.Test.Entities
 {
-    public class Customer : EntityBase<Customer, int>
+    public class Customer : EntityBase<Customer, int>, IEntityBase
     {
         public Customer()
         {

@@ -12,6 +12,7 @@ using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Extensions;
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace Mvp24Hours.Business.Logic
@@ -29,15 +30,15 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.GetBy(Expression{Func{T, bool}})"/>
         /// </summary>
-        public IPagingResult<TEntity> PagingGetBy(Expression<Func<TEntity, bool>> clause)
+        public IPagingResult<IList<TEntity>> GetByWithPagination(Expression<Func<TEntity, bool>> clause)
         {
-            return PagingGetBy(clause, null);
+            return GetByWithPagination(clause, null);
         }
 
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.GetBy(Expression{Func{T, bool}}, IPagingCriteria)"/>
         /// </summary>
-        public virtual IPagingResult<TEntity> PagingGetBy(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria)
+        public virtual IPagingResult<IList<TEntity>> GetByWithPagination(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria)
         {
             try
             {
@@ -74,15 +75,15 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.List()"/>
         /// </summary>
-        public IPagingResult<TEntity> PagingList()
+        public IPagingResult<IList<TEntity>> ListWithPagination()
         {
-            return this.PagingList(null);
+            return this.ListWithPagination(null);
         }
 
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.List(IPagingCriteria)"/>
         /// </summary>
-        public virtual IPagingResult<TEntity> PagingList(IPagingCriteria criteria)
+        public virtual IPagingResult<IList<TEntity>> ListWithPagination(IPagingCriteria criteria)
         {
             try
             {

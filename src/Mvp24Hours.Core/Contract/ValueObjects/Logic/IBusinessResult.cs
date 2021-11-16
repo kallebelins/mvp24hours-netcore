@@ -17,7 +17,7 @@ namespace Mvp24Hours.Core.Contract.ValueObjects.Logic
         /// <summary>
         /// Encapsulated model data list
         /// </summary>
-        IReadOnlyCollection<T> Data { get; }
+        T Data { get; }
         /// <summary>
         /// Business messages for user feedback
         /// </summary>

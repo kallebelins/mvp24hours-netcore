@@ -23,7 +23,7 @@ namespace Mvp24Hours.Business.Logic
     /// Asynchronous service for using repository and unit of work
     /// </summary>
     /// <typeparam name="TEntity">Represents an entity</typeparam>
-    public class RepositoryServiceAsync<TEntity, TUoW> : RepositoryServiceAsyncBase<TEntity, TUoW>, IQueryServiceAsync<TEntity>, ICommandServiceAsync<TEntity>, IQueryRelationServiceAsync<TEntity>
+    public class RepositoryServiceAsync<TEntity, TUoW> : RepositoryServiceAsyncBase<TUoW>, IQueryServiceAsync<TEntity>, ICommandServiceAsync<TEntity>
         where TEntity : class, IEntityBase
         where TUoW : IUnitOfWorkAsync
     {
@@ -32,11 +32,14 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{TEntity}.ListAnyAsync()"/>
         /// </summary>
-        public virtual Task<bool> ListAnyAsync()
+        public virtual Task<IBusinessResult<bool>> ListAnyAsync()
         {
             try
             {
-                return this.UnitOfWork.GetRepositoryAsync<TEntity>().ListAnyAsync();
+                return this.UnitOfWork
+                    .GetRepositoryAsync<TEntity>()
+                    .ListAnyAsync()
+                    .ToBusinessAsync();
             }
             catch (Exception ex)
             {
@@ -48,11 +51,14 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{TEntity}.ListCountAsync()"/>
         /// </summary>
-        public virtual Task<int> ListCountAsync()
+        public virtual Task<IBusinessResult<int>> ListCountAsync()
         {
             try
             {
-                return this.UnitOfWork.GetRepositoryAsync<TEntity>().ListCountAsync();
+                return this.UnitOfWork
+                    .GetRepositoryAsync<TEntity>()
+                    .ListCountAsync()
+                    .ToBusinessAsync();
             }
             catch (Exception ex)
             {
@@ -64,7 +70,7 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{TEntity}.ListAsync()"/>
         /// </summary>
-        public Task<IList<TEntity>> ListAsync()
+        public Task<IBusinessResult<IList<TEntity>>> ListAsync()
         {
             return this.ListAsync(null);
         }
@@ -72,11 +78,14 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{TEntity}.ListAsync(IPagingCriteria)"/>
         /// </summary>
-        public virtual Task<IList<TEntity>> ListAsync(IPagingCriteria criteria)
+        public virtual Task<IBusinessResult<IList<TEntity>>> ListAsync(IPagingCriteria criteria)
         {
             try
             {
-                return this.UnitOfWork.GetRepositoryAsync<TEntity>().ListAsync(criteria);
+                return this.UnitOfWork
+                    .GetRepositoryAsync<TEntity>()
+                    .ListAsync(criteria)
+                    .ToBusinessAsync();
             }
             catch (Exception ex)
             {
@@ -88,11 +97,14 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{TEntity}.GetByAnyAsync(Expression{Func{T, bool}})"/>
         /// </summary>
-        public Task<bool> GetByAnyAsync(Expression<Func<TEntity, bool>> clause)
+        public Task<IBusinessResult<bool>> GetByAnyAsync(Expression<Func<TEntity, bool>> clause)
         {
             try
             {
-                return this.UnitOfWork.GetRepositoryAsync<TEntity>().GetByAnyAsync(clause);
+                return this.UnitOfWork
+                    .GetRepositoryAsync<TEntity>()
+                    .GetByAnyAsync(clause)
+                    .ToBusinessAsync();
             }
             catch (Exception ex)
             {
@@ -104,11 +116,14 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{TEntity}.GetByCountAsync(Expression{Func{T, bool}})()"/>
         /// </summary>
-        public virtual Task<int> GetByCountAsync(Expression<Func<TEntity, bool>> clause)
+        public virtual Task<IBusinessResult<int>> GetByCountAsync(Expression<Func<TEntity, bool>> clause)
         {
             try
             {
-                return this.UnitOfWork.GetRepositoryAsync<TEntity>().GetByCountAsync(clause);
+                return this.UnitOfWork
+                    .GetRepositoryAsync<TEntity>()
+                    .GetByCountAsync(clause)
+                    .ToBusinessAsync();
             }
             catch (Exception ex)
             {
@@ -120,7 +135,7 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{TEntity}.GetByAsync(Expression{Func{T, bool}})"/>
         /// </summary>
-        public Task<IList<TEntity>> GetByAsync(Expression<Func<TEntity, bool>> clause)
+        public Task<IBusinessResult<IList<TEntity>>> GetByAsync(Expression<Func<TEntity, bool>> clause)
         {
             return GetByAsync(clause, null);
         }
@@ -128,11 +143,14 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{TEntity}.GetByAsync(Expression{Func{T, bool}}, IPagingCriteria)"/>
         /// </summary>
-        public virtual Task<IList<TEntity>> GetByAsync(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria)
+        public virtual Task<IBusinessResult<IList<TEntity>>> GetByAsync(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria)
         {
             try
             {
-                return UnitOfWork.GetRepositoryAsync<TEntity>().GetByAsync(clause, criteria);
+                return UnitOfWork
+                    .GetRepositoryAsync<TEntity>()
+                    .GetByAsync(clause, criteria)
+                    .ToBusinessAsync();
             }
             catch (Exception ex)
             {
@@ -144,7 +162,7 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{TEntity}.GetByIdAsync(int)"/>
         /// </summary>
-        public Task<TEntity> GetByIdAsync(object id)
+        public Task<IBusinessResult<TEntity>> GetByIdAsync(object id)
         {
             return this.GetByIdAsync(id, null);
         }
@@ -152,11 +170,14 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{TEntity}.GetByIdAsync(int, IPagingCriteria)"/>
         /// </summary>
-        public virtual Task<TEntity> GetByIdAsync(object id, IPagingCriteria criteria)
+        public virtual Task<IBusinessResult<TEntity>> GetByIdAsync(object id, IPagingCriteria criteria)
         {
             try
             {
-                return this.UnitOfWork.GetRepositoryAsync<TEntity>().GetByIdAsync(id, criteria);
+                return this.UnitOfWork
+                    .GetRepositoryAsync<TEntity>()
+                    .GetByIdAsync(id, criteria)
+                    .ToBusinessAsync();
             }
             catch (Exception ex)
             {
@@ -178,9 +199,11 @@ namespace Mvp24Hours.Business.Logic
             {
                 if (!(await Validate(entity)))
                 {
-                    await Task.FromResult(false);
+                    await false.TaskResult();
                 }
-                await this.UnitOfWork.GetRepositoryAsync<TEntity>().AddAsync(entity);
+                await this.UnitOfWork
+                    .GetRepositoryAsync<TEntity>()
+                    .AddAsync(entity);
             }
             catch (Exception ex)
             {
@@ -211,7 +234,7 @@ namespace Mvp24Hours.Business.Logic
             {
                 if (!(await Validate(entity)))
                 {
-                    await Task.FromResult(false);
+                    await false.TaskResult();
                 }
                 await this.UnitOfWork.GetRepositoryAsync<TEntity>().ModifyAsync(entity);
             }
@@ -229,7 +252,7 @@ namespace Mvp24Hours.Business.Logic
         {
             if (!entities.AnyOrNotNull())
             {
-                return Task.FromResult(false);
+                return false.TaskResult();
             }
 
             return Task.WhenAll(entities?.Select(x => ModifyAsync(x)));
@@ -258,7 +281,7 @@ namespace Mvp24Hours.Business.Logic
         {
             if (!entities.AnyOrNotNull())
             {
-                return Task.FromResult(false);
+                return false.TaskResult();
             }
 
             return Task.WhenAll(entities?.Select(x => RemoveAsync(x)));
@@ -287,7 +310,7 @@ namespace Mvp24Hours.Business.Logic
         {
             if (!ids.AnyOrNotNull())
             {
-                return Task.FromResult(false);
+                return false.TaskResult();
             }
 
             return Task.WhenAll(ids?.Select(x => RemoveByIdAsync(x)));
@@ -301,43 +324,6 @@ namespace Mvp24Hours.Business.Logic
             try
             {
                 return this.UnitOfWork.SaveChangesAsync(cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                Logging.Error(ex);
-                throw;
-            }
-        }
-
-        #endregion
-
-        #region [ Implements IQueryRelationServiceAsync ]
-
-        public Task LoadRelationAsync<TProperty>(TEntity entity, Expression<Func<TEntity, TProperty>> propertyExpression)
-            where TProperty : class
-        {
-            try
-            {
-                return this.UnitOfWork.GetRepositoryAsync<TEntity>().LoadRelationAsync(entity, propertyExpression);
-            }
-            catch (Exception ex)
-            {
-                Logging.Error(ex);
-                throw;
-            }
-        }
-
-        public Task LoadRelationAsync<TProperty, TKey>(TEntity entity,
-            Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression,
-            Expression<Func<TProperty, bool>> clause = null,
-            Expression<Func<TProperty, TKey>> orderKey = null,
-            Expression<Func<TProperty, TKey>> orderDescendingKey = null,
-            int limit = 0)
-            where TProperty : class
-        {
-            try
-            {
-                return this.UnitOfWork.GetRepositoryAsync<TEntity>().LoadRelationAsync(entity, propertyExpression, clause, orderKey, orderDescendingKey, limit);
             }
             catch (Exception ex)
             {

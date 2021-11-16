@@ -10,10 +10,11 @@ using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.Logic;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Core.ValueObjects.Logic;
-using Mvp24Hours.Infrastructure.Extensions;
 using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Mvp24Hours.Infrastructure.Extensions;
+using System.Collections.Generic;
 
 namespace Mvp24Hours.Business.Logic
 {
@@ -27,15 +28,15 @@ namespace Mvp24Hours.Business.Logic
     {
         #region [ Implements IPagingBaseAsyncBO ]
 
-        public Task<IPagingResult<TEntity>> PagingGetByAsync(Expression<Func<TEntity, bool>> clause)
+        public Task<IPagingResult<IList<TEntity>>> GetByWithPaginationAsync(Expression<Func<TEntity, bool>> clause)
         {
-            return PagingGetByAsync(clause, null);
+            return GetByWithPaginationAsync(clause, null);
         }
 
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.GetByAsync(Expression{Func{T, bool}}, IPagingCriteria)"/>
         /// </summary>
-        public virtual async Task<IPagingResult<TEntity>> PagingGetByAsync(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria)
+        public virtual async Task<IPagingResult<IList<TEntity>>> GetByWithPaginationAsync(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria)
         {
             try
             {
@@ -55,7 +56,7 @@ namespace Mvp24Hours.Business.Logic
 
                 var items = await repo.GetByAsync(clause, criteria);
 
-                var result = await items.ToBusinessPagingAsync(
+                var result = items.ToBusinessPaging(
                     new PageResult(limit, offset, items.Count),
                     new SummaryResult(totalCount, totalPages)
                 );
@@ -72,15 +73,15 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.ListAsync()"/>
         /// </summary>
-        public Task<IPagingResult<TEntity>> PagingListAsync()
+        public Task<IPagingResult<IList<TEntity>>> ListWithPaginationAsync()
         {
-            return this.PagingListAsync(null);
+            return this.ListWithPaginationAsync(null);
         }
 
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.ListAsync(IPagingCriteria)"/>
         /// </summary>
-        public virtual async Task<IPagingResult<TEntity>> PagingListAsync(IPagingCriteria criteria)
+        public virtual async Task<IPagingResult<IList<TEntity>>> ListWithPaginationAsync(IPagingCriteria criteria)
         {
             try
             {
@@ -100,7 +101,7 @@ namespace Mvp24Hours.Business.Logic
 
                 var items = await repo.ListAsync(criteria);
 
-                var result = await items.ToBusinessPagingAsync(
+                var result = items.ToBusinessPaging(
                     new PageResult(limit, offset, items.Count),
                     new SummaryResult(totalCount, totalPages)
                 );

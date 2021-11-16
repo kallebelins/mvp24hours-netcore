@@ -5,27 +5,29 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-using Mvp24Hours.Application.PostgreSql.Test.Entities;
-using Mvp24Hours.Application.PostgreSql.Test.Helpers;
-using Mvp24Hours.Application.PostgreSql.Test.Services;
+using Mvp24Hours.Application.MySql.Test.Entities;
+using Mvp24Hours.Application.MySql.Test.Helpers;
+using Mvp24Hours.Application.MySql.Test.Services;
 using Mvp24Hours.Core.ValueObjects.Logic;
+using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 using Xunit.Priority;
 
-namespace Mvp24Hours.Application.PostgreSql.Test
+namespace Mvp24Hours.Application.MySql.Test
 {
     /// <summary>
     /// 
     /// </summary>
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
-    public class QueryServiceTest
+    public class Test1QueryService
     {
-        public QueryServiceTest()
+        public Test1QueryService()
         {
             StartupHelper.ConfigureServices();
+            StartupHelper.LoadData();
         }
 
         #region [ List ]
@@ -33,54 +35,47 @@ namespace Mvp24Hours.Application.PostgreSql.Test
         public void Get_Filter_Customer_List()
         {
             var service = ServiceProviderHelper.GetService<CustomerService>();
-            var customers = service.List();
-            Assert.True(customers != null && customers.Count > 0);
+            Assert.True(service.List().HasData());
         }
         [Fact, Priority(3)]
         public void Get_Filter_Customer_List_Any()
         {
             var service = ServiceProviderHelper.GetService<CustomerService>();
-            bool any = service.ListAny();
-            Assert.True(any);
+            Assert.True(service.ListAny().GetDataValue());
         }
         [Fact, Priority(4)]
         public void Get_Filter_Customer_List_Count()
         {
             var service = ServiceProviderHelper.GetService<CustomerService>();
-            int count = service.ListCount();
-            Assert.True(count > 0);
+            Assert.True(service.ListCount().GetDataValue() > 0);
         }
         [Fact, Priority(5)]
-        public void Get_Filter_Customer_List_Pagging()
+        public void Get_Filter_Customer_List_Paging()
         {
             var service = ServiceProviderHelper.GetService<CustomerService>();
             var paging = new PagingCriteria(3, 0);
-            var customers = service.List(paging);
-            Assert.True(customers != null && customers.Count == 3);
+            Assert.True(service.List(paging).HasDataCount(3));
         }
         [Fact, Priority(5)]
         public void Get_Filter_Customer_List_Navigation()
         {
             var service = ServiceProviderHelper.GetService<CustomerService>();
             var paging = new PagingCriteria(3, 0, navigation: new List<string> { "Contacts" });
-            var customers = service.List(paging);
-            Assert.True(customers != null && customers.Count == 3);
+            Assert.True(service.List(paging).HasDataCount(3));
         }
         [Fact, Priority(6)]
         public void Get_Filter_Customer_List_Order_Asc()
         {
             var service = ServiceProviderHelper.GetService<CustomerService>();
             var paging = new PagingCriteria(3, 0, new List<string> { "Name" });
-            var customers = service.List(paging);
-            Assert.True(customers != null && customers.Count == 3);
+            Assert.True(service.List(paging).HasDataCount(3));
         }
         [Fact, Priority(6)]
         public void Get_Filter_Customer_List_Order_Desc()
         {
             var service = ServiceProviderHelper.GetService<CustomerService>();
             var paging = new PagingCriteria(3, 0, new List<string> { "Name desc" });
-            var customers = service.List(paging);
-            Assert.True(customers != null && customers.Count == 3);
+            Assert.True(service.List(paging).HasDataCount(3));
         }
         [Fact, Priority(7)]
         public void Get_Filter_Customer_List_Order_Asc_Expression()
@@ -88,8 +83,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             var service = ServiceProviderHelper.GetService<CustomerService>();
             var paging = new PagingCriteriaExpression<Customer>(3, 0);
             paging.OrderByAscendingExpr.Add(x => x.Name);
-            var customers = service.List(paging);
-            Assert.True(customers != null && customers.Count == 3);
+            Assert.True(service.List(paging).HasDataCount(3));
         }
         [Fact, Priority(8)]
         public void Get_Filter_Customer_List_Order_Desc_Expression()
@@ -97,16 +91,14 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             var service = ServiceProviderHelper.GetService<CustomerService>();
             var paging = new PagingCriteriaExpression<Customer>(3, 0);
             paging.OrderByDescendingExpr.Add(x => x.Name);
-            var customers = service.List(paging);
-            Assert.True(customers != null && customers.Count == 3);
+            Assert.True(service.List(paging).HasDataCount(3));
         }
         [Fact, Priority(9)]
-        public void Get_Filter_Customer_List_Pagging_Expression()
+        public void Get_Filter_Customer_List_Paging_Expression()
         {
             var service = ServiceProviderHelper.GetService<CustomerService>();
             var paging = new PagingCriteriaExpression<Customer>(3, 0);
-            var customers = service.List(paging);
-            Assert.True(customers != null && customers.Count == 3);
+            Assert.True(service.List(paging).HasDataCount(3));
         }
         [Fact, Priority(9)]
         public void Get_Filter_Customer_List_Navigation_Expression()
@@ -114,8 +106,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             var service = ServiceProviderHelper.GetService<CustomerService>();
             var paging = new PagingCriteriaExpression<Customer>(3, 0);
             paging.NavigationExpr.Add(x => x.Contacts);
-            var customers = service.List(paging);
-            Assert.True(customers != null && customers.Count == 3);
+            Assert.True(service.List(paging).HasDataCount(3));
         }
         #endregion
 
@@ -125,62 +116,68 @@ namespace Mvp24Hours.Application.PostgreSql.Test
         {
             var service = ServiceProviderHelper.GetService<CustomerService>();
             var paging = new PagingCriteria(1, 0);
-            var customer = service.GetBy(x => x.Name.Contains("Test"), paging)?.FirstOrDefault();
-            customer = service.GetById(customer?.Id);
+            var customer = service.GetBy(x => x.Name.Contains("Test"), paging)
+                .GetDataFirstOrDefault() as Customer;
+            customer = service.GetById(customer?.Id)
+                .GetDataFirstOrDefault() as Customer;
             Assert.True(customer != null);
+        }
+        [Fact, Priority(2)]
+        public void Get_Filter_Customer_GetById_Navigation()
+        {
+            var service = ServiceProviderHelper.GetService<CustomerService>();
+            var paging = new PagingCriteria(1, 0, navigation: new List<string> { "Contacts" });
+            var customer = service.GetBy(x => x.Contacts.Any(), paging)
+                .GetDataFirstOrDefault() as Customer;
+            customer = service.GetById(customer?.Id, paging)
+                .GetDataFirstOrDefault() as Customer;
+            Assert.True(customer.Contacts.AnyOrNotNull());
         }
         [Fact, Priority(2)]
         public void Get_Filter_Customer_GetBy()
         {
             var service = ServiceProviderHelper.GetService<CustomerService>();
-            var customers = service.GetBy(x => x.Name.Contains("Test"));
-            Assert.True(customers != null && customers.Count > 0);
+            Assert.True(service.GetBy(x => x.Name.Contains("Test")).HasData());
         }
         [Fact, Priority(3)]
         public void Get_Filter_Customer_GetBy_Any()
         {
             var service = ServiceProviderHelper.GetService<CustomerService>();
-            bool any = service.GetByAny(x => x.Name.Contains("Test"));
-            Assert.True(any);
+            Assert.True(service.GetByAny(x => x.Name.Contains("Test")).GetDataValue());
         }
         [Fact, Priority(4)]
         public void Get_Filter_Customer_GetBy_Count()
         {
             var service = ServiceProviderHelper.GetService<CustomerService>();
-            int count = service.GetByCount(x => x.Name.Contains("Test"));
-            Assert.True(count > 0);
+            Assert.True(service.GetByCount(x => x.Name.Contains("Test")).GetDataValue() > 0);
         }
         [Fact, Priority(5)]
-        public void Get_Filter_Customer_GetBy_Pagging()
+        public void Get_Filter_Customer_GetBy_Paging()
         {
             var service = ServiceProviderHelper.GetService<CustomerService>();
             var paging = new PagingCriteria(3, 0);
-            var customers = service.GetBy(x => x.Name.Contains("Test"), paging);
-            Assert.True(customers != null && customers.Count == 3);
+            Assert.True(service.GetBy(x => x.Name.Contains("Test"), paging).HasDataCount(3));
         }
         [Fact, Priority(5)]
         public void Get_Filter_Customer_GetBy_Navigation()
         {
             var service = ServiceProviderHelper.GetService<CustomerService>();
             var paging = new PagingCriteria(3, 0, navigation: new List<string> { "Contacts" });
-            var customers = service.GetBy(x => x.Name.Contains("Test"), paging);
-            Assert.True(customers != null && customers.Count == 3);
+            Assert.True(service.GetBy(x => x.Name.Contains("Test"), paging).HasDataCount(3));
         }
         [Fact, Priority(6)]
         public void Get_Filter_Customer_GetBy_Order_Asc()
         {
             var service = ServiceProviderHelper.GetService<CustomerService>();
             var paging = new PagingCriteria(3, 0, new List<string> { "Name" });
-            var customers = service.GetBy(x => x.Name.Contains("Test"), paging);
-            Assert.True(customers != null && customers.Count == 3);
+            Assert.True(service.GetBy(x => x.Name.Contains("Test"), paging).HasDataCount(3));
         }
         [Fact, Priority(6)]
         public void Get_Filter_Customer_GetBy_Order_Desc()
         {
             var service = ServiceProviderHelper.GetService<CustomerService>();
             var paging = new PagingCriteria(3, 0, new List<string> { "Name desc" });
-            var customers = service.GetBy(x => x.Name.Contains("Test"), paging);
-            Assert.True(customers != null && customers.Count == 3);
+            Assert.True(service.GetBy(x => x.Name.Contains("Test"), paging).HasDataCount(3));
         }
         [Fact, Priority(7)]
         public void Get_Filter_Customer_GetBy_Order_Asc_Expression()
@@ -188,8 +185,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             var service = ServiceProviderHelper.GetService<CustomerService>();
             var paging = new PagingCriteriaExpression<Customer>(3, 0);
             paging.OrderByAscendingExpr.Add(x => x.Name);
-            var customers = service.GetBy(x => x.Name.Contains("Test"), paging);
-            Assert.True(customers != null && customers.Count == 3);
+            Assert.True(service.GetBy(x => x.Name.Contains("Test"), paging).HasDataCount(3));
         }
         [Fact, Priority(8)]
         public void Get_Filter_Customer_GetBy_Order_Desc_Expression()
@@ -197,16 +193,14 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             var service = ServiceProviderHelper.GetService<CustomerService>();
             var paging = new PagingCriteriaExpression<Customer>(3, 0);
             paging.OrderByDescendingExpr.Add(x => x.Name);
-            var customers = service.GetBy(x => x.Name.Contains("Test"), paging);
-            Assert.True(customers != null && customers.Count == 3);
+            Assert.True(service.GetBy(x => x.Name.Contains("Test"), paging).HasDataCount(3));
         }
         [Fact, Priority(9)]
-        public void Get_Filter_Customer_GetBy_Pagging_Expression()
+        public void Get_Filter_Customer_GetBy_Paging_Expression()
         {
             var service = ServiceProviderHelper.GetService<CustomerService>();
             var paging = new PagingCriteriaExpression<Customer>(3, 0);
-            var customers = service.GetBy(x => x.Name.Contains("Test"), paging);
-            Assert.True(customers != null && customers.Count == 3);
+            Assert.True(service.GetBy(x => x.Name.Contains("Test"), paging).HasDataCount(3));
         }
         [Fact, Priority(9)]
         public void Get_Filter_Customer_GetBy_Navigation_Expression()
@@ -214,8 +208,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             var service = ServiceProviderHelper.GetService<CustomerService>();
             var paging = new PagingCriteriaExpression<Customer>(3, 0);
             paging.NavigationExpr.Add(x => x.Contacts);
-            var customers = service.GetBy(x => x.Name.Contains("Test"), paging);
-            Assert.True(customers != null && customers.Count == 3);
+            Assert.True(service.GetBy(x => x.Name.Contains("Test"), paging).HasDataCount(3));
         }
         #endregion
     }

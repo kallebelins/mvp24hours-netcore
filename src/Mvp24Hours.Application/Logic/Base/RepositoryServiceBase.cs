@@ -19,8 +19,7 @@ namespace Mvp24Hours.Business.Logic
     /// Base service for using repository and unit of work
     /// </summary>
     /// <typeparam name="TEntity">Represents an entity</typeparam>
-    public abstract class RepositoryServiceBase<TEntity, TUoW>
-        where TEntity : class, IEntityBase
+    public abstract class RepositoryServiceBase<TUoW>
         where TUoW : IUnitOfWork
     {
         #region [ Properties ]
@@ -58,7 +57,7 @@ namespace Mvp24Hours.Business.Logic
         #endregion
 
         #region [ Methods ]
-        protected virtual bool Validate(TEntity entity)
+        protected virtual bool Validate<TEntity>(TEntity entity) where TEntity : class, IEntityBase
         {
             try
             {

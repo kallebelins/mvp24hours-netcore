@@ -11,6 +11,7 @@ using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Data.MongoDb.Base;
+using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;
 using System;
 using System.Collections.Generic;
@@ -259,6 +260,20 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         }
 
         /// <summary>
+        ///  <see cref="Mvp24Hours.Core.Contract.Data.ICommand.Remove(IList{TEntity})"/>
+        /// </summary>
+        public void RemoveById(IList<object> ids)
+        {
+            if (ids.AnyOrNotNull())
+            {
+                foreach (var id in ids)
+                {
+                    RemoveById(id);
+                }
+            }
+        }
+
+        /// <summary>
         ///  If entity is not log
         /// </summary>
         private void ForceRemove(T entity)
@@ -270,6 +285,25 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
             this.dbEntities.DeleteOne(GetKeyFilter(entity));
         }
 
+        #endregion
+
+        #region [ IQueryRelation ]
+        public void LoadRelation<TProperty>(T entity, Expression<Func<T, TProperty>> propertyExpression) where TProperty : class
+        {
+            throw new NotSupportedException();
+        }
+        public void LoadRelation<TProperty>(T entity, Expression<Func<T, IEnumerable<TProperty>>> propertyExpression, Expression<Func<TProperty, bool>> clause = null, int limit = 0) where TProperty : class
+        {
+            throw new NotSupportedException();
+        }
+        public void LoadRelationSortByAscending<TProperty, TKey>(T entity, Expression<Func<T, IEnumerable<TProperty>>> propertyExpression, Expression<Func<TProperty, TKey>> orderKey, Expression<Func<TProperty, bool>> clause = null, int limit = 0) where TProperty : class
+        {
+            throw new NotSupportedException();
+        }
+        public void LoadRelationSortByDescending<TProperty, TKey>(T entity, Expression<Func<T, IEnumerable<TProperty>>> propertyExpression, Expression<Func<TProperty, TKey>> orderKey, Expression<Func<TProperty, bool>> clause = null, int limit = 0) where TProperty : class
+        {
+            throw new NotSupportedException();
+        }
         #endregion
 
         #region [ Properties ]

@@ -9,6 +9,7 @@ using Mvp24Hours.Application.MySql.Test.Entities;
 using Mvp24Hours.Application.MySql.Test.Helpers;
 using Mvp24Hours.Application.MySql.Test.Services.Async;
 using Mvp24Hours.Core.ValueObjects.Logic;
+using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,11 +23,12 @@ namespace Mvp24Hours.Application.MySql.Test
     /// 
     /// </summary>
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
-    public class QueryServiceAsyncTest
+    public class Test2QueryServiceAsync
     {
-        public QueryServiceAsyncTest()
+        public Test2QueryServiceAsync()
         {
             StartupHelper.ConfigureServicesAsync();
+            StartupHelper.LoadDataAsync();
         }
 
         #region [ List ]
@@ -34,54 +36,47 @@ namespace Mvp24Hours.Application.MySql.Test
         public async Task Get_Filter_Customer_List()
         {
             var service = ServiceProviderHelper.GetService<CustomerServiceAsync>();
-            var customers = await service.ListAsync();
-            Assert.True(customers != null && customers.Count > 0);
+            Assert.True(await service.ListAsync().HasDataAsync());
         }
         [Fact, Priority(3)]
         public async Task Get_Filter_Customer_List_Any()
         {
             var service = ServiceProviderHelper.GetService<CustomerServiceAsync>();
-            bool any = await service.ListAnyAsync();
-            Assert.True(any);
+            Assert.True(await service.ListAnyAsync().GetDataValueAsync());
         }
         [Fact, Priority(4)]
         public async Task Get_Filter_Customer_List_Count()
         {
             var service = ServiceProviderHelper.GetService<CustomerServiceAsync>();
-            int count = await service.ListCountAsync();
-            Assert.True(count > 0);
+            Assert.True(await service.ListCountAsync().GetDataValueAsync() > 0);
         }
         [Fact, Priority(5)]
-        public async Task Get_Filter_Customer_List_Pagging()
+        public async Task Get_Filter_Customer_List_Paging()
         {
             var service = ServiceProviderHelper.GetService<CustomerServiceAsync>();
             var paging = new PagingCriteria(3, 0);
-            var customers = await service.ListAsync(paging);
-            Assert.True(customers != null && customers.Count == 3);
+            Assert.True(await service.ListAsync(paging).HasDataCountAsync(3));
         }
         [Fact, Priority(5)]
         public async Task Get_Filter_Customer_List_Navigation()
         {
             var service = ServiceProviderHelper.GetService<CustomerServiceAsync>();
             var paging = new PagingCriteria(3, 0, navigation: new List<string> { "Contacts" });
-            var customers = await service.ListAsync(paging);
-            Assert.True(customers != null && customers.Count == 3);
+            Assert.True(await service.ListAsync(paging).HasDataCountAsync(3));
         }
         [Fact, Priority(6)]
         public async Task Get_Filter_Customer_List_Order_Asc()
         {
             var service = ServiceProviderHelper.GetService<CustomerServiceAsync>();
             var paging = new PagingCriteria(3, 0, new List<string> { "Name" });
-            var customers = await service.ListAsync(paging);
-            Assert.True(customers != null && customers.Count == 3);
+            Assert.True(await service.ListAsync(paging).HasDataCountAsync(3));
         }
         [Fact, Priority(6)]
         public async Task Get_Filter_Customer_List_Order_Desc()
         {
             var service = ServiceProviderHelper.GetService<CustomerServiceAsync>();
             var paging = new PagingCriteria(3, 0, new List<string> { "Name desc" });
-            var customers = await service.ListAsync(paging);
-            Assert.True(customers != null && customers.Count == 3);
+            Assert.True(await service.ListAsync(paging).HasDataCountAsync(3));
         }
         [Fact, Priority(7)]
         public async Task Get_Filter_Customer_List_Order_Asc_Expression()
@@ -89,8 +84,7 @@ namespace Mvp24Hours.Application.MySql.Test
             var service = ServiceProviderHelper.GetService<CustomerServiceAsync>();
             var paging = new PagingCriteriaExpression<Customer>(3, 0);
             paging.OrderByAscendingExpr.Add(x => x.Name);
-            var customers = await service.ListAsync(paging);
-            Assert.True(customers != null && customers.Count == 3);
+            Assert.True(await service.ListAsync(paging).HasDataCountAsync(3));
         }
         [Fact, Priority(8)]
         public async Task Get_Filter_Customer_List_Order_Desc_Expression()
@@ -98,16 +92,14 @@ namespace Mvp24Hours.Application.MySql.Test
             var service = ServiceProviderHelper.GetService<CustomerServiceAsync>();
             var paging = new PagingCriteriaExpression<Customer>(3, 0);
             paging.OrderByDescendingExpr.Add(x => x.Name);
-            var customers = await service.ListAsync(paging);
-            Assert.True(customers != null && customers.Count == 3);
+            Assert.True(await service.ListAsync(paging).HasDataCountAsync(3));
         }
         [Fact, Priority(9)]
-        public async Task Get_Filter_Customer_List_Pagging_Expression()
+        public async Task Get_Filter_Customer_List_Paging_Expression()
         {
             var service = ServiceProviderHelper.GetService<CustomerServiceAsync>();
             var paging = new PagingCriteriaExpression<Customer>(3, 0);
-            var customers = await service.ListAsync(paging);
-            Assert.True(customers != null && customers.Count == 3);
+            Assert.True(await service.ListAsync(paging).HasDataCountAsync(3));
         }
         [Fact, Priority(9)]
         public async Task Get_Filter_Customer_List_Navigation_Expression()
@@ -115,8 +107,7 @@ namespace Mvp24Hours.Application.MySql.Test
             var service = ServiceProviderHelper.GetService<CustomerServiceAsync>();
             var paging = new PagingCriteriaExpression<Customer>(3, 0);
             paging.NavigationExpr.Add(x => x.Contacts);
-            var customers = await service.ListAsync(paging);
-            Assert.True(customers != null && customers.Count == 3);
+            Assert.True(await service.ListAsync(paging).HasDataCountAsync(3));
         }
         #endregion
 
@@ -126,63 +117,68 @@ namespace Mvp24Hours.Application.MySql.Test
         {
             var service = ServiceProviderHelper.GetService<CustomerServiceAsync>();
             var paging = new PagingCriteria(1, 0);
-            var customers = await service.GetByAsync(x => x.Name.Contains("Test"), paging);
-            var customer = customers?.FirstOrDefault();
-            customer = await service.GetByIdAsync(customer?.Id);
+            var customer = await service.GetByAsync(x => x.Name.Contains("Test"), paging)
+                .GetDataFirstOrDefaultAsync() as Customer;
+            customer = await service.GetByIdAsync(customer?.Id)
+                .GetDataFirstOrDefaultAsync() as Customer;
             Assert.True(customer != null);
+        }
+        [Fact, Priority(2)]
+        public async Task Get_Filter_Customer_GetById_Navigation()
+        {
+            var service = ServiceProviderHelper.GetService<CustomerServiceAsync>();
+            var paging = new PagingCriteria(1, 0, navigation: new List<string> { "Contacts" });
+            var customer = (await service.GetByAsync(x => x.Contacts.Any(), paging))
+                .GetDataFirstOrDefault() as Customer;
+            customer = await service.GetByIdAsync(customer?.Id, paging)
+                .GetDataFirstOrDefaultAsync() as Customer;
+            Assert.True(customer.Contacts.AnyOrNotNull());
         }
         [Fact, Priority(2)]
         public async Task Get_Filter_Customer_GetBy()
         {
             var service = ServiceProviderHelper.GetService<CustomerServiceAsync>();
-            var customers = await service.GetByAsync(x => x.Name.Contains("Test"));
-            Assert.True(customers != null && customers.Count > 0);
+            Assert.True(await service.GetByAsync(x => x.Name.Contains("Test")).HasDataAsync());
         }
         [Fact, Priority(3)]
         public async Task Get_Filter_Customer_GetBy_Any()
         {
             var service = ServiceProviderHelper.GetService<CustomerServiceAsync>();
-            bool any = await service.GetByAnyAsync(x => x.Name.Contains("Test"));
-            Assert.True(any);
+            Assert.True(await service.GetByAnyAsync(x => x.Name.Contains("Test")).GetDataValueAsync());
         }
         [Fact, Priority(4)]
         public async Task Get_Filter_Customer_GetBy_Count()
         {
             var service = ServiceProviderHelper.GetService<CustomerServiceAsync>();
-            int count = await service.GetByCountAsync(x => x.Name.Contains("Test"));
-            Assert.True(count > 0);
+            Assert.True(await service.GetByCountAsync(x => x.Name.Contains("Test")).GetDataValueAsync() > 0);
         }
         [Fact, Priority(5)]
-        public async Task Get_Filter_Customer_GetBy_Pagging()
+        public async Task Get_Filter_Customer_GetBy_Paging()
         {
             var service = ServiceProviderHelper.GetService<CustomerServiceAsync>();
             var paging = new PagingCriteria(3, 0);
-            var customers = await service.GetByAsync(x => x.Name.Contains("Test"), paging);
-            Assert.True(customers != null && customers.Count == 3);
+            Assert.True(await service.GetByAsync(x => x.Name.Contains("Test"), paging).HasDataCountAsync(3));
         }
         [Fact, Priority(5)]
         public async Task Get_Filter_Customer_GetBy_Navigation()
         {
             var service = ServiceProviderHelper.GetService<CustomerServiceAsync>();
             var paging = new PagingCriteria(3, 0, navigation: new List<string> { "Contacts" });
-            var customers = await service.GetByAsync(x => x.Name.Contains("Test"), paging);
-            Assert.True(customers != null && customers.Count == 3);
+            Assert.True(await service.GetByAsync(x => x.Name.Contains("Test"), paging).HasDataCountAsync(3));
         }
         [Fact, Priority(6)]
         public async Task Get_Filter_Customer_GetBy_Order_Asc()
         {
             var service = ServiceProviderHelper.GetService<CustomerServiceAsync>();
             var paging = new PagingCriteria(3, 0, new List<string> { "Name" });
-            var customers = await service.GetByAsync(x => x.Name.Contains("Test"), paging);
-            Assert.True(customers != null && customers.Count == 3);
+            Assert.True(await service.GetByAsync(x => x.Name.Contains("Test"), paging).HasDataCountAsync(3));
         }
         [Fact, Priority(6)]
         public async Task Get_Filter_Customer_GetBy_Order_Desc()
         {
             var service = ServiceProviderHelper.GetService<CustomerServiceAsync>();
             var paging = new PagingCriteria(3, 0, new List<string> { "Name desc" });
-            var customers = await service.GetByAsync(x => x.Name.Contains("Test"), paging);
-            Assert.True(customers != null && customers.Count == 3);
+            Assert.True(await service.GetByAsync(x => x.Name.Contains("Test"), paging).HasDataCountAsync(3));
         }
         [Fact, Priority(7)]
         public async Task Get_Filter_Customer_GetBy_Order_Asc_Expression()
@@ -190,8 +186,7 @@ namespace Mvp24Hours.Application.MySql.Test
             var service = ServiceProviderHelper.GetService<CustomerServiceAsync>();
             var paging = new PagingCriteriaExpression<Customer>(3, 0);
             paging.OrderByAscendingExpr.Add(x => x.Name);
-            var customers = await service.GetByAsync(x => x.Name.Contains("Test"), paging);
-            Assert.True(customers != null && customers.Count == 3);
+            Assert.True(await service.GetByAsync(x => x.Name.Contains("Test"), paging).HasDataCountAsync(3));
         }
         [Fact, Priority(8)]
         public async Task Get_Filter_Customer_GetBy_Order_Desc_Expression()
@@ -199,16 +194,14 @@ namespace Mvp24Hours.Application.MySql.Test
             var service = ServiceProviderHelper.GetService<CustomerServiceAsync>();
             var paging = new PagingCriteriaExpression<Customer>(3, 0);
             paging.OrderByDescendingExpr.Add(x => x.Name);
-            var customers = await service.GetByAsync(x => x.Name.Contains("Test"), paging);
-            Assert.True(customers != null && customers.Count == 3);
+            Assert.True(await service.GetByAsync(x => x.Name.Contains("Test"), paging).HasDataCountAsync(3));
         }
         [Fact, Priority(9)]
-        public async Task Get_Filter_Customer_GetBy_Pagging_Expression()
+        public async Task Get_Filter_Customer_GetBy_Paging_Expression()
         {
             var service = ServiceProviderHelper.GetService<CustomerServiceAsync>();
             var paging = new PagingCriteriaExpression<Customer>(3, 0);
-            var customers = await service.GetByAsync(x => x.Name.Contains("Test"), paging);
-            Assert.True(customers != null && customers.Count == 3);
+            Assert.True(await service.GetByAsync(x => x.Name.Contains("Test"), paging).HasDataCountAsync(3));
         }
         [Fact, Priority(9)]
         public async Task Get_Filter_Customer_GetBy_Navigation_Expression()
@@ -216,8 +209,7 @@ namespace Mvp24Hours.Application.MySql.Test
             var service = ServiceProviderHelper.GetService<CustomerServiceAsync>();
             var paging = new PagingCriteriaExpression<Customer>(3, 0);
             paging.NavigationExpr.Add(x => x.Contacts);
-            var customers = await service.GetByAsync(x => x.Name.Contains("Test"), paging);
-            Assert.True(customers != null && customers.Count == 3);
+            Assert.True(await service.GetByAsync(x => x.Name.Contains("Test"), paging).HasDataCountAsync(3));
         }
         #endregion
     }

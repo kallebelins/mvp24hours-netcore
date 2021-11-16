@@ -5,10 +5,11 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-using Mvp24Hours.Application.MySql.Test.Entities;
-using Mvp24Hours.Application.MySql.Test.Helpers;
-using Mvp24Hours.Application.MySql.Test.Services.Async;
+using Mvp24Hours.Application.PostgreSql.Test.Entities;
+using Mvp24Hours.Application.PostgreSql.Test.Helpers;
+using Mvp24Hours.Application.PostgreSql.Test.Services.Async;
 using Mvp24Hours.Core.ValueObjects.Logic;
+using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,15 +17,15 @@ using System.Threading.Tasks;
 using Xunit;
 using Xunit.Priority;
 
-namespace Mvp24Hours.Application.MySql.Test
+namespace Mvp24Hours.Application.PostgreSql.Test
 {
     /// <summary>
     /// 
     /// </summary>
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
-    public class CommandServiceAsyncTest
+    public class Test4CommandServiceAsync
     {
-        public CommandServiceAsyncTest()
+        public Test4CommandServiceAsync()
         {
             StartupHelper.ConfigureServicesAsync();
         }
@@ -40,7 +41,8 @@ namespace Mvp24Hours.Application.MySql.Test
             };
             await service.AddAsync(customer);
             await service.SaveChangesAsync();
-            customer = await service.GetByIdAsync(customer.Id);
+            customer = await service.GetByIdAsync(customer.Id)
+                .GetDataFirstOrDefaultAsync() as Customer;
             Assert.True(customer != null);
         }
         [Fact, Priority(2)]
@@ -58,7 +60,8 @@ namespace Mvp24Hours.Application.MySql.Test
             }
             await service.AddAsync(customers);
             await service.SaveChangesAsync();
-            int count = await service.GetByCountAsync(x => x.Active);
+            int count = await service.GetByCountAsync(x => x.Active)
+                .GetDataValueAsync();
             Assert.True(count > 0);
         }
         [Fact, Priority(3)]
@@ -66,13 +69,15 @@ namespace Mvp24Hours.Application.MySql.Test
         {
             var service = ServiceProviderHelper.GetService<CustomerServiceAsync>();
             var paging = new PagingCriteria(1, 0);
-            var customer = (await service.ListAsync(paging))?.FirstOrDefault();
+            var customer = (await service.ListAsync(paging))
+                .GetDataFirstOrDefault() as Customer;
             if (customer != null)
             {
                 customer.Name = "Test Updated";
                 await service.ModifyAsync(customer);
                 await service.SaveChangesAsync();
-                customer = await service.GetByIdAsync(customer.Id);
+                customer = await service.GetByIdAsync(customer.Id)
+                    .GetDataFirstOrDefaultAsync() as Customer;
             }
             Assert.True(customer != null && customer.Name == "Test Updated");
         }
@@ -81,7 +86,7 @@ namespace Mvp24Hours.Application.MySql.Test
         {
             var service = ServiceProviderHelper.GetService<CustomerServiceAsync>();
             var paging = new PagingCriteria(3, 0);
-            var customers = await service.ListAsync(paging);
+            var customers = (await service.ListAsync(paging)).Data;
             foreach (var item in customers)
             {
                 item.Active = false;
@@ -89,7 +94,8 @@ namespace Mvp24Hours.Application.MySql.Test
 
             await service.ModifyAsync(customers);
             await service.SaveChangesAsync();
-            int count = await service.GetByCountAsync(x => !x.Active);
+            int count = await service.GetByCountAsync(x => !x.Active)
+                .GetDataValueAsync();
             Assert.True(count > 0);
         }
         [Fact, Priority(5)]
@@ -97,12 +103,14 @@ namespace Mvp24Hours.Application.MySql.Test
         {
             var service = ServiceProviderHelper.GetService<CustomerServiceAsync>();
             var paging = new PagingCriteria(1, 0);
-            var customer = (await service.ListAsync(paging))?.FirstOrDefault();
+            var customer = (await service.ListAsync(paging))
+                .GetDataFirstOrDefault() as Customer;
             if (customer != null)
             {
                 await service.RemoveByIdAsync(customer.Id);
                 await service.SaveChangesAsync();
-                customer = await service.GetByIdAsync(customer.Id);
+                customer = await service.GetByIdAsync(customer.Id)
+                    .GetDataFirstOrDefaultAsync() as Customer;
             }
             Assert.True(customer == null);
         }
@@ -110,10 +118,11 @@ namespace Mvp24Hours.Application.MySql.Test
         public async Task Delete_Many_Customers()
         {
             var service = ServiceProviderHelper.GetService<CustomerServiceAsync>();
-            var customers = await service.ListAsync();
+            var customers = (await service.ListAsync()).Data;
             await service.RemoveAsync(customers);
             await service.SaveChangesAsync();
-            int count = await service.ListCountAsync();
+            int count = await service.ListCountAsync()
+                .GetDataValueAsync();
             Assert.True(count == 0);
         }
     }

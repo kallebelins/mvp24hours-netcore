@@ -8,6 +8,7 @@
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.Domain.Validations;
+using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;
 using Mvp24Hours.Infrastructure.Logging;
 using System;
@@ -19,9 +20,7 @@ namespace Mvp24Hours.Business.Logic
     /// <summary>
     /// Asynchronous base service for using repository and unit of work
     /// </summary>
-    /// <typeparam name="TEntity">Represents an entity</typeparam>
-    public abstract class RepositoryServiceAsyncBase<TEntity, TUoW>
-        where TEntity : class, IEntityBase
+    public abstract class RepositoryServiceAsyncBase<TUoW>
         where TUoW : IUnitOfWorkAsync
     {
         #region [ Properties ]
@@ -63,12 +62,7 @@ namespace Mvp24Hours.Business.Logic
 
         #region [ Methods ]
 
-        protected virtual Task<R> TaskResult<R>(R obj)
-        {
-            return Task.FromResult<R>(obj);
-        }
-
-        protected virtual Task<bool> Validate(TEntity entity)
+        protected virtual Task<bool> Validate<TEntity>(TEntity entity) where TEntity : class, IEntityBase
         {
             try
             {
@@ -80,11 +74,11 @@ namespace Mvp24Hours.Business.Logic
                     var validator = ServiceProviderHelper.GetService<IValidatorNotify<TEntity>>();
                     if (!((IValidationModel<TEntity>)entity).IsValid(validator))
                     {
-                        return TaskResult(false);
+                        return false.TaskResult();
                     }
                 }
 
-                return TaskResult(true);
+                return true.TaskResult();
             }
             catch (Exception ex)
             {

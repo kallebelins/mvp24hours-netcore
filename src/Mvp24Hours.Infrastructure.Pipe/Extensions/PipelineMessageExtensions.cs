@@ -9,6 +9,8 @@ using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Helpers;
 using Mvp24Hours.Infrastructure.Pipe;
+using System;
+using System.Collections.Generic;
 
 namespace Mvp24Hours.Infrastructure.Extensions
 {
@@ -83,11 +85,18 @@ namespace Mvp24Hours.Infrastructure.Extensions
             IPipelineMessage message = new PipelineMessage();
             if (bo != null)
             {
-                if (bo.Data?.Count > 0)
+                if (bo.Data != null)
                 {
-                    foreach (var item in bo.Data)
+                    if (bo.Data.IsList<T>())
                     {
-                        message.AddContent(item);
+                        foreach (var item in bo.Data as IEnumerable<T>)
+                        {
+                            message.AddContent(item);
+                        }
+                    }
+                    else
+                    {
+                        message.AddContent(bo.Data);
                     }
                 }
                 if (!string.IsNullOrEmpty(bo.Token))
@@ -118,11 +127,18 @@ namespace Mvp24Hours.Infrastructure.Extensions
             IPipelineMessage message = new PipelineMessage();
             if (bo != null)
             {
-                if (bo.Data?.Count > 0)
+                if (bo.Data != null)
                 {
-                    foreach (var item in bo.Data)
+                    if (bo.Data.IsList<T>())
                     {
-                        message.AddContent(ObjectHelper.Clone<T>(item));
+                        foreach (var item in bo.Data as IEnumerable<T>)
+                        {
+                            message.AddContent(ObjectHelper.Clone<T>(item));
+                        }
+                    }
+                    else
+                    {
+                        message.AddContent(ObjectHelper.Clone<T>(bo.Data));
                     }
                 }
                 if (!string.IsNullOrEmpty(bo.Token))

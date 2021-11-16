@@ -6,6 +6,7 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,6 +17,28 @@ namespace Mvp24Hours.Infrastructure.Extensions
     /// </summary>
     public static class EnumerableExtensions
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        public static bool IsList(this object Value)
+        {
+            var type = Value.GetType();
+            return typeof(IEnumerable).IsAssignableFrom(type)
+                || typeof(ICollection).IsAssignableFrom(type)
+                || typeof(IList).IsAssignableFrom(type);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static bool IsList<T>(this object Value)
+        {
+            var type = Value.GetType();
+            return typeof(IEnumerable<T>).IsAssignableFrom(type)
+                || typeof(ICollection<T>).IsAssignableFrom(type)
+                || typeof(IList<T>).IsAssignableFrom(type);
+        }
+
         /// <summary>
         /// 
         /// </summary>

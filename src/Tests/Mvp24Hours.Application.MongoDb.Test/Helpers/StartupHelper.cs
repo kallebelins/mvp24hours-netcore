@@ -23,7 +23,7 @@ namespace Mvp24Hours.Application.MongoDb.Test.Helpers
             // register my services
             services.AddScoped<CustomerService, CustomerService>();
 
-            ServiceProviderHelper.SetProvider(services.BuildServiceProvider());
+            services.BuildMvp24HoursProvider();
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Mvp24Hours.Business.Logic
     /// Base service for using repository and unit of work
     /// </summary>
     /// <typeparam name="TEntity">Represents an entity</typeparam>
-    public class RepositoryService<TEntity, TUoW> : RepositoryServiceBase<TEntity, TUoW>, IQueryService<TEntity>, ICommandService<TEntity>, IQueryRelationService<TEntity>
+    public class RepositoryService<TEntity, TUoW> : RepositoryServiceBase<TUoW>, IQueryService<TEntity>, ICommandService<TEntity>
         where TEntity : class, IEntityBase
         where TUoW : IUnitOfWork
     {
@@ -29,11 +29,14 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.ListAny()"/>
         /// </summary>
-        public virtual bool ListAny()
+        public virtual IBusinessResult<bool> ListAny()
         {
             try
             {
-                return this.UnitOfWork.GetRepository<TEntity>().ListAny();
+                return this.UnitOfWork
+                    .GetRepository<TEntity>()
+                    .ListAny()
+                    .ToBusiness();
             }
             catch (Exception ex)
             {
@@ -45,11 +48,14 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.ListCount()"/>
         /// </summary>
-        public virtual int ListCount()
+        public virtual IBusinessResult<int> ListCount()
         {
             try
             {
-                return this.UnitOfWork.GetRepository<TEntity>().ListCount();
+                return this.UnitOfWork
+                    .GetRepository<TEntity>()
+                    .ListCount()
+                    .ToBusiness();
             }
             catch (Exception ex)
             {
@@ -61,7 +67,7 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.List()"/>
         /// </summary>
-        public IList<TEntity> List()
+        public IBusinessResult<IList<TEntity>> List()
         {
             return this.List(null);
         }
@@ -69,11 +75,14 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.List(IPagingCriteria)"/>
         /// </summary>
-        public virtual IList<TEntity> List(IPagingCriteria criteria)
+        public virtual IBusinessResult<IList<TEntity>> List(IPagingCriteria criteria)
         {
             try
             {
-                return this.UnitOfWork.GetRepository<TEntity>().List(criteria);
+                return this.UnitOfWork
+                    .GetRepository<TEntity>()
+                    .List(criteria)
+                    .ToBusiness();
             }
             catch (Exception ex)
             {
@@ -85,11 +94,14 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.GetByAny(Expression{Func{T, bool}})()"/>
         /// </summary>
-        public virtual bool GetByAny(Expression<Func<TEntity, bool>> clause)
+        public virtual IBusinessResult<bool> GetByAny(Expression<Func<TEntity, bool>> clause)
         {
             try
             {
-                return this.UnitOfWork.GetRepository<TEntity>().GetByAny(clause);
+                return this.UnitOfWork
+                    .GetRepository<TEntity>()
+                    .GetByAny(clause)
+                    .ToBusiness();
             }
             catch (Exception ex)
             {
@@ -101,11 +113,14 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.GetByCount(Expression{Func{T, bool}})()"/>
         /// </summary>
-        public virtual int GetByCount(Expression<Func<TEntity, bool>> clause)
+        public virtual IBusinessResult<int> GetByCount(Expression<Func<TEntity, bool>> clause)
         {
             try
             {
-                return this.UnitOfWork.GetRepository<TEntity>().GetByCount(clause);
+                return this.UnitOfWork
+                    .GetRepository<TEntity>()
+                    .GetByCount(clause)
+                    .ToBusiness();
             }
             catch (Exception ex)
             {
@@ -117,7 +132,7 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.GetBy(Expression{Func{T, bool}})"/>
         /// </summary>
-        public IList<TEntity> GetBy(Expression<Func<TEntity, bool>> clause)
+        public IBusinessResult<IList<TEntity>> GetBy(Expression<Func<TEntity, bool>> clause)
         {
             return GetBy(clause, null);
         }
@@ -125,11 +140,14 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.GetBy(Expression{Func{T, bool}}, IPagingCriteria)"/>
         /// </summary>
-        public virtual IList<TEntity> GetBy(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria)
+        public virtual IBusinessResult<IList<TEntity>> GetBy(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria)
         {
             try
             {
-                return UnitOfWork.GetRepository<TEntity>().GetBy(clause, criteria);
+                return UnitOfWork
+                    .GetRepository<TEntity>()
+                    .GetBy(clause, criteria)
+                    .ToBusiness();
             }
             catch (Exception ex)
             {
@@ -141,7 +159,7 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.GetById(int)"/>
         /// </summary>
-        public TEntity GetById(object id)
+        public IBusinessResult<TEntity> GetById(object id)
         {
             return this.GetById(id, null);
         }
@@ -149,11 +167,14 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.GetById(int, IPagingCriteria)"/>
         /// </summary>
-        public virtual TEntity GetById(object id, IPagingCriteria criteria)
+        public virtual IBusinessResult<TEntity> GetById(object id, IPagingCriteria criteria)
         {
             try
             {
-                return this.UnitOfWork.GetRepository<TEntity>().GetById(id, criteria);
+                return this.UnitOfWork
+                    .GetRepository<TEntity>()
+                    .GetById(id, criteria)
+                    .ToBusiness();
             }
             catch (Exception ex)
             {
@@ -340,43 +361,6 @@ namespace Mvp24Hours.Business.Logic
             try
             {
                 return this.UnitOfWork.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                Logging.Error(ex);
-                throw;
-            }
-        }
-
-        #endregion
-
-        #region [ Implements IQueryRelationService ]
-
-        public void LoadRelation<TProperty>(TEntity entity, Expression<Func<TEntity, TProperty>> propertyExpression)
-            where TProperty : class
-        {
-            try
-            {
-                (this.UnitOfWork.GetRepository<TEntity>() as IQueryRelation<TEntity>)?.LoadRelation(entity, propertyExpression);
-            }
-            catch (Exception ex)
-            {
-                Logging.Error(ex);
-                throw;
-            }
-        }
-
-        public void LoadRelation<TProperty, TKey>(TEntity entity,
-            Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression,
-            Expression<Func<TProperty, bool>> clause = null,
-            Expression<Func<TProperty, TKey>> orderKey = null,
-            Expression<Func<TProperty, TKey>> orderDescendingKey = null,
-            int limit = 0)
-            where TProperty : class
-        {
-            try
-            {
-                (this.UnitOfWork.GetRepository<TEntity>() as IQueryRelation<TEntity>)?.LoadRelation(entity, propertyExpression, clause, orderKey, orderDescendingKey, limit);
             }
             catch (Exception ex)
             {

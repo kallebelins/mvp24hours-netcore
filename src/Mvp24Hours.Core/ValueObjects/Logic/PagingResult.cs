@@ -8,8 +8,6 @@
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using System.Runtime.Serialization;
 
 namespace Mvp24Hours.Core.ValueObjects.Logic
@@ -25,7 +23,7 @@ namespace Mvp24Hours.Core.ValueObjects.Logic
         public PagingResult(
             IPageResult paging,
             ISummaryResult summary,
-            IReadOnlyCollection<T> data = null,
+            T data = default,
             IReadOnlyCollection<IMessageResult> messages = null,
             string token = null
         ) : base(data, messages, token)
@@ -59,47 +57,5 @@ namespace Mvp24Hours.Core.ValueObjects.Logic
             yield return base.GetEqualityComponents();
         }
         #endregion
-
-        #region [ Static's ]
-
-        public static new IPagingResult<T> Create(params IMessageResult[] messageResult)
-        {
-            return Create(null, messageResult);
-        }
-
-        public static new IPagingResult<T> Create(string tokenDefault, params IMessageResult[] messageResult)
-        {
-            return new PagingResult<T>(
-                new PageResult(0, 0, 0),
-                new SummaryResult(0, 0),
-                token: tokenDefault,
-                messages: new ReadOnlyCollection<IMessageResult>(messageResult?.ToList() ?? new List<IMessageResult>())
-            );
-        }
-
-        public static new IPagingResult<T> Create(T value, params IMessageResult[] messageResult)
-        {
-            return Create(value, null, messageResult);
-        }
-
-        public static new IPagingResult<T> Create(T value, string tokenDefault, params IMessageResult[] messageResult)
-        {
-            if (value != null)
-            {
-                return new PagingResult<T>(
-                    new PageResult(0, 0, 0),
-                    new SummaryResult(0, 0),
-                    token: tokenDefault,
-                    data: new ReadOnlyCollection<T>(new List<T> { value }),
-                    messages: new ReadOnlyCollection<IMessageResult>(messageResult?.ToList() ?? new List<IMessageResult>())
-                );
-            }
-            return new PagingResult<T>(
-                new PageResult(0, 0, 0),
-                new SummaryResult(0, 0)
-            );
-        }
-        #endregion
-
     }
 }

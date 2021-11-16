@@ -10,19 +10,25 @@ using Mvp24Hours.Core.ValueObjects.Logic;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Mvp24Hours.Infrastructure.Extensions
 {
     /// <summary>
     /// 
     /// </summary>
-    public static class BusinessPagingExtensions
+    public static class BusinessPagingAsyncExtensions
     {
         /// <summary>
         /// 
         /// </summary>
-        public static IPagingResult<T> ToBusinessPaging<T>(this T value, IPageResult page, ISummaryResult summary, IList<IMessageResult> messageResult = null, string tokenDefault = null)
+        public static async Task<IPagingResult<T>> ToBusinessPagingAsync<T>(this Task<T> valueAsync, IPageResult page, ISummaryResult summary, IList<IMessageResult> messageResult = null, string tokenDefault = null)
         {
+            T value = default;
+            if (valueAsync != null)
+            {
+                value = await valueAsync;
+            }
             return new PagingResult<T>(
                 page,
                 summary,
@@ -35,8 +41,13 @@ namespace Mvp24Hours.Infrastructure.Extensions
         /// <summary>
         /// 
         /// </summary>
-        public static IPagingResult<T> ToBusinessPaging<T>(this T value, IList<IMessageResult> messageResult, string tokenDefault = null)
+        public static async Task<IPagingResult<T>> ToBusinessPagingAsync<T>(this Task<T> valueAsync, IList<IMessageResult> messageResult, string tokenDefault = null)
         {
+            T value = default;
+            if (valueAsync != null)
+            {
+                value = await valueAsync;
+            }
             return new PagingResult<T>(
                 new PageResult(0, 0, 0),
                 new SummaryResult(0, 0),

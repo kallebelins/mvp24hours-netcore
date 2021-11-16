@@ -81,17 +81,17 @@ namespace Mvp24Hours.Infrastructure.Extensions
             if (source.Messages.AnyOrNotNull())
             {
                 return source.Data
-                    .MapTo<IList<TDestination>>()
-                    .ToBusinessPagingWithMessage(
+                    .MapTo<TDestination>()
+                    .ToBusinessPaging(
                         source.Paging,
                         source.Summary,
-                        source.Messages.ToArray()
+                        source.Messages?.ToList()
                     );
             }
             else
             {
                 return source.Data
-                    .MapTo<IList<TDestination>>()
+                    .MapTo<TDestination>()
                     .ToBusinessPaging(
                         source.Paging,
                         source.Summary
@@ -118,13 +118,13 @@ namespace Mvp24Hours.Infrastructure.Extensions
             if (source.Messages.AnyOrNotNull())
             {
                 return source.Data
-                    .MapTo<IList<TDestination>>()
-                    .ToBusinessWithMessage(source.Messages.ToArray());
+                    .MapTo<TDestination>()
+                    .ToBusiness(source.Messages.ToArray());
             }
             else
             {
                 return source.Data
-                    .MapTo<IList<TDestination>>()
+                    .MapTo<TDestination>()
                     .ToBusiness();
             }
         }

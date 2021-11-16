@@ -9,6 +9,7 @@ using MongoDB.Bson;
 using Mvp24Hours.Application.MongoDb.Test.Entities;
 using Mvp24Hours.Application.MongoDb.Test.Helpers;
 using Mvp24Hours.Application.MongoDb.Test.Services;
+using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;
 using System;
 using Xunit;
@@ -42,9 +43,7 @@ namespace Mvp24Hours.Application.MongoDb.Test
                 Active = true
             });
 
-            var customer = service.GetById(_oid);
-
-            Assert.True(customer != null);
+            Assert.True(service.GetById(_oid).HasData());
         }
 
         [Fact, Priority(2)]
@@ -52,18 +51,20 @@ namespace Mvp24Hours.Application.MongoDb.Test
         {
             var service = ServiceProviderHelper.GetService<CustomerService>();
 
-            var customer = service.GetById(_oid);
+            var boCustomer = service.GetById(_oid);
 
-            if (customer != null)
+            if (boCustomer?.Data != null)
             {
+                var customer = boCustomer?.Data;
+
                 customer.Name = "Test Updated";
 
                 service.Modify(customer);
 
-                customer = service.GetById(_oid);
+                boCustomer = service.GetById(_oid);
             }
 
-            Assert.True(customer != null && customer.Name == "Test Updated");
+            Assert.True(boCustomer != null && boCustomer?.Data?.Name == "Test Updated");
         }
 
         [Fact, Priority(3)]
@@ -73,9 +74,7 @@ namespace Mvp24Hours.Application.MongoDb.Test
 
             service.RemoveById(_oid);
 
-            var customer = service.GetById(_oid);
-
-            Assert.True(customer == null);
+            Assert.True(!service.GetById(_oid).HasData());
         }
 
     }

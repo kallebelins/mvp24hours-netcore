@@ -20,7 +20,7 @@ namespace Mvp24Hours.Application.Pipe.Test.Helpers
             services.AddMvp24HoursNotification();
             services.AddMvp24HoursPipeline();
 
-            ServiceProviderHelper.SetProvider(services.BuildServiceProvider());
+            services.BuildMvp24HoursProvider();
         }
 
         public static void ConfigureServicesAsync()
@@ -30,7 +30,7 @@ namespace Mvp24Hours.Application.Pipe.Test.Helpers
             services.AddMvp24HoursNotification();
             services.AddMvp24HoursPipelineAsync();
 
-            ServiceProviderHelper.SetProvider(services.BuildServiceProvider());
+            services.BuildMvp24HoursProvider();
         }
     }
 }

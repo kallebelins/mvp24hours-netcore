@@ -15,7 +15,6 @@ using Mvp24Hours.Application.SQLServer.Test.Services.Async;
 using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Mvp24Hours.Application.SQLServer.Test.Helpers
 {
@@ -34,7 +33,7 @@ namespace Mvp24Hours.Application.SQLServer.Test.Helpers
             services.AddScoped<CustomerService, CustomerService>();
             services.AddScoped<ContactService, ContactService>();
 
-            ServiceProviderHelper.SetProvider(services.BuildServiceProvider());
+            services.BuildMvp24HoursProvider();
 
             // ensure database
             var db = ServiceProviderHelper.GetService<DataContext>();
@@ -83,7 +82,7 @@ namespace Mvp24Hours.Application.SQLServer.Test.Helpers
             services.AddScoped<CustomerServiceAsync, CustomerServiceAsync>();
             services.AddScoped<ContactServiceAsync, ContactServiceAsync>();
 
-            ServiceProviderHelper.SetProvider(services.BuildServiceProvider());
+            services.BuildMvp24HoursProvider();
 
             // ensure database
             var db = ServiceProviderHelper.GetService<DataContext>();

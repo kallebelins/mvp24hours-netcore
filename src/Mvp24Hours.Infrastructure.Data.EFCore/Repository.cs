@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
+using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;
 using System;
 using System.Collections.Generic;
@@ -158,7 +159,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
         /// </summary>
         public void Add(IList<T> entities)
         {
-            if (entities != null && entities.Count > 0)
+            if (entities.AnyOrNotNull())
             {
                 foreach (var entity in entities)
                 {
@@ -177,13 +178,27 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
             this.dbContext.Entry(entity).Reference(propertyExpression).Load();
         }
 
-        public void LoadRelation<TProperty, TKey>(T entity,
-            Expression<Func<T, IEnumerable<TProperty>>> propertyExpression,
-            Expression<Func<TProperty, bool>> clause = null,
-            Expression<Func<TProperty, TKey>> orderKey = null,
-            Expression<Func<TProperty, TKey>> orderDescendingKey = null,
-            int limit = 0)
+        public void LoadRelation<TProperty>(T entity, 
+            Expression<Func<T, IEnumerable<TProperty>>> propertyExpression, Expression<Func<TProperty, bool>> clause = null, 
+            int limit = 0) 
             where TProperty : class
+        {
+            var query = this.dbContext.Entry(entity).Collection(propertyExpression).Query();
+
+            if (clause != null)
+            {
+                query = query.Where(clause);
+            }
+
+            if (limit > 0)
+            {
+                query = query.Take(limit);
+            }
+
+            query.ToList();
+        }
+
+        public void LoadRelationSortByAscending<TProperty, TKey>(T entity, Expression<Func<T, IEnumerable<TProperty>>> propertyExpression, Expression<Func<TProperty, TKey>> orderKey, Expression<Func<TProperty, bool>> clause = null, int limit = 0) where TProperty : class
         {
             var query = this.dbContext.Entry(entity).Collection(propertyExpression).Query();
 
@@ -197,9 +212,26 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                 query = query.OrderBy(orderKey);
             }
 
-            if (orderDescendingKey != null)
+            if (limit > 0)
             {
-                query = query.OrderByDescending(orderDescendingKey);
+                query = query.Take(limit);
+            }
+
+            query.ToList();
+        }
+
+        public void LoadRelationSortByDescending<TProperty, TKey>(T entity, Expression<Func<T, IEnumerable<TProperty>>> propertyExpression, Expression<Func<TProperty, TKey>> orderKey, Expression<Func<TProperty, bool>> clause = null, int limit = 0) where TProperty : class
+        {
+            var query = this.dbContext.Entry(entity).Collection(propertyExpression).Query();
+
+            if (clause != null)
+            {
+                query = query.Where(clause);
+            }
+
+            if (orderKey != null)
+            {
+                query = query.OrderByDescending(orderKey);
             }
 
             if (limit > 0)
@@ -251,7 +283,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
         /// </summary>
         public void Modify(IList<T> entities)
         {
-            if (entities != null && entities.Count > 0)
+            if (entities.AnyOrNotNull())
             {
                 foreach (var entity in entities)
                 {
@@ -309,6 +341,20 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
             }
 
             this.Remove(entity);
+        }
+
+        /// <summary>
+        ///  <see cref="Mvp24Hours.Core.Contract.Data.ICommand.Remove(int)"/>
+        /// </summary>
+        public void RemoveById(IList<object> ids)
+        {
+            if (ids.AnyOrNotNull())
+            {
+                foreach (var id in ids)
+                {
+                    RemoveById(id);
+                }
+            }
         }
 
         /// <summary>

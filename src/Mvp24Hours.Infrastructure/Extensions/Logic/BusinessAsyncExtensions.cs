@@ -11,19 +11,22 @@ using Mvp24Hours.Core.ValueObjects.Logic;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Mvp24Hours.Infrastructure.Extensions
 {
     /// <summary>
     /// 
     /// </summary>
-    public static class BusinessExtensions
+    public static class BusinessAsyncExtensions
     {
         /// <summary>
         /// Transform a message into a business object
         /// </summary>
-        public static IBusinessResult<T> ToBusiness<T>(this IPipelineMessage message, string tokenDefault = null)
+        public static async Task<IBusinessResult<T>> ToBusinessAsync<T>(this Task<IPipelineMessage> messageAsync, string tokenDefault = null)
         {
+            var message = await messageAsync;
+
             if (message != null)
             {
                 return new BusinessResult<T>(
@@ -38,8 +41,9 @@ namespace Mvp24Hours.Infrastructure.Extensions
         /// <summary>
         /// Transform a message into a business object
         /// </summary>
-        public static IBusinessResult<T> ToBusinessWithKey<T>(this IPipelineMessage message, string key, string tokenDefault = null)
+        public static async Task<IBusinessResult<T>> ToBusinessWithKeyAsync<T>(this Task<IPipelineMessage> messageAsync, string key, string tokenDefault = null)
         {
+            var message = await messageAsync;
             if (message != null)
             {
                 return new BusinessResult<T>(
@@ -54,32 +58,33 @@ namespace Mvp24Hours.Infrastructure.Extensions
         /// <summary>
         /// Encapsulates object for business
         /// </summary>
-        public static IBusinessResult<T> ToBusiness<T>(this IMessageResult messageResult, string tokenDefault = null)
+        public static async Task<IBusinessResult<T>> ToBusinessAsync<T>(this Task<T> valueAsync, string tokenDefault = null)
         {
-            if (messageResult != null)
+            var value = await valueAsync;
+            if (value != null)
             {
-                return ToBusiness<T>(default, new List<IMessageResult> { messageResult }, tokenDefault);
+                return new BusinessResult<T>(
+                    token: tokenDefault,
+                    data: value
+                );
             }
             return new BusinessResult<T>(token: tokenDefault);
         }
 
         /// <summary>
-        /// Encapsulates object for business
+        /// Encapsulates object for business with message
         /// </summary>
-        public static IBusinessResult<T> ToBusiness<T>(this IList<IMessageResult> messageResult, string tokenDefault = null)
+        public static Task<IBusinessResult<T>> ToBusinessWithMessageAsync<T>(this Task<T> valueAsync, params IMessageResult[] messageResult)
         {
-            if (messageResult != null)
-            {
-                return ToBusiness<T>(default, messageResult, tokenDefault);
-            }
-            return new BusinessResult<T>(token: tokenDefault);
+            return ToBusinessWithMessageAsync(valueAsync, null, messageResult);
         }
 
         /// <summary>
-        /// Encapsulates object for business
+        /// Encapsulates object for business with message
         /// </summary>
-        public static IBusinessResult<T> ToBusiness<T>(this T value, IList<IMessageResult> messageResult = null, string tokenDefault = null)
+        public static async Task<IBusinessResult<T>> ToBusinessWithMessageAsync<T>(this Task<T> valueAsync, string tokenDefault = null, params IMessageResult[] messageResult)
         {
+            var value = await valueAsync;
             if (value != null)
             {
                 return new BusinessResult<T>(
@@ -91,8 +96,33 @@ namespace Mvp24Hours.Infrastructure.Extensions
             return new BusinessResult<T>(token: tokenDefault);
         }
 
-        public static bool HasData<T>(this IBusinessResult<T> value)
+        /// <summary>
+        /// Encapsulates object for business with message
+        /// </summary>
+        public static Task<IBusinessResult<T>> ToBusinessWithMessageAsync<T>(this Task<IBusinessResult<T>> valueAsync, params IMessageResult[] messageResult)
         {
+            return ToBusinessWithMessageAsync(valueAsync, null, messageResult);
+        }
+
+        /// <summary>
+        /// Encapsulates object for business with message
+        /// </summary>
+        public static async Task<IBusinessResult<T>> ToBusinessWithMessageAsync<T>(this Task<IBusinessResult<T>> valueAsync, string tokenDefault = null, params IMessageResult[] messageResult)
+        {
+            var value = await valueAsync;
+            if (value != null)
+            {
+                return new BusinessResult<T>(
+                    token: tokenDefault,
+                    messages: new ReadOnlyCollection<IMessageResult>(messageResult?.ToList() ?? new List<IMessageResult>())
+                );
+            }
+            return new BusinessResult<T>(token: tokenDefault);
+        }
+
+        public static async Task<bool> HasDataAsync<T>(this Task<IBusinessResult<T>> valueAsync)
+        {
+            var value = await valueAsync;
             if (value == null || value.Data == null)
             {
                 return false;
@@ -106,8 +136,9 @@ namespace Mvp24Hours.Infrastructure.Extensions
             return true;
         }
 
-        public static T GetDataValue<T>(this IBusinessResult<T> value)
+        public static async Task<T> GetDataValueAsync<T>(this Task<IBusinessResult<T>> valueAsync)
         {
+            var value = await valueAsync;
             if (value.HasData())
             {
                 return (T)value.Data;
@@ -115,14 +146,16 @@ namespace Mvp24Hours.Infrastructure.Extensions
             return default;
         }
 
-        public static int GetDataCount<T>(this IBusinessResult<T> value)
+        public static async Task<int> GetDataCountAsync<T>(this Task<IBusinessResult<T>> valueAsync)
         {
+            var value = await valueAsync;
             if (value.HasData())
             {
                 if (value.Data.IsList<T>())
                 {
                     return ((IEnumerable<T>)value.Data).Count();
-                } else
+                }
+                else
                 {
                     return 1;
                 }
@@ -130,8 +163,9 @@ namespace Mvp24Hours.Infrastructure.Extensions
             return 0;
         }
 
-        public static bool HasDataCount<T>(this IBusinessResult<T> value, int count)
+        public static async Task<bool> HasDataCountAsync<T>(this Task<IBusinessResult<T>> valueAsync, int count)
         {
+            var value = await valueAsync;
             if (value.HasData())
             {
                 if (value.Data.IsList<T>())
@@ -142,8 +176,9 @@ namespace Mvp24Hours.Infrastructure.Extensions
             return false;
         }
 
-        public static object GetDataFirstOrDefault<T>(this IBusinessResult<T> value)
+        public static async Task<object> GetDataFirstOrDefaultAsync<T>(this Task<IBusinessResult<T>> valueAsync)
         {
+            var value = await valueAsync;
             if (value.HasData())
             {
                 if (value.Data.IsList<T>())
@@ -157,5 +192,6 @@ namespace Mvp24Hours.Infrastructure.Extensions
             }
             return null;
         }
+
     }
 }

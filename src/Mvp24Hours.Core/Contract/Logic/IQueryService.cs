@@ -15,43 +15,62 @@ namespace Mvp24Hours.Core.Contract.Logic
     /// <summary>
     /// Standard contract with methods for data projection.
     /// </summary>
-    public interface IQueryService<TEntity> where TEntity : class
+    public interface IQueryService<TEntity>
+        where TEntity : class
     {
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{TEntity}.ListAny()"/>
+        /// Checks whether any records returned by the List() method
         /// </summary>
-        bool ListAny();
+        /// <returns>Number of representations</returns>
+        IBusinessResult<bool> ListAny();
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{TEntity}.ListCount()"/>
+        /// Gets the amount of representations returned by the List() method.
         /// </summary>
-        int ListCount();
+        /// <returns>Number of representations</returns>
+        IBusinessResult<int> ListCount();
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{TEntity}.List()"/>
+        /// Gets all representations of the typed entity.
         /// </summary>
-        IList<TEntity> List();
+        /// <returns>List of entities</returns>
+        IBusinessResult<IList<TEntity>> List();
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{TEntity}.List(IPagingCriteria)"/>
+        /// Gets all representations of the entity typed with criteria.
         /// </summary>
-        IList<TEntity> List(IPagingCriteria criteria);
+        /// <returns>List of entities</returns>
+        IBusinessResult<IList<TEntity>> List(IPagingCriteria criteria);
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{TEntity}.GetByCount(Expression{Func{TEntity, bool}})"/>
+        /// Checks whether any records returned by the GetBy() method.
         /// </summary>
-        int GetByCount(Expression<Func<TEntity, bool>> clause);
+        /// <returns>Indicates whether there is a record</returns>
+        IBusinessResult<bool> GetByAny(Expression<Func<TEntity, bool>> clause);
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{TEntity}.GetBy(Expression{Func{TEntity, bool}})"/>
+        /// Gets the amount of representations returned by the GetBy() method.
         /// </summary>
-        IList<TEntity> GetBy(Expression<Func<TEntity, bool>> clause);
+        /// <returns>Number of representations</returns>
+        IBusinessResult<int> GetByCount(Expression<Func<TEntity, bool>> clause);
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{TEntity}.GetBy(Expression{Func{TEntity, bool}}, IPagingCriteria)"/>
+        /// Gets the representations based on the filter of the typed entity.
         /// </summary>
-        IList<TEntity> GetBy(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria);
+        /// <param name="clause">Filter</param>
+        /// <returns>Number of representations</returns>
+        IBusinessResult<IList<TEntity>> GetBy(Expression<Func<TEntity, bool>> clause);
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{TEntity}.GetById(int)"/>
+        /// Gets the filter-based representations of the entity typed with criteria.
         /// </summary>
-        TEntity GetById(object id);
+        /// <param name="clause">Filter</param>
+        /// <returns>Number of representations</returns>
+        IBusinessResult<IList<TEntity>> GetBy(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria);
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{TEntity}.GetById(int, IPagingCriteria)"/>
+        /// Gets a representation of the typed entity.
         /// </summary>
-        TEntity GetById(object id, IPagingCriteria criteria);
+        /// <param name="id">Identifier of entity</param>
+        /// <returns>A representation of the entity</returns>
+        IBusinessResult<TEntity> GetById(object id);
+        /// <summary>
+        /// Gets a representation of the entity typed with criteria.
+        /// </summary>
+        /// <param name="id">Identifier of entity</param>
+        /// <returns>A representation of the entity</returns>
+        IBusinessResult<TEntity> GetById(object id, IPagingCriteria criteria);
     }
 }

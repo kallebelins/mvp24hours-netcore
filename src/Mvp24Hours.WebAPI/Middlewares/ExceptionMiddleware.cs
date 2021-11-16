@@ -6,6 +6,7 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Microsoft.AspNetCore.Http;
+using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Core.DTOs;
 using Mvp24Hours.Core.Enums;
 using Mvp24Hours.Core.ValueObjects.Logic;
@@ -13,6 +14,7 @@ using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;
 using Mvp24Hours.Infrastructure.Logging;
 using System;
+using System.Collections.ObjectModel;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -66,9 +68,9 @@ namespace Mvp24Hours.Infrastructure.Middlewares
                 message = $"Message: {(exception?.InnerException ?? exception).Message}";
             }
 
-            var boResult = BusinessResult<VoidResult>.Create(
-                message.ToMessageResult("internalservererror", MessageType.Error)
-            );
+            var boResult = message
+                .ToMessageResult("internalservererror", MessageType.Error)
+                .ToBusiness<VoidResult>();
 
             var messageResult = JsonHelper.Serialize(boResult);
             return context.Response.WriteAsync(messageResult);
