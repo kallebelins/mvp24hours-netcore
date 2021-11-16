@@ -24,17 +24,29 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
     public interface IPipelineAsync
     {
         /// <summary>
-        /// Records async operations
+        /// Records async operations 
         /// </summary>
         IPipelineAsync AddAsync(IOperationAsync operation);
         /// <summary>
         /// Records async operations
         /// </summary>
-        IPipelineAsync AddAsync(Action<IPipelineMessage> operation, bool isRequired = false);
+        IPipelineAsync AddAsync(Action<IPipelineMessage> action, bool isRequired = false);
         /// <summary>
         /// Records async operations
         /// </summary>
         IPipelineAsync AddAsync<T>() where T : IOperationAsync;
+        /// <summary>
+        /// Records async operations interceptors
+        /// </summary>
+        IPipelineAsync AddInterceptorsAsync(IOperationAsync operation, bool postOperation = false);
+        /// <summary>
+        /// Records async operations interceptors
+        /// </summary>
+        IPipelineAsync AddInterceptorsAsync(Action<IPipelineMessage> action, bool postOperation = false);
+        /// <summary>
+        /// Records async operations interceptors
+        /// </summary>
+        IPipelineAsync AddInterceptorsAsync<T>(bool postOperation = false) where T : IOperationAsync;
         /// <summary>
         /// Performs async operations
         /// </summary>
