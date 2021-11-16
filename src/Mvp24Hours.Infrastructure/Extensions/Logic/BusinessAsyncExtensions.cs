@@ -141,7 +141,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
             var value = await valueAsync;
             if (value.HasData())
             {
-                return (T)value.Data;
+                return value.Data;
             }
             return default;
         }

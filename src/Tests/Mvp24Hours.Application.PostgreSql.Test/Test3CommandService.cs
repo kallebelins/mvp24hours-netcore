@@ -12,7 +12,6 @@ using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;
 using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 using Xunit.Priority;
 

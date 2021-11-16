@@ -35,6 +35,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test.Helpers
             // register my services
             services.AddScoped<CustomerService, CustomerService>();
             services.AddScoped<ContactService, ContactService>();
+            services.AddScoped<CustomerPagingService, CustomerPagingService>();
 
             services.BuildMvp24HoursProvider();
 
@@ -87,6 +88,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test.Helpers
             // register my services
             services.AddScoped<CustomerServiceAsync, CustomerServiceAsync>();
             services.AddScoped<ContactServiceAsync, ContactServiceAsync>();
+            services.AddScoped<CustomerPagingServiceAsync, CustomerPagingServiceAsync>();
 
             services.BuildMvp24HoursProvider();
 

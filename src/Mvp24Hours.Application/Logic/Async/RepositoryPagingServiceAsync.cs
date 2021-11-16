@@ -10,11 +10,11 @@ using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.Logic;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Core.ValueObjects.Logic;
+using Mvp24Hours.Infrastructure.Extensions;
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Mvp24Hours.Infrastructure.Extensions;
-using System.Collections.Generic;
 
 namespace Mvp24Hours.Business.Logic
 {

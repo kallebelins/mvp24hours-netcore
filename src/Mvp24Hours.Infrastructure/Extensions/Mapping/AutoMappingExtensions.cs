@@ -9,7 +9,6 @@ using AutoMapper;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Helpers;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 

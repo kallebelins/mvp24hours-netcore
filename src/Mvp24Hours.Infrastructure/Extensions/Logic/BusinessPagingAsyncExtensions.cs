@@ -9,7 +9,6 @@ using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Mvp24Hours.Infrastructure.Extensions

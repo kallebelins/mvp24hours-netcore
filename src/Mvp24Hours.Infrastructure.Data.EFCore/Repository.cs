@@ -178,9 +178,9 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
             this.dbContext.Entry(entity).Reference(propertyExpression).Load();
         }
 
-        public void LoadRelation<TProperty>(T entity, 
-            Expression<Func<T, IEnumerable<TProperty>>> propertyExpression, Expression<Func<TProperty, bool>> clause = null, 
-            int limit = 0) 
+        public void LoadRelation<TProperty>(T entity,
+            Expression<Func<T, IEnumerable<TProperty>>> propertyExpression, Expression<Func<TProperty, bool>> clause = null,
+            int limit = 0)
             where TProperty : class
         {
             var query = this.dbContext.Entry(entity).Collection(propertyExpression).Query();

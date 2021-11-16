@@ -27,7 +27,14 @@ namespace Mvp24Hours.Infrastructure.Extensions
         /// </summary>
         public static IServiceCollection BuildMvp24HoursProvider(this IServiceCollection services, ServiceProviderOptions options = null)
         {
-            ServiceProviderHelper.SetProvider(services.BuildServiceProvider(options));
+            if (options == null)
+            {
+                ServiceProviderHelper.SetProvider(services.BuildServiceProvider());
+            }
+            else
+            {
+                ServiceProviderHelper.SetProvider(services.BuildServiceProvider(options));
+            }
             return services;
         }
 

@@ -9,7 +9,6 @@ using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Helpers;
 using Mvp24Hours.Infrastructure.Pipe;
-using System;
 using System.Collections.Generic;
 
 namespace Mvp24Hours.Infrastructure.Extensions

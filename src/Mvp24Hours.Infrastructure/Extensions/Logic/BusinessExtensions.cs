@@ -110,7 +110,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
         {
             if (value.HasData())
             {
-                return (T)value.Data;
+                return value.Data;
             }
             return default;
         }
@@ -122,7 +122,8 @@ namespace Mvp24Hours.Infrastructure.Extensions
                 if (value.Data.IsList<T>())
                 {
                     return ((IEnumerable<T>)value.Data).Count();
-                } else
+                }
+                else
                 {
                     return 1;
                 }
