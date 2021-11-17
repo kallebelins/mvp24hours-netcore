@@ -1,5 +1,4 @@
 ﻿using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
-using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;
 using Mvp24Hours.Patterns.Test.Support.Entities;
 using Mvp24Hours.Patterns.Test.Support.Helpers;
@@ -11,7 +10,7 @@ using Xunit.Priority;
 namespace Mvp24Hours.Patterns.Test
 {
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
-    public class Test1ValidationTest
+    public class Test1Validation
     {
 
         [Fact, Priority(1)]

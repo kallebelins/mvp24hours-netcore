@@ -63,7 +63,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
 
         public Task<IList<T>> ListAsync(CancellationToken cancellationToken = default)
         {
-            return ListAsync(null,cancellationToken);
+            return ListAsync(null, cancellationToken);
         }
 
         public async Task<IList<T>> ListAsync(IPagingCriteria clause, CancellationToken cancellationToken = default)
@@ -166,7 +166,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
 
         public Task LoadRelationAsync<TProperty>(T entity,
             Expression<Func<T, IEnumerable<TProperty>>> propertyExpression, Expression<Func<TProperty, bool>> clause = null,
-            int limit = 0, 
+            int limit = 0,
             CancellationToken cancellationToken = default)
             where TProperty : class
         {
@@ -185,11 +185,11 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
             return query.ToListAsync(cancellationToken);
         }
 
-        public Task LoadRelationSortByAscendingAsync<TProperty, TKey>(T entity, 
-            Expression<Func<T, IEnumerable<TProperty>>> propertyExpression, 
-            Expression<Func<TProperty, TKey>> orderKey, 
-            Expression<Func<TProperty, bool>> clause = null, 
-            int limit = 0, 
+        public Task LoadRelationSortByAscendingAsync<TProperty, TKey>(T entity,
+            Expression<Func<T, IEnumerable<TProperty>>> propertyExpression,
+            Expression<Func<TProperty, TKey>> orderKey,
+            Expression<Func<TProperty, bool>> clause = null,
+            int limit = 0,
             CancellationToken cancellationToken = default) where TProperty : class
         {
             var query = this.dbContext.Entry(entity).Collection(propertyExpression).Query();
@@ -212,11 +212,11 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
             return query.ToListAsync(cancellationToken);
         }
 
-        public Task LoadRelationSortByDescendingAsync<TProperty, TKey>(T entity, 
-            Expression<Func<T, IEnumerable<TProperty>>> propertyExpression, 
-            Expression<Func<TProperty, TKey>> orderKey, 
-            Expression<Func<TProperty, bool>> clause = null, 
-            int limit = 0, 
+        public Task LoadRelationSortByDescendingAsync<TProperty, TKey>(T entity,
+            Expression<Func<T, IEnumerable<TProperty>>> propertyExpression,
+            Expression<Func<TProperty, TKey>> orderKey,
+            Expression<Func<TProperty, bool>> clause = null,
+            int limit = 0,
             CancellationToken cancellationToken = default) where TProperty : class
         {
             var query = this.dbContext.Entry(entity).Collection(propertyExpression).Query();

@@ -72,16 +72,16 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
         /// <summary>
         /// Gets database query with clause and aggregation of relationships
         /// </summary>
-        protected IQueryable<T> GetQuery(IPagingCriteria clause, bool onlyNavigation = false)
+        protected IQueryable<T> GetQuery(IPagingCriteria criteria, bool onlyNavigation = false)
         {
             // cria query
             var query = this.dbEntities.AsQueryable();
-            return GetQuery(query, clause, onlyNavigation);
+            return GetQuery(query, criteria, onlyNavigation);
         }
         /// <summary>
         /// Gets database query with clause and aggregation of relationships
         /// </summary>
-        protected IQueryable<T> GetQuery(IQueryable<T> query, IPagingCriteria clause, bool onlyNavigation = false)
+        protected IQueryable<T> GetQuery(IQueryable<T> query, IPagingCriteria criteria, bool onlyNavigation = false)
         {
             var ordered = false;
 
@@ -90,12 +90,12 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                 int offset = 0;
                 int limit = MaxQtyByQueryPage;
 
-                if (clause != null)
+                if (criteria != null)
                 {
                     // ordination
-                    if (clause is IPagingCriteriaExpression<T>)
+                    if (criteria is IPagingCriteriaExpression<T>)
                     {
-                        var clauseExpr = clause as IPagingCriteriaExpression<T>;
+                        var clauseExpr = criteria as IPagingCriteriaExpression<T>;
                         // ordination by ascending expression
                         if (clauseExpr.OrderByAscendingExpr.AnyOrNotNull())
                         {
@@ -136,10 +136,10 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                     }
 
                     // ordination by string
-                    if (clause.OrderBy.AnyOrNotNull())
+                    if (criteria.OrderBy.AnyOrNotNull())
                     {
                         IOrderedQueryable<T> queryOrdered = null;
-                        foreach (var ord in clause.OrderBy)
+                        foreach (var ord in criteria.OrderBy)
                         {
                             if (queryOrdered == null)
                             {
@@ -155,8 +155,8 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                     }
 
                     // Paging
-                    offset = clause.Offset;
-                    limit = clause.Limit > 0 ? clause.Limit : limit;
+                    offset = criteria.Offset;
+                    limit = criteria.Limit > 0 ? criteria.Limit : limit;
                 }
 
                 if (!ordered)
@@ -171,12 +171,12 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                 query = query.Take(limit);
             }
 
-            if (clause != null)
+            if (criteria != null)
             {
                 // navigation
-                if (clause is IPagingCriteriaExpression<T>)
+                if (criteria is IPagingCriteriaExpression<T>)
                 {
-                    var clauseExpr = clause as IPagingCriteriaExpression<T>;
+                    var clauseExpr = criteria as IPagingCriteriaExpression<T>;
                     // navigation by expression
                     if (clauseExpr.NavigationExpr.AnyOrNotNull())
                     {
@@ -188,9 +188,9 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                 }
 
                 // navigation by string
-                if (clause.Navigation.AnyOrNotNull())
+                if (criteria.Navigation.AnyOrNotNull())
                 {
-                    foreach (var nav in clause.Navigation)
+                    foreach (var nav in criteria.Navigation)
                     {
                         query = query.Include(nav);
                     }
