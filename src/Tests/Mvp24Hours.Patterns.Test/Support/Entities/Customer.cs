@@ -10,7 +10,7 @@ using Mvp24Hours.Core.Entities;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Mvp24Hours.Patterns.Test.Entities
+namespace Mvp24Hours.Patterns.Test.Support.Entities
 {
     public class Customer : EntityBase<Customer, int>, IEntityBase
     {

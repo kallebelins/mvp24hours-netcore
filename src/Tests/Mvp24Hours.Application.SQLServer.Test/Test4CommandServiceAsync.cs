@@ -5,9 +5,9 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-using Mvp24Hours.Application.SQLServer.Test.Entities;
-using Mvp24Hours.Application.SQLServer.Test.Helpers;
-using Mvp24Hours.Application.SQLServer.Test.Services.Async;
+using Mvp24Hours.Application.SQLServer.Test.Support.Entities;
+using Mvp24Hours.Application.SQLServer.Test.Support.Helpers;
+using Mvp24Hours.Application.SQLServer.Test.Support.Services.Async;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;
@@ -39,7 +39,6 @@ namespace Mvp24Hours.Application.SQLServer.Test
                 Active = true
             };
             await service.AddAsync(customer);
-            await service.SaveChangesAsync();
             customer = await service.GetByIdAsync(customer.Id)
                 .GetDataFirstOrDefaultAsync() as Customer;
             Assert.True(customer != null);
@@ -58,7 +57,6 @@ namespace Mvp24Hours.Application.SQLServer.Test
                 });
             }
             await service.AddAsync(customers);
-            await service.SaveChangesAsync();
             int count = await service.GetByCountAsync(x => x.Active)
                 .GetDataValueAsync();
             Assert.True(count > 0);
@@ -74,7 +72,6 @@ namespace Mvp24Hours.Application.SQLServer.Test
             {
                 customer.Name = "Test Updated";
                 await service.ModifyAsync(customer);
-                await service.SaveChangesAsync();
                 customer = await service.GetByIdAsync(customer.Id)
                     .GetDataFirstOrDefaultAsync() as Customer;
             }
@@ -92,7 +89,6 @@ namespace Mvp24Hours.Application.SQLServer.Test
             }
 
             await service.ModifyAsync(customers);
-            await service.SaveChangesAsync();
             int count = await service.GetByCountAsync(x => !x.Active)
                 .GetDataValueAsync();
             Assert.True(count > 0);
@@ -107,7 +103,6 @@ namespace Mvp24Hours.Application.SQLServer.Test
             if (customer != null)
             {
                 await service.RemoveByIdAsync(customer.Id);
-                await service.SaveChangesAsync();
                 customer = await service.GetByIdAsync(customer.Id)
                     .GetDataFirstOrDefaultAsync() as Customer;
             }
@@ -119,7 +114,6 @@ namespace Mvp24Hours.Application.SQLServer.Test
             var service = ServiceProviderHelper.GetService<CustomerServiceAsync>();
             var customers = (await service.ListAsync()).Data;
             await service.RemoveAsync(customers);
-            await service.SaveChangesAsync();
             int count = await service.ListCountAsync()
                 .GetDataValueAsync();
             Assert.True(count == 0);

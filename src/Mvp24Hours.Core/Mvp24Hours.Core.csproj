@@ -17,6 +17,10 @@
 
   <ItemGroup>
     <Compile Remove="Contract\Domain\Entity\IEntityBaseGuid.cs" />
+    <Compile Remove="Contract\Domain\Specifications\ISpecificationValidator.cs" />
+    <Compile Remove="Contract\Domain\Validations\IValidator.cs" />
+    <Compile Remove="Contract\Domain\Validations\IValidatorNotify.cs" />
+    <Compile Remove="ValueObjects\Infrastructure\NotifySpecification.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -6,6 +6,7 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Domain.Validations;
+using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -93,7 +94,7 @@ namespace Mvp24Hours.Core.ValueObjects
             return true;
         }
 
-        public virtual bool IsValid(IValidatorNotify<BaseVO> validatorNotify)
+        public virtual bool IsValid(INotificationContext context)
         {
             return IsValid();
         }

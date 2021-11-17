@@ -7,6 +7,7 @@
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.Domain.Validations;
+using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -43,17 +44,17 @@ namespace Mvp24Hours.Core.Entities
         /// Checks whether the entity meets the specification (default true)
         /// </summary>
         /// <returns>true|false</returns>
-        public virtual bool IsValid(IValidatorNotify<TObject> validatorNotify)
+        public virtual bool IsValid(INotificationContext context)
         {
             var results = new List<ValidationResult>();
             var contexto = new ValidationContext(this, null, null);
             if (!Validator.TryValidateObject(this, contexto, results, true))
             {
-                if (validatorNotify != null)
+                if (context != null)
                 {
                     foreach (var item in results)
                     {
-                        validatorNotify.Context.Add(string.Join("|", item.MemberNames), item.ErrorMessage, Enums.MessageType.Error);
+                        context.Add(string.Join("|", item.MemberNames), item.ErrorMessage, Enums.MessageType.Error);
                     }
                 }
                 return false;

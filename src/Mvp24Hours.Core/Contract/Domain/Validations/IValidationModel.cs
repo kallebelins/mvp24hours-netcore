@@ -5,6 +5,8 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
+
 namespace Mvp24Hours.Core.Contract.Domain.Validations
 {
     /// <summary>
@@ -21,6 +23,6 @@ namespace Mvp24Hours.Core.Contract.Domain.Validations
         /// Ensures the model is valid
         /// </summary>
         /// <returns>true|false</returns>
-        bool IsValid(IValidatorNotify<T> validatorNotify);
+        bool IsValid(INotificationContext context);
     }
 }

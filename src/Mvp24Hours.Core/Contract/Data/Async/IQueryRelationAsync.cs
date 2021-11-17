@@ -9,6 +9,7 @@ using Mvp24Hours.Core.Contract.Domain.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Mvp24Hours.Core.Contract.Data
@@ -24,7 +25,8 @@ namespace Mvp24Hours.Core.Contract.Data
         /// Load entity related to model entity
         /// </summary>
         Task LoadRelationAsync<TProperty>(TEntity entity,
-            Expression<Func<TEntity, TProperty>> propertyExpression)
+            Expression<Func<TEntity, TProperty>> propertyExpression,
+            CancellationToken cancellationToken = default)
             where TProperty : class;
         /// <summary>
         /// Load entities related to model entity with clause
@@ -32,7 +34,8 @@ namespace Mvp24Hours.Core.Contract.Data
         Task LoadRelationAsync<TProperty>(TEntity entity,
             Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression,
             Expression<Func<TProperty, bool>> clause = null,
-            int limit = 0)
+            int limit = 0,
+            CancellationToken cancellationToken = default)
             where TProperty : class;
         /// <summary>
         /// Load entities related to model entity sorted by ascending
@@ -41,7 +44,8 @@ namespace Mvp24Hours.Core.Contract.Data
             Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression,
             Expression<Func<TProperty, TKey>> orderKey,
             Expression<Func<TProperty, bool>> clause = null,
-            int limit = 0)
+            int limit = 0,
+            CancellationToken cancellationToken = default)
             where TProperty : class;
         /// <summary>
         /// Load entities related to model entity sorted by descending
@@ -50,7 +54,8 @@ namespace Mvp24Hours.Core.Contract.Data
             Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression,
             Expression<Func<TProperty, TKey>> orderKey,
             Expression<Func<TProperty, bool>> clause = null,
-            int limit = 0)
+            int limit = 0,
+            CancellationToken cancellationToken = default)
             where TProperty : class;
     }
 }

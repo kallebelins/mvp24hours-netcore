@@ -5,9 +5,9 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-using Mvp24Hours.Application.SQLServer.Test.Entities;
-using Mvp24Hours.Application.SQLServer.Test.Helpers;
-using Mvp24Hours.Application.SQLServer.Test.Services;
+using Mvp24Hours.Application.SQLServer.Test.Support.Entities;
+using Mvp24Hours.Application.SQLServer.Test.Support.Helpers;
+using Mvp24Hours.Application.SQLServer.Test.Support.Services;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;
@@ -38,7 +38,6 @@ namespace Mvp24Hours.Application.SQLServer.Test
                 Active = true
             };
             service.Add(customer);
-            service.SaveChanges();
             Assert.True(service.GetById(customer.Id).HasData());
         }
         [Fact, Priority(2)]
@@ -55,7 +54,6 @@ namespace Mvp24Hours.Application.SQLServer.Test
                 });
             }
             service.Add(customers);
-            service.SaveChanges();
             Assert.True(service.GetByCount(x => x.Active).GetDataValue() > 0);
         }
         [Fact, Priority(3)]
@@ -68,7 +66,6 @@ namespace Mvp24Hours.Application.SQLServer.Test
             {
                 customer.Name = "Test Updated";
                 service.Modify(customer);
-                service.SaveChanges();
                 customer = service.GetById(customer.Id)
                     .GetDataFirstOrDefault() as Customer;
             }
@@ -89,7 +86,6 @@ namespace Mvp24Hours.Application.SQLServer.Test
                 });
             }
             service.Modify(customers);
-            service.SaveChanges();
             int count = service.GetByCount(x => !x.Active)
                 .GetDataValue();
             Assert.True(count > 0);
@@ -104,7 +100,6 @@ namespace Mvp24Hours.Application.SQLServer.Test
             if (customer != null)
             {
                 service.RemoveById(customer.Id);
-                service.SaveChanges();
                 customer = service.GetById(customer.Id)
                     .GetDataFirstOrDefault() as Customer;
             }
@@ -116,7 +111,6 @@ namespace Mvp24Hours.Application.SQLServer.Test
             var service = ServiceProviderHelper.GetService<CustomerService>();
             var customers = service.List().Data;
             service.Remove(customers);
-            service.SaveChanges();
             int count = service.ListCount().GetDataValue();
             Assert.True(count == 0);
         }

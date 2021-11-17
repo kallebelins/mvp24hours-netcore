@@ -190,14 +190,16 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.ICommandService{T}.Add(T)"/>
         /// </summary>
-        public virtual void Add(TEntity entity)
+        public virtual int Add(TEntity entity)
         {
             try
             {
                 if (Validate(entity))
                 {
                     this.UnitOfWork.GetRepository<TEntity>().Add(entity);
+                    return this.UnitOfWork.SaveChanges();
                 }
+                return 0;
             }
             catch (Exception ex)
             {
@@ -209,19 +211,20 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.ICommandService{T}.Add(T)"/>
         /// </summary>
-        public virtual void Add(IList<TEntity> entities)
+        public virtual int Add(IList<TEntity> entities)
         {
             if (!entities.AnyOrNotNull())
             {
-                return;
+                return 0;
             }
 
             try
             {
-                foreach (var item in entities)
+                foreach (var entity in entities)
                 {
-                    Add(item);
+                    this.UnitOfWork.GetRepository<TEntity>().Add(entity);
                 }
+                return this.UnitOfWork.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -233,14 +236,16 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.ICommandService{T}.Modify(T)"/>
         /// </summary>
-        public virtual void Modify(TEntity entity)
+        public virtual int Modify(TEntity entity)
         {
             try
             {
                 if (Validate(entity))
                 {
                     this.UnitOfWork.GetRepository<TEntity>().Modify(entity);
+                    return this.UnitOfWork.SaveChanges();
                 }
+                return 0;
             }
             catch (Exception ex)
             {
@@ -252,19 +257,20 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.ICommandService{T}.Modify(T)"/>
         /// </summary>
-        public virtual void Modify(IList<TEntity> entities)
+        public virtual int Modify(IList<TEntity> entities)
         {
             if (!entities.AnyOrNotNull())
             {
-                return;
+                return 0;
             }
 
             try
             {
-                foreach (var item in entities)
+                foreach (var entity in entities)
                 {
-                    Modify(item);
+                    this.UnitOfWork.GetRepository<TEntity>().Modify(entity);
                 }
+                return this.UnitOfWork.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -276,11 +282,12 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.ICommandService{T}.Remove(T)"/>
         /// </summary>
-        public virtual void Remove(TEntity entity)
+        public virtual int Remove(TEntity entity)
         {
             try
             {
                 this.UnitOfWork.GetRepository<TEntity>().Remove(entity);
+                return this.UnitOfWork.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -292,19 +299,20 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.ICommandService{T}.Remove(T)"/>
         /// </summary>
-        public virtual void Remove(IList<TEntity> entities)
+        public virtual int Remove(IList<TEntity> entities)
         {
             if (!entities.AnyOrNotNull())
             {
-                return;
+                return 0;
             }
 
             try
             {
-                foreach (var item in entities)
+                foreach (var entity in entities)
                 {
-                    Remove(item);
+                    this.UnitOfWork.GetRepository<TEntity>().Remove(entity);
                 }
+                return this.UnitOfWork.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -316,11 +324,12 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.ICommandService{T}.RemoveById(object)"/>
         /// </summary>
-        public virtual void RemoveById(object id)
+        public virtual int RemoveById(object id)
         {
             try
             {
                 this.UnitOfWork.GetRepository<TEntity>().RemoveById(id);
+                return this.UnitOfWork.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -332,34 +341,19 @@ namespace Mvp24Hours.Business.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.ICommandService{T}.RemoveById(T)"/>
         /// </summary>
-        public virtual void RemoveById(IList<object> ids)
+        public virtual int RemoveById(IList<object> ids)
         {
             if (!ids.AnyOrNotNull())
             {
-                return;
+                return 0;
             }
 
             try
             {
                 foreach (var id in ids)
                 {
-                    RemoveById(id);
+                    this.UnitOfWork.GetRepository<TEntity>().RemoveById(id);
                 }
-            }
-            catch (Exception ex)
-            {
-                Logging.Error(ex);
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.ICommandService{T}.SaveChanges()"/>
-        /// </summary>
-        public virtual int SaveChanges()
-        {
-            try
-            {
                 return this.UnitOfWork.SaveChanges();
             }
             catch (Exception ex)

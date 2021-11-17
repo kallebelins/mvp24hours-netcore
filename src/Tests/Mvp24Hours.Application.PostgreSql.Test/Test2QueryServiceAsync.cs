@@ -5,9 +5,9 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-using Mvp24Hours.Application.PostgreSql.Test.Entities;
-using Mvp24Hours.Application.PostgreSql.Test.Helpers;
-using Mvp24Hours.Application.PostgreSql.Test.Services.Async;
+using Mvp24Hours.Application.PostgreSql.Test.Support.Entities;
+using Mvp24Hours.Application.PostgreSql.Test.Support.Helpers;
+using Mvp24Hours.Application.PostgreSql.Test.Support.Services.Async;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;

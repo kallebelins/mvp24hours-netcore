@@ -6,6 +6,7 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Mvp24Hours.Core.Contract.Logic
@@ -20,41 +21,41 @@ namespace Mvp24Hours.Core.Contract.Logic
         /// Add an entities.
         /// </summary>
         /// <param name="entity"></param>
-        Task AddAsync(T entity);
+        Task<int> AddAsync(T entity, CancellationToken cancellationToken = default);
         /// <summary>
         /// Adds list of entities.
         /// </summary>
         /// <param name="entities">List of entities</param>
-        Task AddAsync(IList<T> entities);
+        Task<int> AddAsync(IList<T> entities, CancellationToken cancellationToken = default);
         /// <summary>
         /// Updates an entity.
         /// </summary>
         /// <param name="entity">Entity instance</param>
-        Task ModifyAsync(T entity);
+        Task<int> ModifyAsync(T entity, CancellationToken cancellationToken = default);
         /// <summary>
         /// Updates list of entities.
         /// </summary>
         /// <param name="entities">List of entities</param>
-        Task ModifyAsync(IList<T> entities);
+        Task<int> ModifyAsync(IList<T> entities, CancellationToken cancellationToken = default);
         /// <summary>
         /// Removes an entity (logical exclusion).
         /// </summary>
         /// <param name="entity">Entity instance</param>
-        Task RemoveAsync(T entity);
+        Task<int> RemoveAsync(T entity, CancellationToken cancellationToken = default);
         /// <summary>
         /// Removes list of entities (logical exclusion).
         /// </summary>
         /// <param name="entities">List of entities</param>
-        Task RemoveAsync(IList<T> entities);
+        Task<int> RemoveAsync(IList<T> entities, CancellationToken cancellationToken = default);
         /// <summary>
         /// Removes an entity by the code identifier (logical exclusion).
         /// </summary>
         /// <param name="id">Identifier of entity</param>
-        Task RemoveByIdAsync(object id);
+        Task<int> RemoveByIdAsync(object id, CancellationToken cancellationToken = default);
         /// <summary>
         /// Removes an entity by the code identifier (logical exclusion).
         /// </summary>
         /// <param name="id">List of identifiers</param>
-        Task RemoveByIdAsync(IList<object> ids);
+        Task<int> RemoveByIdAsync(IList<object> ids, CancellationToken cancellationToken = default);
     }
 }

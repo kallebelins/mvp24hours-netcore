@@ -5,9 +5,9 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-using Mvp24Hours.Application.SQLServer.Test.Entities;
-using Mvp24Hours.Application.SQLServer.Test.Helpers;
-using Mvp24Hours.Application.SQLServer.Test.Services.Async;
+using Mvp24Hours.Application.SQLServer.Test.Support.Entities;
+using Mvp24Hours.Application.SQLServer.Test.Support.Helpers;
+using Mvp24Hours.Application.SQLServer.Test.Support.Services.Async;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;

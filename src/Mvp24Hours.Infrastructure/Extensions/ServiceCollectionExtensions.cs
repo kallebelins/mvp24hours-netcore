@@ -7,12 +7,10 @@
 //=====================================================================================
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
-using Mvp24Hours.Core.Contract.Domain.Validations;
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Mappings;
 using Mvp24Hours.Infrastructure.Contexts;
 using Mvp24Hours.Infrastructure.Helpers;
-using Mvp24Hours.Infrastructure.Validations;
 using System.Reflection;
 
 namespace Mvp24Hours.Infrastructure.Extensions
@@ -45,7 +43,6 @@ namespace Mvp24Hours.Infrastructure.Extensions
         {
             // notification
             services.AddScoped<INotificationContext, NotificationContext>();
-            services.AddScoped(typeof(IValidatorNotify<>), typeof(ValidatorNotify<>));
 
             return services;
         }

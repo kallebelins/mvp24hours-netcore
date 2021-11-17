@@ -6,11 +6,11 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Mvp24Hours.Core.Entities;
-using Mvp24Hours.Patterns.Test.Enums;
+using Mvp24Hours.Patterns.Test.Support.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace Mvp24Hours.Patterns.Test.Entities
+namespace Mvp24Hours.Patterns.Test.Support.Entities
 {
     public class Contact : EntityBase<Contact, int>
     {

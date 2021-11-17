@@ -7,9 +7,9 @@
 //=====================================================================================
 using Microsoft.EntityFrameworkCore;
 using Mvp24Hours.Infrastructure.Data.EFCore;
-using Mvp24Hours.Patterns.Test.Entities;
+using Mvp24Hours.Patterns.Test.Support.Entities;
 
-namespace Mvp24Hours.Patterns.Test.Data
+namespace Mvp24Hours.Patterns.Test.Support.Data
 {
     public class DataContext : Mvp24HoursContext
     {

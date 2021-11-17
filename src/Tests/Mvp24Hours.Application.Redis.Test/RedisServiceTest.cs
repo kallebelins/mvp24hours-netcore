@@ -5,8 +5,8 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-using Mvp24Hours.Application.Redis.Test.Entities;
-using Mvp24Hours.Application.Redis.Test.Helpers;
+using Mvp24Hours.Application.Redis.Test.Support.Entities;
+using Mvp24Hours.Application.Redis.Test.Support.Helpers;
 using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;
 using System;

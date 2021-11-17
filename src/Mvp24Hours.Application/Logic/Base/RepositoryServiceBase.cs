@@ -5,9 +5,12 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using FluentValidation;
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.Domain.Validations;
+using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
+using Mvp24Hours.Core.ValueObjects.Infrastructure;
 using Mvp24Hours.Infrastructure.Helpers;
 using Mvp24Hours.Infrastructure.Logging;
 using System;
@@ -61,15 +64,36 @@ namespace Mvp24Hours.Business.Logic
         {
             try
             {
-                bool isValidationModel = entity.GetType()?.GetInterfaces()?.Any(x => x == typeof(IValidationModel<TEntity>)) ?? false;
-                isValidationModel = isValidationModel || (entity.GetType()?.BaseType?.GetInterfaces()?.Any(x => x == typeof(IValidationModel<TEntity>)) ?? false);
-
-                if (isValidationModel)
+                var context = ServiceProviderHelper.GetService<INotificationContext>();
+                var validator = ServiceProviderHelper.GetService<IValidator<TEntity>>();
+                if (validator != null)
                 {
-                    var validator = ServiceProviderHelper.GetService<IValidatorNotify<TEntity>>();
-                    if (!((IValidationModel<TEntity>)entity).IsValid(validator))
+                    var validationResult = validator.Validate(entity);
+                    if (!validationResult.IsValid)
                     {
+                        if (context != null)
+                        {
+                            var notifications = validationResult.Errors
+                            .Select(x => new Notification(x.ErrorCode, x.ErrorMessage, Core.Enums.MessageType.Error))
+                            .ToList();
+
+                            context.Add(notifications);
+                        }
+
                         return false;
+                    }
+                }
+                else
+                {
+                    bool isValidationModel = entity.GetType()?.GetInterfaces()?.Any(x => x == typeof(IValidationModel<TEntity>)) ?? false;
+                    isValidationModel = isValidationModel || (entity.GetType()?.BaseType?.GetInterfaces()?.Any(x => x == typeof(IValidationModel<TEntity>)) ?? false);
+
+                    if (isValidationModel)
+                    {
+                        if (!((IValidationModel<TEntity>)entity).IsValid(context))
+                        {
+                            return false;
+                        }
                     }
                 }
 

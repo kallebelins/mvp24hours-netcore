@@ -20,41 +20,41 @@ namespace Mvp24Hours.Core.Contract.Logic
         /// Adds an entity.
         /// </summary>
         /// <param name="entity">Entity instance</param>
-        void Add(T entity);
+        int Add(T entity);
         /// <summary>
         /// Adds list of entities.
         /// </summary>
         /// <param name="entities">List of entities</param>
-        void Add(IList<T> entities);
+        int Add(IList<T> entities);
         /// <summary>
         /// Updates an entity.
         /// </summary>
         /// <param name="entity">Entity instance</param>
-        void Modify(T entity);
+        int Modify(T entity);
         /// <summary>
         /// Updates list of entities.
         /// </summary>
         /// <param name="entities">List of entities</param>
-        void Modify(IList<T> entities);
+        int Modify(IList<T> entities);
         /// <summary>
         /// Removes an entity (logical exclusion).
         /// </summary>
         /// <param name="entity">Entity instance</param>
-        void Remove(T entity);
+        int Remove(T entity);
         /// <summary>
         /// Removes list of entities (logical exclusion).
         /// </summary>
         /// <param name="entities">List of entities</param>
-        void Remove(IList<T> entities);
+        int Remove(IList<T> entities);
         /// <summary>
         /// Removes an entity by the code identifier (logical exclusion).
         /// </summary>
         /// <param name="id">Identifier of entity</param>
-        void RemoveById(object id);
+        int RemoveById(object id);
         /// <summary>
         /// Removes an entity by the code identifier (logical exclusion).
         /// </summary>
         /// <param name="ids">List of identifiers</param>
-        void RemoveById(IList<object> ids);
+        int RemoveById(IList<object> ids);
     }
 }

@@ -5,9 +5,9 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-using Mvp24Hours.Application.MySql.Test.Entities;
-using Mvp24Hours.Application.MySql.Test.Helpers;
-using Mvp24Hours.Application.MySql.Test.Services;
+using Mvp24Hours.Application.MySql.Test.Support.Entities;
+using Mvp24Hours.Application.MySql.Test.Support.Helpers;
+using Mvp24Hours.Application.MySql.Test.Support.Services;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Helpers;
 using System.Collections.Generic;

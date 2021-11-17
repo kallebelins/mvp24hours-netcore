@@ -5,30 +5,40 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;
-using Mvp24Hours.Patterns.Test.Data;
-using Mvp24Hours.Patterns.Test.Entities;
-using Mvp24Hours.Patterns.Test.Services;
-using Mvp24Hours.Patterns.Test.Services.Async;
+using Mvp24Hours.Patterns.Test.Support.Data;
+using Mvp24Hours.Patterns.Test.Support.Entities;
+using Mvp24Hours.Patterns.Test.Support.Enums;
+using Mvp24Hours.Patterns.Test.Support.Services;
+using Mvp24Hours.Patterns.Test.Support.Services.Async;
+using Mvp24Hours.Patterns.Test.Support.Validations;
 using System.Collections.Generic;
 
-namespace Mvp24Hours.Patterns.Test.Helpers
+namespace Mvp24Hours.Patterns.Test.Support.Helpers
 {
     public class StartupHelper
     {
-        public static void ConfigureServices()
+        public static void ConfigureServices(bool enableFluentValidation = false)
         {
             var services = new ServiceCollection().AddSingleton(ConfigurationHelper.AppSettings);
 
             services.AddDbContext<DataContext>(options =>
                 options.UseSqlServer(ConfigurationHelper.AppSettings.GetConnectionString("DataContext")));
 
+            services.AddMvp24HoursNotification();
             services.AddMvp24HoursDbService<DataContext>();
 
+            if (enableFluentValidation)
+            {
+                services.AddSingleton<IValidator<Customer>, CustomerValidator>();
+            }
+
+            services.AddScoped<CustomerService, CustomerService>();
 
             services.BuildMvp24HoursProvider();
 
@@ -51,29 +61,34 @@ namespace Mvp24Hours.Patterns.Test.Helpers
                 customer.Contacts.Add(new Contact
                 {
                     Description = $"202-555-014{i}",
-                    Type = Enums.ContactType.CellPhone,
+                    Type = ContactType.CellPhone,
                     Active = true
                 });
                 customer.Contacts.Add(new Contact
                 {
                     Description = $"test{i}@sample.com",
-                    Type = Enums.ContactType.Email,
+                    Type = ContactType.Email,
                     Active = true
                 });
                 customers.Add(customer);
             }
             service.Add(customers);
-            service.SaveChanges();
         }
 
-        public static void ConfigureServicesAsync()
+        public static void ConfigureServicesAsync(bool enableFluentValidation = false)
         {
             var services = new ServiceCollection().AddSingleton(ConfigurationHelper.AppSettings);
 
             services.AddDbContext<DataContext>(options =>
                 options.UseSqlServer(ConfigurationHelper.AppSettings.GetConnectionString("DataContext")));
 
+            services.AddMvp24HoursNotification();
             services.AddMvp24HoursDbAsyncService<DataContext>();
+
+            if (enableFluentValidation)
+            {
+                services.AddSingleton<IValidator<Customer>, CustomerValidator>();
+            }
 
             // register my services
             services.AddScoped<CustomerServiceAsync, CustomerServiceAsync>();
@@ -99,19 +114,18 @@ namespace Mvp24Hours.Patterns.Test.Helpers
                 customer.Contacts.Add(new Contact
                 {
                     Description = $"202-555-014{i}",
-                    Type = Enums.ContactType.CellPhone,
+                    Type = ContactType.CellPhone,
                     Active = true
                 });
                 customer.Contacts.Add(new Contact
                 {
                     Description = $"test{i}@sample.com",
-                    Type = Enums.ContactType.Email,
+                    Type = ContactType.Email,
                     Active = true
                 });
                 customers.Add(customer);
             }
             await service.AddAsync(customers);
-            await service.SaveChangesAsync();
         }
     }
 }
