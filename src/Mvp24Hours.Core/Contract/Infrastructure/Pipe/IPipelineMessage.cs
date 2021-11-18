@@ -21,9 +21,9 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
         /// </summary>
         bool IsLocked { get; }
         /// <summary>
-        /// Indicates whether the message is successfully traveling through the pipeline
+        /// Indicates if the message is faulty
         /// </summary>
-        bool IsSuccess { get; }
+        bool IsFaulty { get; }
         /// <summary>
         /// List of feedback messages
         /// </summary>

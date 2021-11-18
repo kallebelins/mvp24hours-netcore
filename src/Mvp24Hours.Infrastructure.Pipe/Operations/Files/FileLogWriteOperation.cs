@@ -21,7 +21,7 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations.Files
 
         public override Task<IPipelineMessage> Execute(IPipelineMessage input)
         {
-            FileLogHelper.WriteLog(input.GetContentAll(), "message", $"Token: {input.Token} / IsSuccess: {input.IsSuccess} / Warnings: {string.Join('/', input.Messages)}", FileLogPath);
+            FileLogHelper.WriteLog(input.GetContentAll(), "message", $"Token: {input.Token} / IsSuccess: {input.IsFaulty} / Warnings: {string.Join('/', input.Messages)}", FileLogPath);
             return Task.FromResult(input);
         }
     }

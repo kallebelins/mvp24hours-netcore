@@ -8,6 +8,7 @@
 using Mvp24Hours.Application.Pipe.Test.Support.Helpers;
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
+using Mvp24Hours.Core.Enums.Infrastructure;
 using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;
 using System.Diagnostics;
@@ -43,8 +44,8 @@ namespace Mvp24Hours.Application.Pipe.Test
             {
                 Trace.WriteLine("Test 3");
             });
-            var result = pipeline.Execute();
-            Assert.True(result != null);
+            pipeline.Execute();
+            Assert.True(pipeline.GetMessage() != null);
         }
 
         [Fact, Priority(2)]
@@ -72,8 +73,8 @@ namespace Mvp24Hours.Application.Pipe.Test
             // define param
             var message = "Parameter received.".ToMessage();
 
-            var result = pipeline.Execute(message);
-            Assert.True(result != null);
+            pipeline.Execute(message);
+            Assert.True(pipeline.GetMessage() != null);
         }
 
         [Fact, Priority(3)]
@@ -101,10 +102,10 @@ namespace Mvp24Hours.Application.Pipe.Test
             // define attachment for message 
             var message = "Parameter received.".ToMessage();
 
-            var result = pipeline.Execute(message);
+            pipeline.Execute(message);
 
             // get content from result
-            foreach (var item in result.GetContentAll())
+            foreach (var item in pipeline.GetMessage().GetContentAll())
             {
                 if (item is string)
                 {
@@ -112,7 +113,7 @@ namespace Mvp24Hours.Application.Pipe.Test
                 }
             }
 
-            Assert.True(result != null);
+            Assert.True(pipeline.GetMessage() != null);
         }
 
         [Fact, Priority(4)]
@@ -134,8 +135,8 @@ namespace Mvp24Hours.Application.Pipe.Test
                 }
             });
 
-            var result1 = pipeline.Execute();
-            var result2 = pipeline.Execute("Parameter received.".ToMessage());
+            var result1 = pipeline.Execute().GetMessage();
+            var result2 = pipeline.Execute("Parameter received.".ToMessage()).GetMessage();
 
             Assert.True(result1 != null && result2 != null);
         }
@@ -164,8 +165,8 @@ namespace Mvp24Hours.Application.Pipe.Test
                 Trace.WriteLine($"Test 3 - {param}");
             });
 
-            var result = pipeline.Execute("Parameter received.".ToMessage());
-            Assert.True(result != null);
+            pipeline.Execute("Parameter received.".ToMessage());
+            Assert.True(pipeline.GetMessage() != null);
         }
 
         [Fact, Priority(5)]
@@ -202,8 +203,14 @@ namespace Mvp24Hours.Application.Pipe.Test
                 Trace.WriteLine($"Test 4 - {param}");
             });
 
-            var result = pipeline.Execute("Parameter received.".ToMessage());
-            Assert.True(result != null);
+            // interceptors -> locked-operation
+            pipeline.AddInterceptors(_ =>
+            {
+                Trace.WriteLine("Locked-Operation, only one time.");
+            }, PipelineInterceptorType.Locked);
+
+            pipeline.Execute("Parameter received.".ToMessage());
+            Assert.True(pipeline.GetMessage() != null);
         }
 
         [Fact, Priority(6)]
@@ -221,7 +228,7 @@ namespace Mvp24Hours.Application.Pipe.Test
             {
                 string param = input.GetContent<string>();
                 Trace.WriteLine($"Test 2 - {param}");
-                Trace.WriteLine($"Locking....");
+                Trace.WriteLine($"Failure....");
                 input.SetFailure();
             });
             pipeline.Add(input =>
@@ -230,8 +237,14 @@ namespace Mvp24Hours.Application.Pipe.Test
                 Trace.WriteLine($"Test 3 - {param}");
             });
 
-            var result = pipeline.Execute("Parameter received.".ToMessage());
-            Assert.True(result != null);
+            // interceptors -> locked-operation
+            pipeline.AddInterceptors(_ =>
+            {
+                Trace.WriteLine("Faulty-Operation, only one time.");
+            }, PipelineInterceptorType.Faulty);
+
+            pipeline.Execute("Parameter received.".ToMessage());
+            Assert.True(pipeline.GetMessage() != null);
         }
 
         [Fact, Priority(7)]
@@ -249,6 +262,12 @@ namespace Mvp24Hours.Application.Pipe.Test
             {
                 Trace.WriteLine("Operation blocked by 'Error' notification.");
             });
+
+            // interceptors -> locked-operation
+            pipeline.AddInterceptors(_ =>
+            {
+                Trace.WriteLine("Locked-Operation, only one time.");
+            }, PipelineInterceptorType.Locked);
 
             pipeline.Execute();
 
@@ -283,20 +302,44 @@ namespace Mvp24Hours.Application.Pipe.Test
                 Trace.WriteLine("Test 3");
             });
 
+            // interceptors -> first-operation
+            pipeline.AddInterceptors(_ =>
+            {
+                Trace.WriteLine("First-Operation, only one time.");
+            }, PipelineInterceptorType.FirstOperation);
+
             // interceptors -> pre-operation
             pipeline.AddInterceptors(_ =>
             {
                 Trace.WriteLine("Pre-Operation");
-            });
+            }, PipelineInterceptorType.PreOperation);
 
             // interceptors -> post-operation
             pipeline.AddInterceptors(_ =>
             {
                 Trace.WriteLine("Post-Operation");
-            }, true);
+            }, PipelineInterceptorType.PostOperation);
 
-            var result = pipeline.Execute();
-            Assert.True(result != null);
+            // interceptors -> last-operation
+            pipeline.AddInterceptors(_ =>
+            {
+                Trace.WriteLine("Last-Operation, only one time.");
+            }, PipelineInterceptorType.LastOperation);
+
+            // interceptors -> locked-operation
+            pipeline.AddInterceptors(_ =>
+            {
+                Trace.WriteLine("Locked-Operation, only one time.");
+            }, PipelineInterceptorType.Locked);
+
+            // interceptors -> faulty-operation
+            pipeline.AddInterceptors(_ =>
+            {
+                Trace.WriteLine("Faulty-Operation, only one time.");
+            }, PipelineInterceptorType.Faulty);
+
+            pipeline.Execute();
+            Assert.True(pipeline.GetMessage() != null);
         }
 
     }

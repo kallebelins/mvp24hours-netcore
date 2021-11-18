@@ -8,6 +8,7 @@
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Core.Enums;
+using Mvp24Hours.Core.Enums.Infrastructure;
 using Mvp24Hours.Core.Extensions;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Extensions;
@@ -23,7 +24,6 @@ namespace Mvp24Hours.Infrastructure.Pipe
     /// <summary>
     /// <see cref="Mvp24Hours.Core.Contract.Infrastructure.Pipe.IPipeline"/>
     /// </summary>
-    [DebuggerStepThrough]
     public class Pipeline : IPipeline
     {
         #region [ Ctor ]
@@ -57,9 +57,11 @@ namespace Mvp24Hours.Infrastructure.Pipe
 
         #region [ Fields ]
         private readonly IList<IOperation> operations = new List<IOperation>();
-        private readonly IList<IOperation> preOperationsInterceptors = new List<IOperation>();
-        private readonly IList<IOperation> postOperationsInterceptors = new List<IOperation>();
+        private readonly IList<KeyValuePair<Func<IPipelineMessage, bool>, IOperation>> preCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, IOperation>>();
+        private readonly IList<KeyValuePair<Func<IPipelineMessage, bool>, IOperation>> postCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, IOperation>>();
+        private readonly IDictionary<PipelineInterceptorType, IList<IOperation>> dictionaryInterceptors = new Dictionary<PipelineInterceptorType, IList<IOperation>>();
         private readonly bool _isBreakOnFail;
+        private IPipelineMessage _pipelineMessage = null;
         private string _token;
         #endregion
 
@@ -74,6 +76,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
         #endregion
 
         #region [ Methods ]
+        public IPipelineMessage GetMessage() => _pipelineMessage;
         public IPipeline Add<T>() where T : IOperation
         {
             IOperation instance = ServiceProviderHelper.GetService<T>();
@@ -109,7 +112,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
             this.operations.Add(new OperationAction(action, isRequired));
             return this;
         }
-        public IPipeline AddInterceptors<T>(bool postOperation = false) where T : IOperation
+        public IPipeline AddInterceptors<T>(PipelineInterceptorType pipelineInterceptor = PipelineInterceptorType.PostOperation) where T : IOperation
         {
             IOperation instance = ServiceProviderHelper.GetService<T>();
             if (instance == null)
@@ -117,16 +120,59 @@ namespace Mvp24Hours.Infrastructure.Pipe
                 Type type = typeof(T);
                 if (type.IsClass && !type.IsAbstract)
                 {
-                    return AddInterceptors(Activator.CreateInstance<T>(), postOperation);
+                    return AddInterceptors(Activator.CreateInstance<T>(), pipelineInterceptor);
                 }
                 else
                 {
                     throw new ArgumentNullException("Operation not found. Check if it has been registered in this context.");
                 }
             }
-            return AddInterceptors(instance, postOperation);
+            return AddInterceptors(instance, pipelineInterceptor);
         }
-        public IPipeline AddInterceptors(IOperation operation, bool postOperation = false)
+        public IPipeline AddInterceptors(IOperation operation, PipelineInterceptorType pipelineInterceptor = PipelineInterceptorType.PostOperation)
+        {
+            if (operation == null)
+            {
+                throw new ArgumentNullException("Operation has not been defined or is null.");
+            }
+            if (!this.dictionaryInterceptors.ContainsKey(pipelineInterceptor))
+            {
+                this.dictionaryInterceptors.Add(pipelineInterceptor, new List<IOperation>());
+            }
+            this.dictionaryInterceptors[pipelineInterceptor].Add(operation);
+            return this;
+        }
+        public IPipeline AddInterceptors(Action<IPipelineMessage> action, PipelineInterceptorType pipelineInterceptor = PipelineInterceptorType.PostOperation)
+        {
+            if (action == null)
+            {
+                throw new ArgumentNullException("Action is mandatory.");
+            }
+            if (!this.dictionaryInterceptors.ContainsKey(pipelineInterceptor))
+            {
+                this.dictionaryInterceptors.Add(pipelineInterceptor, new List<IOperation>());
+            }
+            this.dictionaryInterceptors[pipelineInterceptor].Add(new OperationAction(action));
+            return this;
+        }
+        public IPipeline AddInterceptors<T>(Func<IPipelineMessage, bool> condition, bool postOperation = true) where T : IOperation
+        {
+            IOperation instance = ServiceProviderHelper.GetService<T>();
+            if (instance == null)
+            {
+                Type type = typeof(T);
+                if (type.IsClass && !type.IsAbstract)
+                {
+                    return AddInterceptors(Activator.CreateInstance<T>(), condition, postOperation);
+                }
+                else
+                {
+                    throw new ArgumentNullException("Operation not found. Check if it has been registered in this context.");
+                }
+            }
+            return AddInterceptors(instance, condition, postOperation);
+        }
+        public IPipeline AddInterceptors(IOperation operation, Func<IPipelineMessage, bool> condition, bool postOperation = true)
         {
             if (operation == null)
             {
@@ -134,35 +180,41 @@ namespace Mvp24Hours.Infrastructure.Pipe
             }
             if (postOperation)
             {
-                this.postOperationsInterceptors.Add(operation);
+                this.postCustomInterceptors.Add(new KeyValuePair<Func<IPipelineMessage, bool>, IOperation>(condition, operation));
             }
             else
             {
-                this.preOperationsInterceptors.Add(operation);
+                this.preCustomInterceptors.Add(new KeyValuePair<Func<IPipelineMessage, bool>, IOperation>(condition, operation));
             }
             return this;
         }
-        public IPipeline AddInterceptors(Action<IPipelineMessage> action, bool postOperation = false)
+        public IPipeline AddInterceptors(Action<IPipelineMessage> action, Func<IPipelineMessage, bool> condition, bool postOperation = true)
         {
             if (action == null)
             {
                 throw new ArgumentNullException("Action is mandatory.");
             }
+            if (condition == null)
+            {
+                throw new ArgumentNullException("Condition is mandatory.");
+            }
             if (postOperation)
             {
-                this.postOperationsInterceptors.Add(new OperationAction(action));
+                this.postCustomInterceptors.Add(new KeyValuePair<Func<IPipelineMessage, bool>, IOperation>(condition, new OperationAction(action)));
             }
             else
             {
-                this.preOperationsInterceptors.Add(new OperationAction(action));
+                this.preCustomInterceptors.Add(new KeyValuePair<Func<IPipelineMessage, bool>, IOperation>(condition, new OperationAction(action)));
             }
             return this;
         }
-        public IPipelineMessage Execute(IPipelineMessage input = null)
+        public IPipeline Execute(IPipelineMessage input = null)
         {
-            return RunOperations(this.operations, input);
+            _pipelineMessage = input ?? _pipelineMessage;
+            _pipelineMessage = RunOperations(this.operations, _pipelineMessage);
+            return this;
         }
-        internal IPipelineMessage RunOperations(IList<IOperation> _operations, IPipelineMessage input = null, bool onlyOperationDefault = false)
+        internal IPipelineMessage RunOperations(IList<IOperation> _operations, IPipelineMessage input, bool onlyOperationDefault = false)
         {
             if (!_operations.AnyOrNotNull())
             {
@@ -179,45 +231,106 @@ namespace Mvp24Hours.Infrastructure.Pipe
                 _token = input.Token.HasValue() ? input.Token : Guid.NewGuid().ToString();
             }
 
-            return _operations.Aggregate(input, (current, operation) =>
+            if (!onlyOperationDefault && dictionaryInterceptors.ContainsKey(PipelineInterceptorType.FirstOperation))
             {
-                current.SetToken(this._token);
-                if (!operation.IsRequired && (!current.IsSuccess || !IsValidContext) && this._isBreakOnFail)
-                {
-                    return current;
-                }
+                RunOperations(dictionaryInterceptors[PipelineInterceptorType.FirstOperation], input, true);
+            }
 
-                if (!operation.IsRequired && current.IsLocked)
-                {
-                    return current;
-                }
+            _ = _operations.Aggregate(input, (current, operation) =>
+              {
+                  current.SetToken(this._token);
 
-                try
-                {
-                    // pre-operation
-                    if (!onlyOperationDefault)
-                    {
-                        RunOperations(this.preOperationsInterceptors, current, true);
-                    }
+                  if (!onlyOperationDefault)
+                  {
+                      if (current.IsFaulty || !IsValidContext)
+                      {
+                          if (dictionaryInterceptors.ContainsKey(PipelineInterceptorType.Faulty))
+                          {
+                              RunOperations(dictionaryInterceptors[PipelineInterceptorType.Faulty], current, true);
+                              dictionaryInterceptors.Remove(PipelineInterceptorType.Faulty);
+                          }
 
-                    // operation
-                    operation.Execute(current);
+                          if (this._isBreakOnFail)
+                          {
+                              return current;
+                          }
+                      }
 
-                    // post-operation
-                    if (!onlyOperationDefault)
-                    {
-                        RunOperations(this.postOperationsInterceptors, current, true);
-                    }
+                      if (current.IsLocked)
+                      {
+                          if (dictionaryInterceptors.ContainsKey(PipelineInterceptorType.Locked))
+                          {
+                              RunOperations(dictionaryInterceptors[PipelineInterceptorType.Locked], current, true);
+                              dictionaryInterceptors.Remove(PipelineInterceptorType.Locked);
+                          }
 
-                    return current;
-                }
-                catch (Exception ex)
-                {
-                    current.Messages.Add(new MessageResult((ex?.InnerException ?? ex).Message, MessageType.Error));
-                    input.AddContent(ex);
-                }
-                return current;
-            });
+                          if (!operation.IsRequired)
+                          {
+                              return current;
+                          }
+                      }
+                  }
+
+                  try
+                  {
+                      // pre-operation
+                      if (!onlyOperationDefault)
+                      {
+                          if (preCustomInterceptors.AnyOrNotNull())
+                          {
+                              foreach (var ci in preCustomInterceptors)
+                              {
+                                  if (ci.Key.Invoke(input))
+                                  {
+                                      RunOperations(new List<IOperation> { ci.Value }, current, true);
+                                  }
+                              }
+                          }
+                          if (dictionaryInterceptors.ContainsKey(PipelineInterceptorType.PreOperation))
+                          {
+                              RunOperations(dictionaryInterceptors[PipelineInterceptorType.PreOperation], current, true);
+                          }
+                      }
+
+                      // operation
+                      operation.Execute(current);
+
+                      // post-operation
+                      if (!onlyOperationDefault)
+                      {
+                          if (dictionaryInterceptors.ContainsKey(PipelineInterceptorType.PostOperation))
+                          {
+                              RunOperations(dictionaryInterceptors[PipelineInterceptorType.PostOperation], current, true);
+                          }
+
+                          if (postCustomInterceptors.AnyOrNotNull())
+                          {
+                              foreach (var ci in postCustomInterceptors)
+                              {
+                                  if (ci.Key.Invoke(input))
+                                  {
+                                      RunOperations(new List<IOperation> { ci.Value }, current, true);
+                                  }
+                              }
+                          }
+                      }
+
+                      return current;
+                  }
+                  catch (Exception ex)
+                  {
+                      current.Messages.Add(new MessageResult((ex?.InnerException ?? ex).Message, MessageType.Error));
+                      input.AddContent(ex);
+                  }
+                  return current;
+              });
+
+            if (!onlyOperationDefault && dictionaryInterceptors.ContainsKey(PipelineInterceptorType.LastOperation))
+            {
+                RunOperations(dictionaryInterceptors[PipelineInterceptorType.LastOperation], input, true);
+            }
+
+            return input;
         }
 
         #endregion

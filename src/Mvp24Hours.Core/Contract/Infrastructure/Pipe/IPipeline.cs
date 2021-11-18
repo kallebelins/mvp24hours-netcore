@@ -5,6 +5,7 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Mvp24Hours.Core.Enums.Infrastructure;
 using System;
 
 namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
@@ -16,12 +17,21 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
     /// <code>
     ///     IPipeline pipeline = new Pipeline();
     ///     pipeline.Add(new FileLogWriteOperation());
-    ///     var result = await pipeline.Execute(filter.ToMessage());
-    ///     return result.ToBusiness{Product}();
+    ///     pipeline.Execute(filter.ToMessage());
+    ///     return pipeline.GetMessage().ToBusiness{Product}();
     /// </code>
     /// </example>
     public interface IPipeline
     {
+        /// <summary>
+        /// Get message package
+        /// </summary>
+        /// <returns></returns>
+        IPipelineMessage GetMessage();
+        /// <summary>
+        /// Records operations
+        /// </summary>
+        IPipeline Add<T>() where T : IOperation;
         /// <summary>
         /// Records operations
         /// </summary>
@@ -31,24 +41,32 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
         /// </summary>
         IPipeline Add(Action<IPipelineMessage> action, bool isRequired = false);
         /// <summary>
-        /// Records operations
+        /// Records operations interceptors
         /// </summary>
-        IPipeline Add<T>() where T : IOperation;
+        IPipeline AddInterceptors<T>(PipelineInterceptorType pipelineInterceptor = PipelineInterceptorType.PostOperation) where T : IOperation;
         /// <summary>
         /// Records operations interceptors
         /// </summary>
-        IPipeline AddInterceptors(IOperation operation, bool postOperation = false);
+        IPipeline AddInterceptors(IOperation operation, PipelineInterceptorType pipelineInterceptor = PipelineInterceptorType.PostOperation);
         /// <summary>
         /// Records operations interceptors
         /// </summary>
-        IPipeline AddInterceptors(Action<IPipelineMessage> action, bool postOperation = false);
+        IPipeline AddInterceptors(Action<IPipelineMessage> action, PipelineInterceptorType pipelineInterceptor = PipelineInterceptorType.PostOperation);
         /// <summary>
         /// Records operations interceptors
         /// </summary>
-        IPipeline AddInterceptors<T>(bool postOperation = false) where T : IOperation;
+        IPipeline AddInterceptors<T>(Func<IPipelineMessage, bool> condition, bool postOperation = true) where T : IOperation;
+        /// <summary>
+        /// Records operations interceptors
+        /// </summary>
+        IPipeline AddInterceptors(IOperation operation, Func<IPipelineMessage, bool> condition, bool postOperation = true);
+        /// <summary>
+        /// Records operations interceptors
+        /// </summary>
+        IPipeline AddInterceptors(Action<IPipelineMessage> action, Func<IPipelineMessage, bool> condition, bool postOperation = true);
         /// <summary>
         /// Performs operations 
         /// </summary>
-        IPipelineMessage Execute(IPipelineMessage input = null);
+        IPipeline Execute(IPipelineMessage input = null);
     }
 }

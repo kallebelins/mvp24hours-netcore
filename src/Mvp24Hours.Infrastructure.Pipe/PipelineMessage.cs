@@ -42,15 +42,15 @@ namespace Mvp24Hours.Infrastructure.Pipe
         #region [ Fields ]
         private readonly Dictionary<string, object> _contents;
         private IList<IMessageResult> _messages;
-        private bool isSuccess = true;
+        private bool isFaulty = false;
         #endregion
 
         #region [ Properties ]
-        public bool IsSuccess
+        public bool IsFaulty
         {
             get
             {
-                return !Messages?.Any(x => x.Type == Core.Enums.MessageType.Error) ?? isSuccess;
+                return isFaulty || Messages.Any(x => x.Type == Core.Enums.MessageType.Error);
             }
         }
         public IList<IMessageResult> Messages
@@ -128,7 +128,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
         }
         public void SetFailure()
         {
-            isSuccess = false;
+            isFaulty = true;
         }
         #endregion
     }

@@ -24,7 +24,6 @@ namespace Mvp24Hours.Infrastructure.Pipe
     /// <summary>
     /// <see cref="Mvp24Hours.Core.Contract.Infrastructure.Pipe.IPipelineAsync"/>
     /// </summary>
-    [DebuggerStepThrough]
     public class PipelineAsync : IPipelineAsync
     {
         #region [ Ctor ]
@@ -185,7 +184,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
             {
                 var result = await current;
                 result.SetToken(this._token);
-                if (!operation.IsRequired && (!result.IsSuccess || !IsValidContext) && this._isBreakOnFail)
+                if (!operation.IsRequired && (!result.IsFaulty || !IsValidContext) && this._isBreakOnFail)
                 {
                     return result;
                 }
