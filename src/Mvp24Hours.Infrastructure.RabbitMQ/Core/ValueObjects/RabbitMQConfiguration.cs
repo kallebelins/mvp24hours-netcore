@@ -1,9 +1,6 @@
-﻿using Mvp24Hours.Core.ValueObjects;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
-namespace Mvp24Hours.Infrastructure.RabbitMQ.ValueObjects
+namespace Mvp24Hours.Core.ValueObjects.RabbitMQ
 {
     public class RabbitMQConfiguration : BaseVO
     {
