@@ -48,11 +48,19 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
         {
             if (_event == null)
             {
-                _event = new EventingBasicConsumer(Channel);
-                _event.Received += Event_Received;
-                Channel.BasicConsume(queue: Options.RoutingKey,
-                     autoAck: false,
-                     consumer: _event);
+                try
+                {
+                    _event = new EventingBasicConsumer(Channel);
+                    _event.Received += Event_Received;
+                    Channel.BasicConsume(queue: Options.RoutingKey,
+                         autoAck: false,
+                         consumer: _event);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Error(ex);
+                    throw;
+                }
             }
         }
 
@@ -69,9 +77,11 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
                     Channel.BasicAck(e.DeliveryTag, false);
                 });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 Channel.BasicNack(e.DeliveryTag, false, true);
+                Logging.Error(ex);
+                throw;
             }
         }
 
