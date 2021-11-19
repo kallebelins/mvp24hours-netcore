@@ -39,7 +39,7 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations
         #endregion
 
         #region [ Methods ]
-        public abstract Task<IPipelineMessage> Execute(IPipelineMessage input);
+        public abstract Task<IPipelineMessage> ExecuteAsync(IPipelineMessage input);
         #endregion
     }
 }

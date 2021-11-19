@@ -5,6 +5,7 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Mvp24Hours.Core.Enums.Infrastructure;
 using System;
 using System.Threading.Tasks;
 
@@ -17,39 +18,56 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
     /// <code>
     ///     IPipelineAsync pipeline = new PipelineAsync();
     ///     pipeline.AddAsync(new FileLogWriteOperation());
-    ///     var result = await pipeline.Execute(filter.ToMessage());
-    ///     return result.ToBusiness{Product}();
+    ///     await pipeline.Execute(filter.ToMessage());
+    ///     return pipeline.GetMessage().ToBusinessAsync{Product}();
     /// </code>
     /// </example>
     public interface IPipelineAsync
     {
         /// <summary>
-        /// Records async operations 
+        /// Get message package
         /// </summary>
-        IPipelineAsync AddAsync(IOperationAsync operation);
+        /// <returns></returns>
+        IPipelineMessage GetMessage();
         /// <summary>
-        /// Records async operations
+        /// Records operations
         /// </summary>
-        IPipelineAsync AddAsync(Action<IPipelineMessage> action, bool isRequired = false);
+        IPipelineAsync Add<T>() where T : IOperationAsync;
         /// <summary>
-        /// Records async operations
+        /// Records operations
         /// </summary>
-        IPipelineAsync AddAsync<T>() where T : IOperationAsync;
+        IPipelineAsync Add(IOperationAsync operation);
         /// <summary>
-        /// Records async operations interceptors
+        /// Records operations
         /// </summary>
-        IPipelineAsync AddInterceptorsAsync(IOperationAsync operation, bool postOperation = false);
+        IPipelineAsync Add(Action<IPipelineMessage> action, bool isRequired = false);
         /// <summary>
-        /// Records async operations interceptors
+        /// Records operations interceptors
         /// </summary>
-        IPipelineAsync AddInterceptorsAsync(Action<IPipelineMessage> action, bool postOperation = false);
+        IPipelineAsync AddInterceptors<T>(PipelineInterceptorType pipelineInterceptor = PipelineInterceptorType.PostOperation) where T : IOperationAsync;
         /// <summary>
-        /// Records async operations interceptors
+        /// Records operations interceptors
         /// </summary>
-        IPipelineAsync AddInterceptorsAsync<T>(bool postOperation = false) where T : IOperationAsync;
+        IPipelineAsync AddInterceptors(IOperationAsync operation, PipelineInterceptorType pipelineInterceptor = PipelineInterceptorType.PostOperation);
+        /// <summary>
+        /// Records operations interceptors
+        /// </summary>
+        IPipelineAsync AddInterceptors(Action<IPipelineMessage> action, PipelineInterceptorType pipelineInterceptor = PipelineInterceptorType.PostOperation);
+        /// <summary>
+        /// Records operations interceptors
+        /// </summary>
+        IPipelineAsync AddInterceptors<T>(Func<IPipelineMessage, bool> condition, bool postOperation = true) where T : IOperationAsync;
+        /// <summary>
+        /// Records operations interceptors
+        /// </summary>
+        IPipelineAsync AddInterceptors(IOperationAsync operation, Func<IPipelineMessage, bool> condition, bool postOperation = true);
+        /// <summary>
+        /// Records operations interceptors
+        /// </summary>
+        IPipelineAsync AddInterceptors(Action<IPipelineMessage> action, Func<IPipelineMessage, bool> condition, bool postOperation = true);
         /// <summary>
         /// Performs async operations
         /// </summary>
-        Task<IPipelineMessage> ExecuteAsync(IPipelineMessage input = null);
+        Task<IPipelineAsync> ExecuteAsync(IPipelineMessage input = null);
     }
 }

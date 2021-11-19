@@ -293,9 +293,11 @@ namespace Mvp24Hours.Application.Pipe.Test
             {
                 Trace.WriteLine("Test 1");
             });
-            pipeline.Add(_ =>
+            pipeline.Add(input =>
             {
                 Trace.WriteLine("Test 2");
+                Trace.WriteLine("Adding value to conditional interceptor test...");
+                input.AddContent(1);
             });
             pipeline.Add(_ =>
             {
@@ -337,6 +339,16 @@ namespace Mvp24Hours.Application.Pipe.Test
             {
                 Trace.WriteLine("Faulty-Operation, only one time.");
             }, PipelineInterceptorType.Faulty);
+
+            // interceptors -> conditional
+            pipeline.AddInterceptors(_ =>
+            {
+                Trace.WriteLine("Conditional-Operation.");
+            },
+            input =>
+            {
+                return input.HasContent<int>();
+            });
 
             pipeline.Execute();
             Assert.True(pipeline.GetMessage() != null);

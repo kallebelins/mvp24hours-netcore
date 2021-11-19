@@ -28,7 +28,7 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations
             return Task.FromResult<T>(default);
         }
 
-        public override async Task<IPipelineMessage> Execute(IPipelineMessage input)
+        public override async Task<IPipelineMessage> ExecuteAsync(IPipelineMessage input)
         {
             var result = await MapperAsync(input);
             if (result != null)

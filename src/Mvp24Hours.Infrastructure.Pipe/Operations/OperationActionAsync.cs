@@ -27,7 +27,7 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations
             this._isRequired = isRequired;
         }
 
-        public override Task<IPipelineMessage> Execute(IPipelineMessage input)
+        public override Task<IPipelineMessage> ExecuteAsync(IPipelineMessage input)
         {
             if (this._action != null)
             {

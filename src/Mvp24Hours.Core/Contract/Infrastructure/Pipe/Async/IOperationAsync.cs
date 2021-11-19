@@ -17,7 +17,7 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
         /// <summary>  
         /// Perform an operation
         /// </summary>
-        Task<IPipelineMessage> Execute(IPipelineMessage input);
+        Task<IPipelineMessage> ExecuteAsync(IPipelineMessage input);
         /// <summary>
         /// Indicates whether operation is mandatory (even with failure)
         /// </summary>

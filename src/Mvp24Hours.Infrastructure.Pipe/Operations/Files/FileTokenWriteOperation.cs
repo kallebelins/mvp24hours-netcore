@@ -18,7 +18,7 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations.Files
     {
         public virtual string FileLogPath => null;
 
-        public override Task<IPipelineMessage> Execute(IPipelineMessage input)
+        public override Task<IPipelineMessage> ExecuteAsync(IPipelineMessage input)
         {
             var dto = input.GetContent<T>();
 

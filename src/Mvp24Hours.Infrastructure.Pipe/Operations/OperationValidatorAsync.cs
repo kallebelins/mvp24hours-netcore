@@ -15,7 +15,7 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations
     /// </summary>
     public abstract class OperationValidatorAsync : OperationBaseAsync
     {
-        public override async Task<IPipelineMessage> Execute(IPipelineMessage input)
+        public override async Task<IPipelineMessage> ExecuteAsync(IPipelineMessage input)
         {
             if (!await IsValid(input))
             {

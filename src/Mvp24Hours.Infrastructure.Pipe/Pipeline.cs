@@ -16,7 +16,6 @@ using Mvp24Hours.Infrastructure.Helpers;
 using Mvp24Hours.Infrastructure.Pipe.Operations;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace Mvp24Hours.Infrastructure.Pipe
