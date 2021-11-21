@@ -34,7 +34,8 @@ namespace Mvp24Hours.Patterns.Test
             var source = new CancellationTokenSource(TimeSpan.FromSeconds(5));
             while (!source.IsCancellationRequested)
             {
-                ServiceProviderHelper.GetService<CustomerConsumer>();
+                var consumer = ServiceProviderHelper.GetService<CustomerConsumer>();
+                consumer.Consume();
             }
             Assert.True(true);
         }

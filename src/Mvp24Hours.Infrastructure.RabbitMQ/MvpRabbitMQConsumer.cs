@@ -17,50 +17,45 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
         protected MvpRabbitMQConsumer()
             : base()
         {
-            CreateEvent();
         }
 
         protected MvpRabbitMQConsumer(string routingKey)
             : base(routingKey)
         {
-            CreateEvent();
         }
 
         protected MvpRabbitMQConsumer(string hostAddress, string routingKey)
             : base(hostAddress, routingKey)
         {
-            CreateEvent();
         }
 
         protected MvpRabbitMQConsumer(RabbitMQConfiguration configuration)
             : base(configuration)
         {
-            CreateEvent();
         }
 
         protected MvpRabbitMQConsumer(RabbitMQConfiguration configuration, RabbitMQQueueOptions options)
             : base(configuration, options)
         {
-            CreateEvent();
         }
 
-        private void CreateEvent()
+        public virtual void Consume()
         {
-            if (_event == null)
+            try
             {
-                try
+                if (_event == null)
                 {
                     _event = new EventingBasicConsumer(Channel);
                     _event.Received += Event_Received;
-                    Channel.BasicConsume(queue: Options.RoutingKey,
-                         autoAck: false,
-                         consumer: _event);
                 }
-                catch (Exception ex)
-                {
-                    Logging.Error(ex);
-                    throw;
-                }
+                Channel.BasicConsume(queue: Options.RoutingKey,
+                     autoAck: false,
+                     consumer: _event);
+            }
+            catch (Exception ex)
+            {
+                Logging.Error(ex);
+                throw;
             }
         }
 
