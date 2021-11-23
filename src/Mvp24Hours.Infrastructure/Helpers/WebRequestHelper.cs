@@ -5,7 +5,10 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Mvp24Hours.Core.Extensions;
+using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -81,9 +84,31 @@ namespace Mvp24Hours.Infrastructure.Helpers
         /// <summary>
         /// 
         /// </summary>
+        public static async Task<T> PostAsync<T>(string urlService, string data = "", Hashtable header = null, ICredentials credentials = null, JsonSerializerSettings jsonSerializerSettings = null)
+        {
+            var result = await SendAsync(urlService, header, credentials, "POST", data);
+            if (!result.HasValue())
+                return default;
+            return result.ToDeserialize<T>(jsonSerializerSettings);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public static async Task<string> GetAsync(string url, Hashtable header = null, ICredentials credentials = null)
         {
             return await SendAsync(url, header, credentials, "GET", null);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static async Task<T> GetAsync<T>(string url, Hashtable header = null, ICredentials credentials = null, JsonSerializerSettings jsonSerializerSettings = null)
+        {
+            var result = await SendAsync(url, header, credentials, "GET", null);
+            if (!result.HasValue())
+                return default;
+            return result.ToDeserialize<T>(jsonSerializerSettings);
         }
 
         /// <summary>
@@ -97,9 +122,31 @@ namespace Mvp24Hours.Infrastructure.Helpers
         /// <summary>
         /// 
         /// </summary>
+        public static async Task<T> PutAsync<T>(string urlService, string data = "", Hashtable header = null, ICredentials credentials = null, JsonSerializerSettings jsonSerializerSettings = null)
+        {
+            var result = await SendAsync(urlService, header, credentials, "PUT", data);
+            if (!result.HasValue())
+                return default;
+            return result.ToDeserialize<T>(jsonSerializerSettings);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public static async Task<string> DeleteAsync(string url, Hashtable header = null, ICredentials credentials = null)
         {
             return await SendAsync(url, header, credentials, "DELETE", null);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static async Task<T> DeleteAsync<T>(string url, Hashtable header = null, ICredentials credentials = null, JsonSerializerSettings jsonSerializerSettings = null)
+        {
+            var result = await SendAsync(url, header, credentials, "DELETE", null);
+            if (!result.HasValue())
+                return default;
+            return result.ToDeserialize<T>(jsonSerializerSettings);
         }
 
         private static async Task<string> SendAsync(string url, Hashtable header, ICredentials credentials, string method, string data)
@@ -170,6 +217,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
                 }
                 catch (WebException we)
                 {
+                    _logger.Error(we);
                     if (we.Response != null)
                     {
                         using var stream = we.Response.GetResponseStream();
@@ -185,6 +233,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
             catch (Exception ex)
             {
                 _logger.Error(ex);
+                throw;
             }
             return result;
         }
