@@ -7,6 +7,7 @@
 //=====================================================================================
 using Microsoft.AspNetCore.Mvc.Filters;
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
+using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Core.Extensions;
 using Mvp24Hours.Core.ValueObjects.Infrastructure;

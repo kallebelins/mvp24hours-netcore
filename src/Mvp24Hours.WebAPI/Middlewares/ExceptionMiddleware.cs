@@ -6,6 +6,7 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Microsoft.AspNetCore.Http;
+using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Core.DTOs;
 using Mvp24Hours.Core.Enums;
 using Mvp24Hours.Infrastructure.Extensions;

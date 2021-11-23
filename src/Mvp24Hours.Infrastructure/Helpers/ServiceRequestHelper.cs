@@ -1,3 +1,4 @@
+using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Infrastructure.Logging;
 using System;
 using System.Net;

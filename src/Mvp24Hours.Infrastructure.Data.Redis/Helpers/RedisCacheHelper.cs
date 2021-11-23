@@ -1,4 +1,12 @@
+//=====================================================================================
+// Developed by Kallebe Lins (kallebe.santos@outlook.com)
+// Teacher, Architect, Consultant and Project Leader
+// Virtual Card: https://www.linkedin.com/in/kallebelins
+//=====================================================================================
+// Reproduction or sharing is free! Contribute to a better world!
+//=====================================================================================
 using Microsoft.Extensions.Caching.Distributed;
+using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Logging;
 using System;

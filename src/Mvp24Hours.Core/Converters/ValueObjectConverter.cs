@@ -13,6 +13,11 @@ namespace Mvp24Hours.Core.Converters
     /// <summary>
     /// Concrete object interface converter.
     /// </summary>
+    /// <remarks>
+    /// <code>
+    /// jsonSerializerSettings.Converters.Add(new ValueObjectConverter<IPagingResult<T>, PagingResult<T>>());
+    /// </code>
+    /// </remarks>
     /// <typeparam name="TInterface">Interface</typeparam>
     /// <typeparam name="TConcrete">Class</typeparam>
     public class ValueObjectConverter<TInterface, TConcrete> : JsonConverter

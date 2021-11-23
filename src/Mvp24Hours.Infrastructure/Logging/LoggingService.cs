@@ -5,6 +5,7 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Infrastructure.Logging.Renderer;
 using NLog;
 using NLog.Config;
@@ -31,7 +32,7 @@ namespace Mvp24Hours.Infrastructure.Logging
             return (ILoggingService)LogManager.GetLogger("NLogLogger", typeof(LoggingService));
         }
 
-        public new void Debug(Exception exception, string format, params object[] args)
+        new public void Debug(Exception exception, string format, params object[] args)
         {
             if (!base.IsDebugEnabled)
             {
@@ -41,7 +42,7 @@ namespace Mvp24Hours.Infrastructure.Logging
             var logEvent = GetLogEvent(_loggerName, LogLevel.Debug, exception, format, args);
             base.Log(typeof(LoggingService), logEvent);
         }
-        public new void Error(Exception exception, string format, params object[] args)
+        new public void Error(Exception exception, string format, params object[] args)
         {
             if (!base.IsErrorEnabled)
             {
@@ -51,7 +52,7 @@ namespace Mvp24Hours.Infrastructure.Logging
             var logEvent = GetLogEvent(_loggerName, LogLevel.Error, exception, format, args);
             base.Log(typeof(LoggingService), logEvent);
         }
-        public new void Fatal(Exception exception, string format, params object[] args)
+        new public void Fatal(Exception exception, string format, params object[] args)
         {
             if (!base.IsFatalEnabled)
             {
@@ -61,7 +62,7 @@ namespace Mvp24Hours.Infrastructure.Logging
             var logEvent = GetLogEvent(_loggerName, LogLevel.Fatal, exception, format, args);
             base.Log(typeof(LoggingService), logEvent);
         }
-        public new void Info(Exception exception, string format, params object[] args)
+        new public void Info(Exception exception, string format, params object[] args)
         {
             if (!base.IsInfoEnabled)
             {
@@ -71,7 +72,7 @@ namespace Mvp24Hours.Infrastructure.Logging
             var logEvent = GetLogEvent(_loggerName, LogLevel.Info, exception, format, args);
             base.Log(typeof(LoggingService), logEvent);
         }
-        public new void Trace(Exception exception, string format, params object[] args)
+        new public void Trace(Exception exception, string format, params object[] args)
         {
             if (!base.IsTraceEnabled)
             {
@@ -81,7 +82,7 @@ namespace Mvp24Hours.Infrastructure.Logging
             var logEvent = GetLogEvent(_loggerName, LogLevel.Trace, exception, format, args);
             base.Log(typeof(LoggingService), logEvent);
         }
-        public new void Warn(Exception exception, string format, params object[] args)
+        new public void Warn(Exception exception, string format, params object[] args)
         {
             if (!base.IsWarnEnabled)
             {

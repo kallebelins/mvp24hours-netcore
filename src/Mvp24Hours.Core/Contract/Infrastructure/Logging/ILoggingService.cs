@@ -7,7 +7,7 @@
 //=====================================================================================
 using System;
 
-namespace Mvp24Hours.Infrastructure.Logging
+namespace Mvp24Hours.Core.Contract.Infrastructure.Logging
 {
     /// <summary>
     /// Provides logging interface and utility functions.
