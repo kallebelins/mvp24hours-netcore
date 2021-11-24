@@ -2,6 +2,17 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Authors>Kallebe Lins</Authors>
+    <Description>Series architectures for fast product construction.</Description>
+    <Copyright></Copyright>
+    <PackageProjectUrl>https://github.com/kallebelins</PackageProjectUrl>
+    <Company>Kallebe Lins</Company>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Version>2.11.241</Version>
+    <AssemblyVersion>2.11.24.1</AssemblyVersion>
+    <FileVersion>2.11.24.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
