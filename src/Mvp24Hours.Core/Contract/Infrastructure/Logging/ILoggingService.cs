@@ -46,7 +46,7 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Logging
         /// <summary>
         /// 
         /// </summary>
-        void Debug(string format, params object[] args);
+        void Debug(string message, params object[] args);
         /// <summary>
         /// 
         /// </summary>
@@ -58,7 +58,7 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Logging
         /// <summary>
         /// 
         /// </summary>
-        void Error(string format, params object[] args);
+        void Error(string message, params object[] args);
         /// <summary>
         /// 
         /// </summary>
@@ -70,7 +70,7 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Logging
         /// <summary>
         /// 
         /// </summary>
-        void Fatal(string format, params object[] args);
+        void Fatal(string message, params object[] args);
         /// <summary>
         /// 
         /// </summary>
@@ -82,7 +82,7 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Logging
         /// <summary>
         /// 
         /// </summary>
-        void Info(string format, params object[] args);
+        void Info(string message, params object[] args);
         /// <summary>
         /// 
         /// </summary>
@@ -94,7 +94,7 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Logging
         /// <summary>
         /// 
         /// </summary>
-        void Trace(string format, params object[] args);
+        void Trace(string message, params object[] args);
         /// <summary>
         /// 
         /// </summary>
@@ -106,7 +106,7 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Logging
         /// <summary>
         /// 
         /// </summary>
-        void Warn(string format, params object[] args);
+        void Warn(string message, params object[] args);
         /// <summary>
         /// 
         /// </summary>

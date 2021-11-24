@@ -11,7 +11,7 @@ using Mvp24Hours.Infrastructure.Helpers;
 
 namespace Mvp24Hours.Application.Redis.Test.Support.Helpers
 {
-    public class StartupHelper
+    public static class StartupHelper
     {
         public static void ConfigureServices()
         {
@@ -19,7 +19,7 @@ namespace Mvp24Hours.Application.Redis.Test.Support.Helpers
 
             services.AddMvp24HoursRedisCache();
 
-            services.BuildMvp24HoursProvider();
+            services.UseMvp24Hours();
         }
     }
 }

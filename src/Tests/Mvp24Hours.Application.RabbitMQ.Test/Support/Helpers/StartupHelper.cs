@@ -12,7 +12,7 @@ using Mvp24Hours.Infrastructure.Helpers;
 
 namespace Mvp24Hours.Application.RabbitMQ.Test.Support.Helpers
 {
-    public class StartupHelper
+    public static class StartupHelper
     {
         public static void ConfigureProducerServices()
         {
@@ -20,7 +20,7 @@ namespace Mvp24Hours.Application.RabbitMQ.Test.Support.Helpers
 
             services.AddScoped<CustomerProducer, CustomerProducer>();
 
-            services.BuildMvp24HoursProvider();
+            services.UseMvp24Hours();
         }
 
         public static void ConfigureConsumerServices()
@@ -29,7 +29,7 @@ namespace Mvp24Hours.Application.RabbitMQ.Test.Support.Helpers
 
             services.AddScoped<CustomerConsumer, CustomerConsumer>();
 
-            services.BuildMvp24HoursProvider();
+            services.UseMvp24Hours();
         }
 
     }

@@ -21,7 +21,7 @@ using System.Collections.Generic;
 
 namespace Mvp24Hours.Patterns.Test.Support.Helpers
 {
-    public class StartupHelper
+    public static class StartupHelper
     {
         public static void ConfigureServices(bool enableFluentValidation = false)
         {
@@ -40,7 +40,7 @@ namespace Mvp24Hours.Patterns.Test.Support.Helpers
 
             services.AddScoped<CustomerService, CustomerService>();
 
-            services.BuildMvp24HoursProvider();
+            services.UseMvp24Hours();
 
             // ensure database
             var db = ServiceProviderHelper.GetService<DataContext>();
@@ -93,7 +93,7 @@ namespace Mvp24Hours.Patterns.Test.Support.Helpers
             // register my services
             services.AddScoped<CustomerServiceAsync, CustomerServiceAsync>();
 
-            services.BuildMvp24HoursProvider();
+            services.UseMvp24Hours();
 
             // ensure database
             var db = ServiceProviderHelper.GetService<DataContext>();

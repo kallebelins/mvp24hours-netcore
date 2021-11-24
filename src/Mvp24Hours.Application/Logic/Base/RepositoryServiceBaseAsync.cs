@@ -14,7 +14,6 @@ using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Core.ValueObjects.Infrastructure;
 using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;
-using Mvp24Hours.Infrastructure.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -48,7 +47,7 @@ namespace Mvp24Hours.Business.Logic
         /// <returns>ILoggingService</returns>
         protected virtual ILoggingService Logging
         {
-            get { return logger ??= LoggingService.GetLoggingService(); }
+            get { return logger ??= ServiceProviderHelper.GetService<ILoggingService>(); }
         }
 
         /// <summary>

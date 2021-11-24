@@ -11,7 +11,7 @@ using Mvp24Hours.Infrastructure.Helpers;
 
 namespace Mvp24Hours.Application.Pipe.Test.Support.Helpers
 {
-    public class StartupHelper
+    public static class StartupHelper
     {
         public static void ConfigureServices()
         {
@@ -20,7 +20,7 @@ namespace Mvp24Hours.Application.Pipe.Test.Support.Helpers
             services.AddMvp24HoursNotification();
             services.AddMvp24HoursPipeline();
 
-            services.BuildMvp24HoursProvider();
+            services.UseMvp24Hours();
         }
 
         public static void ConfigureServicesAsync()
@@ -30,7 +30,7 @@ namespace Mvp24Hours.Application.Pipe.Test.Support.Helpers
             services.AddMvp24HoursNotification();
             services.AddMvp24HoursPipelineAsync();
 
-            services.BuildMvp24HoursProvider();
+            services.UseMvp24Hours();
         }
     }
 }

@@ -18,6 +18,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
         /// </summary>
         public static IServiceCollection AddMvp24HoursPipeline(this IServiceCollection services, string token = null, bool isBreakOnFail = false)
         {
+            services.AddMvp24HoursNotification();
             services.AddScoped<IPipeline>(x => new Pipeline(token, isBreakOnFail));
             return services;
         }
@@ -27,6 +28,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
         /// </summary>
         public static IServiceCollection AddMvp24HoursPipelineAsync(this IServiceCollection services, string token = null, bool isBreakOnFail = false)
         {
+            services.AddMvp24HoursNotification();
             services.AddScoped<IPipelineAsync>(x => new PipelineAsync(token, isBreakOnFail));
             return services;
         }

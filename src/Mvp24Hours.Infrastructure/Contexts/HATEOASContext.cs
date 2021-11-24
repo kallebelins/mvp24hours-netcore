@@ -14,9 +14,9 @@ using System.Linq;
 namespace Mvp24Hours.Infrastructure.Contexts
 {
     /// <summary>
-    /// <see cref="Mvp24Hours.Core.Contract.Infrastructure.Contexts.IHATEOASContext"/>
+    /// <see cref="Mvp24Hours.Core.Contract.Infrastructure.Contexts.IHateoasContext"/>
     /// </summary>
-    public class HATEOASContext : IHATEOASContext
+    public class HATEOASContext : IHateoasContext
     {
         #region [ Fields / Properties ]
         private readonly List<ILinkResult> _links;

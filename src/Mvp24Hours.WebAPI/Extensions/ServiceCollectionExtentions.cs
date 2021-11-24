@@ -5,8 +5,25 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
+using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
+using Mvp24Hours.Infrastructure.Contexts;
+using Mvp24Hours.Infrastructure.Extensions;
+using Mvp24Hours.Infrastructure.Helpers;
+using Mvp24Hours.WebAPI.Filters;
+using Mvp24Hours.WebAPI.Filters.Swagger;
+using Swashbuckle.AspNetCore.Filters;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 
@@ -18,71 +35,126 @@ namespace Mvp24Hours.WebAPI.Extensions
     public static class ServiceCollectionExtentions
     {
         /// <summary>
-        /// 
+        /// Adds essential services
         /// </summary>
-        public static IServiceCollection Remove<T>(this IServiceCollection services)
+        public static IServiceCollection AddMvp24HoursService(this IServiceCollection services)
         {
-            services.Remove(typeof(T));
+            #region [ HttpContext ]
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            #endregion
+
+            #region [ Filters ]
+            services.AddScoped<IHateoasContext, HATEOASContext>();
+
+            services.AddMvc(options =>
+            {
+                options.Filters.Add<NotificationFilter>();
+                options.Filters.Add<HATEOASFilter>();
+            });
+
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>()
+                .AddScoped<IUrlHelper>(x => x.GetRequiredService<IUrlHelperFactory>()
+                .GetUrlHelper(x.GetRequiredService<IActionContextAccessor>().ActionContext));
+            #endregion
+
+            // notification
+            services.AddMvp24HoursNotification();
+
             return services;
         }
 
         /// <summary>
-        /// 
+        /// Add configuration for GzipCompressionProvider
         /// </summary>
-        public static IServiceCollection Remove(this IServiceCollection services, Type type)
+        public static IServiceCollection AddMvp24HoursZipService(this IServiceCollection services)
         {
-            var serviceDescriptor = services.FirstOrDefault(descriptor => descriptor.ServiceType == type);
-            if (serviceDescriptor != null)
+            services.Configure<GzipCompressionProviderOptions>(options =>
             {
-                services.Remove(serviceDescriptor);
-            }
+                options.Level = CompressionLevel.Optimal;
+            });
+
+            services.AddResponseCompression(options =>
+            {
+                options.EnableForHttps = ConfigurationHelper.GetSettings<bool>("Mvp24Hours:Web:ResponseCompressionForHttps");
+                options.Providers.Add<GzipCompressionProvider>();
+            });
 
             return services;
         }
 
         /// <summary>
-        /// 
+        /// Add configuration for Swagger
         /// </summary>
-        public static void AddAllTypes<T>(this IServiceCollection services
-            , Assembly[] assemblies
-            , bool additionalRegisterTypesByThemself = false
-            , ServiceLifetime lifetime = ServiceLifetime.Transient
-        )
+        public static IServiceCollection AddMvp24HoursSwagger(this IServiceCollection services,
+            string version, string title, string xmlCommentsFileName = null,
+            bool enableExample = false, bool enableOAuth2 = false,
+            IEnumerable<Type> authTypes = null)
         {
-            var typesFromAssemblies = assemblies.SelectMany(a =>
-                a.DefinedTypes.Where(x => x.GetInterfaces().Any(i => i == typeof(T))));
-            foreach (var type in typesFromAssemblies)
+            services.AddSwaggerGen(c =>
             {
-                services.Add(new ServiceDescriptor(typeof(T), type, lifetime));
-                if (additionalRegisterTypesByThemself)
+                c.SwaggerDoc(version, new OpenApiInfo { Title = title, Version = version });
+
+                if (enableExample)
                 {
-                    services.Add(new ServiceDescriptor(type, type, lifetime));
+                    c.ExampleFilters();
+                    c.OperationFilter<AddResponseHeadersFilter>();
                 }
-            }
-        }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public static void AddAllGenericTypes(this IServiceCollection services
-            , Type t
-            , Assembly[] assemblies
-            , bool additionalRegisterTypesByThemself = false
-            , ServiceLifetime lifetime = ServiceLifetime.Transient
-        )
-        {
-            var genericType = t;
-            var typesFromAssemblies = assemblies.SelectMany(a => a.DefinedTypes.Where(x => x.GetInterfaces()
-                .Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == genericType)));
+                c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
 
-            foreach (var type in typesFromAssemblies)
+                if (enableOAuth2)
+                {
+                    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                    {
+                        Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n 
+                          Enter 'Bearer' [space] and then your token in the text input below.
+                          \r\n\r\nExample: 'Bearer 12345abcdef'",
+                        Name = "Authorization",
+                        In = ParameterLocation.Header,
+                        Type = SecuritySchemeType.ApiKey,
+                        Scheme = "Bearer"
+                    });
+
+                    if (authTypes == null)
+                    {
+                        c.AddSecurityRequirement(new OpenApiSecurityRequirement() {
+                            {
+                                new OpenApiSecurityScheme {
+                                    Reference = new OpenApiReference {
+                                        Type = ReferenceType.SecurityScheme,
+                                        Id = "Bearer"
+                                    },
+                                    Scheme = "oauth2",
+                                    Name = "Bearer",
+                                    In = ParameterLocation.Header,
+                                },
+                                new List<string>()
+                            }
+                        });
+                    }
+                    else
+                    {
+                        c.OperationFilter<AuthResponsesOperationFilter>(authTypes);
+                    }
+                }
+
+                // Set the comments path for the Swagger JSON and UI.
+                if (!string.IsNullOrEmpty(xmlCommentsFileName))
+                {
+                    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlCommentsFileName);
+                    if (File.Exists(xmlPath))
+                    {
+                        c.IncludeXmlComments(xmlPath);
+                    }
+                }
+            });
+
+            if (enableExample)
             {
-                services.Add(new ServiceDescriptor(t, type, lifetime));
-                if (additionalRegisterTypesByThemself)
-                {
-                    services.Add(new ServiceDescriptor(type, type, lifetime));
-                }
+                services.AddSwaggerExamplesFromAssemblies(Assembly.GetEntryAssembly());
             }
+
+            return services;
         }
     }
 }

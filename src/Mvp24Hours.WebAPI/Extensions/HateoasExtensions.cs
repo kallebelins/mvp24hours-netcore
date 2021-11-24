@@ -13,11 +13,14 @@ using System.Collections.Generic;
 
 namespace Mvp24Hours.WebAPI.Extensions
 {
-    public static class HATEOASExtensions
+    /// <summary>
+    /// 
+    /// </summary>
+    public static class HateoasExtensions
     {
         #region [ Item ]
 
-        public static IHATEOASContext AddLinkItem(this IHATEOASContext result, string routeName)
+        public static IHateoasContext AddLinkItem(this IHateoasContext result, string routeName)
         {
             if (result != null && !string.IsNullOrEmpty(routeName))
             {
@@ -30,7 +33,7 @@ namespace Mvp24Hours.WebAPI.Extensions
             return result;
         }
 
-        public static IHATEOASContext AddLinkItem(this IHATEOASContext result, string routeName, object routeValues)
+        public static IHateoasContext AddLinkItem(this IHateoasContext result, string routeName, object routeValues)
         {
             if (result != null && !string.IsNullOrEmpty(routeName))
             {
@@ -43,7 +46,7 @@ namespace Mvp24Hours.WebAPI.Extensions
             return result;
         }
 
-        public static IHATEOASContext AddLinkItem(this IHATEOASContext result, string routeName, object routeValues, HateoasMethodType method)
+        public static IHateoasContext AddLinkItem(this IHateoasContext result, string routeName, object routeValues, HateoasMethodType method)
         {
             if (result != null && !string.IsNullOrEmpty(routeName))
             {
@@ -60,7 +63,7 @@ namespace Mvp24Hours.WebAPI.Extensions
 
         #region [ Create ]
 
-        public static IHATEOASContext AddLinkItemCreate(this IHATEOASContext result, string routeName)
+        public static IHateoasContext AddLinkItemCreate(this IHateoasContext result, string routeName)
         {
             if (result != null && !string.IsNullOrEmpty(routeName))
             {
@@ -73,7 +76,7 @@ namespace Mvp24Hours.WebAPI.Extensions
             return result;
         }
 
-        public static IHATEOASContext AddLinkItemCreate(this IHATEOASContext result, string routeName, object routeValues)
+        public static IHateoasContext AddLinkItemCreate(this IHateoasContext result, string routeName, object routeValues)
         {
             if (result != null && !string.IsNullOrEmpty(routeName))
             {
@@ -86,7 +89,7 @@ namespace Mvp24Hours.WebAPI.Extensions
             return result;
         }
 
-        public static IHATEOASContext AddLinkItemCreate(this IHATEOASContext result, string routeName, object routeValues, HateoasMethodType method)
+        public static IHateoasContext AddLinkItemCreate(this IHateoasContext result, string routeName, object routeValues, HateoasMethodType method)
         {
             if (result != null && !string.IsNullOrEmpty(routeName))
             {
@@ -103,7 +106,7 @@ namespace Mvp24Hours.WebAPI.Extensions
 
         #region [ Edit ]
 
-        public static IHATEOASContext AddLinkItemEdit(this IHATEOASContext result, string routeName)
+        public static IHateoasContext AddLinkItemEdit(this IHateoasContext result, string routeName)
         {
             if (result != null && !string.IsNullOrEmpty(routeName))
             {
@@ -116,7 +119,7 @@ namespace Mvp24Hours.WebAPI.Extensions
             return result;
         }
 
-        public static IHATEOASContext AddLinkItemEdit(this IHATEOASContext result, string routeName, object routeValues)
+        public static IHateoasContext AddLinkItemEdit(this IHateoasContext result, string routeName, object routeValues)
         {
             if (result != null && !string.IsNullOrEmpty(routeName))
             {
@@ -129,7 +132,7 @@ namespace Mvp24Hours.WebAPI.Extensions
             return result;
         }
 
-        public static IHATEOASContext AddLinkItemEdit(this IHATEOASContext result, string routeName, object routeValues, HateoasMethodType method)
+        public static IHateoasContext AddLinkItemEdit(this IHateoasContext result, string routeName, object routeValues, HateoasMethodType method)
         {
             if (result != null && !string.IsNullOrEmpty(routeName))
             {
@@ -146,7 +149,7 @@ namespace Mvp24Hours.WebAPI.Extensions
 
         #region [ Delete ]
 
-        public static IHATEOASContext AddLinkItemDelete(this IHATEOASContext result, string routeName)
+        public static IHateoasContext AddLinkItemDelete(this IHateoasContext result, string routeName)
         {
             if (result != null && !string.IsNullOrEmpty(routeName))
             {
@@ -159,7 +162,7 @@ namespace Mvp24Hours.WebAPI.Extensions
             return result;
         }
 
-        public static IHATEOASContext AddLinkItemDelete(this IHATEOASContext result, string routeName, object routeValues)
+        public static IHateoasContext AddLinkItemDelete(this IHateoasContext result, string routeName, object routeValues)
         {
             if (result != null && !string.IsNullOrEmpty(routeName))
             {
@@ -172,7 +175,7 @@ namespace Mvp24Hours.WebAPI.Extensions
             return result;
         }
 
-        public static IHATEOASContext AddLinkItemDelete(this IHATEOASContext result, string routeName, object routeValues, HateoasMethodType method)
+        public static IHateoasContext AddLinkItemDelete(this IHateoasContext result, string routeName, object routeValues, HateoasMethodType method)
         {
             if (result != null && !string.IsNullOrEmpty(routeName))
             {
@@ -189,7 +192,7 @@ namespace Mvp24Hours.WebAPI.Extensions
 
         #region [ Self ]
 
-        public static IHATEOASContext AddLinkSelf(this IHATEOASContext result, string routeName)
+        public static IHateoasContext AddLinkSelf(this IHateoasContext result, string routeName)
         {
             if (result != null && !string.IsNullOrEmpty(routeName))
             {
@@ -202,7 +205,7 @@ namespace Mvp24Hours.WebAPI.Extensions
             return result;
         }
 
-        public static IHATEOASContext AddLinkSelf(this IHATEOASContext context, string routeName, object routeValues)
+        public static IHateoasContext AddLinkSelf(this IHateoasContext context, string routeName, object routeValues)
         {
             if (context != null && !string.IsNullOrEmpty(routeName))
             {
@@ -215,7 +218,7 @@ namespace Mvp24Hours.WebAPI.Extensions
             return context;
         }
 
-        public static IHATEOASContext AddLinkSelf(this IHATEOASContext context, string routeName, object routeValues, HateoasMethodType method)
+        public static IHateoasContext AddLinkSelf(this IHateoasContext context, string routeName, object routeValues, HateoasMethodType method)
         {
             if (context != null && !string.IsNullOrEmpty(routeName))
             {
@@ -228,7 +231,7 @@ namespace Mvp24Hours.WebAPI.Extensions
             return context;
         }
 
-        public static IHATEOASContext AddLinkSelf<T>(this IHATEOASContext context, IPagingResult<T> result, string routeName, IPagingCriteria Paging)
+        public static IHateoasContext AddLinkSelf<T>(this IHateoasContext context, IPagingResult<T> result, string routeName, IPagingCriteria Paging)
         {
             if (context != null && !string.IsNullOrEmpty(routeName))
             {
@@ -241,7 +244,7 @@ namespace Mvp24Hours.WebAPI.Extensions
             return context;
         }
 
-        public static IHATEOASContext AddLinkSelf<T>(this IHATEOASContext context, IPagingResult<T> result, string routeName, IPagingCriteria Paging, HateoasMethodType method)
+        public static IHateoasContext AddLinkSelf<T>(this IHateoasContext context, IPagingResult<T> result, string routeName, IPagingCriteria Paging, HateoasMethodType method)
         {
             if (context != null && !string.IsNullOrEmpty(routeName))
             {
@@ -258,7 +261,7 @@ namespace Mvp24Hours.WebAPI.Extensions
 
         #region [ Collection ]
 
-        public static IHATEOASContext AddLinkCollection(this IHATEOASContext result, string routeName)
+        public static IHateoasContext AddLinkCollection(this IHateoasContext result, string routeName)
         {
             if (result != null && !string.IsNullOrEmpty(routeName))
             {
@@ -271,7 +274,7 @@ namespace Mvp24Hours.WebAPI.Extensions
             return result;
         }
 
-        public static IHATEOASContext AddLinkCollection(this IHATEOASContext result, string routeName, object routeValues)
+        public static IHateoasContext AddLinkCollection(this IHateoasContext result, string routeName, object routeValues)
         {
             if (result != null && !string.IsNullOrEmpty(routeName))
             {
@@ -284,7 +287,7 @@ namespace Mvp24Hours.WebAPI.Extensions
             return result;
         }
 
-        public static IHATEOASContext AddLinkCollection(this IHATEOASContext result, string routeName, object routeValues, HateoasMethodType method)
+        public static IHateoasContext AddLinkCollection(this IHateoasContext result, string routeName, object routeValues, HateoasMethodType method)
         {
             if (result != null && !string.IsNullOrEmpty(routeName))
             {
@@ -297,7 +300,7 @@ namespace Mvp24Hours.WebAPI.Extensions
             return result;
         }
 
-        public static IHATEOASContext AddLinkCollection<T>(this IHATEOASContext context, IPagingResult<T> result, string routeName, IPagingCriteria Paging)
+        public static IHateoasContext AddLinkCollection<T>(this IHateoasContext context, IPagingResult<T> result, string routeName, IPagingCriteria Paging)
         {
             if (context != null && !string.IsNullOrEmpty(routeName))
             {
@@ -310,7 +313,7 @@ namespace Mvp24Hours.WebAPI.Extensions
             return context;
         }
 
-        public static IHATEOASContext AddLinkCollection<T>(this IHATEOASContext context, IPagingResult<T> result, string routeName, IPagingCriteria Paging, HateoasMethodType method)
+        public static IHateoasContext AddLinkCollection<T>(this IHateoasContext context, IPagingResult<T> result, string routeName, IPagingCriteria Paging, HateoasMethodType method)
         {
             if (context != null && !string.IsNullOrEmpty(routeName))
             {
@@ -327,13 +330,13 @@ namespace Mvp24Hours.WebAPI.Extensions
 
         #region [ Paging ]
 
-        public static IHATEOASContext AddLinkPaging<T>(this IHATEOASContext context, IPagingResult<T> result, string routeName, IPagingCriteria Paging)
+        public static IHateoasContext AddLinkPaging<T>(this IHateoasContext context, IPagingResult<T> result, string routeName, IPagingCriteria Paging)
         {
             AddLinkPaging(context, result, routeName, Paging, HateoasMethodType.GET);
             return context;
         }
 
-        public static IHATEOASContext AddLinkPaging<T>(this IHATEOASContext context, IPagingResult<T> result, string routeName, IPagingCriteria Paging, HateoasMethodType method)
+        public static IHateoasContext AddLinkPaging<T>(this IHateoasContext context, IPagingResult<T> result, string routeName, IPagingCriteria Paging, HateoasMethodType method)
         {
             if (context == null)
             {

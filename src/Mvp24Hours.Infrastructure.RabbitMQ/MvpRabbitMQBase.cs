@@ -8,7 +8,6 @@
 using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Core.ValueObjects.RabbitMQ;
 using Mvp24Hours.Infrastructure.Helpers;
-using Mvp24Hours.Infrastructure.Logging;
 using RabbitMQ.Client;
 using System;
 
@@ -39,7 +38,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
             }
         }
 
-        protected ILoggingService Logging => _logging ??= LoggingService.GetLoggingService();
+        protected ILoggingService Logging => _logging ??= ServiceProviderHelper.GetService<ILoggingService>();
 
         protected MvpRabbitMQBase()
             : this("mvp24hours-queue")

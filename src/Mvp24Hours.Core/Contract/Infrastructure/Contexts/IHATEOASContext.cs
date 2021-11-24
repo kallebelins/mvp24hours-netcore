@@ -13,7 +13,7 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Contexts
     /// <summary>
     /// Context that represents a container for in-app links HATEOAS
     /// </summary>
-    public interface IHATEOASContext
+    public interface IHateoasContext
     {
         /// <summary>
         /// List of links

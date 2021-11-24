@@ -8,9 +8,10 @@
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
+using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Core.Mappings;
 using Mvp24Hours.Infrastructure.Contexts;
-using Mvp24Hours.Infrastructure.Helpers;
+using Mvp24Hours.Infrastructure.Logging;
 using System.Reflection;
 
 namespace Mvp24Hours.Infrastructure.Extensions
@@ -21,28 +22,39 @@ namespace Mvp24Hours.Infrastructure.Extensions
     public static class ServiceCollectionExtensions
     {
         /// <summary>
-        /// Create a ServiceProvider
+        /// Add Mvp24Hours essential
         /// </summary>
-        public static IServiceCollection BuildMvp24HoursProvider(this IServiceCollection services, ServiceProviderOptions options = null)
+        public static IServiceCollection AddMvp24Hours(this IServiceCollection services)
         {
-            if (options == null)
-            {
-                ServiceProviderHelper.SetProvider(services.BuildServiceProvider());
-            }
-            else
-            {
-                ServiceProviderHelper.SetProvider(services.BuildServiceProvider(options));
-            }
+            services.AddMvp24HoursLogging();
+            services.AddMvp24HoursNotification();
             return services;
         }
 
         /// <summary>
-        /// Adds essential services
+        /// Add logging
+        /// </summary>
+        public static IServiceCollection AddMvp24HoursLogging(this IServiceCollection services)
+        {
+            // notification
+            if (!services.Exists<ILoggingService>())
+            {
+                services.AddScoped<ILoggingService, LoggingService>();
+            }
+
+            return services;
+        }
+
+        /// <summary>
+        /// Add notification pattern
         /// </summary>
         public static IServiceCollection AddMvp24HoursNotification(this IServiceCollection services)
         {
             // notification
-            services.AddScoped<INotificationContext, NotificationContext>();
+            if (!services.Exists<INotificationContext>())
+            {
+                services.AddScoped<INotificationContext, NotificationContext>();
+            }
 
             return services;
         }

@@ -8,7 +8,6 @@
 using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Core.Extensions;
 using Mvp24Hours.Infrastructure.Extensions;
-using Mvp24Hours.Infrastructure.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -31,7 +30,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
 
         static WebRequestHelper()
         {
-            _logger = LoggingService.GetLoggingService();
+            _logger = ServiceProviderHelper.GetService<ILoggingService>();
         }
 
         /// <summary>

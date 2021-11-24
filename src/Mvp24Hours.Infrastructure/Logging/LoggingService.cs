@@ -16,105 +16,140 @@ namespace Mvp24Hours.Infrastructure.Logging
     /// <summary>
     /// Provides logging interface and utility functions.
     /// </summary>
-    public class LoggingService : Logger, ILoggingService
+    public class LoggingService : ILoggingService
     {
-        private const string _loggerName = "NLogLogger";
+        private static readonly Logger _logger;
+        internal const string LOGGER_NAME = "Mvp24HoursLogger";
 
-        /// <summary>
-        /// Get pre-configured instant log
-        /// </summary>
-        public static ILoggingService GetLoggingService()
+        static LoggingService()
         {
             ConfigurationItemFactory.Default.LayoutRenderers
                 .RegisterDefinition("utc_date", typeof(UtcDateRenderer));
             ConfigurationItemFactory.Default.LayoutRenderers
                 .RegisterDefinition("web_variables", typeof(WebVariablesRenderer));
-            return (ILoggingService)LogManager.GetLogger("NLogLogger", typeof(LoggingService));
+
+            _logger = LogManager.GetLogger(LOGGER_NAME);
         }
 
-        new public void Debug(Exception exception, string format, params object[] args)
-        {
-            if (!base.IsDebugEnabled)
-            {
-                return;
-            }
+        public bool IsDebugEnabled => _logger.IsDebugEnabled;
 
-            var logEvent = GetLogEvent(_loggerName, LogLevel.Debug, exception, format, args);
-            base.Log(typeof(LoggingService), logEvent);
-        }
-        new public void Error(Exception exception, string format, params object[] args)
-        {
-            if (!base.IsErrorEnabled)
-            {
-                return;
-            }
+        public bool IsErrorEnabled => _logger.IsErrorEnabled;
 
-            var logEvent = GetLogEvent(_loggerName, LogLevel.Error, exception, format, args);
-            base.Log(typeof(LoggingService), logEvent);
-        }
-        new public void Fatal(Exception exception, string format, params object[] args)
-        {
-            if (!base.IsFatalEnabled)
-            {
-                return;
-            }
+        public bool IsFatalEnabled => _logger.IsFatalEnabled;
 
-            var logEvent = GetLogEvent(_loggerName, LogLevel.Fatal, exception, format, args);
-            base.Log(typeof(LoggingService), logEvent);
-        }
-        new public void Info(Exception exception, string format, params object[] args)
-        {
-            if (!base.IsInfoEnabled)
-            {
-                return;
-            }
+        public bool IsInfoEnabled => _logger.IsInfoEnabled;
 
-            var logEvent = GetLogEvent(_loggerName, LogLevel.Info, exception, format, args);
-            base.Log(typeof(LoggingService), logEvent);
-        }
-        new public void Trace(Exception exception, string format, params object[] args)
-        {
-            if (!base.IsTraceEnabled)
-            {
-                return;
-            }
+        public bool IsTraceEnabled => _logger.IsTraceEnabled;
 
-            var logEvent = GetLogEvent(_loggerName, LogLevel.Trace, exception, format, args);
-            base.Log(typeof(LoggingService), logEvent);
-        }
-        new public void Warn(Exception exception, string format, params object[] args)
-        {
-            if (!base.IsWarnEnabled)
-            {
-                return;
-            }
+        public bool IsWarnEnabled => _logger.IsWarnEnabled;
 
-            var logEvent = GetLogEvent(_loggerName, LogLevel.Warn, exception, format, args);
-            base.Log(typeof(LoggingService), logEvent);
+        public void Debug(string message, params object[] args)
+        {
+            _logger.Debug(message, args);
         }
         public void Debug(Exception exception)
         {
-            this.Debug(exception, string.Empty);
+            Debug(exception, string.Empty);
+        }
+        public void Debug(Exception exception, string format, params object[] args)
+        {
+            if (!_logger.IsDebugEnabled)
+            {
+                return;
+            }
+
+            var logEvent = GetLogEvent(LOGGER_NAME, LogLevel.Debug, exception, format, args);
+            _logger.Log(typeof(LoggingService), logEvent);
+        }
+        public void Error(string message, params object[] args)
+        {
+            _logger.Error(message, args);
         }
         public void Error(Exception exception)
         {
-            this.Error(exception, string.Empty);
+            Error(exception, string.Empty);
+        }
+        public void Error(Exception exception, string format, params object[] args)
+        {
+            if (!_logger.IsErrorEnabled)
+            {
+                return;
+            }
+
+            var logEvent = GetLogEvent(LOGGER_NAME, LogLevel.Error, exception, format, args);
+            _logger.Log(typeof(LoggingService), logEvent);
+        }
+        public void Fatal(string message, params object[] args)
+        {
+            _logger.Fatal(message, args);
         }
         public void Fatal(Exception exception)
         {
-            this.Fatal(exception, string.Empty);
+            Fatal(exception, string.Empty);
+        }
+        public void Fatal(Exception exception, string format, params object[] args)
+        {
+            if (!_logger.IsFatalEnabled)
+            {
+                return;
+            }
+
+            var logEvent = GetLogEvent(LOGGER_NAME, LogLevel.Fatal, exception, format, args);
+            _logger.Log(typeof(LoggingService), logEvent);
+        }
+        public void Info(string message, params object[] args)
+        {
+            _logger.Info(message, args);
         }
         public void Info(Exception exception)
         {
-            this.Info(exception, string.Empty);
+            Info(exception, string.Empty);
+        }
+        public void Info(Exception exception, string format, params object[] args)
+        {
+            if (!_logger.IsInfoEnabled)
+            {
+                return;
+            }
+
+            var logEvent = GetLogEvent(LOGGER_NAME, LogLevel.Info, exception, format, args);
+            _logger.Log(typeof(LoggingService), logEvent);
+        }
+        public void Trace(string message, params object[] args)
+        {
+            _logger.Trace(message, args);
         }
         public void Trace(Exception exception)
         {
-            this.Trace(exception, string.Empty);
+            Trace(exception, string.Empty);
+        }
+        public void Trace(Exception exception, string format, params object[] args)
+        {
+            if (!_logger.IsTraceEnabled)
+            {
+                return;
+            }
+
+            var logEvent = GetLogEvent(LOGGER_NAME, LogLevel.Trace, exception, format, args);
+            _logger.Log(typeof(LoggingService), logEvent);
+        }
+        public void Warn(string message, params object[] args)
+        {
+            _logger.Warn(message, args);
         }
         public void Warn(Exception exception)
         {
-            this.Warn(exception, string.Empty);
+            Warn(exception, string.Empty);
+        }
+        public void Warn(Exception exception, string format, params object[] args)
+        {
+            if (!_logger.IsWarnEnabled)
+            {
+                return;
+            }
+
+            var logEvent = GetLogEvent(LOGGER_NAME, LogLevel.Warn, exception, format, args);
+            _logger.Log(typeof(LoggingService), logEvent);
         }
 
         private LogEventInfo GetLogEvent(string loggerName, LogLevel level, Exception exception, string format, object[] args)

@@ -14,7 +14,6 @@ using Mvp24Hours.Core.ValueObjects.Infrastructure;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;
-using Mvp24Hours.Infrastructure.Logging;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -35,7 +34,7 @@ namespace Mvp24Hours.WebAPI.Filters
 
         public NotificationFilter(INotificationContext notificationContext)
         {
-            _logger = LoggingService.GetLoggingService();
+            _logger = ServiceProviderHelper.GetService<ILoggingService>();
             if (!IsLoaded)
             {
                 string configEnableFilter = ConfigurationHelper.GetSettings("Mvp24Hours:Filters:EnableNotification");

@@ -8,7 +8,6 @@
 using Microsoft.Extensions.Caching.Distributed;
 using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Infrastructure.Extensions;
-using Mvp24Hours.Infrastructure.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Threading;
@@ -32,7 +31,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
 #pragma warning disable S3963 // "static" fields should be initialized inline
         static RedisObjectCacheHelper()
         {
-            _logger = LoggingService.GetLoggingService();
+            _logger = ServiceProviderHelper.GetService<ILoggingService>();
         }
 #pragma warning restore S3963 // "static" fields should be initialized inline
 
@@ -71,7 +70,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
             }
         }
 
-        public static async Task SetObjectAsync(string key, string value, int minutes, JsonSerializerSettings jsonSerializerSettings = null, CancellationToken token = default)
+        public static async Task SetObjectAsync(string key, object value, int minutes, JsonSerializerSettings jsonSerializerSettings = null, CancellationToken token = default)
         {
             if (RedisCache == null)
             {
@@ -88,7 +87,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
             }
         }
 
-        public static async Task SetObjectAsync(string key, string value, DateTimeOffset time, JsonSerializerSettings jsonSerializerSettings = null, CancellationToken token = default)
+        public static async Task SetObjectAsync(string key, object value, DateTimeOffset time, JsonSerializerSettings jsonSerializerSettings = null, CancellationToken token = default)
         {
             if (RedisCache == null)
             {

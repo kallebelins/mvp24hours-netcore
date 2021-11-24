@@ -12,7 +12,6 @@ using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Core.Extensions;
 using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;
-using Mvp24Hours.Infrastructure.Logging;
 using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
@@ -24,13 +23,13 @@ namespace Mvp24Hours.WebAPI.Filters
     {
         private readonly ILoggingService _logger;
 
-        private readonly IHATEOASContext _hateaosContext;
+        private readonly IHateoasContext _hateaosContext;
         public static bool IsLoaded { get; private set; }
         public static bool EnableFilter { get; private set; }
 
-        public HATEOASFilter(IHATEOASContext hateaosContext)
+        public HATEOASFilter(IHateoasContext hateaosContext)
         {
-            _logger = LoggingService.GetLoggingService();
+            _logger = ServiceProviderHelper.GetService<ILoggingService>();
             if (!IsLoaded)
             {
                 string configEnableFilter = ConfigurationHelper.GetSettings("Mvp24Hours:Filters:EnableHATEOAS");

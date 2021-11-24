@@ -11,7 +11,6 @@ using Mvp24Hours.Core.DTOs;
 using Mvp24Hours.Core.Enums;
 using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;
-using Mvp24Hours.Infrastructure.Logging;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -26,7 +25,7 @@ namespace Mvp24Hours.Infrastructure.Middlewares
 
         public ExceptionMiddleware(RequestDelegate next)
         {
-            _logger = LoggingService.GetLoggingService();
+            _logger = ServiceProviderHelper.GetService<ILoggingService>();
             _next = next;
             TraceMiddleware = GetTraceMiddleware();
         }

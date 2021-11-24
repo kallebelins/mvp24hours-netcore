@@ -53,13 +53,13 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
-        public static IApplicationBuilder UseMvp24HoursSwagger(this IApplicationBuilder builder, string name)
+        public static IApplicationBuilder UseMvp24HoursSwagger(this IApplicationBuilder builder, string name, string version = "v1")
         {
             builder.UseSwagger();
             builder.UseSwaggerUI(opt =>
             {
                 string swaggerJsonBasePath = string.IsNullOrWhiteSpace(opt.RoutePrefix) ? "." : "..";
-                opt.SwaggerEndpoint($"{swaggerJsonBasePath}/swagger/v1/swagger.json", name);
+                opt.SwaggerEndpoint($"{swaggerJsonBasePath}/swagger/{version}/swagger.json", name);
             });
             return builder;
         }

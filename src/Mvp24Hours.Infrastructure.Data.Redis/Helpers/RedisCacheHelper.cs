@@ -8,7 +8,6 @@
 using Microsoft.Extensions.Caching.Distributed;
 using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Infrastructure.Extensions;
-using Mvp24Hours.Infrastructure.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,7 +30,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
 #pragma warning disable S3963 // "static" fields should be initialized inline
         static RedisCacheHelper()
         {
-            _logger = LoggingService.GetLoggingService();
+            _logger = ServiceProviderHelper.GetService<ILoggingService>();
         }
 #pragma warning restore S3963 // "static" fields should be initialized inline
 

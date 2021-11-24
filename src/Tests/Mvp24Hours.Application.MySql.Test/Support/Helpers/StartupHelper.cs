@@ -18,7 +18,7 @@ using System.Collections.Generic;
 
 namespace Mvp24Hours.Application.MySql.Test.Support.Helpers
 {
-    public class StartupHelper
+    public static class StartupHelper
     {
         public static void ConfigureServices()
         {
@@ -34,7 +34,7 @@ namespace Mvp24Hours.Application.MySql.Test.Support.Helpers
             services.AddScoped<ContactService, ContactService>();
             services.AddScoped<CustomerPagingService, CustomerPagingService>();
 
-            services.BuildMvp24HoursProvider();
+            services.UseMvp24Hours();
 
             // ensure database
             var db = ServiceProviderHelper.GetService<DataContext>();
@@ -83,7 +83,7 @@ namespace Mvp24Hours.Application.MySql.Test.Support.Helpers
             services.AddScoped<ContactServiceAsync, ContactServiceAsync>();
             services.AddScoped<CustomerPagingServiceAsync, CustomerPagingServiceAsync>();
 
-            services.BuildMvp24HoursProvider();
+            services.UseMvp24Hours();
 
             // ensure database
             var db = ServiceProviderHelper.GetService<DataContext>();
