@@ -19,24 +19,24 @@ using System.Threading.Tasks;
 
 namespace Mvp24Hours.WebAPI.Filters
 {
-    public class HATEOASFilter : IAsyncResultFilter
+    public class HateoasFilter : IAsyncResultFilter
     {
         private readonly ILoggingService _logger;
 
-        private readonly IHateoasContext _hateaosContext;
+        private readonly IHateoasContext _hateoasContext;
         public static bool IsLoaded { get; private set; }
         public static bool EnableFilter { get; private set; }
 
-        public HATEOASFilter(IHateoasContext hateaosContext)
+        public HateoasFilter(IHateoasContext hateoasContext)
         {
             _logger = ServiceProviderHelper.GetService<ILoggingService>();
             if (!IsLoaded)
             {
-                string configEnableFilter = ConfigurationHelper.GetSettings("Mvp24Hours:Filters:EnableHATEOAS");
+                string configEnableFilter = ConfigurationHelper.GetSettings("Mvp24Hours:Filters:EnableHateoas");
                 EnableFilter = !configEnableFilter.HasValue() || (bool)configEnableFilter.ToBoolean();
                 IsLoaded = true;
             }
-            _hateaosContext = hateaosContext;
+            _hateoasContext = hateoasContext;
         }
 
         public async Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next)
@@ -86,7 +86,7 @@ namespace Mvp24Hours.WebAPI.Filters
         private string GetNewContent(string newContent)
         {
             dynamic result = JObject.Parse(newContent);
-            result.links = JArray.Parse(_hateaosContext.Links.ToSerialize());
+            result.links = JArray.Parse(_hateoasContext.Links.ToSerialize());
             return ((object)result).ToSerialize();
         }
     }

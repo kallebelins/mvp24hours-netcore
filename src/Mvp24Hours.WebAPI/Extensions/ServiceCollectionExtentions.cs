@@ -44,12 +44,12 @@ namespace Mvp24Hours.WebAPI.Extensions
             #endregion
 
             #region [ Filters ]
-            services.AddScoped<IHateoasContext, HATEOASContext>();
+            services.AddScoped<IHateoasContext, HateoasContext>();
 
             services.AddMvc(options =>
             {
                 options.Filters.Add<NotificationFilter>();
-                options.Filters.Add<HATEOASFilter>();
+                options.Filters.Add<HateoasFilter>();
             });
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>()

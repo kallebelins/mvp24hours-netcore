@@ -17,6 +17,6 @@ namespace Mvp24Hours.WebAPI.Controller
         protected virtual INotificationContext NotificationContext => notificationContext ??= ServiceProviderHelper.GetService<INotificationContext>();
 
         private IHateoasContext hateoasContext;
-        protected virtual IHateoasContext HATEOASContext => hateoasContext ??= ServiceProviderHelper.GetService<IHateoasContext>();
+        protected virtual IHateoasContext HateoasContext => hateoasContext ??= ServiceProviderHelper.GetService<IHateoasContext>();
     }
 }

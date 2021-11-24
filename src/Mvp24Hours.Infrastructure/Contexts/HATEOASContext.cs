@@ -16,7 +16,7 @@ namespace Mvp24Hours.Infrastructure.Contexts
     /// <summary>
     /// <see cref="Mvp24Hours.Core.Contract.Infrastructure.Contexts.IHateoasContext"/>
     /// </summary>
-    public class HATEOASContext : IHateoasContext
+    public class HateoasContext : IHateoasContext
     {
         #region [ Fields / Properties ]
         private readonly List<ILinkResult> _links;
@@ -25,7 +25,7 @@ namespace Mvp24Hours.Infrastructure.Contexts
         #endregion
 
         #region [ Ctor ]
-        public HATEOASContext()
+        public HateoasContext()
         {
             _links = new List<ILinkResult>();
         }

@@ -11,7 +11,7 @@ using System.Collections.Generic;
 namespace Mvp24Hours.Core.Contract.Infrastructure.Contexts
 {
     /// <summary>
-    /// Context that represents a container for in-app links HATEOAS
+    /// Context that represents a container for in-app links Hateoas
     /// </summary>
     public interface IHateoasContext
     {
