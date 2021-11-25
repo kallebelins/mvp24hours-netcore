@@ -7,6 +7,8 @@
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
+using Mvp24Hours.Core.DTOs;
+using Mvp24Hours.Core.Extensions;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -23,34 +25,30 @@ namespace Mvp24Hours.Infrastructure.Extensions
         /// <summary>
         /// Transform a message into a business object
         /// </summary>
-        public static async Task<IBusinessResult<T>> ToBusinessAsync<T>(this Task<IPipelineMessage> messageAsync, string tokenDefault = null)
+        public static async Task<IBusinessResult<T>> ToBusinessAsync<T>(this Task<IPipelineMessage> messageAsync, string key = null, string tokenDefault = null)
         {
             var message = await messageAsync;
-
             if (message != null)
             {
                 return new BusinessResult<T>(
                     token: message.Token ?? tokenDefault,
-                    data: message.GetContent<T>(),
+                    data: key.HasValue() ? message.GetContent<T>(key) : message.GetContent<T>(),
                     messages: new ReadOnlyCollection<IMessageResult>(message.Messages ?? new List<IMessageResult>())
                 );
             }
             return new BusinessResult<T>(token: tokenDefault);
         }
 
+
         /// <summary>
-        /// Transform a message into a business object
+        /// Encapsulates object for business
         /// </summary>
-        public static async Task<IBusinessResult<T>> ToBusinessWithKeyAsync<T>(this Task<IPipelineMessage> messageAsync, string key, string tokenDefault = null)
+        public static async Task<IBusinessResult<T>> ToBusinessAsync<T>(this Task<IMessageResult> messageResultAsync, string tokenDefault = null)
         {
-            var message = await messageAsync;
-            if (message != null)
+            var messageResult = await messageResultAsync;
+            if (messageResult != null)
             {
-                return new BusinessResult<T>(
-                    token: message.Token ?? tokenDefault,
-                    data: message.GetContent<T>(key),
-                    messages: new ReadOnlyCollection<IMessageResult>(message.Messages ?? new List<IMessageResult>())
-                );
+                return await ToBusinessAsync<T>(default, new List<IMessageResult> { messageResult }, tokenDefault);
             }
             return new BusinessResult<T>(token: tokenDefault);
         }
@@ -58,31 +56,20 @@ namespace Mvp24Hours.Infrastructure.Extensions
         /// <summary>
         /// Encapsulates object for business
         /// </summary>
-        public static async Task<IBusinessResult<T>> ToBusinessAsync<T>(this Task<T> valueAsync, string tokenDefault = null)
+        public static async Task<IBusinessResult<T>> ToBusinessAsync<T>(this Task<IList<IMessageResult>> messageResultAsync, string tokenDefault = null)
         {
-            var value = await valueAsync;
-            if (value != null)
+            var messageResult = await messageResultAsync;
+            if (messageResult != null)
             {
-                return new BusinessResult<T>(
-                    token: tokenDefault,
-                    data: value
-                );
+                return await ToBusinessAsync<T>(default, messageResult, tokenDefault);
             }
             return new BusinessResult<T>(token: tokenDefault);
         }
 
         /// <summary>
-        /// Encapsulates object for business with message
+        /// Encapsulates object for business
         /// </summary>
-        public static Task<IBusinessResult<T>> ToBusinessWithMessageAsync<T>(this Task<T> valueAsync, params IMessageResult[] messageResult)
-        {
-            return ToBusinessWithMessageAsync(valueAsync, null, messageResult);
-        }
-
-        /// <summary>
-        /// Encapsulates object for business with message
-        /// </summary>
-        public static async Task<IBusinessResult<T>> ToBusinessWithMessageAsync<T>(this Task<T> valueAsync, string tokenDefault = null, params IMessageResult[] messageResult)
+        public static async Task<IBusinessResult<T>> ToBusinessAsync<T>(this Task<T> valueAsync, IList<IMessageResult> messageResult = null, string tokenDefault = null)
         {
             var value = await valueAsync;
             if (value != null)
@@ -97,27 +84,15 @@ namespace Mvp24Hours.Infrastructure.Extensions
         }
 
         /// <summary>
-        /// Encapsulates object for business with message
+        /// Encapsulates object for business
         /// </summary>
-        public static Task<IBusinessResult<T>> ToBusinessWithMessageAsync<T>(this Task<IBusinessResult<T>> valueAsync, params IMessageResult[] messageResult)
+        public static async Task<IBusinessResult<VoidResult>> ToBusinessAsync(this Task task, IList<IMessageResult> messageResult = null, string tokenDefault = null)
         {
-            return ToBusinessWithMessageAsync(valueAsync, null, messageResult);
-        }
-
-        /// <summary>
-        /// Encapsulates object for business with message
-        /// </summary>
-        public static async Task<IBusinessResult<T>> ToBusinessWithMessageAsync<T>(this Task<IBusinessResult<T>> valueAsync, string tokenDefault = null, params IMessageResult[] messageResult)
-        {
-            var value = await valueAsync;
-            if (value != null)
-            {
-                return new BusinessResult<T>(
-                    token: tokenDefault,
-                    messages: new ReadOnlyCollection<IMessageResult>(messageResult?.ToList() ?? new List<IMessageResult>())
-                );
-            }
-            return new BusinessResult<T>(token: tokenDefault);
+            await task;
+            return new BusinessResult<VoidResult>(
+                token: tokenDefault,
+                messages: new ReadOnlyCollection<IMessageResult>(messageResult?.ToList() ?? new List<IMessageResult>())
+            );
         }
 
         public static async Task<bool> HasDataAsync<T>(this Task<IBusinessResult<T>> valueAsync)

@@ -7,6 +7,7 @@
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
+using Mvp24Hours.Core.Extensions;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,29 +23,13 @@ namespace Mvp24Hours.Infrastructure.Extensions
         /// <summary>
         /// Transform a message into a business object
         /// </summary>
-        public static IBusinessResult<T> ToBusiness<T>(this IPipelineMessage message, string tokenDefault = null)
+        public static IBusinessResult<T> ToBusiness<T>(this IPipelineMessage message, string key = null, string tokenDefault = null)
         {
             if (message != null)
             {
                 return new BusinessResult<T>(
                     token: message.Token ?? tokenDefault,
-                    data: message.GetContent<T>(),
-                    messages: new ReadOnlyCollection<IMessageResult>(message.Messages ?? new List<IMessageResult>())
-                );
-            }
-            return new BusinessResult<T>(token: tokenDefault);
-        }
-
-        /// <summary>
-        /// Transform a message into a business object
-        /// </summary>
-        public static IBusinessResult<T> ToBusinessWithKey<T>(this IPipelineMessage message, string key, string tokenDefault = null)
-        {
-            if (message != null)
-            {
-                return new BusinessResult<T>(
-                    token: message.Token ?? tokenDefault,
-                    data: message.GetContent<T>(key),
+                    data: key.HasValue() ? message.GetContent<T>(key) : message.GetContent<T>(),
                     messages: new ReadOnlyCollection<IMessageResult>(message.Messages ?? new List<IMessageResult>())
                 );
             }
