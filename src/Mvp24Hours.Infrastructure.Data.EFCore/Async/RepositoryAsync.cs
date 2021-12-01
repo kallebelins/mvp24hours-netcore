@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 namespace Mvp24Hours.Infrastructure.Data.EFCore
 {
     /// <summary>
-    ///  <see cref="Mvp24Hours.Core.Contract.Data.IRepositoryAsync{T}"/>
+    ///  <see cref="Core.Contract.Data.Async.IRepositoryAsync{T}"/>
     /// </summary>
     public class RepositoryAsync<T> : RepositoryBase<T>, IRepositoryAsync<T>, IQueryRelationAsync<T>
         where T : class, IEntityBase

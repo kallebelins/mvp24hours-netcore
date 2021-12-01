@@ -15,14 +15,14 @@ using System.Threading.Tasks;
 
 namespace Mvp24Hours.Infrastructure.Extensions
 {
-    public static class RedisCacheExtensions
+    public static class CacheAsyncExtensions
     {
         private static bool? _enable;
         private static DateTimeOffset? _defaultExpiration;
         private static readonly ILoggingService _logger;
 
 #pragma warning disable S3963 // "static" fields should be initialized inline
-        static RedisCacheExtensions()
+        static CacheAsyncExtensions()
         {
             _logger = ServiceProviderHelper.GetService<ILoggingService>();
         }
@@ -34,7 +34,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
             {
                 if (_enable == null)
                 {
-                    string value = ConfigurationHelper.GetSettings("Mvp24Hours:Persistence:Redis:Enable");
+                    string value = ConfigurationHelper.GetSettings("Mvp24Hours:Persistence:Cache:Enable");
                     _enable = value.ToBoolean(true);
                 }
                 return (bool)_enable;
@@ -47,19 +47,19 @@ namespace Mvp24Hours.Infrastructure.Extensions
             {
                 if (_defaultExpiration == null)
                 {
-                    string value = ConfigurationHelper.GetSettings("Mvp24Hours:Persistence:Redis:DefaultExpiration");
+                    string value = ConfigurationHelper.GetSettings("Mvp24Hours:Persistence:Cache:DefaultExpiration");
                     _defaultExpiration = value.ToDateTime();
                 }
                 return _defaultExpiration;
             }
         }
 
-        public static DistributedCacheEntryOptions GetRedisCacheOptions(DateTimeOffset? time = default)
+        public static DistributedCacheEntryOptions GetCacheOptions(DateTimeOffset? time = default)
         {
             return new DistributedCacheEntryOptions { AbsoluteExpiration = time ?? DefaultExpiration };
         }
 
-        public static async Task<string> GetRedisStringAsync(this IDistributedCache cache, string key, CancellationToken token = default)
+        public static async Task<string> GetCacheStringAsync(this IDistributedCache cache, string key, CancellationToken token = default)
         {
             if (cache == null || !Enable)
             {
@@ -77,7 +77,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
             return null;
         }
 
-        public static async Task SetRedisStringAsync(this IDistributedCache cache, string key, string value, CancellationToken token = default)
+        public static async Task SetCacheStringAsync(this IDistributedCache cache, string key, string value, CancellationToken token = default)
         {
             if (cache == null || !Enable)
             {
@@ -86,7 +86,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
 
             try
             {
-                await cache.SetStringAsync(key, value, GetRedisCacheOptions(), token);
+                await cache.SetStringAsync(key, value, GetCacheOptions(), token);
             }
             catch (Exception ex)
             {
@@ -94,7 +94,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
             }
         }
 
-        public static async Task SetRedisStringAsync(this IDistributedCache cache, string key, string value, int minutes, CancellationToken token = default)
+        public static async Task SetCacheStringAsync(this IDistributedCache cache, string key, string value, int minutes, CancellationToken token = default)
         {
             if (cache == null || !Enable)
             {
@@ -103,7 +103,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
 
             try
             {
-                await cache.SetRedisStringAsync(key, value, DateTimeOffset.Now.AddMinutes(minutes), token);
+                await cache.SetCacheStringAsync(key, value, DateTimeOffset.Now.AddMinutes(minutes), token);
             }
             catch (Exception ex)
             {
@@ -111,7 +111,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
             }
         }
 
-        public static async Task SetRedisStringAsync(this IDistributedCache cache, string key, string value, DateTimeOffset time, CancellationToken token = default)
+        public static async Task SetCacheStringAsync(this IDistributedCache cache, string key, string value, DateTimeOffset time, CancellationToken token = default)
         {
             if (cache == null || !Enable)
             {
@@ -120,7 +120,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
 
             try
             {
-                await cache.SetStringAsync(key, value, GetRedisCacheOptions(time), token);
+                await cache.SetStringAsync(key, value, GetCacheOptions(time), token);
             }
             catch (Exception ex)
             {
@@ -128,7 +128,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
             }
         }
 
-        public static async Task RemoveRedisStringAsync(this IDistributedCache cache, string key, CancellationToken token = default)
+        public static async Task RemoveCacheStringAsync(this IDistributedCache cache, string key, CancellationToken token = default)
         {
             if (cache == null || !Enable)
             {

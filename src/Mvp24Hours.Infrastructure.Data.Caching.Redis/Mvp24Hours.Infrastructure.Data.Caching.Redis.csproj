@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Authors>Kallebe Lins</Authors>
+    <Description>Series architectures for fast product construction.</Description>
+    <Copyright></Copyright>
+    <PackageProjectUrl>https://github.com/kallebelins</PackageProjectUrl>
+    <Company>Kallebe Lins</Company>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Version>2.11.241</Version>
+    <AssemblyVersion>2.11.24.1</AssemblyVersion>
+    <FileVersion>2.11.24.1</FileVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Redis" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Mvp24Hours.Core\Mvp24Hours.Core.csproj" />
+    <ProjectReference Include="..\Mvp24Hours.Infrastructure.Data.Caching\Mvp24Hours.Infrastructure.Data.Caching.csproj" />
+    <ProjectReference Include="..\Mvp24Hours.Infrastructure\Mvp24Hours.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

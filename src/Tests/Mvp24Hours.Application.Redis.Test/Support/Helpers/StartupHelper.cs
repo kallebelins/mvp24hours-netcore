@@ -6,6 +6,9 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Microsoft.Extensions.DependencyInjection;
+using Mvp24Hours.Application.Redis.Test.Support.Entities;
+using Mvp24Hours.Core.Contract.Data;
+using Mvp24Hours.Infrastructure.Data.Cache;
 using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;
 
@@ -17,6 +20,11 @@ namespace Mvp24Hours.Application.Redis.Test.Support.Helpers
         {
             var services = new ServiceCollection().AddSingleton(ConfigurationHelper.AppSettings);
 
+            // caching
+            services.AddScoped<IRepositoryCache<Customer>, RepositoryCache<Customer>>();
+            services.AddScoped<IRepositoryCacheAsync<Customer>, RepositoryCacheAsync<Customer>>();
+
+            // caching.redis
             services.AddMvp24HoursRedisCache();
 
             services.UseMvp24Hours();

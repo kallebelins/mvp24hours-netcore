@@ -10,41 +10,39 @@ using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Infrastructure.Extensions;
 using Newtonsoft.Json;
 using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Mvp24Hours.Infrastructure.Helpers
 {
-    public static class RedisObjectCacheHelper
+    public static class ObjectCacheHelper
     {
         private static readonly ILoggingService _logger;
 
-        private static IDistributedCache _redisCache;
-        public static IDistributedCache RedisCache
+        private static IDistributedCache _Cache;
+        public static IDistributedCache Cache
         {
             get
             {
-                return _redisCache ??= ServiceProviderHelper.GetService<IDistributedCache>();
+                return _Cache ??= ServiceProviderHelper.GetService<IDistributedCache>();
             }
         }
 
 #pragma warning disable S3963 // "static" fields should be initialized inline
-        static RedisObjectCacheHelper()
+        static ObjectCacheHelper()
         {
             _logger = ServiceProviderHelper.GetService<ILoggingService>();
         }
 #pragma warning restore S3963 // "static" fields should be initialized inline
 
-        public static async Task<T> GetObjectAsync<T>(string key, JsonSerializerSettings jsonSerializerSettings = null, CancellationToken token = default)
+        public static T GetObject<T>(string key, JsonSerializerSettings jsonSerializerSettings = null)
         {
-            if (RedisCache == null)
+            if (Cache == null)
             {
                 return default;
             }
 
             try
             {
-                return await RedisCache.GetRedisObjectAsync<T>(key, jsonSerializerSettings, token);
+                return Cache.GetCacheObject<T>(key, jsonSerializerSettings);
             }
             catch (Exception ex)
             {
@@ -53,16 +51,16 @@ namespace Mvp24Hours.Infrastructure.Helpers
             return default;
         }
 
-        public static async Task SetObjectAsync<T>(string key, T value, JsonSerializerSettings jsonSerializerSettings = null, CancellationToken token = default)
+        public static void SetObject<T>(string key, T value, JsonSerializerSettings jsonSerializerSettings = null)
         {
-            if (RedisCache == null)
+            if (Cache == null)
             {
                 return;
             }
 
             try
             {
-                await RedisCache.SetRedisObjectAsync<T>(key, value, jsonSerializerSettings, token);
+                Cache.SetCacheObject<T>(key, value, jsonSerializerSettings);
             }
             catch (Exception ex)
             {
@@ -70,16 +68,16 @@ namespace Mvp24Hours.Infrastructure.Helpers
             }
         }
 
-        public static async Task SetObjectAsync(string key, object value, int minutes, JsonSerializerSettings jsonSerializerSettings = null, CancellationToken token = default)
+        public static void SetObject(string key, object value, int minutes, JsonSerializerSettings jsonSerializerSettings = null)
         {
-            if (RedisCache == null)
+            if (Cache == null)
             {
                 return;
             }
 
             try
             {
-                await RedisCache.SetRedisObjectAsync(key, value, minutes, jsonSerializerSettings, token);
+                Cache.SetCacheObject(key, value, minutes, jsonSerializerSettings);
             }
             catch (Exception ex)
             {
@@ -87,16 +85,16 @@ namespace Mvp24Hours.Infrastructure.Helpers
             }
         }
 
-        public static async Task SetObjectAsync(string key, object value, DateTimeOffset time, JsonSerializerSettings jsonSerializerSettings = null, CancellationToken token = default)
+        public static void SetObject(string key, object value, DateTimeOffset time, JsonSerializerSettings jsonSerializerSettings = null)
         {
-            if (RedisCache == null)
+            if (Cache == null)
             {
                 return;
             }
 
             try
             {
-                await RedisCache.SetRedisObjectAsync(key, value, time, jsonSerializerSettings, token);
+                Cache.SetCacheObject(key, value, time, jsonSerializerSettings);
             }
             catch (Exception ex)
             {

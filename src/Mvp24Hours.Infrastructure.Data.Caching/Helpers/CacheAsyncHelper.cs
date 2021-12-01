@@ -14,21 +14,21 @@ using System.Threading.Tasks;
 
 namespace Mvp24Hours.Infrastructure.Helpers
 {
-    public static class RedisCacheHelper
+    public static class CacheAsyncHelper
     {
         private static readonly ILoggingService _logger;
 
-        private static IDistributedCache _redisCache;
-        public static IDistributedCache RedisCache
+        private static IDistributedCache _Cache;
+        public static IDistributedCache Cache
         {
             get
             {
-                return _redisCache ??= ServiceProviderHelper.GetService<IDistributedCache>();
+                return _Cache ??= ServiceProviderHelper.GetService<IDistributedCache>();
             }
         }
 
 #pragma warning disable S3963 // "static" fields should be initialized inline
-        static RedisCacheHelper()
+        static CacheAsyncHelper()
         {
             _logger = ServiceProviderHelper.GetService<ILoggingService>();
         }
@@ -36,14 +36,14 @@ namespace Mvp24Hours.Infrastructure.Helpers
 
         public static async Task<string> GetStringAsync(string key, CancellationToken token = default)
         {
-            if (RedisCache == null)
+            if (Cache == null)
             {
                 return null;
             }
 
             try
             {
-                return await RedisCache.GetRedisStringAsync(key, token);
+                return await Cache.GetCacheStringAsync(key, token);
             }
             catch (Exception ex)
             {
@@ -54,14 +54,14 @@ namespace Mvp24Hours.Infrastructure.Helpers
 
         public static async Task SetStringAsync(string key, string value, CancellationToken token = default)
         {
-            if (RedisCache == null)
+            if (Cache == null)
             {
                 return;
             }
 
             try
             {
-                await RedisCache.SetRedisStringAsync(key, value, token);
+                await Cache.SetCacheStringAsync(key, value, token);
             }
             catch (Exception ex)
             {
@@ -71,14 +71,14 @@ namespace Mvp24Hours.Infrastructure.Helpers
 
         public static async Task SetStringAsync(string key, string value, int minutes, CancellationToken token = default)
         {
-            if (RedisCache == null)
+            if (Cache == null)
             {
                 return;
             }
 
             try
             {
-                await RedisCache.SetRedisStringAsync(key, value, minutes, token);
+                await Cache.SetCacheStringAsync(key, value, minutes, token);
             }
             catch (Exception ex)
             {
@@ -88,14 +88,14 @@ namespace Mvp24Hours.Infrastructure.Helpers
 
         public static async Task SetStringAsync(string key, string value, DateTimeOffset time, CancellationToken token = default)
         {
-            if (RedisCache == null)
+            if (Cache == null)
             {
                 return;
             }
 
             try
             {
-                await RedisCache.SetRedisStringAsync(key, value, time, token);
+                await Cache.SetCacheStringAsync(key, value, time, token);
             }
             catch (Exception ex)
             {
@@ -105,14 +105,14 @@ namespace Mvp24Hours.Infrastructure.Helpers
 
         public static async Task RemoveStringAsync(string key, CancellationToken token = default)
         {
-            if (RedisCache == null)
+            if (Cache == null)
             {
                 return;
             }
 
             try
             {
-                await RedisCache.RemoveRedisStringAsync(key, token);
+                await Cache.RemoveCacheStringAsync(key, token);
             }
             catch (Exception ex)
             {

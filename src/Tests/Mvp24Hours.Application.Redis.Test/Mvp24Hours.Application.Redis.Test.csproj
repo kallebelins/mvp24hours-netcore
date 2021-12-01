@@ -17,7 +17,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Mvp24Hours.Core\Mvp24Hours.Core.csproj" />
-    <ProjectReference Include="..\..\Mvp24Hours.Infrastructure.Data.Redis\Mvp24Hours.Infrastructure.Data.Redis.csproj" />
+    <ProjectReference Include="..\..\Mvp24Hours.Infrastructure.Data.Caching.Redis\Mvp24Hours.Infrastructure.Data.Caching.Redis.csproj" />
+    <ProjectReference Include="..\..\Mvp24Hours.Infrastructure.Data.Caching\Mvp24Hours.Infrastructure.Data.Caching.csproj" />
     <ProjectReference Include="..\..\Mvp24Hours.Infrastructure\Mvp24Hours.Infrastructure.csproj" />
   </ItemGroup>
 
