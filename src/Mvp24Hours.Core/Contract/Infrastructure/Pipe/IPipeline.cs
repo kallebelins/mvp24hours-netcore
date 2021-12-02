@@ -65,6 +65,14 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
         /// </summary>
         IPipeline AddInterceptors(Action<IPipelineMessage> action, Func<IPipelineMessage, bool> condition, bool postOperation = true);
         /// <summary>
+        /// Records event operations interceptors
+        /// </summary>
+        IPipeline AddInterceptors(EventHandler<IPipelineMessage, EventArgs> handler, PipelineInterceptorType pipelineInterceptor = PipelineInterceptorType.PostOperation);
+        /// <summary>
+        /// Records event operations interceptors
+        /// </summary>
+        IPipeline AddInterceptors(EventHandler<IPipelineMessage, EventArgs> handler, Func<IPipelineMessage, bool> condition, bool postOperation = true);
+        /// <summary>
         /// Performs operations 
         /// </summary>
         IPipeline Execute(IPipelineMessage input = null);

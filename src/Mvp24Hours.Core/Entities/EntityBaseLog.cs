@@ -18,7 +18,7 @@ namespace Mvp24Hours.Core.Entities
     /// </summary>
     /// <typeparam name="TKey">Represents entity</typeparam>
     /// <typeparam name="TForeignKey">Represents data type used to log</typeparam>
-    public abstract class EntityBaseLog<TObject, TKey, TForeignKey> : EntityBase<TObject, TKey>, IEntityBase, IValidationModel<TObject>, IEntityLog<TForeignKey>
+    public abstract class EntityBaseLog<TObject, TKey, TForeignKey> : EntityBase<TObject, TKey>, IEntityLog<TForeignKey>
     {
         #region [ Log ]
         /// <summary>

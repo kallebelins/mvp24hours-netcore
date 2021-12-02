@@ -88,7 +88,10 @@ namespace Mvp24Hours.Infrastructure.Helpers
         {
             var result = await SendAsync(urlService, header, credentials, "POST", data);
             if (!result.HasValue())
+            {
                 return default;
+            }
+
             return result.ToDeserialize<T>(jsonSerializerSettings);
         }
 
@@ -107,7 +110,10 @@ namespace Mvp24Hours.Infrastructure.Helpers
         {
             var result = await SendAsync(url, header, credentials, "GET", null);
             if (!result.HasValue())
+            {
                 return default;
+            }
+
             return result.ToDeserialize<T>(jsonSerializerSettings);
         }
 
@@ -126,7 +132,10 @@ namespace Mvp24Hours.Infrastructure.Helpers
         {
             var result = await SendAsync(urlService, header, credentials, "PUT", data);
             if (!result.HasValue())
+            {
                 return default;
+            }
+
             return result.ToDeserialize<T>(jsonSerializerSettings);
         }
 
@@ -145,7 +154,10 @@ namespace Mvp24Hours.Infrastructure.Helpers
         {
             var result = await SendAsync(url, header, credentials, "DELETE", null);
             if (!result.HasValue())
+            {
                 return default;
+            }
+
             return result.ToDeserialize<T>(jsonSerializerSettings);
         }
 

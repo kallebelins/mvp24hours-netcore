@@ -29,10 +29,7 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations
 
         public override Task<IPipelineMessage> ExecuteAsync(IPipelineMessage input)
         {
-            if (this._action != null)
-            {
-                this._action(input);
-            }
+            this._action?.Invoke(input);
             return Task.FromResult(input);
         }
     }

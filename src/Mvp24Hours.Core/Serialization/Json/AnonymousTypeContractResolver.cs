@@ -65,7 +65,9 @@ namespace Mvp24Hours.Core.Serialization.Json
                 try
                 {
                     if (_setter == null)
+                    {
                         _setter = (t, v) => { _fieldInfo.SetValue(t, v); };
+                    }
 
                     _setter(target, value);
                 }
@@ -80,7 +82,9 @@ namespace Mvp24Hours.Core.Serialization.Json
                 try
                 {
                     if (_getter == null)
+                    {
                         _getter = t => { return _fieldInfo.GetValue(t); };
+                    }
 
                     return _getter(target);
                 }
