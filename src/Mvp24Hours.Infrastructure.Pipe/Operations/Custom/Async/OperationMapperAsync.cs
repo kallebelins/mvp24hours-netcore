@@ -8,17 +8,17 @@
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using System.Threading.Tasks;
 
-namespace Mvp24Hours.Infrastructure.Pipe.Operations
+namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom
 {
     /// <summary>  
     /// Abstraction of asynchronous mapping operations
     /// </summary>
-    public abstract class OperationMapperAsync<T> : OperationBaseAsync, IOperationMapperAsync<T>
+    public abstract class OperationMapperAsync<T> : OperationBaseAsync
     {
         /// <summary>
         /// Key defined for content attached to the message (mapped object)
         /// </summary>
-        public virtual string MessageContentKey => null;
+        public virtual string ContentKey => null;
 
         /// <summary>
         /// Get default value for object mapping
@@ -33,13 +33,13 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations
             var result = await MapperAsync(input);
             if (result != null)
             {
-                if (string.IsNullOrEmpty(MessageContentKey))
+                if (string.IsNullOrEmpty(ContentKey))
                 {
                     input.AddContent(result);
                 }
                 else
                 {
-                    input.AddContent(MessageContentKey, result);
+                    input.AddContent(ContentKey, result);
                 }
             }
             return input;

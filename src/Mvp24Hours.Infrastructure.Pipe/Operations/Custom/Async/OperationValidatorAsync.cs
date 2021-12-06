@@ -5,18 +5,26 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using System.Threading.Tasks;
 
-namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
+namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom
 {
-    /// <summary>
-    /// Used to asynchronously map object
+    /// <summary>  
+    /// Abstraction of mapping operations
     /// </summary>
-    public interface IOperationMapperAsync<T> : IOperationAsync
+    public abstract class OperationValidatorAsync : OperationBaseAsync
     {
-        /// <summary>
-        /// Used to asynchronously map an object
-        /// </summary>
-        Task<T> MapperAsync(IPipelineMessage input);
+        public override async Task<IPipelineMessage> ExecuteAsync(IPipelineMessage input)
+        {
+            if (!await IsValid(input))
+            {
+                input.SetLock();
+            }
+
+            return input;
+        }
+
+        public abstract Task<bool> IsValid(IPipelineMessage input);
     }
 }

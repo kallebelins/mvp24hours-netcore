@@ -9,24 +9,19 @@ using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Infrastructure.Helpers;
 using System.Threading.Tasks;
 
-namespace Mvp24Hours.Infrastructure.Pipe.Operations.Files
+namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom.Files
 {
     /// <summary>
-    /// Operation to read file log token
+    /// Log writing operation
     /// </summary>
-    public class FileTokenReadOperation<T> : OperationBaseAsync
+    public class FileLogWriteOperation : OperationBaseAsync
     {
+        public override bool IsRequired => true;
         public virtual string FileLogPath => null;
 
         public override Task<IPipelineMessage> ExecuteAsync(IPipelineMessage input)
         {
-            var dto = FileLogHelper.ReadLogToken<T>(input.Token, typeof(T).Name.ToLower(), FileLogPath);
-
-            if (dto != null)
-            {
-                input.AddContent(dto);
-            }
-
+            FileLogHelper.WriteLog(input.GetContentAll(), "message", $"Token: {input.Token} / IsSuccess: {input.IsFaulty} / Warnings: {string.Join('/', input.Messages)}", FileLogPath);
             return Task.FromResult(input);
         }
     }

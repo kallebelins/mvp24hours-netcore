@@ -39,7 +39,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
             // notification
             if (!services.Exists<ILoggingService>())
             {
-                services.AddScoped<ILoggingService, LoggingService>();
+                services.AddSingleton<ILoggingService, LoggingService>();
             }
 
             return services;

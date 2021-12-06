@@ -21,13 +21,13 @@ namespace Mvp24Hours.Infrastructure.Middlewares
     {
         private readonly RequestDelegate _next;
         private readonly ILoggingService _logger;
-        private readonly bool TraceMiddleware;
+        private readonly bool _traceMiddleware;
 
-        public ExceptionMiddleware(RequestDelegate next)
+        public ExceptionMiddleware(RequestDelegate next, ILoggingService logger)
         {
-            _logger = ServiceProviderHelper.GetService<ILoggingService>();
             _next = next;
-            TraceMiddleware = GetTraceMiddleware();
+            _logger = logger;
+            _traceMiddleware = ConfigurationHelper.GetSettings<bool>("Mvp24Hours:Web:TraceMiddleware");
         }
 
         public async Task InvokeAsync(HttpContext httpContext)
@@ -56,7 +56,7 @@ namespace Mvp24Hours.Infrastructure.Middlewares
 
             string message;
 
-            if (TraceMiddleware)
+            if (_traceMiddleware)
             {
                 message = $"Message: {(exception?.InnerException ?? exception).Message} / Trace: {exception.StackTrace}";
             }
@@ -71,13 +71,6 @@ namespace Mvp24Hours.Infrastructure.Middlewares
 
             var messageResult = JsonHelper.Serialize(boResult);
             return context.Response.WriteAsync(messageResult);
-        }
-
-        private bool GetTraceMiddleware()
-        {
-            string enableTraceStr = ConfigurationHelper.GetSettings("Mvp24Hours:Web:TraceMiddleware");
-            bool.TryParse(enableTraceStr, out bool enableTrace);
-            return enableTrace;
         }
     }
 }

@@ -86,7 +86,7 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// Add configuration for Swagger
         /// </summary>
         public static IServiceCollection AddMvp24HoursSwagger(this IServiceCollection services,
-            string version, string title, string xmlCommentsFileName = null,
+            string title, string version = "v1", string xmlCommentsFileName = null,
             bool enableExample = false, bool enableOAuth2 = false,
             IEnumerable<Type> authTypes = null)
         {

@@ -5,16 +5,25 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
+using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
+
+namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom
 {
-    /// <summary>
-    /// Operation for object mapping
+    /// <summary>  
+    /// Abstraction of mapping operations
     /// </summary>
-    public interface IOperationMapper<T> : IOperation
+    public abstract class OperationValidator : OperationBase
     {
-        /// <summary>
-        /// Used to map object
-        /// </summary>
-        T Mapper(IPipelineMessage input);
+        public override IPipelineMessage Execute(IPipelineMessage input)
+        {
+            if (!IsValid(input))
+            {
+                input.SetLock();
+            }
+
+            return input;
+        }
+
+        public abstract bool IsValid(IPipelineMessage input);
     }
 }

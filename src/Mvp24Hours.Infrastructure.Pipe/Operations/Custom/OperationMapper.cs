@@ -7,23 +7,35 @@
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 
-namespace Mvp24Hours.Infrastructure.Pipe.Operations
+namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom
 {
     /// <summary>  
     /// Abstraction of mapping operations
     /// </summary>
-    public abstract class OperationValidator : OperationBase
+    public abstract class OperationMapper<T> : OperationBase
     {
+        /// <summary>
+        /// Key defined for content attached to the message (mapped object)
+        /// </summary>
+        public virtual string ContentKey => null;
+
         public override IPipelineMessage Execute(IPipelineMessage input)
         {
-            if (!IsValid(input))
+            var result = Mapper(input);
+            if (result != null)
             {
-                input.SetLock();
+                if (string.IsNullOrEmpty(ContentKey))
+                {
+                    input.AddContent(result);
+                }
+                else
+                {
+                    input.AddContent(ContentKey, result);
+                }
             }
-
             return input;
         }
 
-        public abstract bool IsValid(IPipelineMessage input);
+        public abstract T Mapper(IPipelineMessage input);
     }
 }

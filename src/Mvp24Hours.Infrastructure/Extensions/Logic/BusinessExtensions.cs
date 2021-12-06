@@ -65,15 +65,11 @@ namespace Mvp24Hours.Infrastructure.Extensions
         /// </summary>
         public static IBusinessResult<T> ToBusiness<T>(this T value, IList<IMessageResult> messageResult = null, string tokenDefault = null)
         {
-            if (value != null)
-            {
-                return new BusinessResult<T>(
-                    token: tokenDefault,
-                    data: value,
-                    messages: new ReadOnlyCollection<IMessageResult>(messageResult?.ToList() ?? new List<IMessageResult>())
-                );
-            }
-            return new BusinessResult<T>(token: tokenDefault);
+            return new BusinessResult<T>(
+                token: tokenDefault,
+                data: value,
+                messages: new ReadOnlyCollection<IMessageResult>(messageResult?.ToList() ?? new List<IMessageResult>())
+            );
         }
 
         public static bool HasData<T>(this IBusinessResult<T> value)
