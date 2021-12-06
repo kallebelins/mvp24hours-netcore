@@ -28,7 +28,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
     {
         #region [ Ctor ]
 
-        public RepositoryBase(Mvp24HoursMongoDbContext dbContext)
+        protected RepositoryBase(Mvp24HoursMongoDbContext dbContext)
         {
             this.dbContext = dbContext ?? throw new ArgumentNullException("dbContext");
             dbEntities = dbContext.Set<T>();
@@ -166,10 +166,6 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
                     if (clauseExpr.NavigationExpr.AnyOrNotNull())
                     {
                         throw new NotSupportedException("Relationship loading via navigation not available for mongodb. Do data structure analysis or implement your custom repository.");
-                        //foreach (var nav in clauseExpr.NavigationExpr)
-                        //{
-                        //    query = query.Include(nav);
-                        //}
                     }
                 }
 
@@ -177,10 +173,6 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
                 if (clause.Navigation.AnyOrNotNull())
                 {
                     throw new NotSupportedException("Relationship loading via navigation not available for mongodb. Do data structure analysis or implement your custom repository.");
-                    //foreach (var nav in clause.Navigation)
-                    //{
-                    //    query = query.Include(nav);
-                    //}
                 }
             }
 
@@ -222,8 +214,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
             {
                 _keyInfo = typeof(T).GetTypeInfo()
                     .GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                    .Where(x => x.GetCustomAttribute<BsonIdAttribute>() != null)
-                    .FirstOrDefault();
+                    .FirstOrDefault(x => x.GetCustomAttribute<BsonIdAttribute>() != null);
 
                 if (_keyInfo == null)
                 {

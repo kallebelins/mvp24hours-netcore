@@ -5,7 +5,6 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Core.Enums;
 using Mvp24Hours.Core.Enums.Infrastructure;
@@ -24,59 +23,40 @@ namespace Mvp24Hours.Infrastructure.Pipe
     /// <summary>
     /// <see cref="Mvp24Hours.Core.Contract.Infrastructure.Pipe.IPipelineAsync"/>
     /// </summary>
-    public class PipelineAsync : IPipelineAsync
+    public class PipelineAsync : PipelineBase, IPipelineAsync
     {
         #region [ Ctor ]
         public PipelineAsync()
-            : this(true)
+            : base()
         {
         }
         public PipelineAsync(string token)
-            : this(token, true)
+            : base(token)
         {
         }
         public PipelineAsync(bool isBreakOnFail)
-            : this(null, isBreakOnFail)
+            : base(isBreakOnFail)
         {
         }
         public PipelineAsync(string token, bool isBreakOnFail)
+            : base(token, isBreakOnFail)
         {
-            this._isBreakOnFail = isBreakOnFail;
-            this._token = token;
-
-            Context = ServiceProviderHelper.GetService<INotificationContext>();
-
-            if (Context == null)
-            {
-                throw new ArgumentNullException("Notification context is mandatory.");
-            }
         }
         #endregion
 
         #region [ Fields / Properties ]
-
-        #region [ Fields ]
         private readonly IList<IOperationAsync> operations = new List<IOperationAsync>();
+
         private readonly IList<KeyValuePair<Func<IPipelineMessage, bool>, IOperationAsync>> preCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, IOperationAsync>>();
         private readonly IList<KeyValuePair<Func<IPipelineMessage, bool>, IOperationAsync>> postCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, IOperationAsync>>();
         private readonly IDictionary<PipelineInterceptorType, IList<IOperationAsync>> dictionaryInterceptors = new Dictionary<PipelineInterceptorType, IList<IOperationAsync>>();
-        private readonly bool _isBreakOnFail;
-        private IPipelineMessage _pipelineMessage = null;
-        private string _token;
-        #endregion
 
-        /// <summary>
-        /// Notification context based on individual HTTP request
-        /// </summary>
-        protected INotificationContext Context { get; private set; }
-        /// <summary>
-        /// Indicates whether there are failures in the notification context
-        /// </summary>
-        protected bool IsValidContext => !Context.HasErrorNotifications;
+        private readonly IDictionary<PipelineInterceptorType, IList<EventHandler<IPipelineMessage, EventArgs>>> dictionaryEventInterceptors = new Dictionary<PipelineInterceptorType, IList<EventHandler<IPipelineMessage, EventArgs>>>();
+        private readonly IList<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>> preEventCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>>();
+        private readonly IList<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>> postEventCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>>();
         #endregion
 
         #region [ Methods ]
-        public IPipelineMessage GetMessage() => _pipelineMessage;
         public IPipelineAsync Add<T>() where T : IOperationAsync
         {
             IOperationAsync instance = ServiceProviderHelper.GetService<T>();
@@ -89,7 +69,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
                 }
                 else
                 {
-                    throw new ArgumentNullException("Operation not found. Check if it has been registered in this context.");
+                    throw new ArgumentNullException(string.Empty, "Operation not found. Check if it has been registered in this context.");
                 }
             }
             return Add(instance);
@@ -98,7 +78,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
         {
             if (operation == null)
             {
-                throw new ArgumentNullException("Operation has not been defined or is null.");
+                throw new ArgumentNullException(nameof(operation), "Operation has not been defined or is null.");
             }
             this.operations.Add(operation);
             return this;
@@ -107,11 +87,12 @@ namespace Mvp24Hours.Infrastructure.Pipe
         {
             if (action == null)
             {
-                throw new ArgumentNullException("Action is mandatory.");
+                throw new ArgumentNullException(nameof(action), "Action is mandatory.");
             }
             this.operations.Add(new OperationActionAsync(action, isRequired));
             return this;
         }
+
         public IPipelineAsync AddInterceptors<T>(PipelineInterceptorType pipelineInterceptor = PipelineInterceptorType.PostOperation) where T : IOperationAsync
         {
             IOperationAsync instance = ServiceProviderHelper.GetService<T>();
@@ -124,7 +105,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
                 }
                 else
                 {
-                    throw new ArgumentNullException("Operation not found. Check if it has been registered in this context.");
+                    throw new ArgumentNullException(string.Empty, "Operation not found. Check if it has been registered in this context.");
                 }
             }
             return AddInterceptors(instance, pipelineInterceptor);
@@ -133,7 +114,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
         {
             if (operation == null)
             {
-                throw new ArgumentNullException("Operation has not been defined or is null.");
+                throw new ArgumentNullException(nameof(operation), "Operation has not been defined or is null.");
             }
             if (!this.dictionaryInterceptors.ContainsKey(pipelineInterceptor))
             {
@@ -146,7 +127,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
         {
             if (action == null)
             {
-                throw new ArgumentNullException("Action is mandatory.");
+                throw new ArgumentNullException(nameof(action), "Action is mandatory.");
             }
             if (!this.dictionaryInterceptors.ContainsKey(pipelineInterceptor))
             {
@@ -167,7 +148,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
                 }
                 else
                 {
-                    throw new ArgumentNullException("Operation not found. Check if it has been registered in this context.");
+                    throw new ArgumentNullException(string.Empty, "Operation not found. Check if it has been registered in this context.");
                 }
             }
             return AddInterceptors(instance, condition, postOperation);
@@ -176,7 +157,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
         {
             if (operation == null)
             {
-                throw new ArgumentNullException("Operation has not been defined or is null.");
+                throw new ArgumentNullException(nameof(operation), "Operation has not been defined or is null.");
             }
             if (postOperation)
             {
@@ -192,11 +173,11 @@ namespace Mvp24Hours.Infrastructure.Pipe
         {
             if (action == null)
             {
-                throw new ArgumentNullException("Action is mandatory.");
+                throw new ArgumentNullException(nameof(action), "Action is mandatory.");
             }
             if (condition == null)
             {
-                throw new ArgumentNullException("Condition is mandatory.");
+                throw new ArgumentNullException(nameof(condition), "Condition is mandatory.");
             }
             if (postOperation)
             {
@@ -208,13 +189,48 @@ namespace Mvp24Hours.Infrastructure.Pipe
             }
             return this;
         }
-        public async Task<IPipelineAsync> ExecuteAsync(IPipelineMessage input = null)
+        public IPipelineAsync AddInterceptors(EventHandler<IPipelineMessage, EventArgs> handler, PipelineInterceptorType pipelineInterceptor = PipelineInterceptorType.PostOperation)
         {
-            _pipelineMessage = input ?? _pipelineMessage;
-            _pipelineMessage = await RunOperationsAsync(this.operations, _pipelineMessage);
+            if (handler == null)
+            {
+                throw new ArgumentNullException(nameof(handler), "Handler has not been defined or is null.");
+            }
+
+            if (!this.dictionaryEventInterceptors.ContainsKey(pipelineInterceptor))
+            {
+                this.dictionaryEventInterceptors.Add(pipelineInterceptor, new List<EventHandler<IPipelineMessage, EventArgs>>());
+            }
+            this.dictionaryEventInterceptors[pipelineInterceptor].Add(handler);
             return this;
         }
-        internal async Task<IPipelineMessage> RunOperationsAsync(IList<IOperationAsync> _operations, IPipelineMessage input, bool onlyOperationDefault = false)
+        public IPipelineAsync AddInterceptors(EventHandler<IPipelineMessage, EventArgs> handler, Func<IPipelineMessage, bool> condition, bool postOperation = true)
+        {
+            if (handler == null)
+            {
+                throw new ArgumentNullException(nameof(handler), "Handler is mandatory.");
+            }
+            if (condition == null)
+            {
+                throw new ArgumentNullException(nameof(condition), "Condition is mandatory.");
+            }
+            if (postOperation)
+            {
+                this.postEventCustomInterceptors.Add(new KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>(condition, handler));
+            }
+            else
+            {
+                this.preEventCustomInterceptors.Add(new KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>(condition, handler));
+            }
+            return this;
+        }
+
+        public async Task<IPipelineAsync> ExecuteAsync(IPipelineMessage input = null)
+        {
+            Message = input ?? Message;
+            Message = await RunOperationsAsync(this.operations, Message);
+            return this;
+        }
+        internal virtual async Task<IPipelineMessage> RunOperationsAsync(IList<IOperationAsync> _operations, IPipelineMessage input, bool onlyOperationDefault = false)
         {
             if (!_operations.AnyOrNotNull())
             {
@@ -226,50 +242,33 @@ namespace Mvp24Hours.Infrastructure.Pipe
                 input = new PipelineMessage();
             }
 
-            if (!_token.HasValue())
+            if (!Token.HasValue())
             {
-                _token = input.Token.HasValue() ? input.Token : Guid.NewGuid().ToString();
+                Token = input.Token.HasValue() ? input.Token : Guid.NewGuid().ToString();
             }
 
-            if (!onlyOperationDefault && dictionaryInterceptors.ContainsKey(PipelineInterceptorType.FirstOperation))
+            if (!onlyOperationDefault)
             {
-                await RunOperationsAsync(dictionaryInterceptors[PipelineInterceptorType.FirstOperation], input, true);
+                await RunEventInterceptorsAsync(input, PipelineInterceptorType.FirstOperation);
+                await RunOperationInterceptorsAsync(input, PipelineInterceptorType.FirstOperation);
             }
 
             _ = await _operations.Aggregate(Task.FromResult(input), async (currentAsync, operation) =>
             {
                 var current = await currentAsync;
 
-                current.SetToken(this._token);
+                current.SetToken(this.Token);
 
                 if (!onlyOperationDefault)
                 {
-                    if (current.IsFaulty || !IsValidContext)
+                    if ((current.IsFaulty || !IsValidContext) && this.IsBreakOnFail)
                     {
-                        if (dictionaryInterceptors.ContainsKey(PipelineInterceptorType.Faulty))
-                        {
-                            await RunOperationsAsync(dictionaryInterceptors[PipelineInterceptorType.Faulty], current, true);
-                            dictionaryInterceptors.Remove(PipelineInterceptorType.Faulty);
-                        }
-
-                        if (this._isBreakOnFail)
-                        {
-                            return current;
-                        }
+                        return current;
                     }
 
-                    if (current.IsLocked)
+                    if (current.IsLocked && !operation.IsRequired)
                     {
-                        if (dictionaryInterceptors.ContainsKey(PipelineInterceptorType.Locked))
-                        {
-                            await RunOperationsAsync(dictionaryInterceptors[PipelineInterceptorType.Locked], current, true);
-                            dictionaryInterceptors.Remove(PipelineInterceptorType.Locked);
-                        }
-
-                        if (!operation.IsRequired)
-                        {
-                            return current;
-                        }
+                        return current;
                     }
                 }
 
@@ -278,20 +277,13 @@ namespace Mvp24Hours.Infrastructure.Pipe
                     // pre-operation
                     if (!onlyOperationDefault)
                     {
-                        if (preCustomInterceptors.AnyOrNotNull())
-                        {
-                            foreach (var ci in preCustomInterceptors)
-                            {
-                                if (ci.Key.Invoke(input))
-                                {
-                                    await RunOperationsAsync(new List<IOperationAsync> { ci.Value }, current, true);
-                                }
-                            }
-                        }
-                        if (dictionaryInterceptors.ContainsKey(PipelineInterceptorType.PreOperation))
-                        {
-                            await RunOperationsAsync(dictionaryInterceptors[PipelineInterceptorType.PreOperation], current, true);
-                        }
+                        // events
+                        await RunCustomEventInterceptorsAsync(input, false);
+                        await RunEventInterceptorsAsync(input, PipelineInterceptorType.PreOperation);
+
+                        // operations
+                        await RunCustomOperationInterceptorsAsync(input, false);
+                        await RunOperationInterceptorsAsync(input, PipelineInterceptorType.PreOperation);
                     }
 
                     // operation
@@ -300,20 +292,24 @@ namespace Mvp24Hours.Infrastructure.Pipe
                     // post-operation
                     if (!onlyOperationDefault)
                     {
-                        if (dictionaryInterceptors.ContainsKey(PipelineInterceptorType.PostOperation))
+                        // events
+                        await RunEventInterceptorsAsync(input, PipelineInterceptorType.PostOperation);
+                        await RunCustomEventInterceptorsAsync(input);
+
+                        // operations
+                        await RunOperationInterceptorsAsync(current, PipelineInterceptorType.PostOperation);
+                        await RunCustomOperationInterceptorsAsync(current);
+
+                        if (current.IsLocked)
                         {
-                            await RunOperationsAsync(dictionaryInterceptors[PipelineInterceptorType.PostOperation], current, true);
+                            await RunEventInterceptorsAsync(input, PipelineInterceptorType.Locked, true);
+                            await RunOperationInterceptorsAsync(current, PipelineInterceptorType.Locked, true);
                         }
 
-                        if (postCustomInterceptors.AnyOrNotNull())
+                        if (current.IsFaulty || !IsValidContext)
                         {
-                            foreach (var ci in postCustomInterceptors)
-                            {
-                                if (ci.Key.Invoke(input))
-                                {
-                                    await RunOperationsAsync(new List<IOperationAsync> { ci.Value }, current, true);
-                                }
-                            }
+                            await RunEventInterceptorsAsync(input, PipelineInterceptorType.Faulty, true);
+                            await RunOperationInterceptorsAsync(current, PipelineInterceptorType.Faulty, true);
                         }
                     }
 
@@ -327,12 +323,109 @@ namespace Mvp24Hours.Infrastructure.Pipe
                 return current;
             });
 
-            if (!onlyOperationDefault && dictionaryInterceptors.ContainsKey(PipelineInterceptorType.LastOperation))
+            if (!onlyOperationDefault && (!input.IsFaulty || IsValidContext))
             {
-                await RunOperationsAsync(dictionaryInterceptors[PipelineInterceptorType.LastOperation], input, true);
+                await RunEventInterceptorsAsync(input, PipelineInterceptorType.LastOperation);
+                await RunOperationInterceptorsAsync(input, PipelineInterceptorType.LastOperation);
             }
 
             return input;
+        }
+
+        protected virtual async Task RunOperationInterceptorsAsync(IPipelineMessage input, PipelineInterceptorType interceptorType, bool canClearList = false)
+        {
+            if (dictionaryInterceptors.ContainsKey(interceptorType))
+            {
+                await RunOperationsAsync(dictionaryInterceptors[interceptorType], input, true);
+                if (canClearList)
+                {
+                    dictionaryInterceptors.Remove(interceptorType);
+                }
+            }
+        }
+        protected virtual async Task RunCustomOperationInterceptorsAsync(IPipelineMessage input, bool postOperation = true)
+        {
+            if (postOperation)
+            {
+                if (postCustomInterceptors.AnyOrNotNull())
+                {
+                    foreach (var ci in postCustomInterceptors)
+                    {
+                        if (ci.Key.Invoke(input))
+                        {
+                            await RunOperationsAsync(new List<IOperationAsync> { ci.Value }, input, true);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (preCustomInterceptors.AnyOrNotNull())
+                {
+                    foreach (var ci in preCustomInterceptors)
+                    {
+                        if (ci.Key.Invoke(input))
+                        {
+                            await RunOperationsAsync(new List<IOperationAsync> { ci.Value }, input, true);
+                        }
+                    }
+                }
+            }
+        }
+        protected virtual async Task RunEventInterceptorsAsync(IPipelineMessage input, PipelineInterceptorType interceptorType, bool canClearList = false)
+        {
+            if (dictionaryEventInterceptors.ContainsKey(interceptorType))
+            {
+                await RunEventsAsync(dictionaryEventInterceptors[interceptorType], input);
+                if (canClearList)
+                {
+                    dictionaryEventInterceptors.Remove(interceptorType);
+                }
+            }
+        }
+        protected virtual async Task RunCustomEventInterceptorsAsync(IPipelineMessage input, bool postOperation = true)
+        {
+            if (postOperation)
+            {
+                if (postEventCustomInterceptors.AnyOrNotNull())
+                {
+                    foreach (var ci in postEventCustomInterceptors)
+                    {
+                        if (ci.Key.Invoke(input))
+                        {
+                            await RunEventsAsync(new List<EventHandler<IPipelineMessage, EventArgs>> { ci.Value }, input);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (preEventCustomInterceptors.AnyOrNotNull())
+                {
+                    foreach (var ci in preEventCustomInterceptors)
+                    {
+                        if (ci.Key.Invoke(input))
+                        {
+                            await RunEventsAsync(new List<EventHandler<IPipelineMessage, EventArgs>> { ci.Value }, input);
+                        }
+                    }
+                }
+            }
+        }
+        protected virtual async Task RunEventsAsync(IList<EventHandler<IPipelineMessage, EventArgs>> _handlers, IPipelineMessage input)
+        {
+            if (_handlers.AnyOrNotNull())
+            {
+                foreach (var handler in _handlers)
+                {
+                    if (handler == null)
+                    {
+                        continue;
+                    }
+
+                    await Task.Factory.StartNew(() => handler(input, EventArgs.Empty));
+                }
+            }
         }
 
         #endregion

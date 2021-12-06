@@ -354,5 +354,149 @@ namespace Mvp24Hours.Application.Pipe.Test
             Assert.True(pipeline.GetMessage() != null);
         }
 
+        [Fact, Priority(9)]
+        public void Pipeline_Event_Interceptors()
+        {
+            var pipeline = ServiceProviderHelper.GetService<IPipeline>();
+
+            // operations
+            pipeline.Add(_ =>
+            {
+                Trace.WriteLine("Test 1");
+            });
+            pipeline.Add(input =>
+            {
+                Trace.WriteLine("Test 2");
+                Trace.WriteLine("Adding value to conditional interceptor test...");
+                input.AddContent(1);
+            });
+            pipeline.Add(_ =>
+            {
+                Trace.WriteLine("Test 3");
+            });
+
+            // event interceptors -> first-operation
+            pipeline.AddInterceptors((input, e) =>
+            {
+                Trace.WriteLine("First-Operation, event.");
+            }, PipelineInterceptorType.FirstOperation);
+
+            // event interceptors -> pre-operation
+            pipeline.AddInterceptors((input, e) =>
+            {
+                Trace.WriteLine("Pre-Operation, event.");
+            }, PipelineInterceptorType.PreOperation);
+
+            // event interceptors -> post-operation
+            pipeline.AddInterceptors((input, e) =>
+            {
+                Trace.WriteLine("Post-Operation, event.");
+            }, PipelineInterceptorType.PostOperation);
+
+            // event interceptors -> last-operation
+            pipeline.AddInterceptors((input, e) =>
+            {
+                Trace.WriteLine("Last-Operation, event.");
+            }, PipelineInterceptorType.LastOperation);
+
+            // event interceptors -> locked-operation
+            pipeline.AddInterceptors((input, e) =>
+            {
+                Trace.WriteLine("Locked-Operation, event.");
+            }, PipelineInterceptorType.Locked);
+
+            // event interceptors -> faulty-operation
+            pipeline.AddInterceptors((input, e) =>
+            {
+                Trace.WriteLine("Faulty-Operation, event.");
+            }, PipelineInterceptorType.Faulty);
+
+            // event interceptors -> conditional
+            pipeline.AddInterceptors((input, e) =>
+            {
+                Trace.WriteLine("Conditional-Operation, event.");
+            },
+            input =>
+            {
+                return input.HasContent<int>();
+            });
+
+            pipeline.Execute();
+            Assert.True(pipeline.GetMessage() != null);
+        }
+
+        [Fact, Priority(10)]
+        public void Pipeline_Event_Interceptors_With_Lock()
+        {
+            var pipeline = ServiceProviderHelper.GetService<IPipeline>();
+
+            // operations
+            pipeline.Add(_ =>
+            {
+                Trace.WriteLine("Test 1");
+            });
+            pipeline.Add(input =>
+            {
+                Trace.WriteLine("Test 2");
+                Trace.WriteLine("Adding value to conditional interceptor test...");
+                input.AddContent(1);
+            });
+            pipeline.Add(input =>
+            {
+                Trace.WriteLine("Test 3");
+                Trace.WriteLine("Locking...");
+                input.SetLock();
+            });
+
+            // event interceptors -> first-operation
+            pipeline.AddInterceptors((input, e) =>
+            {
+                Trace.WriteLine("First-Operation, event.");
+            }, PipelineInterceptorType.FirstOperation);
+
+            // event interceptors -> pre-operation
+            pipeline.AddInterceptors((input, e) =>
+            {
+                Trace.WriteLine("Pre-Operation, event.");
+            }, PipelineInterceptorType.PreOperation);
+
+            // event interceptors -> post-operation
+            pipeline.AddInterceptors((input, e) =>
+            {
+                Trace.WriteLine("Post-Operation, event.");
+            }, PipelineInterceptorType.PostOperation);
+
+            // event interceptors -> last-operation
+            pipeline.AddInterceptors((input, e) =>
+            {
+                Trace.WriteLine("Last-Operation, event.");
+            }, PipelineInterceptorType.LastOperation);
+
+            // event interceptors -> locked-operation
+            pipeline.AddInterceptors((input, e) =>
+            {
+                Trace.WriteLine("Locked-Operation, event.");
+            }, PipelineInterceptorType.Locked);
+
+            // event interceptors -> faulty-operation
+            pipeline.AddInterceptors((input, e) =>
+            {
+                Trace.WriteLine("Faulty-Operation, event.");
+            }, PipelineInterceptorType.Faulty);
+
+            // event interceptors -> conditional
+            pipeline.AddInterceptors((input, e) =>
+            {
+                Trace.WriteLine("Conditional-Operation, event.");
+            },
+            input =>
+            {
+                return input.HasContent<int>();
+            });
+
+            pipeline.Execute();
+            Assert.True(pipeline.GetMessage() != null);
+        }
+
     }
 }

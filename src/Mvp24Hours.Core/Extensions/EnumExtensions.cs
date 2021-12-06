@@ -23,7 +23,6 @@ namespace Mvp24Hours.Core.Extensions
                 return string.Empty;
             }
             var field = type.GetField(name);
-            var valueteste = field.GetRawConstantValue();
             var customAttribute = field.GetCustomAttributes(typeof(DisplayAttribute), false);
             return customAttribute.Length > 0 ? ((DisplayAttribute)customAttribute[0]).Description : name;
         }

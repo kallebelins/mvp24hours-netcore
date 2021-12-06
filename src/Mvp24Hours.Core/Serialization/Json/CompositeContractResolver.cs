@@ -43,7 +43,11 @@ namespace Mvp24Hours.Core.Serialization.Json
         /// <param name="contractResolver"></param>
         public void Add(IContractResolver contractResolver)
         {
-            if (contractResolver == null) throw new ArgumentNullException(nameof(contractResolver));
+            if (contractResolver == null)
+            {
+                throw new ArgumentNullException(nameof(contractResolver));
+            }
+
             _contractResolvers.Add(contractResolver);
         }
 
