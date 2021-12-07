@@ -1,0 +1,12 @@
+{
+  "Mvp24Hours": {
+    "Brokers": {
+      "RabbitMQ": {
+        "HostName": "localhost",
+        "Port": 6672,
+        "UserName": "admin",
+        "Password": "admin@123"
+      }
+    }
+  }
+}

@@ -6,11 +6,13 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Core.Mappings;
 using Mvp24Hours.Infrastructure.Contexts;
+using Mvp24Hours.Infrastructure.Helpers;
 using Mvp24Hours.Infrastructure.Logging;
 using System.Reflection;
 
@@ -24,10 +26,23 @@ namespace Mvp24Hours.Infrastructure.Extensions
         /// <summary>
         /// Add Mvp24Hours essential
         /// </summary>
-        public static IServiceCollection AddMvp24Hours(this IServiceCollection services)
+        public static IServiceCollection AddMvp24Hours(this IServiceCollection services, IConfiguration configuration = null)
         {
+            if (configuration != null)
+            {
+                services.AddMvp24HoursConfiguration(configuration);
+            }
             services.AddMvp24HoursLogging();
             services.AddMvp24HoursNotification();
+            return services;
+        }
+
+        /// <summary>
+        /// Add configuration
+        /// </summary>
+        public static IServiceCollection AddMvp24HoursConfiguration(this IServiceCollection services, IConfiguration configuration)
+        {
+            ConfigurationHelper.SetConfiguration(configuration);
             return services;
         }
 

@@ -16,11 +16,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="sample-appsettings.json" />
+    <None Remove="webapi-appsettings.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="sample-appsettings.json">
+    <Content Include="webapi-appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>

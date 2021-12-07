@@ -1,0 +1,11 @@
+{
+  "ConnectionStrings": {
+    "DbContext": null
+  },
+  "Mvp24Hours": {
+    "Persistence": {
+      "MaxQtyByQueryPage": 30,
+      "ReadUncommitedQuery": false
+    }
+  }
+}

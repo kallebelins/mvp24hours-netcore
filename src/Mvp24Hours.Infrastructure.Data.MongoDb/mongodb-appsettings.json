@@ -1,0 +1,14 @@
+{
+  "ConnectionStrings": {
+    "MongoDbContext": null
+  },
+  "Mvp24Hours": {
+    "Persistence": {
+      "MaxQtyByQueryPage": 30,
+      "MongoDb": {
+        "EnableTls": false,
+        "EnableTransaction": false
+      }
+    }
+  }
+}

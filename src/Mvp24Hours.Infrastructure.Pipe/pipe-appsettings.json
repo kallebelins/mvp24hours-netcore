@@ -1,0 +1,16 @@
+{
+  "Mvp24Hours": {
+    "Pipe": {
+      "Operation": {
+        "FileLog": {
+          "Enable": false,
+          "Path": ""
+        },
+        "FileToken": {
+          "Enable": false,
+          "Path": ""
+        }        
+      }
+    }
+  }
+}

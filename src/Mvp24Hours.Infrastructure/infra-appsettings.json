@@ -1,0 +1,19 @@
+{
+  "Mvp24Hours": {
+    "General": {
+      "TimeZoneIds": ""
+    },
+    "SmtpMail": {
+      "SmtpServer": "",
+      "SmtpUser": "",
+      "SmtpPassword": "",
+      "SmtpPort": "",
+      "SmtpSSL": "",
+      "MailTo": "",
+      "MailFrom": "",
+      "MailFromName": "",
+      "ReplyTo": "",
+      "ReplyToName": ""
+    }
+  }
+}

@@ -6,7 +6,6 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Domain.Entity;
-using Mvp24Hours.Core.Contract.Domain.Validations;
 using System;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;

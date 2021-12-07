@@ -26,6 +26,8 @@ namespace Mvp24Hours.Infrastructure.Helpers
         public static void SetEnvironment(IHostEnvironment environment)
         {
             _environment = environment;
+            if (environment != null)
+                LoadSettings();
         }
 
         /// <summary>
@@ -45,23 +47,18 @@ namespace Mvp24Hours.Infrastructure.Helpers
         /// <summary>
         /// 
         /// </summary>
-        public static IConfigurationRoot AppSettings
+        public static IConfigurationRoot AppSettings => _appSettings ??= LoadSettings();
+
+        private static IConfigurationRoot LoadSettings()
         {
-            get
+            IConfigurationBuilder builder = new ConfigurationBuilder();
+            builder.AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json"), optional: true, reloadOnChange: true);
+            var env = GetEnvironment();
+            if (env != null)
             {
-                if (_appSettings == null)
-                {
-                    IConfigurationBuilder builder = new ConfigurationBuilder();
-                    builder.AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json"), optional: true, reloadOnChange: true);
-                    var env = GetEnvironment();
-                    if (env != null)
-                    {
-                        builder.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
-                    }
-                    _appSettings = builder.Build();
-                }
-                return _appSettings;
+                builder.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
             }
+            return builder.Build();
         }
 
         /// <summary>
@@ -89,23 +86,17 @@ namespace Mvp24Hours.Infrastructure.Helpers
             {
                 return AppSettings?.GetSection(key);
             }
-            else if (_configuration != null)
-            {
-                return _configuration.GetSection(key);
-            }
             return default;
         }
 
         #region [ Configuration Settings ]
-
-        private static IConfiguration _configuration;
 
         /// <summary>
         /// Records native .NET core configuration
         /// </summary>
         public static void SetConfiguration(IConfiguration configuration)
         {
-            _configuration = configuration;
+            _appSettings = (IConfigurationRoot)configuration;
         }
 
         #endregion
