@@ -19,6 +19,9 @@ using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;
 using Mvp24Hours.WebAPI.Filters;
 using Mvp24Hours.WebAPI.Filters.Swagger;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Filters;
 using System;
 using System.Collections.Generic;
@@ -26,6 +29,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json.Serialization;
 
 namespace Mvp24Hours.WebAPI.Extensions
 {
@@ -60,6 +64,24 @@ namespace Mvp24Hours.WebAPI.Extensions
             // notification
             services.AddMvp24HoursNotification();
 
+            return services;
+        }
+
+        /// <summary>
+        /// Add json serialization
+        /// </summary>
+        public static IServiceCollection AddMvp24HoursJson(this IServiceCollection services, Assembly assemblyMap = null)
+        {
+            services.AddControllers()
+                .AddNewtonsoftJson(options =>
+                {
+                    options.SerializerSettings.ContractResolver = JsonHelper.JsonDefaultSettings.ContractResolver;
+                    options.SerializerSettings.Converters = JsonHelper.JsonDefaultSettings.Converters;
+                    options.SerializerSettings.DateFormatHandling = JsonHelper.JsonDefaultSettings.DateFormatHandling;
+                    options.SerializerSettings.DateFormatString = JsonHelper.JsonDefaultSettings.DateFormatString;
+                    options.SerializerSettings.NullValueHandling = JsonHelper.JsonDefaultSettings.NullValueHandling;
+                    options.SerializerSettings.ReferenceLoopHandling = JsonHelper.JsonDefaultSettings.ReferenceLoopHandling;
+                });
             return services;
         }
 

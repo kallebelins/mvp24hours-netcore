@@ -21,7 +21,8 @@ namespace Mvp24Hours.Infrastructure.Helpers
                 Converters = new List<JsonConverter> { new StringEnumConverter() },
                 DateFormatHandling = DateFormatHandling.MicrosoftDateFormat,
                 DateFormatString = "yyyy-MM-dd",
-                NullValueHandling = NullValueHandling.Ignore
+                NullValueHandling = NullValueHandling.Ignore,
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             };
         }
 
