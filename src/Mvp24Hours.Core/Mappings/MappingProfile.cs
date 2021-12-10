@@ -20,6 +20,8 @@ namespace Mvp24Hours.Core.Mappings
     {
         public MappingProfile(Assembly assembly)
         {
+            ApplyMappingsFromAssembly(assembly);
+
             foreach (var assemblyName in assembly.GetReferencedAssemblies())
             {
                 Assembly assemblyLoaded = Assembly.Load(assemblyName);

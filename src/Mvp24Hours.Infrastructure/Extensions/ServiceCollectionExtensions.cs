@@ -77,7 +77,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
         /// <summary>
         /// Add mapping services
         /// </summary>
-        public static IServiceCollection AddMvp24HoursMapService(this IServiceCollection services, Assembly assemblyMap)
+        public static IServiceCollection AddMvp24HoursMapService(this IServiceCollection services, Assembly assemblyMap = null)
         {
             Assembly local = assemblyMap ?? Assembly.GetExecutingAssembly();
             var mapperConfig = new MapperConfiguration(mc =>

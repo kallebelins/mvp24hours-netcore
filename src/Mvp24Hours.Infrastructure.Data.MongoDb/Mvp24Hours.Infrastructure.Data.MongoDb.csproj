@@ -10,9 +10,9 @@
     <Company>Kallebe Lins</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>2.11.241</Version>
-    <AssemblyVersion>2.11.24.1</AssemblyVersion>
-    <FileVersion>2.11.24.1</FileVersion>
+    <Version>2.12.101</Version>
+    <AssemblyVersion>2.12.10.1</AssemblyVersion>
+    <FileVersion>2.12.10.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MongoDB.Driver" Version="2.13.2" />
+    <PackageReference Include="MongoDB.Driver" Version="2.14.1" />
   </ItemGroup>
 
   <ItemGroup>

@@ -27,7 +27,9 @@ namespace Mvp24Hours.Infrastructure.Helpers
         {
             _environment = environment;
             if (environment != null)
+            {
                 LoadSettings();
+            }
         }
 
         /// <summary>
