@@ -6,13 +6,13 @@ Este projeto foi desenvolvido para contribuir com a construção rápida de serv
 * Banco de dados chave-valor (Redis)
 * Banco de dados relacional (SQL Server, PostgreSql, MySql)
 * Message Broker (RabbitMQ)
-* Pipeline
+* Pipeline (Pipe and Filters pattern)
 * Documentação (Swagger)
 * Mapeamento (AutoMapper)
-* Padrões para validação de dados, notificação e especificações.
+* Padrões para validação de dados (FluentValidation e Data Annotations), notificação (Notification pattern) e especificações (Specification pattern).
 
 ## Donativos
-Por favor, considere fazer uma doação se você acha que o docsify é útil para você ou que meu trabalho é valioso. Fico feliz se você puder me ajudar a comprar uma xícara de café. :heart:
+Por favor, considere fazer uma doação se você acha que esta biblioteca é útil para você ou que meu trabalho é valioso. Fico feliz se você puder me ajudar a comprar uma xícara de café. :heart:
 
 ## Comunidade
 Os usuários e a equipe de desenvolvimento será criada no Discord em breve.
