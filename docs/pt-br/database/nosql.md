@@ -1,4 +1,4 @@
-# Banco de Dados NoSQL (MongoDb)
+# Banco de Dados NoSQL
 Foi implementado padrão de repositório com critérios de pesquisa e paginação, além de unidade de trabalho. Esta implementação não oferece suporte apenas a carga tardia de objetos relacionados:
 
 ## Pré-Requisitos (Não Obrigatório)
@@ -10,7 +10,19 @@ Adicione um arquivo de configuração ao projeto com nome "appsettings.json". O 
   },
   "Mvp24Hours": {
     "Persistence": {
-      "MaxQtyByQueryPage": 30,
+      "MaxQtyByQueryPage": 30
+    }
+  }
+}
+```
+Você poderá usar a conexão de banco de dados direto, o que não é recomendado. Acesse o site [ConnectionStrings](https://www.connectionstrings.com/) e veja como montar a conexão com seu banco.
+
+## MongoDB
+Configuração adicional para MongoDb registrado no "appsettings.json":
+```json
+{
+  "Mvp24Hours": {
+    "Persistence": {
       "MongoDb": {
         "EnableTls": false,
         "EnableTransaction": false
@@ -19,15 +31,14 @@ Adicione um arquivo de configuração ao projeto com nome "appsettings.json". O 
   }
 }
 ```
-Você poderá usar a conexão de banco de dados direto, o que não é recomendado. Acesse o site [ConnectionStrings](https://www.connectionstrings.com/) e veja como montar a conexão com seu banco.
 
-## Instalação
+### Instalação
 ```csharp
 /// Package Manager Console >
 
 Install-Package MongoDB.Driver -Version 2.13.2
 ```
-## Configuração
+### Configuração
 ```csharp
 /// Startup.cs
 
@@ -35,7 +46,7 @@ services.AddMvp24HoursMongoDb("mycollection", ConfigurationHelper.GetSettings("C
 
 ```
 
-## Usando Docker
+### Usando Docker
 **Comando Básico**
 ```
 // Command

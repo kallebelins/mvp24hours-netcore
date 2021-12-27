@@ -1,27 +1,29 @@
 # Início
-Cada solução arquitetural deve ser construída baseada nas necessidades técnicas ou de negócio.
+Cada solução arquitetural deve ser construída baseada nas necessidades técnicas e/ou de negócio.
+O objetivo dessa biblioteca é garantir agilidade na construção de produtos digitais através de estruturas, mecanismos e ferramentas que, combinados corretamente, oferecem robustez, segurança, desempenho, monitoramento, observabilidade, resiliência e consistência.
+Abaixo estão as principais referências para API RESTful para persistência e integração de serviços.
 
 ## Banco de dados relacional
 É um banco de dados que permite criar relacionamentos entre si com o objetivo de garantir consistência e integridade dos dados.
 
-* [SQL Server](pt-br/ef-sqlserver.md)
-* [PostgreSql](pt-br/ef-postgresql.md)
-* [MySql](pt-br/ef-mysql.md)
+* [SQL Server](pt-br/database/getting-started?id=sql-server)
+* [PostgreSql](pt-br/database/getting-started?id=postgresql)
+* [MySql](pt-br/database/getting-started?id=mysql)
 
 ## Banco de dados NoSql
 NoSQL é um termo genérico que representa um banco de dados não relacional.
 
-[MongoDb](pt-br/mongodb.md)
+[MongoDb](pt-br/database/nosql?id=mongodb)
 
 ## Banco de dados chave-valor
 É uma estrutura de dados do tipo mapa ou dicionário, onde utilizamos uma chave como identificador do registro.
 
-[Redis](pt-br/redis.md)
+[Redis](pt-br/database/keyvalue?id=redis.md)
 
 ## Message Broker
 Um message broker é um software que possibilita que aplicativos, sistemas e serviços se comuniquem e troquem informações.
 
-[RabbitMQ](pt-br/rabbitmq.md)
+[RabbitMQ](pt-br/broker.md)
 
 ## Pipeline
 É um padrão de projeto que representa um tubo com diversas operações (filtros), executadas de forma sequencial, com o intuito de trafegar, integir e/ou manuear um pacote/mensagem.
@@ -29,13 +31,19 @@ Um message broker é um software que possibilita que aplicativos, sistemas e ser
 [Pipeline](pt-br/pipeline.md)
 
 ## Documentação
+O hábito de documentar interfaces e classes de dados (value objects, dtos, entidades, ...) pode contruibuir para facilitar a manutenção de código. O Swagger permite você documentar facilmente sua API RESTful compartilhando com outros desenvolvedores a forma como poderão consumir os recursos disponíveis.
+
 [Swagger](pt-br/swagger.md)
 
 ## Mapeamento
+Com a prática de desenvolvimento de API RESTful com foco em mobile, temos como referência oferecer o mínimo de dados possível ou necessários em cada recurso da API. Sendo assim, surge a necessidade de criarmos objetos específicos para tráfeto (DTOs).
+O AutoMapper auxilia na atribuição de valores de propriedades de objetos relacionados (Pessoa => PessoaDto), ou melhor, mapeamento de um objeto para outro.
+
 [AutoMapper](pt-br/automapper.md)
 
-## Padrões 
+## Outros Padrões
+Os padrões são modelos que usamos como referência ou base para resolução de um problema. Além dos padrões que apresentaremos nas definições arquiteturais exploradas por esta biblioteca, exploramos as seguintes referências:
 
-* [Validação de dados](pt-br/automapper.md)
-* [Notificação](pt-br/notification.md)
-* [Especificação](pt-br/notification.md)
+* [Validação de dados](pt-br/automapper.md): Validação de usando fluent ou anotações
+* [Notificação](pt-br/notification.md): Troca de mensagens em um contexto de notificações
+* [Especificação](pt-br/notification.md): Filtro de dados

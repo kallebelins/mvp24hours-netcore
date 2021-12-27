@@ -1,7 +1,9 @@
-# Message Broker com RabbitMQ
+# Message Broker
 Em contrução...
 
-## Configuração
+## RabbitMQ
+
+### Configuração
 ```csharp
 
 // Producers
@@ -35,7 +37,7 @@ public class CustomerConsumer : MvpRabbitMQConsumer<CustomerEvent>
 
 ```
 
-## Usando Docker
+### Usando Docker
 ```
 // Command
 docker run -d --name my-rabbit -p 5672:5672 -p 5673:5673 -p 15672:15672 rabbitmq:3-management

@@ -169,14 +169,14 @@ namespace Mvp24Hours.Application.SQLServer.Test
         public void Get_Filter_Customer_GetBy_Order_Asc()
         {
             var service = ServiceProviderHelper.GetService<CustomerService>();
-            var paging = new PagingCriteria(3, 0, new List<string> { "Name" });
+            var paging = new PagingCriteria(3, 0, orderBy: new List<string> { "Name" });
             Assert.True(service.GetBy(x => x.Name.Contains("Test"), paging).HasDataCount(3));
         }
         [Fact, Priority(6)]
         public void Get_Filter_Customer_GetBy_Order_Desc()
         {
             var service = ServiceProviderHelper.GetService<CustomerService>();
-            var paging = new PagingCriteria(3, 0, new List<string> { "Name desc" });
+            var paging = new PagingCriteria(3, 0, orderBy: new List<string> { "Name desc" });
             Assert.True(service.GetBy(x => x.Name.Contains("Test"), paging).HasDataCount(3));
         }
         [Fact, Priority(7)]

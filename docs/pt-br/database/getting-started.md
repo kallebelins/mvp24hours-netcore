@@ -38,6 +38,15 @@ services.AddDbContext<DataContext>(
 services.AddMvp24HoursDbService<DataContext>();
 
 ```
+### Usando Docker
+```
+// Command
+docker run --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=MyPass@word -d onjin/alpine-postgres
+
+// ConnectionString
+Host=localhost;Port=5432;Pooling=true;Database=MyTestDb;User Id=postgres;Password=MyPass@word;
+
+```
 
 ## MySql
 ### Instalação
@@ -57,6 +66,15 @@ services.AddDbContext<DataContext>(options =>
 services.AddMvp24HoursDbService<DataContext>();
 
 ```
+### Usando Docker
+```
+// Command
+docker run --name mysql -v /mysql/data/:/var/lib/mysql -d -p 3306:3306 -e MYSQL_ROOT_PWD=MyPass@word -e MYSQL_USER=user -e MYSQL_USER_PWD=MyPass@word leafney/docker-alpine-mysql
+
+// ConnectionString
+server=localhost;user=root;password=MyPass@word;database=MyTestDb
+
+```
 
 ## SQL Server
 ### Instalação
@@ -74,5 +92,14 @@ services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(ConfigurationHelper.AppSettings.GetConnectionString("DataContext")));
 
 services.AddMvp24HoursDbService<DataContext>();
+
+```
+### Usando Docker
+```
+// Command
+docker run --name sqlserver -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=MyPass@word" -p 1433:1433 -d mcr.microsoft.com/mssql/server
+
+// ConnectionString
+Data Source=.,1433;Initial Catalog=MyTestDb;Persist Security Info=True;User ID=sa;Password=MyPass@word;Pooling=False;
 
 ```
