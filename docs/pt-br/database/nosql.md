@@ -1,5 +1,7 @@
 # Banco de Dados NoSQL
-Foi implementado padrão de repositório com critérios de pesquisa e paginação, além de unidade de trabalho. Esta implementação não oferece suporte apenas a carga tardia de objetos relacionados:
+>NoSQL (originalmente se referindo a "no SQL": "não SQL" ou "não relacional", posteriormente estendido para Not Only SQL - Não Somente SQL) é um termo genérico que representa os bancos de dados não relacionais. Uma classe definida de banco de dados que fornecem um mecanismo para armazenamento e recuperação de dados que são modelados de formas diferentes das relações tabulares usadas nos bancos de dados relacionais. [Wikipédia](https://pt.wikipedia.org/wiki/NoSQL)
+
+Foi implementado padrão de repositório com critérios de pesquisa e paginação, além de unidade de trabalho ([Veja Repositório](pt-br/database/use-repository)). Esta implementação não oferece suporte apenas a carga tardia de objetos relacionados. 
 
 ## Pré-Requisitos (Não Obrigatório)
 Adicione um arquivo de configuração ao projeto com nome "appsettings.json". O arquivo deverá conter um chave com dados de conexão, por exemplo, ConnectionStrings/DataContext conforme abaixo:

@@ -1,4 +1,6 @@
 # Banco de Dados Relacional
+>Um banco de dados relacional é um banco de dados que modela os dados de uma forma que eles sejam percebidos pelo usuário como tabelas, ou mais formalmente relações. [Wikipédia](https://pt.wikipedia.org/wiki/Banco_de_dados_relacional)
+
 Foi implementado padrão de repositório com critérios de pesquisa e paginação, além de unidade de trabalho. Usamos Entity Framework para realizar persistência. O Entity Framework dá suporte a diversos bancos de dados e os que já foram testados são:
 
 ## Pré-Requisitos (Não Obrigatório)

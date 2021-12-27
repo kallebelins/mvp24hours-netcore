@@ -14,24 +14,24 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom.Files
     /// <summary>
     /// Operation for writing file log token
     /// </summary>
-    public class FileTokenWriteOperation<T> : OperationBase
+    public class FileTokenWriteOperationAsync<T> : OperationBaseAsync
     {
         static bool _enable = ConfigurationHelper.GetSettings<bool>("Mvp24Hours:Operation:FileToken:Enable");
 
         public virtual string FileLogPath => null;
 
-        public override IPipelineMessage Execute(IPipelineMessage input)
+        public override Task<IPipelineMessage> ExecuteAsync(IPipelineMessage input)
         {
             if (_enable)
             {
                 var dto = input.GetContent<T>();
                 if (dto == null)
                 {
-                    return input;
+                    return Task.FromResult(input);
                 }
                 FileLogHelper.WriteLogToken(input.Token, typeof(T).Name.ToLower(), dto, FileLogPath);
             }
-            return input;
+            return Task.FromResult(input);
         }
     }
 }

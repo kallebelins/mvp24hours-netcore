@@ -26,19 +26,23 @@ IBusinessResult<TEntity> GetById(object id, IPagingCriteria criteria);
 ```
 
 ### Métodos Definidos pelo Usuário
-Neste exemplo usaremos a referência para obter contatos de cliente. Serão carregados apenas 2 contatos de cada cliente, veja:
+Neste exemplo usaremos a referência para obter contatos de cliente. Serão carregados até dois contatos de cada cliente, veja:
 ```csharp
 public IList<Customer> GetWithContacts()
 {
-    var paging = new PagingCriteria(2, 0);
+    // cria paginação para cliente
+    var paging = new PagingCriteria(3, 0);
 
+    // obtém instância de repositório de cliente
     var rpCustomer = UnitOfWork.GetRepository<Customer>();
 
+    // aplica filtro para clientes que possuam contatos com paginação
     var customers = rpCustomer.GetBy(x => x.Contacts.Any(), paging);
 
+    // percorre resultado de clientes para carregar contatos (carga tardia com filtro e/ou paginação)
     foreach (var customer in customers)
     {
-        rpCustomer.LoadRelation(customer, x => x.Contacts);
+        rpCustomer.LoadRelation(customer, x => x.Contacts, clause: c => c.Active, limit: 2);
     }
     return customers;
 }

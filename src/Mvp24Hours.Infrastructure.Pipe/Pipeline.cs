@@ -93,6 +93,33 @@ namespace Mvp24Hours.Infrastructure.Pipe
             this.operations.Add(new OperationAction(action, isRequired));
             return this;
         }
+        
+        public IPipeline AddBuilder<T>() where T : IPipelineBuilder
+        {
+            IPipelineBuilder pipelineBuilder = ServiceProviderHelper.GetService<T>();
+            if (pipelineBuilder == null)
+            {
+                Type type = typeof(T);
+                if (type.IsClass && !type.IsAbstract)
+                {
+                    return Activator.CreateInstance<T>().Builder(this);
+                }
+                else
+                {
+                    throw new ArgumentNullException(string.Empty, "PipelineBuilder not found. Check if it has been registered in this context.");
+                }
+            }
+            return pipelineBuilder.Builder(this);
+        }
+        public IPipeline AddBuilder(IPipelineBuilder pipelineBuilder)
+        {
+            if (pipelineBuilder == null)
+            {
+                throw new ArgumentNullException(nameof(pipelineBuilder), "PipelineBuilder has not been defined or is null.");
+            }
+            pipelineBuilder.Builder(this);
+            return this;
+        }
 
         public IPipeline AddInterceptors<T>(PipelineInterceptorType pipelineInterceptor = PipelineInterceptorType.PostOperation) where T : IOperation
         {

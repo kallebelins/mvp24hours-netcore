@@ -43,7 +43,7 @@ namespace Mvp24Hours.Application.SQLServer.Test.Support.Services
 
             foreach (var customer in customers)
             {
-                rpCustomer.LoadRelation(customer, x => x.Contacts, limit: 1);
+                rpCustomer.LoadRelation(customer, x => x.Contacts, clause: c => c.Active, limit: 1);
             }
             return customers;
         }

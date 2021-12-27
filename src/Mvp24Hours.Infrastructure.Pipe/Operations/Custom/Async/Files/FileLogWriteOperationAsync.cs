@@ -12,26 +12,22 @@ using System.Threading.Tasks;
 namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom.Files
 {
     /// <summary>
-    /// Operation for writing file log token
+    /// Log writing operation
     /// </summary>
-    public class FileTokenWriteOperation<T> : OperationBase
+    public class FileLogWriteOperationAsync : OperationBaseAsync
     {
-        static bool _enable = ConfigurationHelper.GetSettings<bool>("Mvp24Hours:Operation:FileToken:Enable");
+        static bool _enable = ConfigurationHelper.GetSettings<bool>("Mvp24Hours:Operation:FileLog:Enable");
 
+        public override bool IsRequired => true;
         public virtual string FileLogPath => null;
 
-        public override IPipelineMessage Execute(IPipelineMessage input)
+        public override Task<IPipelineMessage> ExecuteAsync(IPipelineMessage input)
         {
             if (_enable)
             {
-                var dto = input.GetContent<T>();
-                if (dto == null)
-                {
-                    return input;
-                }
-                FileLogHelper.WriteLogToken(input.Token, typeof(T).Name.ToLower(), dto, FileLogPath);
+                FileLogHelper.WriteLog(input.GetContentAll(), "message", $"Token: {input.Token} / IsSuccess: {input.IsFaulty} / Warnings: {string.Join('/', input.Messages)}", FileLogPath);
             }
-            return input;
+            return Task.FromResult(input);
         }
     }
 }

@@ -110,4 +110,21 @@ var entities = rpEntity.List(paging);
 var paging = new PagingCriteriaExpression<Entity>(3, 0); //  limit, offset
 paging.OrderByDescendingExpr.Add(x => x.PropertyName);
 var entities = rpEntity.List(paging);
+
+// carregar navegação/relacionamentos de lista com filtro e/ou paginação
+var paging = new PagingCriteria(1, 0, navigation: new List<string> { "PropertyList" });
+var entities = rpEntity.List(paging);
+foreach (var entity in entities)
+{
+	rpEntity.LoadRelation(entity, x => x.PropertyList, clause: c => c.Active, limit: 1);
+}
+
+// carregar navegação/relacionamentos de lista com expressão com filtro e/ou paginação
+var paging = new PagingCriteriaExpression<Entity>(3, 0); //  limit, offset
+paging.NavigationExpr.Add(x => x.PropertyList);
+var entities = rpEntity.List(paging);
+foreach (var entity in entities)
+{
+	rpEntity.LoadRelation(entity, x => x.PropertyList, clause: c => c.Active, limit: 1);
+}
 ```
