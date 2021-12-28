@@ -21,6 +21,12 @@ Adicione um arquivo de configuração ao projeto com nome "appsettings.json", co
 
 ```
 
+### Instalação
+```csharp
+/// Package Manager Console >
+Install-Package Mvp24Hours.Infrastructure.RabbitMQ
+```
+
 ### Configuração
 ```csharp
 /// Startup.cs

@@ -7,7 +7,6 @@
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Infrastructure.Helpers;
-using System.Threading.Tasks;
 
 namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom.Files
 {

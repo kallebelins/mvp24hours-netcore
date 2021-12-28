@@ -22,6 +22,12 @@ Adicione um arquivo de configuração ao projeto com nome "appsettings.json", co
 }
 ```
 
+## Instalação
+```csharp
+/// Package Manager Console >
+Install-Package Mvp24Hours.Infrastructure.Pipe
+```
+
 ## Configuração
 ```csharp
 /// Startup.cs

@@ -27,6 +27,7 @@ Você poderá usar a conexão de banco de dados direto, o que não é recomendad
 
 Install-Package Microsoft.Extensions.DependencyInjection -Version 6.0.0
 Install-Package Npgsql.EntityFrameworkCore.PostgreSQL -Version 5.0.10
+Install-Package Mvp24Hours.Infrastructure.Data.EFCore
 ```
 ### Configuração
 ```csharp
@@ -57,6 +58,7 @@ Host=localhost;Port=5432;Pooling=true;Database=MyTestDb;User Id=postgres;Passwor
 
 Install-Package Microsoft.Extensions.DependencyInjection -Version 6.0.0
 Install-Package MySql.EntityFrameworkCore -Version 5.0.8
+Install-Package Mvp24Hours.Infrastructure.Data.EFCore
 ```
 ### Configuração
 ```csharp
@@ -85,6 +87,10 @@ server=localhost;user=root;password=MyPass@word;database=MyTestDb
 
 Install-Package Microsoft.Extensions.DependencyInjection -Version 6.0.0
 Install-Package Microsoft.EntityFrameworkCore.SqlServer -Version 5.0.10
+Install-Package Mvp24Hours.Infrastructure.Data.EFCore
+
+// para executar comandos no banco de dados (functions, procedures, projeções)
+Install-Package Mvp24Hours.Infrastructure.Data.EFCore.SQLServer
 ```
 ### Configuração
 ```csharp

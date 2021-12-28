@@ -19,9 +19,7 @@ using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;
 using Mvp24Hours.WebAPI.Filters;
 using Mvp24Hours.WebAPI.Filters.Swagger;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
+using Mvp24Hours.WebAPI.Models;
 using Swashbuckle.AspNetCore.Filters;
 using System;
 using System.Collections.Generic;
@@ -29,7 +27,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
-using System.Text.Json.Serialization;
 
 namespace Mvp24Hours.WebAPI.Extensions
 {
@@ -109,7 +106,7 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// </summary>
         public static IServiceCollection AddMvp24HoursSwagger(this IServiceCollection services,
             string title, string version = "v1", string xmlCommentsFileName = null,
-            bool enableExample = false, bool enableOAuth2 = false,
+            bool enableExample = false, SwaggerAuthorizationScheme oAuthScheme = SwaggerAuthorizationScheme.None,
             IEnumerable<Type> authTypes = null)
         {
             services.AddSwaggerGen(c =>
@@ -124,7 +121,7 @@ namespace Mvp24Hours.WebAPI.Extensions
 
                 c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
 
-                if (enableOAuth2)
+                if (oAuthScheme == SwaggerAuthorizationScheme.Bearer)
                 {
                     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                     {
@@ -145,19 +142,45 @@ namespace Mvp24Hours.WebAPI.Extensions
                                     Reference = new OpenApiReference {
                                         Type = ReferenceType.SecurityScheme,
                                         Id = "Bearer"
-                                    },
-                                    Scheme = "oauth2",
-                                    Name = "Bearer",
-                                    In = ParameterLocation.Header,
+                                    }
                                 },
                                 new List<string>()
                             }
                         });
                     }
-                    else
+                }
+                else if (oAuthScheme == SwaggerAuthorizationScheme.Basic)
+                {
+                    c.AddSecurityDefinition("Basic", new OpenApiSecurityScheme
                     {
-                        c.OperationFilter<AuthResponsesOperationFilter>(authTypes);
+                        Description = @"Authorization header using the Basic scheme. \r\n\r\n 
+                          Enter 'Basic' [space] and then your token in the text input below.
+                          \r\n\r\nExample: 'Basic 12345abcdef'",
+                        Name = "Authorization",
+                        In = ParameterLocation.Header,
+                        Type = SecuritySchemeType.Http,
+                        Scheme = "Basic"
+                    });
+
+                    if (authTypes == null)
+                    {
+                        c.AddSecurityRequirement(new OpenApiSecurityRequirement() {
+                            {
+                                new OpenApiSecurityScheme {
+                                    Reference = new OpenApiReference {
+                                        Type = ReferenceType.SecurityScheme,
+                                        Id = "Basic"
+                                    },
+                                },
+                                new List<string>()
+                            }
+                        });
                     }
+                }
+
+                if (oAuthScheme != SwaggerAuthorizationScheme.None && authTypes != null)
+                {
+                    c.OperationFilter<AuthResponsesOperationFilter>(authTypes);
                 }
 
                 // Set the comments path for the Swagger JSON and UI.

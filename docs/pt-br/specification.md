@@ -12,15 +12,12 @@ public class CustomerHasCellContactSpec : ISpecificationQuery<Customer>
     public Expression<Func<Customer, bool>> IsSatisfiedByExpression => x => x.Contacts.Any(y => y.Type == ContactType.CellPhone);
 }
 
-/// CustomerService.cs
+/// CustomerService.cs -> Get Method
 
 Expression<Func<Customer, bool>> filter = x => x.Active;
-
 filter = filter.And<Customer, CustomerHasCellContactSpec>();
-
 var paging = new PagingCriteriaExpression<Customer>(3, 0);
 paging.NavigationExpr.Add(x => x.Contacts);
-
 var boResult = service.GetBy(filter, paging);
 
 ```

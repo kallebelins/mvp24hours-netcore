@@ -1,5 +1,6 @@
 # Validação de Dados
 Podemos usar dois métodos para validação de dados, usando Fluent Validation ou Data Annotations.
+A validação é aplicada apenas no momento de persistir os dados.
 
 ## Fluent Validation
 

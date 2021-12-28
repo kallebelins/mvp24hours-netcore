@@ -93,7 +93,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
             this.operations.Add(new OperationAction(action, isRequired));
             return this;
         }
-        
+
         public IPipeline AddBuilder<T>() where T : IPipelineBuilder
         {
             IPipelineBuilder pipelineBuilder = ServiceProviderHelper.GetService<T>();

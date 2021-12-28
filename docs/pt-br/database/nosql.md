@@ -39,6 +39,7 @@ Configuração adicional para MongoDb registrado no "appsettings.json":
 /// Package Manager Console >
 
 Install-Package MongoDB.Driver -Version 2.13.2
+Install-Package Mvp24Hours.Infrastructure.Data.MongoDb
 ```
 ### Configuração
 ```csharp
