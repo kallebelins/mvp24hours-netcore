@@ -6,13 +6,14 @@
     <Authors>Kallebe Lins</Authors>
     <Description>Series architectures for fast product construction.</Description>
     <Copyright></Copyright>
-    <PackageProjectUrl>https://github.com/kallebelins</PackageProjectUrl>
+    <PackageProjectUrl>https://mvp24hours.dev</PackageProjectUrl>
     <Company>Kallebe Lins</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Version>2.12.291</Version>
     <AssemblyVersion>2.12.29.1</AssemblyVersion>
     <FileVersion>2.12.29.1</FileVersion>
+    <RepositoryUrl>https://github.com/kallebelins/mvp24hours-netcore</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
