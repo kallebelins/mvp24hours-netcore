@@ -2,9 +2,8 @@
 This project was developed to contribute to the rapid construction of services. I used the reference of solutions for building microservices.
 
 ## Features
-* Relational database (SQL Server, PostgreSql, MySql)
-* NoSql database (MongoDb)
-* Key-value database (Redis)
+* Relational database (SQL Server, PostgreSql and MySql)
+* NoSql database (MongoDb and Redis)
 * Message Broker (RabbitMQ)
 * Pipeline (Pipe and Filters pattern)
 * Documentation (Swagger)

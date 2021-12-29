@@ -2,9 +2,8 @@
 Este projeto foi desenvolvido para contribuir com a construção rápida de serviços. Usei a referência de soluções para construção de microserviços.
 
 ## Características
-* Banco de dados relacional (SQL Server, PostgreSql, MySql)
-* Banco de dados NoSql (MongoDb)
-* Banco de dados chave-valor (Redis)
+* Banco de dados relacional (SQL Server, PostgreSql e MySql)
+* Banco de dados NoSql (MongoDb e Redis)
 * Message Broker (RabbitMQ)
 * Pipeline (Pipe and Filters pattern)
 * Documentação (Swagger)
