@@ -6,9 +6,9 @@ Abaixo estão as principais referências para API RESTful para persistência e i
 ## Banco de dados relacional
 É um banco de dados que permite criar relacionamentos entre si com o objetivo de garantir consistência e integridade dos dados.
 
-* [SQL Server](pt-br/database/getting-started?id=sql-server)
-* [PostgreSql](pt-br/database/getting-started?id=postgresql)
-* [MySql](pt-br/database/getting-started?id=mysql)
+* [SQL Server](pt-br/database/relational?id=sql-server)
+* [PostgreSql](pt-br/database/relational?id=postgresql)
+* [MySql](pt-br/database/relational?id=mysql)
 
 ## Banco de dados NoSql
 NoSQL é um termo genérico que representa um banco de dados não relacional.

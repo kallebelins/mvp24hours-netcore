@@ -2,7 +2,7 @@
 Você poderá diminuir a complexidade de construção de serviços na camada de aplicação usando padrões da arquitetura Mvp24Hours.
 
 ## Pré-Requisitos
-Realizar instalação e configuração para usar um banco de dados [relacional](pt-br/database/getting-started.md) ou [NoSQL](pt-br/database/nosql.md).
+Realizar instalação e configuração para usar um banco de dados [relacional](pt-br/database/relational.md) ou [NoSQL](pt-br/database/nosql.md).
 
 ## Serviço de Repositório Básico
 ### Herança

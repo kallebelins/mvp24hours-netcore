@@ -1,8 +1,8 @@
 # Pipeline (Pipe and Filters Pattern)
-É um padrão de projeto que representa um tubo com diversas operações (filtros), executadas de forma sequencial, com o intuito de trafegar, integir e/ou manuear um pacote/mensagem.
+It is a design pattern that represents a tube with several operations (filters), executed sequentially, in order to travel, integrate and/or handle a package/message.
 
-## Pré-Requisitos (Não Obrigatório)
-Adicione um arquivo de configuração ao projeto com nome "appsettings.json", conforme abaixo:
+## Prerequisites (Not Required)
+Add a configuration file to the project named "appsettings.json", as below:
 ```json
 {
   "Mvp24Hours": {
@@ -22,88 +22,87 @@ Adicione um arquivo de configuração ao projeto com nome "appsettings.json", co
 }
 ```
 
-## Instalação
+## Installation
 ```csharp
 /// Package Manager Console >
 Install-Package Mvp24Hours.Infrastructure.Pipe
 ```
 
-## Configuração
+## Configuration
 ```csharp
 /// Startup.cs
-
 services.AddMvp24HoursPipeline();
 ```
 
-## Exemplo de Uso
+## Usage Example
 ```csharp
 var pipeline = ServiceProviderHelper.GetService<IPipeline>();
 
-// executar pipeline
+// run pipeline
 pipeline.Execute();
 
-// executar com pacote/mensagem
+// run with package/message
 var message = "Parameter received.".ToMessage();
 pipeline.Execute(message);
 
-// obter pacote após execução
+// get package after run
 pipeline.GetMessage();
 
-// adicionar operação/filtro de IOperation
+// add IOperation operation/filter
 pipeline.Add<MyOperation>();
 
-// adicionar operação/filtro como action
+// add operation/filter as action
 pipeline.Add(_ =>
 {
     Trace.WriteLine("Test 1");
 });
 
-// ações de interação com pacote por tipo
+// package interaction actions by type
 pipeline.Add(input =>
 {
-    string param = input.GetContent<string>(); // obter conteúdo
-    input.AddContent($"Test 1 - {param}"); // adicionar conteúdo
-    if (input.HasContent<string>()) {} // verifica se tem conteúdo
-    input.SetLock(); // bloquear pacote/mensagem
-    input.SetFailure(); // registrar falha
+    string param = input.GetContent<string>(); // get content
+    input.AddContent($"Test 1 - {param}"); // add content
+    if (input.HasContent<string>()) {} // check for content
+    input.SetLock(); // block package/message
+    input.SetFailure(); // log failure
 });
 
-// ações de interação com pacote por chave
+// packet interaction actions by key
 pipeline.Add(input =>
 {
-    string param = input.GetContent<string>("key"); // obter conteúdo com chave
-    input.AddContent("key", $"Test 1 - {param}"); // adicionar conteúdo com chave
-    if (input.HasContent("key")) {} // verifica se tem conteúdo com chave
-    input.SetLock(); // bloquear pacote/mensagem
-    input.SetFailure(); // registrar falha
+    string param = input.GetContent<string>("key"); // get content with key
+    input.AddContent("key", $"Test 1 - {param}"); // add content with key
+    if (input.HasContent("key")) {} // check for content with key
+    input.SetLock(); // block package/message
+    input.SetFailure(); // log failure
 });
 
-// adicionando interceptadores
+// adding interceptors
 pipeline.AddInterceptors(_ =>
 {
-    // ... comandos
+    // ... commands
 }, PipelineInterceptorType.PostOperation); //  PostOperation, PreOperation, Locked, Faulty, FirstOperation, LastOperation
 
-// adicionando interceptadores condicionais
+// adding conditional interceptors
 pipeline.AddInterceptors(_ =>
 {
-    // ... comandos
+    // ... commands
 },
 input =>
 {
     return input.HasContent<int>();
 });
 
-// adicionando interceptadores como eventos
+// adding interceptors as events
 pipeline.AddInterceptors((input, e) =>
 {
-    // ... comandos
+    // ... commands
 }, PipelineInterceptorType.PostOperation); //  PostOperation, PreOperation, Locked, Faulty, FirstOperation, LastOperation
 
-// adicionando interceptadores condicionais como eventos
+// adding conditional interceptors as events
 pipeline.AddInterceptors((input, e) =>
 {
-    // ... comandos
+    // ... commands
 },
 input =>
 {
@@ -112,28 +111,28 @@ input =>
 
 ```
 
-### Criando Operações
-Para criar uma operação basta implementar uma IOperation ou uma OperationBase:
+### Creating Operations
+To create an operation, simply implement an IOperation or an OperationBase:
 
 ```csharp
 /// MyOperation.cs
 public class MyOperation : OperationBase
 {
-    public override bool IsRequired => false; // indica se a operação irá executar mesmo com o pacote bloqueado
+    public override bool IsRequired => false; // indicates if the operation will execute even with the locked package
 
     public override IPipelineMessage Execute(IPipelineMessage input)
     {
-        // executa ação
+        // perform action
         return input;
     }
 }
 
-// adicionar ao pipeline
+// add to pipeline
 pipeline.Add<MyOperation>();
 ```
 
-### Criando Construtores
-Você poderá adicionar operações dinâmicas usando um padrão de construção (builder). Geralmente, usamos ao implementar arquiteturas Ports And Adapters onde encaixamos adaptadores que implementam regras especializadas.
+### Creating Builders
+You can add dynamic operations using a build pattern (builder). Generally, we use it when implementing Ports And Adapters architectures where we plug in adapters that implement specialized rules.
 
 ```csharp
 /// ..my-core/contract/builders/IProductCategoryListBuilder.cs

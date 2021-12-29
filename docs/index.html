@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Document</title>
+  <title>:: Mvp24Hours ::</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="description" content="Description">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
@@ -11,6 +11,11 @@
 </head>
 
 <body>
+
+  <nav>
+    <a href="#/">English</a>
+    <a href="#/pt-br/">Português</a>
+  </nav>
   <div id="app">Please wait...</div>
   <script>
     window.$docsify = {
@@ -18,10 +23,37 @@
       repo: 'https://github.com/kallebelins/mvp24hours-netcore',
       maxLevel: 5,
       subMaxLevel: 3,
-      homepage: 'README.md',
-      coverpage: false,
+      homepage: 'en-us/readme.md',
       loadSidebar: true,
       auto2top: true,
+
+      /* search */
+      search: [
+        '/',
+        '/pt-br/'
+      ],
+      search: {
+        maxAge: 86400000,
+        paths: [],
+
+        placeholder: {
+          '/pt-br/': 'Digite para pesquisar',
+          '/': 'Type to search',
+        },
+
+        noData: {
+          '/pt-br/': 'Sem resultados!',
+          '/': 'No Results!',
+        },
+
+        depth: 2,
+
+        hideOtherSidebarContent: false,
+
+        pathNamespaces: ['/', '/pt-br'],
+
+        pathNamespaces: /^(\/(en-us|pt-br))?(\/(v1|v2))?/
+      }
     }
   </script>
   <!-- Docsify v4 -->
@@ -29,6 +61,9 @@
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-cpp.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-csharp.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-json.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/emoji.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
+  <script src="//polyfill.io/v3/polyfill.min.js?features=String.prototype.normalize"></script>
 </body>
 
 </html>

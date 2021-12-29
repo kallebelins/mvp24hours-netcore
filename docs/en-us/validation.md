@@ -1,15 +1,15 @@
-# Validação de Dados
-Podemos usar dois métodos para validação de dados, usando Fluent Validation ou Data Annotations.
-A validação é aplicada apenas no momento de persistir os dados.
+# Data Validation
+We can use two methods for data validation, using Fluent Validation or Data Annotations.
+Validation is only applied at the time of persisting the data.
 
 ## Fluent Validation
 
-### Instalação
+### Installation
 ```csharp
 /// Package Manager Console >
 Install-Package FluentValidation -Version 10.3.5
 ```
-### Configuração
+### Configuration
 
 ```csharp
 // CustomerValidator.cs
@@ -29,7 +29,7 @@ services.AddSingleton<IValidator<Customer>, CustomerValidator>();
 
 ## Data Annotations
 
-### Configuração
+### Configuration
 ```csharp
 /// Customer.cs
 
@@ -57,18 +57,18 @@ public class Customer : EntityBase<Customer, int>, IEntityBase
 
 ```
 
-## Contexto de Notificação
-Você poderá capturar as mensagens de validação a partir do contexto de notificação. As validações são realizadas no momento em que tentamos adicionar ou alterar uma entidade a partir do repositório. Caso não tenha um IValidator (FluentValidation) registrado (IoC), assumimos validações baseadas em anotações (DataAnnotations).
+## Notification Context
+You can capture validation messages from the notification context. Validations are performed when we try to add or change an entity from the repository. If you do not have an IValidator (FluentValidation) registered (IoC), we assume validations based on annotations (DataAnnotations).
 
 ```csharp
 
-// tenta criar um cliente, onde nome é obrigatório
+// try to create a client, where name is required
 var service = ServiceProviderHelper.GetService<CustomerService>();
 var customer = new Customer
 {
     Active = true
 };
-service.Add(customer); // tenta adicionar entidade
+service.Add(customer); // try to add entity
 
 // notification pattern
 var notfCtxOut = ServiceProviderHelper.GetService<INotificationContext>();

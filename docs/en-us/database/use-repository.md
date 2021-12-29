@@ -1,17 +1,17 @@
-# Como utilizar um repositório?
-Utilizamos o padrão de repositório para interação com banco de dados. Segundo Martin Fowler:
-> Faz a mediação entre o domínio e as camadas de mapeamento de dados usando uma interface semelhante a uma coleção para acessar objetos de domínio. [Repository](http://martinfowler.com/eaaCatalog/repository.html)
+# How to use a repository?
+We use the repository pattern for database interaction. According to Martin Fowler:
+> Mediates between the domain and data mapping layers using a collection-like interface to access domain objects. [Repository](http://martinfowler.com/eaaCatalog/repository.html)
 
-## Pré-Requisitos
-Realizar instalação e configuração para usar um banco de dados [relacional](pt-br/database/relational.md) ou [NoSQL](pt-br/database/nosql.md).
+## Prerequisites
+Perform installation and configuration to use a [relational](en-us/database/relational.md) or [NoSQL](en-us/database/nosql.md) database.
 
-# Repositório
-Utilize a unidade de trabalho para carregar o repositório, assim:
+# Repository
+Use unit of work to load the repository, like this:
 ```csharp
 IRepository<Entity> rpEntity = UnitOfWork.GetRepository<Entity>();
 ```
 
-## Métodos Pré-Definidos
+## Predefined Methods
 ```csharp
 // IQuery
 bool ListAny();
@@ -58,43 +58,43 @@ void LoadRelationSortByDescending<TProperty, TKey>(TEntity entity,
 	where TProperty : class;
 ```
 
-## Exemplo de Uso
+## Usage Example
 ```csharp
 IRepository<Entity> rpEntity = UnitOfWork.GetRepository<Entity>();
 
-// listar tudo
+// list all
 var entities = rpEntity.List();
 
-// listar tudo com paginação
+// list all with paging
 var paging = new PagingCriteria(3, 0); //  limit, offset
 var entities = rpEntity.List(paging);
 
-// aplicar filtro
+// apply filter
 var entities = rpEntity.GetBy(x => x.PropertyName == null);
 
-// aplicar filtro com paginação
+// apply filter with pagination
 var paging = new PagingCriteria(3, 0); //  limit, offset
 var entities = rpEntity.GetBy(x => x.PropertyName == null, paging);
 
-// carregar navegação/relacionamentos
+// load navigation/relationships
 var paging = new PagingCriteria(1, 0, navigation: new List<string> { "PropertyName" });
 var entities = rpEntity.List(paging);
 
-// carregar navegação/relacionamentos com expressão
+// load navigation/relationships with expression
 var paging = new PagingCriteriaExpression<Entity>(3, 0); //  limit, offset
 paging.NavigationExpr.Add(x => x.PropertyName);
 var entities = rpEntity.List(paging);
 
-// aplicar ordenação
+// apply ordering
 var paging = new PagingCriteria(3, 0, orderBy: new List<string> { "PropertyName desc" });
 var entities = rpEntity.List(paging);
 
-// aplicar ordenação com expressão
+// apply sorting with expression
 var paging = new PagingCriteriaExpression<Entity>(3, 0); //  limit, offset
 paging.OrderByDescendingExpr.Add(x => x.PropertyName);
 var entities = rpEntity.List(paging);
 
-// carregar navegação/relacionamentos de lista com filtro e/ou paginação
+// load list navigation/relationships with filter and/or paging
 var paging = new PagingCriteria(1, 0, navigation: new List<string> { "PropertyList" });
 var entities = rpEntity.List(paging);
 foreach (var entity in entities)
@@ -102,7 +102,7 @@ foreach (var entity in entities)
 	rpEntity.LoadRelation(entity, x => x.PropertyList, clause: c => c.Active, limit: 1);
 }
 
-// carregar navegação/relacionamentos de lista com expressão com filtro e/ou paginação
+// load list navigation/relationships with expression with filter and/or pagination
 var paging = new PagingCriteriaExpression<Entity>(3, 0); //  limit, offset
 paging.NavigationExpr.Add(x => x.PropertyList);
 var entities = rpEntity.List(paging);
