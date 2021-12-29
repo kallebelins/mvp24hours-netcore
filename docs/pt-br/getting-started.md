@@ -13,12 +13,15 @@ Abaixo estão as principais referências para API RESTful para persistência e i
 ## Banco de dados NoSql
 NoSQL é um termo genérico que representa um banco de dados não relacional.
 
+### Orientado a documentos
+> É um tipo de banco de dados não relacional projetado para armazenar e consultar dados como documentos do tipo JSON. [O que é um banco de dados de documentos](https://aws.amazon.com/pt/nosql/document/)
+
 [MongoDb](pt-br/database/nosql?id=mongodb)
 
-## Banco de dados chave-valor
+### Orientado a chave-valor
 É uma estrutura de dados do tipo mapa ou dicionário, onde utilizamos uma chave como identificador do registro.
 
-[Redis](pt-br/database/keyvalue?id=redis.md)
+[Redis](pt-br/database/nosql?id=redis)
 
 ## Message Broker
 Um message broker é um software que possibilita que aplicativos, sistemas e serviços se comuniquem e troquem informações.

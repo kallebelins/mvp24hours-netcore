@@ -2,7 +2,6 @@
 * [Getting Started](en-us/getting-started.md)
 * [Relational Database](en-us/database/relational.md)
 * [NoSQL Database](en-us/database/nosql.md)
-* [Key-Value Database](en-us/database/keyvalue.md)
 * [Message Broker](en-us/broker.md)
 * [Pipeline](en-us/pipeline.md)
 * [Documentation](en-us/documentation.md)

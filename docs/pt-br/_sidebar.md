@@ -2,7 +2,6 @@
 * [Começando](pt-br/getting-started.md)
 * [Banco de Dados Relacional](pt-br/database/relational.md)
 * [Banco de Dados NoSQL](pt-br/database/nosql.md)
-* [Banco de Dados Chave-Valor](pt-br/database/keyvalue.md)
 * [Message Broker](pt-br/broker.md)
 * [Pipeline](pt-br/pipeline.md)
 * [Documentação](pt-br/documentation.md)

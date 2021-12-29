@@ -13,12 +13,15 @@ It is a database that allows you to create relationships with each other in orde
 ## NoSql Database
 NoSQL is a generic term that represents a non-relational database.
 
+### Document-oriented
+> It is a type of non-relational database designed to store and query data as JSON-type documents. [What is a document database](https://aws.amazon.com/en/nosql/document)
+
 [MongoDb](en-us/database/nosql?id=mongodb)
 
-## Key-Value Database
+### Key-value oriented
 It is a map or dictionary data structure, where we use a key as the record identifier.
 
-[Redis](en-us/database/keyvalue?id=redis.md)
+[Redis](en-us/database/nosql?id=redis)
 
 ## Message Broker
 A message broker is software that makes it possible for applications, systems and services to communicate and exchange information.
