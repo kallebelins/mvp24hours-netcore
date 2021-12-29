@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Mvp24Hours.Business.Logic
+namespace Mvp24Hours.Application.Logic
 {
     /// <summary>
     /// Asynchronous service for using repository with paginated results and unit of work

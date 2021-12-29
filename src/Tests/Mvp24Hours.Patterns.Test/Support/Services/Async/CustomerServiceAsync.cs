@@ -5,7 +5,7 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-using Mvp24Hours.Business.Logic;
+using Mvp24Hours.Application.Logic;
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Patterns.Test.Support.Entities;
 

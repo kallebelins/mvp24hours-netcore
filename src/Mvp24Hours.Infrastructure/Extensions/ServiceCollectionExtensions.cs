@@ -75,11 +75,16 @@ namespace Mvp24Hours.Infrastructure.Extensions
         }
 
         /// <summary>
-        /// Add mapping services
+        /// Add mapping services, use Assembly.GetExecutingAssembly()
         /// </summary>
-        public static IServiceCollection AddMvp24HoursMapService(this IServiceCollection services, Assembly assemblyMap = null)
+        public static IServiceCollection AddMvp24HoursMapService(this IServiceCollection services, Assembly assemblyMap)
         {
-            Assembly local = assemblyMap ?? Assembly.GetExecutingAssembly();
+            if (assemblyMap == null)
+            {
+                throw new System.ArgumentNullException(nameof(assemblyMap), "Assembly Map is required.");
+            }
+
+            Assembly local = assemblyMap;
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new MappingProfile(local));

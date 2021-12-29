@@ -18,6 +18,7 @@ using Mvp24Hours.Patterns.Test.Support.Services;
 using Mvp24Hours.Patterns.Test.Support.Services.Async;
 using Mvp24Hours.Patterns.Test.Support.Validations;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Mvp24Hours.Patterns.Test.Support.Helpers
 {
@@ -41,6 +42,8 @@ namespace Mvp24Hours.Patterns.Test.Support.Helpers
             services.AddScoped<CustomerService, CustomerService>();
 
             services.UseMvp24Hours();
+
+            services.AddMvp24HoursMapService(Assembly.GetExecutingAssembly());
 
             // ensure database
             var db = ServiceProviderHelper.GetService<DataContext>();

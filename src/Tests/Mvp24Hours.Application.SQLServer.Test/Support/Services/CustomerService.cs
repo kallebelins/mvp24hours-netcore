@@ -5,8 +5,8 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Mvp24Hours.Application.Logic;
 using Mvp24Hours.Application.SQLServer.Test.Support.Entities;
-using Mvp24Hours.Business.Logic;
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using System.Collections.Generic;

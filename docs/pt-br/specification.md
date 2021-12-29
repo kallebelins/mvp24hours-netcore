@@ -1,5 +1,7 @@
-# Specification Pattern
-O padrão de especificação usamos para aplicar filtros de pesquisa. Cada especificação deve ser criada com o objetivo de definir casos concretos. Cada especificação poderá fazer parte de uma composição ou ser aplicada individualmente.
+# Especificação (Specification Pattern)
+O padrão de especificação usamos como requisitos para filtros de pesquisa. Cada especificação deve ser criada com o objetivo de definir casos concretos. Cada especificação poderá fazer parte de uma composição ou ser aplicada individualmente.
+
+>Na programação de computadores, o padrão de especificação é um padrão de design de software específico, por meio do qual as regras de negócios podem ser recombinadas encadeando as regras de negócios usando a lógica booleana. O padrão é freqüentemente usado no contexto de design orientado a domínio. [Wikipédia](https://en.wikipedia.org/wiki/Specification_pattern)
 
 ### Exemplo
 Neste exemplo criamos um especificação que filtra pessoas que tenham número de celular no registro de contato.

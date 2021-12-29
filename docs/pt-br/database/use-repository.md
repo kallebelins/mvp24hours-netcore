@@ -1,26 +1,9 @@
 # Como utilizar um repositório?
-Utilizamos o padrão de repositório para operações e unidade de trabalho para controlar as transações.
+Utilizamos o padrão de repositório para interação com banco de dados. Segundo Martin Fowler:
+> Faz a mediação entre o domínio e as camadas de mapeamento de dados usando uma interface semelhante a uma coleção para acessar objetos de domínio. [Repository](http://martinfowler.com/eaaCatalog/repository.html)
 
 ## Pré-Requisitos
-Realizar instalação e configuração da [biblioteca](pt-br/database/getting-started.md).
-
-# Unidade de Trabalho
-Para obter basta aplicar o conceito de injeção através do construtor ou utilizar o provedor de ajuda da arquitetura Mvp24Hours, assim:
-```csharp
-IUnitOfWork unitOfWork = ServiceProviderHelper.GetService<IUnitOfWork>();
-```
-
-## Métodos Pré-Definidos
-```csharp
-// IUnitOfWork
-int SaveChanges(CancellationToken cancellationToken = default);
-void Rollback(CancellationToken cancellationToken = default);
-IRepository<T> GetRepository<T>() where T : class, IEntityBase;
-
-// ISQL - SQLServer
-IList<T> ExecuteQuery<T>(string sqlQuery, params object[] parameters) where T : class;
-int ExecuteCommand(string sqlCommand, params object[] parameters);
-```
+Realizar instalação e configuração para usar um banco de dados [relacional](pt-br/database/getting-started.md) ou [NoSQL](pt-br/database/nosql.md).
 
 # Repositório
 Utilize a unidade de trabalho para carregar o repositório, assim:

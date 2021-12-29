@@ -18,7 +18,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Mvp24Hours.Business.Logic
+namespace Mvp24Hours.Application.Logic
 {
     /// <summary>
     /// Asynchronous base service for using repository and unit of work

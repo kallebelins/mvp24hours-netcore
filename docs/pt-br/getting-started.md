@@ -41,9 +41,12 @@ O AutoMapper auxilia na atribuição de valores de propriedades de objetos relac
 
 [AutoMapper](pt-br/automapper.md)
 
-## Outros Padrões
+## Padrões
 Os padrões são modelos que usamos como referência ou base para resolução de um problema. Além dos padrões que apresentaremos nas definições arquiteturais exploradas por esta biblioteca, exploramos as seguintes referências:
 
-* [Validação de dados](pt-br/automapper.md): Validação de usando fluent ou anotações
+* [Unidade de Trabalho](pt-br/database/use-unitofwork.md)
+* [Repositório](pt-br/database/use-repository.md)
+* [Serviço de Repositório](pt-br/database/use-service.md): Usamos para aplicar regras de negócio e encapsular o repositório
+* [Validação de dados](pt-br/validation.md): Validação de dados usando fluent ou anotações
 * [Notificação](pt-br/notification.md): Troca de mensagens em um contexto de notificações
-* [Especificação](pt-br/notification.md): Filtro de dados
+* [Especificação](pt-br/specification.md): Filtro de dados

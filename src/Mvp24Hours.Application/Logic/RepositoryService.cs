@@ -14,7 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace Mvp24Hours.Business.Logic
+namespace Mvp24Hours.Application.Logic
 {
     /// <summary>
     /// Base service for using repository and unit of work

@@ -17,6 +17,6 @@ namespace Mvp24Hours.Core.Contract.Mappings
         /// <summary>
         /// Apply mapping
         /// </summary>
-        void Mapping(Profile profile) => profile.CreateMap(typeof(T), GetType());
+        void Mapping(Profile profile);
     }
 }

@@ -2,7 +2,7 @@
 Você poderá diminuir a complexidade de construção de serviços na camada de aplicação usando padrões da arquitetura Mvp24Hours.
 
 ## Pré-Requisitos
-Realizar instalação e configuração da [biblioteca](pt-br/database/getting-started.md).
+Realizar instalação e configuração para usar um banco de dados [relacional](pt-br/database/getting-started.md) ou [NoSQL](pt-br/database/nosql.md).
 
 ## Serviço de Repositório Básico
 ### Herança
@@ -47,3 +47,8 @@ public IList<Customer> GetWithContacts()
     return customers;
 }
 ```
+
+## Serviços Base
+Você poderá os seguintes serviços de referência como base para especialização (Mvp24Hours.Application.Logic):
+* RepositoryService: consulta e comandos;
+* RepositoryPagingService: consulta, consulta paginada e comandos.
