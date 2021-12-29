@@ -130,5 +130,12 @@ namespace Mvp24Hours.Patterns.Test.Support.Helpers
             }
             await service.AddAsync(customers);
         }
+
+        public static void ConfigureLogging()
+        {
+            var services = new ServiceCollection().AddSingleton(ConfigurationHelper.AppSettings);
+            services.AddMvp24HoursLogging();
+            services.UseMvp24Hours();
+        }
     }
 }

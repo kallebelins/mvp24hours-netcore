@@ -15,7 +15,21 @@ Install-Package Mvp24Hours.Infrastructure
 services.AddMvp24HoursLogging();
 ```
 
-A configuração pode ser através de arquivo. Basta criar um arquivo "NLog.config" no diretório da aplicação. O conteúdo do arquivo é no formato XML. Veja abaixo.
+## Exemplo de Uso
+```csharp
+private static readonly ILoggingService _logger = ServiceProviderHelper.GetService<ILoggingService>();
+// ...
+try
+{
+    throw new NotImplementedException();
+}
+catch (Exception ex)
+{
+    _logger.Error(ex);
+}
+```
+
+Basta criar um arquivo "NLog.config" no diretório da aplicação. O conteúdo do arquivo é no formato XML. Veja abaixo.
 
 ### Log Console
 ```xml
@@ -135,3 +149,13 @@ A configuração pode ser através de arquivo. Basta criar um arquivo "NLog.conf
   </rules>
 </nlog>
 ```
+
+### Propriedades
+* error-source
+* error-class
+* error-method
+* error-message
+* inner-error-message
+* error-stack-trace
+
+Veja outras opções em [NLog-Project](https://nlog-project.org/config/?tab=layout-renderers).
