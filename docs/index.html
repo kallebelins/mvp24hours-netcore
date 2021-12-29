@@ -13,8 +13,8 @@
 <body>
 
   <nav>
-    <a href="#/">English</a>
-    <a href="#/pt-br/">Português</a>
+    <a href="#/en-us/home">English</a>
+    <a href="#/pt-br/home">Português</a>
   </nav>
   <div id="app">Please wait...</div>
   <script>
@@ -23,9 +23,18 @@
       repo: 'https://github.com/kallebelins/mvp24hours-netcore',
       maxLevel: 5,
       subMaxLevel: 3,
-      homepage: 'en-us/readme.md',
+      homepage: 'en-us/home.md',
       loadSidebar: true,
       auto2top: true,
+      fallbackLanguages: ["en-us", "pt-br"],
+      namespaces: [
+        {
+          id: "lang",
+          values: ["en-us", "pt-br"],
+          optional: true,
+          selector: "#lang-selector",
+        },
+      ],
 
       /* search */
       search: [
