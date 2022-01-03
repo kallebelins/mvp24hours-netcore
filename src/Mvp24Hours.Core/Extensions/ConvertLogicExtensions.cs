@@ -5,6 +5,7 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Core.DTOs.Models;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace Mvp24Hours.Core.Extensions
 {
     public static class ConvertLogicExtensions
     {
-        public static PagingCriteria ToPagingService(this PagingCriteriaRequest request)
+        public static IPagingCriteria ToPagingService(this PagingCriteriaRequest request)
         {
             return new PagingCriteria(
                 request.Limit,
