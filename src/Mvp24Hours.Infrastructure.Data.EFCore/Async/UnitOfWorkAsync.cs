@@ -79,16 +79,11 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
             {
                 return await this.DbContext.SaveChangesAsync(cancellationToken);
             }
-            await RollbackAsync(cancellationToken);
+            await RollbackAsync();
             return default;
         }
-        public Task RollbackAsync(CancellationToken cancellationToken = default)
+        public Task RollbackAsync()
         {
-            if (cancellationToken.IsCancellationRequested)
-            {
-                return default;
-            }
-
             var changedEntries = this.DbContext.ChangeTracker.Entries()
                 .Where(x => x.State != EntityState.Unchanged).ToList();
 

@@ -1,14 +1,7 @@
-﻿using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
-using Mvp24Hours.Core.Contract.Infrastructure.Logging;
-using Mvp24Hours.Core.ValueObjects.Logic;
-using Mvp24Hours.Infrastructure.Extensions;
+﻿using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Infrastructure.Helpers;
-using Mvp24Hours.Patterns.Test.Support.Entities;
 using Mvp24Hours.Patterns.Test.Support.Helpers;
-using Mvp24Hours.Patterns.Test.Support.Services;
-using Mvp24Hours.Patterns.Test.Support.Specifications;
 using System;
-using System.Linq.Expressions;
 using Xunit;
 using Xunit.Priority;
 

@@ -27,7 +27,7 @@ namespace Mvp24Hours.Core.Contract.Data
         /// <summary>
         /// Discard changes in transaction
         /// </summary>
-        Task RollbackAsync(CancellationToken cancellationToken = default);
+        Task RollbackAsync();
         /// <summary>
         /// Gets a repository
         /// </summary>

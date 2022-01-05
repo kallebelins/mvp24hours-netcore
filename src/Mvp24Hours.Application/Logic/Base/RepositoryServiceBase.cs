@@ -30,10 +30,13 @@ namespace Mvp24Hours.Application.Logic
         private IUnitOfWork unitOfWork = null;
 
         /// <summary>
-        /// Gets repository instance
+        /// Gets unit of work instance
         /// </summary>
         /// <returns>T</returns>
-        protected virtual TUoW UnitOfWork => (TUoW)(unitOfWork ??= ServiceProviderHelper.GetService<TUoW>());
+        protected virtual TUoW UnitOfWork
+        {
+            get { return (TUoW)(unitOfWork ??= ServiceProviderHelper.GetService<TUoW>()); }
+        }
 
         ILoggingService logger = null;
 

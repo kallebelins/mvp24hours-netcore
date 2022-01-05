@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Core.Extensions;
-using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Extensions.Data;
 using Mvp24Hours.Infrastructure.Helpers;
 using System;

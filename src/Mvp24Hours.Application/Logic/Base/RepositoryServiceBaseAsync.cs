@@ -31,7 +31,7 @@ namespace Mvp24Hours.Application.Logic
         private IUnitOfWorkAsync unitOfWork = null;
 
         /// <summary>
-        /// Gets repository instance
+        /// Gets unit of work instance
         /// </summary>
         /// <returns>T</returns>
         protected virtual TUoW UnitOfWork

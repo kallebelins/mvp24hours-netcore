@@ -9,6 +9,7 @@ using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.Logic;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
+using Mvp24Hours.Core.Extensions;
 using Mvp24Hours.Infrastructure.Extensions;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,22 @@ namespace Mvp24Hours.Application.Logic
         where TEntity : class, IEntityBase
         where TUoW : IUnitOfWorkAsync
     {
+        #region [ Properties ]
+
+        private IRepositoryAsync<TEntity> repository = null;
+
+        /// <summary>
+        /// Gets repository instance
+        /// </summary>
+        /// <returns>T</returns>
+        protected virtual IRepositoryAsync<TEntity> Repository
+        {
+            get { return repository ??= UnitOfWork.GetRepositoryAsync<TEntity>(); }
+        }
+
+        #endregion
+
+
         #region [ Implements IQueryServiceAsync ]
 
         /// <summary>
@@ -38,7 +55,7 @@ namespace Mvp24Hours.Application.Logic
             {
                 return this.UnitOfWork
                     .GetRepositoryAsync<TEntity>()
-                    .ListAnyAsync(cancellationToken)
+                    .ListAnyAsync(cancellationToken: cancellationToken)
                     .ToBusinessAsync();
             }
             catch (Exception ex)
@@ -57,7 +74,7 @@ namespace Mvp24Hours.Application.Logic
             {
                 return this.UnitOfWork
                     .GetRepositoryAsync<TEntity>()
-                    .ListCountAsync(cancellationToken)
+                    .ListCountAsync(cancellationToken: cancellationToken)
                     .ToBusinessAsync();
             }
             catch (Exception ex)
@@ -72,7 +89,7 @@ namespace Mvp24Hours.Application.Logic
         /// </summary>
         public Task<IBusinessResult<IList<TEntity>>> ListAsync(CancellationToken cancellationToken = default)
         {
-            return this.ListAsync(null, cancellationToken);
+            return this.ListAsync(null, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -84,7 +101,7 @@ namespace Mvp24Hours.Application.Logic
             {
                 return this.UnitOfWork
                     .GetRepositoryAsync<TEntity>()
-                    .ListAsync(criteria, cancellationToken)
+                    .ListAsync(criteria, cancellationToken: cancellationToken)
                     .ToBusinessAsync();
             }
             catch (Exception ex)
@@ -103,7 +120,7 @@ namespace Mvp24Hours.Application.Logic
             {
                 return this.UnitOfWork
                     .GetRepositoryAsync<TEntity>()
-                    .GetByAnyAsync(clause, cancellationToken)
+                    .GetByAnyAsync(clause, cancellationToken: cancellationToken)
                     .ToBusinessAsync();
             }
             catch (Exception ex)
@@ -122,7 +139,7 @@ namespace Mvp24Hours.Application.Logic
             {
                 return this.UnitOfWork
                     .GetRepositoryAsync<TEntity>()
-                    .GetByCountAsync(clause, cancellationToken)
+                    .GetByCountAsync(clause, cancellationToken: cancellationToken)
                     .ToBusinessAsync();
             }
             catch (Exception ex)
@@ -137,7 +154,7 @@ namespace Mvp24Hours.Application.Logic
         /// </summary>
         public Task<IBusinessResult<IList<TEntity>>> GetByAsync(Expression<Func<TEntity, bool>> clause, CancellationToken cancellationToken = default)
         {
-            return GetByAsync(clause, null, cancellationToken);
+            return GetByAsync(clause, null, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -149,7 +166,7 @@ namespace Mvp24Hours.Application.Logic
             {
                 return UnitOfWork
                     .GetRepositoryAsync<TEntity>()
-                    .GetByAsync(clause, criteria, cancellationToken)
+                    .GetByAsync(clause, criteria, cancellationToken: cancellationToken)
                     .ToBusinessAsync();
             }
             catch (Exception ex)
@@ -164,7 +181,7 @@ namespace Mvp24Hours.Application.Logic
         /// </summary>
         public Task<IBusinessResult<TEntity>> GetByIdAsync(object id, CancellationToken cancellationToken = default)
         {
-            return this.GetByIdAsync(id, null, cancellationToken);
+            return this.GetByIdAsync(id, null, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -176,7 +193,7 @@ namespace Mvp24Hours.Application.Logic
             {
                 return this.UnitOfWork
                     .GetRepositoryAsync<TEntity>()
-                    .GetByIdAsync(id, criteria, cancellationToken)
+                    .GetByIdAsync(id, criteria, cancellationToken: cancellationToken)
                     .ToBusinessAsync();
             }
             catch (Exception ex)
@@ -201,8 +218,8 @@ namespace Mvp24Hours.Application.Logic
                 {
                     await this.UnitOfWork
                         .GetRepositoryAsync<TEntity>()
-                        .AddAsync(entity);
-                    return await this.UnitOfWork.SaveChangesAsync();
+                        .AddAsync(entity, cancellationToken: cancellationToken);
+                    return await this.UnitOfWork.SaveChangesAsync(cancellationToken: cancellationToken);
                 }
                 return 0;
             }
@@ -221,8 +238,8 @@ namespace Mvp24Hours.Application.Logic
             if (entities.AnyOrNotNull())
             {
                 var rep = this.UnitOfWork.GetRepositoryAsync<TEntity>();
-                await Task.WhenAll(entities?.Select(entity => rep.AddAsync(entity)));
-                return await this.UnitOfWork.SaveChangesAsync();
+                await Task.WhenAll(entities?.Select(entity => rep.AddAsync(entity, cancellationToken: cancellationToken)));
+                return await this.UnitOfWork.SaveChangesAsync(cancellationToken: cancellationToken);
             }
             return 0;
         }
@@ -236,8 +253,8 @@ namespace Mvp24Hours.Application.Logic
             {
                 if (await Validate(entity))
                 {
-                    await this.UnitOfWork.GetRepositoryAsync<TEntity>().ModifyAsync(entity);
-                    return await this.UnitOfWork.SaveChangesAsync();
+                    await this.UnitOfWork.GetRepositoryAsync<TEntity>().ModifyAsync(entity, cancellationToken: cancellationToken);
+                    return await this.UnitOfWork.SaveChangesAsync(cancellationToken: cancellationToken);
                 }
                 return 0;
             }
@@ -256,8 +273,8 @@ namespace Mvp24Hours.Application.Logic
             if (entities.AnyOrNotNull())
             {
                 var rep = this.UnitOfWork.GetRepositoryAsync<TEntity>();
-                await Task.WhenAll(entities?.Select(entity => rep.ModifyAsync(entity)));
-                return await this.UnitOfWork.SaveChangesAsync();
+                await Task.WhenAll(entities?.Select(entity => rep.ModifyAsync(entity, cancellationToken: cancellationToken)));
+                return await this.UnitOfWork.SaveChangesAsync(cancellationToken: cancellationToken);
             }
             return 0;
         }
@@ -269,8 +286,8 @@ namespace Mvp24Hours.Application.Logic
         {
             try
             {
-                await this.UnitOfWork.GetRepositoryAsync<TEntity>().RemoveAsync(entity);
-                return await this.UnitOfWork.SaveChangesAsync();
+                await this.UnitOfWork.GetRepositoryAsync<TEntity>().RemoveAsync(entity, cancellationToken: cancellationToken);
+                return await this.UnitOfWork.SaveChangesAsync(cancellationToken: cancellationToken);
             }
             catch (Exception ex)
             {
@@ -287,8 +304,8 @@ namespace Mvp24Hours.Application.Logic
             if (!entities.AnyOrNotNull())
             {
                 var rep = this.UnitOfWork.GetRepositoryAsync<TEntity>();
-                await Task.WhenAll(entities?.Select(entity => rep.RemoveAsync(entity)));
-                return await this.UnitOfWork.SaveChangesAsync();
+                await Task.WhenAll(entities?.Select(entity => rep.RemoveAsync(entity, cancellationToken: cancellationToken)));
+                return await this.UnitOfWork.SaveChangesAsync(cancellationToken: cancellationToken);
             }
             return 0;
         }
@@ -300,8 +317,8 @@ namespace Mvp24Hours.Application.Logic
         {
             try
             {
-                await this.UnitOfWork.GetRepositoryAsync<TEntity>().RemoveByIdAsync(id);
-                return await this.UnitOfWork.SaveChangesAsync();
+                await this.UnitOfWork.GetRepositoryAsync<TEntity>().RemoveByIdAsync(id, cancellationToken: cancellationToken);
+                return await this.UnitOfWork.SaveChangesAsync(cancellationToken: cancellationToken);
             }
             catch (Exception ex)
             {
@@ -318,8 +335,8 @@ namespace Mvp24Hours.Application.Logic
             if (!ids.AnyOrNotNull())
             {
                 var rep = this.UnitOfWork.GetRepositoryAsync<TEntity>();
-                await Task.WhenAll(ids?.Select(entity => rep.RemoveByIdAsync(entity)));
-                return await this.UnitOfWork.SaveChangesAsync();
+                await Task.WhenAll(ids?.Select(entity => rep.RemoveByIdAsync(entity, cancellationToken: cancellationToken)));
+                return await this.UnitOfWork.SaveChangesAsync(cancellationToken: cancellationToken);
             }
             return 0;
         }

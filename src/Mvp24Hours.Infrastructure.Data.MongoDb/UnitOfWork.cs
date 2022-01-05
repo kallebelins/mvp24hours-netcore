@@ -88,16 +88,16 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
                 DbContext.SaveChanges(cancellationToken);
                 return 1;
             }
-            Rollback(cancellationToken);
+            Rollback();
             return 0;
         }
 
         /// <summary>
         ///  <see cref="Mvp24Hours.Core.Contract.Data.IUnitOfWork.Rollback()"/>
         /// </summary>
-        public void Rollback(CancellationToken cancellationToken = default)
+        public void Rollback()
         {
-            DbContext.Rollback(cancellationToken);
+            DbContext.Rollback();
         }
 
         #endregion

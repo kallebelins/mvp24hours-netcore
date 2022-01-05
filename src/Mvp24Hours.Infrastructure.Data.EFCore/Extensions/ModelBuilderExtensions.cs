@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Mvp24Hours.Infrastructure.Extensions
 {
@@ -31,5 +32,22 @@ namespace Mvp24Hours.Infrastructure.Extensions
                 modelBuilder.Entity(entity).HasQueryFilter(Expression.Lambda(newbody, newParam));
             }
         }
+
+        public static void ApplyMvpConfigurationsFromAssembly<TEntity>(this ModelBuilder builder, Assembly assembly)
+            where TEntity : class
+        {
+            var types = assembly.GetExportedTypes()
+                .Where(t => t.GetInterfaces().Any(i =>
+                    i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEntityTypeConfiguration<>)))
+                .ToList();
+
+            foreach (var type in types)
+            {
+                var instance = Activator.CreateInstance(type);
+                var methodInfo = type.GetMethod("Configure");
+                methodInfo?.Invoke(instance, new object[] { builder.Entity<TEntity>() });
+            }
+        }
+
     }
 }

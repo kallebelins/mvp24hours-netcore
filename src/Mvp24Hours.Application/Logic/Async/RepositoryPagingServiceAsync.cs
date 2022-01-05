@@ -14,6 +14,7 @@ using Mvp24Hours.Infrastructure.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Mvp24Hours.Application.Logic
@@ -28,15 +29,15 @@ namespace Mvp24Hours.Application.Logic
     {
         #region [ Implements IPagingBaseAsyncBO ]
 
-        public Task<IPagingResult<IList<TEntity>>> GetByWithPaginationAsync(Expression<Func<TEntity, bool>> clause)
+        public Task<IPagingResult<IList<TEntity>>> GetByWithPaginationAsync(Expression<Func<TEntity, bool>> clause, CancellationToken cancellationToken = default)
         {
-            return GetByWithPaginationAsync(clause, null);
+            return GetByWithPaginationAsync(clause, null, cancellationToken: cancellationToken);
         }
 
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.GetByAsync(Expression{Func{T, bool}}, IPagingCriteria)"/>
         /// </summary>
-        public virtual async Task<IPagingResult<IList<TEntity>>> GetByWithPaginationAsync(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria)
+        public virtual async Task<IPagingResult<IList<TEntity>>> GetByWithPaginationAsync(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -51,10 +52,10 @@ namespace Mvp24Hours.Application.Logic
 
                 var repo = UnitOfWork.GetRepositoryAsync<TEntity>();
 
-                var totalCount = await repo.GetByCountAsync(clause);
+                var totalCount = await repo.GetByCountAsync(clause, cancellationToken: cancellationToken);
                 var totalPages = (int)Math.Ceiling((double)totalCount / limit);
 
-                var items = await repo.GetByAsync(clause, criteria);
+                var items = await repo.GetByAsync(clause, criteria, cancellationToken: cancellationToken);
 
                 var result = items.ToBusinessPaging(
                     new PageResult(limit, offset, items.Count),
@@ -73,15 +74,15 @@ namespace Mvp24Hours.Application.Logic
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.ListAsync()"/>
         /// </summary>
-        public Task<IPagingResult<IList<TEntity>>> ListWithPaginationAsync()
+        public Task<IPagingResult<IList<TEntity>>> ListWithPaginationAsync(CancellationToken cancellationToken = default)
         {
-            return this.ListWithPaginationAsync(null);
+            return this.ListWithPaginationAsync(null, cancellationToken: cancellationToken);
         }
 
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryServiceAsync{T}.ListAsync(IPagingCriteria)"/>
         /// </summary>
-        public virtual async Task<IPagingResult<IList<TEntity>>> ListWithPaginationAsync(IPagingCriteria criteria)
+        public virtual async Task<IPagingResult<IList<TEntity>>> ListWithPaginationAsync(IPagingCriteria criteria, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -96,10 +97,10 @@ namespace Mvp24Hours.Application.Logic
 
                 var repo = UnitOfWork.GetRepositoryAsync<TEntity>();
 
-                var totalCount = await repo.ListCountAsync();
+                var totalCount = await repo.ListCountAsync(cancellationToken: cancellationToken);
                 var totalPages = (int)Math.Ceiling((double)totalCount / limit);
 
-                var items = await repo.ListAsync(criteria);
+                var items = await repo.ListAsync(criteria, cancellationToken: cancellationToken);
 
                 var result = items.ToBusinessPaging(
                     new PageResult(limit, offset, items.Count),

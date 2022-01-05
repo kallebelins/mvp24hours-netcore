@@ -469,5 +469,26 @@ namespace Mvp24Hours.Core.Extensions
 
             return values.Contains(text);
         }
+
+        public static bool IsValidPhoneNumber(this string text)
+        {
+            return IsValidNumberLength(text, 10);
+        }
+
+        public static bool IsValidNumberLength(this string text, int length)
+        {
+            if (length == 0 && !text.HasValue())
+            {
+                return true;
+            }
+            else if (!text.HasValue())
+            {
+                return false;
+            }
+            else
+            {
+                return text.OnlyNumbers().Length == length;
+            }
+        }
     }
 }

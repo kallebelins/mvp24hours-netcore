@@ -22,13 +22,11 @@ namespace Mvp24Hours.Application.SQLServer.Test.Support.Services
         {
             var paging = new PagingCriteria(3, 0);
 
-            var rpCustomer = UnitOfWork.GetRepository<Customer>();
-
-            var customers = rpCustomer.GetBy(x => x.Contacts.Any(), paging);
+            var customers = Repository.GetBy(x => x.Contacts.Any(), paging);
 
             foreach (var customer in customers)
             {
-                rpCustomer.LoadRelation(customer, x => x.Contacts);
+                Repository.LoadRelation(customer, x => x.Contacts);
             }
             return customers;
         }
@@ -37,13 +35,11 @@ namespace Mvp24Hours.Application.SQLServer.Test.Support.Services
         {
             var paging = new PagingCriteria(3, 0);
 
-            var rpCustomer = UnitOfWork.GetRepository<Customer>();
-
-            var customers = rpCustomer.GetBy(x => x.Contacts.Any(), paging);
+            var customers = Repository.GetBy(x => x.Contacts.Any(), paging);
 
             foreach (var customer in customers)
             {
-                rpCustomer.LoadRelation(customer, x => x.Contacts, clause: c => c.Active, limit: 1);
+                Repository.LoadRelation(customer, x => x.Contacts, clause: c => c.Active, limit: 1);
             }
             return customers;
         }

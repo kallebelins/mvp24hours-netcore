@@ -80,7 +80,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         #region [ Unit of Work ]
 
         /// <summary>
-        ///  <see cref="IUnitOfWorkAsync.SaveChangesAsync()"/>
+        ///  <see cref="IUnitOfWorkAsync.SaveChangesAsync(CancellationToken)"/>
         /// </summary>
         public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
@@ -89,16 +89,16 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
                 await DbContext.SaveChangesAsync(cancellationToken);
                 return 1;
             }
-            await RollbackAsync(cancellationToken);
+            await RollbackAsync();
             return 0;
         }
 
         /// <summary>
         ///  <see cref="IUnitOfWorkAsync.RollbackAsync()"/>
         /// </summary>
-        public async Task RollbackAsync(CancellationToken cancellationToken = default)
+        public async Task RollbackAsync()
         {
-            await DbContext.RollbackAsync(cancellationToken);
+            await DbContext.RollbackAsync();
         }
 
         #endregion

@@ -8,6 +8,7 @@
 using Mvp24Hours.Application.PostgreSql.Test.Support.Entities;
 using Mvp24Hours.Application.PostgreSql.Test.Support.Helpers;
 using Mvp24Hours.Application.PostgreSql.Test.Support.Services.Async;
+using Mvp24Hours.Core.Extensions;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;

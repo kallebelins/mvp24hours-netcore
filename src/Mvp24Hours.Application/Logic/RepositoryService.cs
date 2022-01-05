@@ -9,6 +9,7 @@ using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.Logic;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
+using Mvp24Hours.Core.Extensions;
 using Mvp24Hours.Infrastructure.Extensions;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,21 @@ namespace Mvp24Hours.Application.Logic
         where TEntity : class, IEntityBase
         where TUoW : IUnitOfWork
     {
+        #region [ Properties ]
+
+        private IRepository<TEntity> repository = null;
+
+        /// <summary>
+        /// Gets repository instance
+        /// </summary>
+        /// <returns>T</returns>
+        protected virtual IRepository<TEntity> Repository
+        {
+            get { return repository ??= UnitOfWork.GetRepository<TEntity>(); }
+        }
+
+        #endregion
+
         #region [ Implements IQueryService ]
 
         /// <summary>

@@ -9,8 +9,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
-namespace Mvp24Hours.Infrastructure.Extensions
+namespace Mvp24Hours.Core.Extensions
 {
     /// <summary>
     /// 
@@ -64,6 +65,24 @@ namespace Mvp24Hours.Infrastructure.Extensions
             {
                 return false;
             }
+        }
+
+        public static async Task<TSource> FirstOrDefaultAsync<TSource>(this Task<IEnumerable<TSource>> task, Func<TSource, bool> predicate = null)
+        {
+            var list = await task;
+            return predicate == null ? list.FirstOrDefault() : list.FirstOrDefault(predicate);
+        }
+
+        public static async Task<TSource> LastOrDefaultAsync<TSource>(this Task<IEnumerable<TSource>> task, Func<TSource, bool> predicate = null)
+        {
+            var list = await task;
+            return predicate == null ? list.LastOrDefault() : list.LastOrDefault(predicate);
+        }
+
+        public static async Task<TSource> ElementAtOrDefaultAsync<TSource>(this Task<IEnumerable<TSource>> task, int index)
+        {
+            var list = await task;
+            return list.ElementAtOrDefault(index);
         }
     }
 }

@@ -87,20 +87,15 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
             {
                 return this.DbContext.SaveChanges();
             }
-            Rollback(cancellationToken);
+            Rollback();
             return default;
         }
 
         /// <summary>
         ///  <see cref="Mvp24Hours.Core.Contract.Data.IUnitOfWork.Rollback()"/>
         /// </summary>
-        public void Rollback(CancellationToken cancellationToken = default)
+        public void Rollback()
         {
-            if (cancellationToken.IsCancellationRequested)
-            {
-                return;
-            }
-
             var changedEntries = this.DbContext.ChangeTracker.Entries()
                 .Where(x => x.State != EntityState.Unchanged).ToList();
 
