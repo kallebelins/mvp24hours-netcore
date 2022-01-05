@@ -63,6 +63,18 @@ namespace Mvp24Hours.Infrastructure.Extensions
         /// <summary>
         /// Encapsulates object for business
         /// </summary>
+        public static IBusinessResult<T> ToBusiness<T>(this T value, IMessageResult messageResult, string tokenDefault = null)
+        {
+            return new BusinessResult<T>(
+                token: tokenDefault,
+                data: value,
+                messages: new ReadOnlyCollection<IMessageResult>(new List<IMessageResult>() { messageResult })
+            );
+        }
+
+        /// <summary>
+        /// Encapsulates object for business
+        /// </summary>
         public static IBusinessResult<T> ToBusiness<T>(this T value, IList<IMessageResult> messageResult = null, string tokenDefault = null)
         {
             return new BusinessResult<T>(

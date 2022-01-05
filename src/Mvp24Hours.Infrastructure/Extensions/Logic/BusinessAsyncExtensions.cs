@@ -69,6 +69,23 @@ namespace Mvp24Hours.Infrastructure.Extensions
         /// <summary>
         /// Encapsulates object for business
         /// </summary>
+        public static async Task<IBusinessResult<T>> ToBusinessAsync<T>(this Task<T> valueAsync, IMessageResult messageResult, string tokenDefault = null)
+        {
+            var value = await valueAsync;
+            if (value != null)
+            {
+                return new BusinessResult<T>(
+                    token: tokenDefault,
+                    data: value,
+                    messages: new ReadOnlyCollection<IMessageResult>(new List<IMessageResult>() { messageResult })
+                );
+            }
+            return new BusinessResult<T>(token: tokenDefault);
+        }
+
+        /// <summary>
+        /// Encapsulates object for business
+        /// </summary>
         public static async Task<IBusinessResult<T>> ToBusinessAsync<T>(this Task<T> valueAsync, IList<IMessageResult> messageResult = null, string tokenDefault = null)
         {
             var value = await valueAsync;
@@ -81,6 +98,18 @@ namespace Mvp24Hours.Infrastructure.Extensions
                 );
             }
             return new BusinessResult<T>(token: tokenDefault);
+        }
+
+        /// <summary>
+        /// Encapsulates object for business
+        /// </summary>
+        public static async Task<IBusinessResult<VoidResult>> ToBusinessAsync(this Task task, IMessageResult messageResult, string tokenDefault = null)
+        {
+            await task;
+            return new BusinessResult<VoidResult>(
+                token: tokenDefault,
+                messages: new ReadOnlyCollection<IMessageResult>(new List<IMessageResult>() { messageResult })
+            );
         }
 
         /// <summary>

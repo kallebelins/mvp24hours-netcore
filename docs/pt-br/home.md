@@ -12,7 +12,7 @@ Este projeto foi desenvolvido para contribuir com a construção rápida de serv
 * Padrões para validação de dados (FluentValidation e Data Annotations), notificação (Notification pattern) e especificações (Specification pattern), unidade de trabalho, repositório, entre outros.
 
 ## Donativos
-Por favor, considere fazer uma doação se você acha que esta biblioteca é útil para você ou que meu trabalho é valioso. Fico feliz se você puder me ajudar a comprar uma xícara de café. :heart:
+Por favor, considere fazer uma doação se você acha que esta biblioteca é útil para você ou que meu trabalho é valioso. Fico feliz se você puder me ajudar a [comprar uma xícara de café](https://www.paypal.com/donate/?hosted_button_id=EKA2L256GJVQC). :heart:
 
 ## Comunidade
 Os usuários e a equipe de desenvolvimento será criada no Discord em breve.
