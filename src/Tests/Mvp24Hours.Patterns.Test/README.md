@@ -1,4 +1,4 @@
-﻿#Command 
+#Command 
 docker run --name sqlserver -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=MyPass@word" -p 1433:1433 -d mcr.microsoft.com/mssql/server
 
 #ConnectionString

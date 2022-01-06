@@ -1,4 +1,4 @@
-﻿using MassTransit;
+using MassTransit;
 using Mvp24Hours.Application.RabbitMQ.Test.Support.Dto;
 using System.Diagnostics;
 using System.Threading.Tasks;

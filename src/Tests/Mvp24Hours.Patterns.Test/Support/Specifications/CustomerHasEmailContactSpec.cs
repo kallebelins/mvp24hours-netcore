@@ -1,4 +1,4 @@
-﻿using Mvp24Hours.Core.Contract.Domain.Specifications;
+using Mvp24Hours.Core.Contract.Domain.Specifications;
 using Mvp24Hours.Patterns.Test.Support.Entities;
 using Mvp24Hours.Patterns.Test.Support.Enums;
 using System;

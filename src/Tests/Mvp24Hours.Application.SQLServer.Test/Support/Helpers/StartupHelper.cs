@@ -1,4 +1,4 @@
-﻿//=====================================================================================
+//=====================================================================================
 // Developed by Kallebe Lins (kallebe.santos@outlook.com)
 // Teacher, Architect, Consultant and Project Leader
 // Virtual Card: https://www.linkedin.com/in/kallebelins
@@ -26,7 +26,8 @@ namespace Mvp24Hours.Application.SQLServer.Test.Support.Helpers
                 .AddSingleton(ConfigurationHelper.AppSettings);
 
             services.AddDbContext<DataContext>(options =>
-                options.UseSqlServer(ConfigurationHelper.AppSettings.GetConnectionString("DataContext")));
+                options
+                .UseSqlServer(ConfigurationHelper.AppSettings.GetConnectionString("DataContext")));
 
             services.AddMvp24HoursDbService<DataContext>();
 
@@ -77,7 +78,7 @@ namespace Mvp24Hours.Application.SQLServer.Test.Support.Helpers
             services.AddDbContext<DataContext>(options =>
                 options.UseSqlServer(ConfigurationHelper.AppSettings.GetConnectionString("DataContext")));
 
-            services.AddMvp24HoursDbAsyncService<DataContext>();
+            services.AddMvp24HoursDbServiceAsync<DataContext>();
 
             // register my services
             services.AddScoped<CustomerServiceAsync, CustomerServiceAsync>();

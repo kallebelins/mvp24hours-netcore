@@ -1,4 +1,4 @@
-﻿using MongoDB.Bson;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using Mvp24Hours.Application.MongoDb.Test.Support.Enums;
 using Mvp24Hours.Core.Contract.Domain.Entity;

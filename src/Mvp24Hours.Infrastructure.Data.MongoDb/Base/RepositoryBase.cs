@@ -28,7 +28,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
     {
         #region [ Ctor ]
 
-        protected RepositoryBase(Mvp24HoursMongoDbContext dbContext)
+        protected RepositoryBase(Mvp24HoursContext dbContext)
         {
             this.dbContext = dbContext ?? throw new ArgumentNullException("dbContext");
             dbEntities = dbContext.Set<T>();
@@ -41,7 +41,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
         /// <summary>
         /// Database context
         /// </summary>
-        protected readonly Mvp24HoursMongoDbContext dbContext;
+        protected readonly Mvp24HoursContext dbContext;
         /// <summary>
         /// Represents relationship with entities in the database
         /// </summary>

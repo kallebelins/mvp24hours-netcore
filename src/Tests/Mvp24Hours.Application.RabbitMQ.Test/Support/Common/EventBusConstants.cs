@@ -1,4 +1,4 @@
-﻿namespace Mvp24Hours.Application.RabbitMQ.Test.Support.Common
+namespace Mvp24Hours.Application.RabbitMQ.Test.Support.Common
 {
     public static class EventBusConstants
     {

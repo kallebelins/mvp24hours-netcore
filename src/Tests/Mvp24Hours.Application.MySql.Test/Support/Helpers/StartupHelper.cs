@@ -1,4 +1,4 @@
-﻿//=====================================================================================
+//=====================================================================================
 // Developed by Kallebe Lins (kallebe.santos@outlook.com)
 // Teacher, Architect, Consultant and Project Leader
 // Virtual Card: https://www.linkedin.com/in/kallebelins
@@ -76,7 +76,7 @@ namespace Mvp24Hours.Application.MySql.Test.Support.Helpers
             services.AddDbContext<DataContext>(options =>
                 options.UseMySQL(ConfigurationHelper.AppSettings.GetConnectionString("DataContext")));
 
-            services.AddMvp24HoursDbAsyncService<DataContext>();
+            services.AddMvp24HoursDbServiceAsync<DataContext>();
 
             // register my services
             services.AddScoped<CustomerServiceAsync, CustomerServiceAsync>();

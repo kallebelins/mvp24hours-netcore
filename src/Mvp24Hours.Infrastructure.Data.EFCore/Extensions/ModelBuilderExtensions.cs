@@ -33,6 +33,9 @@ namespace Mvp24Hours.Infrastructure.Extensions
             }
         }
 
+        /// <summary>
+        /// Apply configuration models
+        /// </summary>
         public static void ApplyMvpConfigurationsFromAssembly<TEntity>(this ModelBuilder builder, Assembly assembly)
             where TEntity : class
         {

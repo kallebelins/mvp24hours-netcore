@@ -1,4 +1,4 @@
-﻿using MassTransit;
+using MassTransit;
 using Mvp24Hours.Application.RabbitMQ.Test.Support.Common;
 using Mvp24Hours.Application.RabbitMQ.Test.Support.Consumers.MassTransit;
 using Mvp24Hours.Application.RabbitMQ.Test.Support.Dto;

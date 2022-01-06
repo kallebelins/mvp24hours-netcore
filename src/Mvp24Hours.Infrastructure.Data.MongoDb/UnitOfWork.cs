@@ -1,4 +1,4 @@
-﻿//=====================================================================================
+//=====================================================================================
 // Developed by Kallebe Lins (kallebe.santos@outlook.com)
 // Teacher, Architect, Consultant and Project Leader
 // Virtual Card: https://www.linkedin.com/in/kallebelins
@@ -24,7 +24,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
 
         public UnitOfWork()
         {
-            DbContext = ServiceProviderHelper.GetService<Mvp24HoursMongoDbContext>();
+            DbContext = ServiceProviderHelper.GetService<Mvp24HoursContext>();
             repositories = new Dictionary<Type, object>();
             NotificationContext = ServiceProviderHelper.GetService<INotificationContext>();
 
@@ -37,7 +37,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
 
         private readonly Dictionary<Type, object> repositories;
 
-        protected Mvp24HoursMongoDbContext DbContext { get; private set; }
+        protected Mvp24HoursContext DbContext { get; private set; }
         protected INotificationContext NotificationContext { get; private set; }
 
         /// <summary>

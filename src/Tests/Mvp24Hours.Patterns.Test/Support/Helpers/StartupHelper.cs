@@ -1,4 +1,4 @@
-﻿//=====================================================================================
+//=====================================================================================
 // Developed by Kallebe Lins (kallebe.santos@outlook.com)
 // Teacher, Architect, Consultant and Project Leader
 // Virtual Card: https://www.linkedin.com/in/kallebelins
@@ -86,7 +86,7 @@ namespace Mvp24Hours.Patterns.Test.Support.Helpers
                 options.UseSqlServer(ConfigurationHelper.AppSettings.GetConnectionString("DataContext")));
 
             services.AddMvp24HoursNotification();
-            services.AddMvp24HoursDbAsyncService<DataContext>();
+            services.AddMvp24HoursDbServiceAsync<DataContext>();
 
             if (enableFluentValidation)
             {

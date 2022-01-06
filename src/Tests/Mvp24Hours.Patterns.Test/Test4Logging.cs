@@ -1,4 +1,4 @@
-﻿using Mvp24Hours.Core.Contract.Infrastructure.Logging;
+using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Infrastructure.Helpers;
 using Mvp24Hours.Patterns.Test.Support.Helpers;
 using System;

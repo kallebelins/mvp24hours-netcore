@@ -1,4 +1,4 @@
-﻿//=====================================================================================
+//=====================================================================================
 // Developed by Kallebe Lins (kallebe.santos@outlook.com)
 // Teacher, Architect, Consultant and Project Leader
 // Virtual Card: https://www.linkedin.com/in/kallebelins
@@ -82,7 +82,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test.Support.Helpers
                 options => options.SetPostgresVersion(new Version(9, 6)))
             );
 
-            services.AddMvp24HoursDbAsyncService<DataContext>();
+            services.AddMvp24HoursDbServiceAsync<DataContext>();
 
             // register my services
             services.AddScoped<CustomerServiceAsync, CustomerServiceAsync>();

@@ -1,4 +1,4 @@
-﻿using Mvp24Hours.Core.ValueObjects.Logic;
+using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Helpers;
 using Mvp24Hours.Patterns.Test.Support.Entities;

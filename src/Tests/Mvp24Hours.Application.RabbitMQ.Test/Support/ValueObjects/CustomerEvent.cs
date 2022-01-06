@@ -1,4 +1,4 @@
-﻿namespace Mvp24Hours.Application.RabbitMQ.Test.Support.Dto
+namespace Mvp24Hours.Application.RabbitMQ.Test.Support.Dto
 {
     public class CustomerEvent : MessageBusEvent
     {

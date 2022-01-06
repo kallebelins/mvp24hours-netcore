@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Mvp24Hours.Core.Contract.Mappings;
 using Mvp24Hours.Patterns.Test.Support.Entities;
 

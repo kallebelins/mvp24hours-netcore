@@ -1,4 +1,4 @@
-﻿//=====================================================================================
+//=====================================================================================
 // Developed by Kallebe Lins (kallebe.santos@outlook.com)
 // Teacher, Architect, Consultant and Project Leader
 // Virtual Card: https://www.linkedin.com/in/kallebelins
@@ -17,7 +17,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
     /// <summary>
     /// 
     /// </summary>
-    public class Mvp24HoursMongoDbContext : IDisposable
+    public class Mvp24HoursContext : IDisposable
     {
         public string DatabaseName { get; private set; }
         public string ConnectionString { get; private set; }
@@ -32,7 +32,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         private bool _isTransactionAsync;
 
 
-        public Mvp24HoursMongoDbContext(string databaseName)
+        public Mvp24HoursContext(string databaseName)
             : this(databaseName,
                   ConfigurationHelper.GetSettings("ConnectionStrings:MongoDbContext"),
                   (bool)ConfigurationHelper.GetSettings("Mvp24Hours:Persistence:MongoDb:EnableTls").ToBoolean(false),
@@ -40,7 +40,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         {
         }
 
-        public Mvp24HoursMongoDbContext(string databaseName, string connectionString)
+        public Mvp24HoursContext(string databaseName, string connectionString)
             : this(databaseName,
                   connectionString,
                   (bool)ConfigurationHelper.GetSettings("Mvp24Hours:Persistence:MongoDb:EnableTls").ToBoolean(false),
@@ -48,7 +48,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         {
         }
 
-        public Mvp24HoursMongoDbContext(string databaseName, string connectionString, bool enableTls)
+        public Mvp24HoursContext(string databaseName, string connectionString, bool enableTls)
             : this(databaseName,
                   connectionString,
                   enableTls,
@@ -56,7 +56,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         {
         }
 
-        public Mvp24HoursMongoDbContext(string databaseName, string connectionString, bool enableTls, bool enableTransaction)
+        public Mvp24HoursContext(string databaseName, string connectionString, bool enableTls, bool enableTransaction)
         {
             if (!databaseName.HasValue())
             {

@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using Mvp24Hours.Patterns.Test.Support.Entities;
 
 namespace Mvp24Hours.Patterns.Test.Support.Validations

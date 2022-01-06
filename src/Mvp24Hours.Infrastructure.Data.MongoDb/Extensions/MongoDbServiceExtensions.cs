@@ -1,4 +1,4 @@
-﻿//=====================================================================================
+//=====================================================================================
 // Developed by Kallebe Lins (kallebe.santos@outlook.com)
 // Teacher, Architect, Consultant and Project Leader
 // Virtual Card: https://www.linkedin.com/in/kallebelins
@@ -21,7 +21,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
             // register db context
             services.AddScoped(options =>
             {
-                return new Mvp24HoursMongoDbContext(databaseName, connectionString);
+                return new Mvp24HoursContext(databaseName, connectionString);
             });
 
             // register services

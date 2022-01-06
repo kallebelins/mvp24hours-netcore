@@ -1,4 +1,4 @@
-﻿//=====================================================================================
+//=====================================================================================
 // Developed by Kallebe Lins (kallebe.santos@outlook.com)
 // Teacher, Architect, Consultant and Project Leader
 // Virtual Card: https://www.linkedin.com/in/kallebelins
@@ -7,11 +7,11 @@
 //=====================================================================================
 using Microsoft.Extensions.Caching.Distributed;
 using Mvp24Hours.Core.Contract.Data;
-using Mvp24Hours.Infrastructure.Data.Redis.Base;
+using Mvp24Hours.Infrastructure.Caching.Base;
 using Mvp24Hours.Infrastructure.Extensions;
 using System.Threading.Tasks;
 
-namespace Mvp24Hours.Infrastructure.Data.Cache
+namespace Mvp24Hours.Infrastructure.Caching
 {
     /// <summary>
     ///  <see cref="Mvp24Hours.Core.Contract.Data.IRepositoryCacheAsync{T}"/>

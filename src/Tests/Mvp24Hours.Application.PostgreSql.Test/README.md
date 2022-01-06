@@ -1,4 +1,4 @@
-﻿#Command 
+#Command 
 docker run --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=MyPass@word -d onjin/alpine-postgres
 
 #ConnectionString

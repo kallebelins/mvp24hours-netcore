@@ -1,4 +1,4 @@
-﻿//=====================================================================================
+//=====================================================================================
 // Developed by Kallebe Lins (kallebe.santos@outlook.com)
 // Teacher, Architect, Consultant and Project Leader
 // Virtual Card: https://www.linkedin.com/in/kallebelins
@@ -15,11 +15,10 @@ namespace Mvp24Hours.Infrastructure.Extensions
 {
     public static class EFCoreServiceExtensions
     {
-
         /// <summary>
         /// Add database context services
         /// </summary>
-        public static IServiceCollection AddMvp24HoursDbAsyncService<TDbContext>(this IServiceCollection services, Func<IServiceProvider, TDbContext> dbFactory = null, Type repositoryAsync = null)
+        public static IServiceCollection AddMvp24HoursDbServiceAsync<TDbContext>(this IServiceCollection services, Func<IServiceProvider, TDbContext> dbFactory = null, Type repositoryAsync = null)
             where TDbContext : DbContext
         {
             services.AddScoped<IUnitOfWorkAsync>(x => new UnitOfWorkAsync());
@@ -73,6 +72,5 @@ namespace Mvp24Hours.Infrastructure.Extensions
 
             return services;
         }
-
     }
 }

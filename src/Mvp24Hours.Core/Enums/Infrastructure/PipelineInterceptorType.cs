@@ -1,4 +1,4 @@
-﻿namespace Mvp24Hours.Core.Enums.Infrastructure
+namespace Mvp24Hours.Core.Enums.Infrastructure
 {
     public enum PipelineInterceptorType
     {
