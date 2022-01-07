@@ -5,9 +5,7 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-using Dapper;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
@@ -15,7 +13,6 @@ using Mvp24Hours.Infrastructure.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Common;
 using System.Linq;
 using System.Threading;
 
@@ -24,7 +21,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
     /// <summary>
     ///  <see cref="Mvp24Hours.Core.Contract.Data.IUnitOfWork"/>
     /// </summary>
-    public class UnitOfWork : IUnitOfWork, ISQL, IDisposable
+    public class UnitOfWork : IUnitOfWork, IDisposable
     {
         #region [ Ctor ]
 
@@ -44,9 +41,6 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
 
         readonly Dictionary<Type, object> repositories;
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IUnitOfWork"/>
-        /// </summary>
         public IRepository<T> GetRepository<T>()
             where T : class, IEntityBase
         {
@@ -55,6 +49,11 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                 this.repositories.Add(typeof(T), ServiceProviderHelper.GetService<IRepository<T>>());
             }
             return repositories[typeof(T)] as IRepository<T>;
+        }
+
+        public IDbConnection GetConnection()
+        {
+            return DbContext?.Database?.GetDbConnection();
         }
 
         #endregion
@@ -119,140 +118,6 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                         break;
                 }
             }
-        }
-
-        #endregion
-
-        #region [ ISQL ]
-
-        public IEnumerable<T> Query<T>(string sqlQuery, object param = null, int? commandTimeout = null, CommandType? commandType = null)
-        {
-            return this.DbContext.Database.GetDbConnection().Query<T>(
-                sqlQuery
-                , param: param
-                , transaction: (this.DbContext.Database?.CurrentTransaction as IInfrastructure<DbTransaction>)?.Instance
-                , commandTimeout: commandTimeout ?? this.DbContext.Database.GetCommandTimeout()
-                , commandType: commandType);
-        }
-
-        public T QueryFirst<T>(string sqlQuery, object param = null, int? commandTimeout = null, CommandType? commandType = null)
-        {
-            return this.DbContext.Database.GetDbConnection().QueryFirst<T>(
-                sqlQuery
-                , param: param
-                , transaction: (this.DbContext.Database?.CurrentTransaction as IInfrastructure<DbTransaction>)?.Instance
-                , commandTimeout: commandTimeout ?? this.DbContext.Database.GetCommandTimeout()
-                , commandType: commandType);
-        }
-
-        public T QueryFirstOrDefault<T>(string sqlQuery, object param = null, int? commandTimeout = null, CommandType? commandType = null)
-        {
-            return this.DbContext.Database.GetDbConnection().QueryFirstOrDefault<T>(
-                sqlQuery
-                , param: param
-                , transaction: (this.DbContext.Database?.CurrentTransaction as IInfrastructure<DbTransaction>)?.Instance
-                , commandTimeout: commandTimeout ?? this.DbContext.Database.GetCommandTimeout()
-                , commandType: commandType);
-        }
-
-        public T QuerySingle<T>(string sqlQuery, object param = null, int? commandTimeout = null, CommandType? commandType = null)
-        {
-            return this.DbContext.Database.GetDbConnection().QuerySingle<T>(
-                sqlQuery
-                , param: param
-                , transaction: (this.DbContext.Database?.CurrentTransaction as IInfrastructure<DbTransaction>)?.Instance
-                , commandTimeout: commandTimeout ?? this.DbContext.Database.GetCommandTimeout()
-                , commandType: commandType);
-        }
-
-        public T QuerySingleOrDefault<T>(string sqlQuery, object param = null, int? commandTimeout = null, CommandType? commandType = null)
-        {
-            return this.DbContext.Database.GetDbConnection().QuerySingleOrDefault<T>(
-                sqlQuery
-                , param: param
-                , transaction: (this.DbContext.Database?.CurrentTransaction as IInfrastructure<DbTransaction>)?.Instance
-                , commandTimeout: commandTimeout ?? this.DbContext.Database.GetCommandTimeout()
-                , commandType: commandType);
-        }
-
-        public T ExecuteScalar<T>(string sqlQuery, object param = null, int? commandTimeout = null, CommandType? commandType = null)
-        {
-            return this.DbContext.Database.GetDbConnection().ExecuteScalar<T>(
-                sqlQuery
-                , param: param
-                , transaction: (this.DbContext.Database?.CurrentTransaction as IInfrastructure<DbTransaction>)?.Instance
-                , commandTimeout: commandTimeout ?? this.DbContext.Database.GetCommandTimeout()
-                , commandType: commandType);
-        }
-
-        public int Execute(string sqlQuery, object param = null, int? commandTimeout = null, CommandType? commandType = null)
-        {
-            return this.DbContext.Database.GetDbConnection().Execute(
-                sqlQuery
-                , param: param
-                , transaction: (this.DbContext.Database?.CurrentTransaction as IInfrastructure<DbTransaction>)?.Instance
-                , commandTimeout: commandTimeout ?? this.DbContext.Database.GetCommandTimeout()
-                , commandType: commandType);
-        }
-
-        #endregion
-
-        #region [ Dapper Command Definition ]
-
-        /// <summary>
-        /// Execute a query hronously using Task.
-        /// </summary>
-        public IEnumerable<T> Query<T>(CommandDefinition command)
-        {
-            return this.DbContext.Database.GetDbConnection().Query<T>(command);
-        }
-
-        /// <summary>
-        /// Executes a query, returning the data typed as T.
-        /// </summary>
-        public T QueryFirst<T>(CommandDefinition command)
-        {
-            return this.DbContext.Database.GetDbConnection().QueryFirst<T>(command);
-        }
-
-        /// <summary>
-        /// Executes a query, returning the data typed as T.
-        /// </summary>
-        public T QueryFirstOrDefault<T>(CommandDefinition command)
-        {
-            return this.DbContext.Database.GetDbConnection().QueryFirstOrDefault<T>(command);
-        }
-
-        /// <summary>
-        /// Executes a query, returning the data typed as T.
-        /// </summary>
-        public T QuerySingle<T>(CommandDefinition command)
-        {
-            return this.DbContext.Database.GetDbConnection().QuerySingle<T>(command);
-        }
-
-        /// <summary>
-        /// Executes a query, returning the data typed as T.
-        /// </summary>
-        public T QuerySingleOrDefault<T>(CommandDefinition command)
-        {
-            return this.DbContext.Database.GetDbConnection().QuerySingleOrDefault<T>(command);
-        }
-
-        /// <summary>
-        /// Execute parameterized SQL that selects a single value.
-        /// </summary>
-        public T ExecuteScalar<T>(CommandDefinition command)
-        {
-            return this.DbContext.Database.GetDbConnection().ExecuteScalar<T>(command);
-        }
-
-        /// <summary>
-        /// Execute a command hronously using Task.
-        /// </summary>
-        public int Execute(CommandDefinition command)
-        {
-            return this.DbContext.Database.GetDbConnection().Execute(command);
         }
 
         #endregion

@@ -11,6 +11,7 @@ using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Infrastructure.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -52,6 +53,12 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
                 repositories.Add(typeof(T), ServiceProviderHelper.GetService<IRepositoryAsync<T>>());
             }
             return repositories[typeof(T)] as IRepositoryAsync<T>;
+        }
+
+        [Obsolete("MongoDb does not support IDbConnection. Use the database (IMongoDatabase) from context.")]
+        public IDbConnection GetConnection()
+        {
+            throw new NotSupportedException("MongoDb does not support IDbConnection. Use the database (IMongoDatabase) from context.");
         }
 
         #endregion

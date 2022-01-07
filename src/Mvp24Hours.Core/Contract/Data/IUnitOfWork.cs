@@ -7,6 +7,7 @@
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using System;
+using System.Data;
 using System.Threading;
 
 namespace Mvp24Hours.Core.Contract.Data
@@ -32,5 +33,9 @@ namespace Mvp24Hours.Core.Contract.Data
         /// </summary>
         /// <returns>A repository for an entity instance</returns>
         IRepository<T> GetRepository<T>() where T : class, IEntityBase;
+        /// <summary>
+        /// Get context connection
+        /// </summary>
+        IDbConnection GetConnection();
     }
 }
