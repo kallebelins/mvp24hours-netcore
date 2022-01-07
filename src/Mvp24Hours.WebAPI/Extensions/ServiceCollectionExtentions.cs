@@ -20,6 +20,7 @@ using Mvp24Hours.Infrastructure.Helpers;
 using Mvp24Hours.WebAPI.Filters;
 using Mvp24Hours.WebAPI.Filters.Swagger;
 using Mvp24Hours.WebAPI.Models;
+using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Filters;
 using System;
 using System.Collections.Generic;
@@ -36,30 +37,43 @@ namespace Mvp24Hours.WebAPI.Extensions
     public static class ServiceCollectionExtentions
     {
         /// <summary>
-        /// Adds essential services
+        /// Adds IHttpContextAccessor and IActionContextAccessor
         /// </summary>
-        public static IServiceCollection AddMvp24HoursService(this IServiceCollection services)
+        public static IServiceCollection AddMvp24HoursWebHttp(this IServiceCollection services)
         {
-            #region [ HttpContext ]
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            #endregion
+            if (!services.Exists<IHttpContextAccessor>())
+            {
+                services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            }
+            if (!services.Exists<IActionContextAccessor>())
+            {
+                services.AddSingleton<IActionContextAccessor, ActionContextAccessor>()
+                    .AddScoped<IUrlHelper>(x => x.GetRequiredService<IUrlHelperFactory>()
+                    .GetUrlHelper(x.GetRequiredService<IActionContextAccessor>().ActionContext));
+            }
+            return services;
+        }
 
-            #region [ Filters ]
-            services.AddScoped<IHateoasContext, HateoasContext>();
+        /// <summary>
+        /// Adds filters HateoasFilter and NotificationFilter
+        /// </summary>
+        public static IServiceCollection AddMvp24HoursWebFilters(this IServiceCollection services, bool enableHateoas = false)
+        {
+            if (enableHateoas && !services.Exists<IHateoasContext>())
+            {
+                services.AddMvp24HoursWebHttp();
+                services.AddScoped<IHateoasContext, HateoasContext>();
+                services.AddMvc(options =>
+                {
+                    options.Filters.Add<HateoasFilter>();
+                });
+            }
 
+            services.AddMvp24HoursNotification();
             services.AddMvc(options =>
             {
                 options.Filters.Add<NotificationFilter>();
-                options.Filters.Add<HateoasFilter>();
             });
-
-            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>()
-                .AddScoped<IUrlHelper>(x => x.GetRequiredService<IUrlHelperFactory>()
-                .GetUrlHelper(x.GetRequiredService<IActionContextAccessor>().ActionContext));
-            #endregion
-
-            // notification
-            services.AddMvp24HoursNotification();
 
             return services;
         }
@@ -67,17 +81,17 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// <summary>
         /// Add json serialization
         /// </summary>
-        public static IServiceCollection AddMvp24HoursJson(this IServiceCollection services, Assembly assemblyMap = null)
+        public static IServiceCollection AddMvp24HoursWebJson(this IServiceCollection services, JsonSerializerSettings jsonSerializerSettings = null)
         {
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
                 {
-                    options.SerializerSettings.ContractResolver = JsonHelper.JsonDefaultSettings.ContractResolver;
-                    options.SerializerSettings.Converters = JsonHelper.JsonDefaultSettings.Converters;
-                    options.SerializerSettings.DateFormatHandling = JsonHelper.JsonDefaultSettings.DateFormatHandling;
-                    options.SerializerSettings.DateFormatString = JsonHelper.JsonDefaultSettings.DateFormatString;
-                    options.SerializerSettings.NullValueHandling = JsonHelper.JsonDefaultSettings.NullValueHandling;
-                    options.SerializerSettings.ReferenceLoopHandling = JsonHelper.JsonDefaultSettings.ReferenceLoopHandling;
+                    options.SerializerSettings.ContractResolver = (jsonSerializerSettings ?? JsonHelper.JsonDefaultSettings).ContractResolver;
+                    options.SerializerSettings.Converters = (jsonSerializerSettings ?? JsonHelper.JsonDefaultSettings).Converters;
+                    options.SerializerSettings.DateFormatHandling = (jsonSerializerSettings ?? JsonHelper.JsonDefaultSettings).DateFormatHandling;
+                    options.SerializerSettings.DateFormatString = (jsonSerializerSettings ?? JsonHelper.JsonDefaultSettings).DateFormatString;
+                    options.SerializerSettings.NullValueHandling = (jsonSerializerSettings ?? JsonHelper.JsonDefaultSettings).NullValueHandling;
+                    options.SerializerSettings.ReferenceLoopHandling = (jsonSerializerSettings ?? JsonHelper.JsonDefaultSettings).ReferenceLoopHandling;
                 });
             return services;
         }
@@ -85,7 +99,7 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// <summary>
         /// Add configuration for GzipCompressionProvider
         /// </summary>
-        public static IServiceCollection AddMvp24HoursZipService(this IServiceCollection services)
+        public static IServiceCollection AddMvp24HoursWebGzip(this IServiceCollection services, bool? enableForHttps = null)
         {
             services.Configure<GzipCompressionProviderOptions>(options =>
             {
@@ -94,7 +108,7 @@ namespace Mvp24Hours.WebAPI.Extensions
 
             services.AddResponseCompression(options =>
             {
-                options.EnableForHttps = ConfigurationHelper.GetSettings<bool>("Mvp24Hours:Web:ResponseCompressionForHttps");
+                options.EnableForHttps = enableForHttps ?? ConfigurationHelper.GetSettings<bool>("Mvp24Hours:Web:ResponseCompressionForHttps");
                 options.Providers.Add<GzipCompressionProvider>();
             });
 
@@ -104,7 +118,7 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// <summary>
         /// Add configuration for Swagger
         /// </summary>
-        public static IServiceCollection AddMvp24HoursSwagger(this IServiceCollection services,
+        public static IServiceCollection AddMvp24HoursWebSwagger(this IServiceCollection services,
             string title, string version = "v1", string xmlCommentsFileName = null,
             bool enableExample = false, SwaggerAuthorizationScheme oAuthScheme = SwaggerAuthorizationScheme.None,
             IEnumerable<Type> authTypes = null)

@@ -21,6 +21,8 @@ namespace Mvp24Hours.Infrastructure.Extensions
         public static IServiceCollection AddMvp24HoursDbServiceAsync<TDbContext>(this IServiceCollection services, Func<IServiceProvider, TDbContext> dbFactory = null, Type repositoryAsync = null)
             where TDbContext : DbContext
         {
+            services.AddMvp24HoursLogging();
+
             services.AddScoped<IUnitOfWorkAsync>(x => new UnitOfWorkAsync());
 
             if (repositoryAsync != null)
@@ -50,6 +52,8 @@ namespace Mvp24Hours.Infrastructure.Extensions
         public static IServiceCollection AddMvp24HoursDbService<TDbContext>(this IServiceCollection services, Func<IServiceProvider, TDbContext> dbFactory = null, Type repository = null)
                where TDbContext : DbContext
         {
+            services.AddMvp24HoursLogging();
+
             services.AddScoped<IUnitOfWork>(x => new UnitOfWork());
 
             if (repository != null)

@@ -40,7 +40,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
         /// <summary>
         /// Add configuration
         /// </summary>
-        public static IServiceCollection AddMvp24HoursConfiguration(this IServiceCollection services, IConfiguration configuration)
+        internal static IServiceCollection AddMvp24HoursConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
             ConfigurationHelper.SetConfiguration(configuration);
             return services;

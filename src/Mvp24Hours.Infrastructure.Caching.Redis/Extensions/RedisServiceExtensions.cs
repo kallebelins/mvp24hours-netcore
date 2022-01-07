@@ -20,9 +20,20 @@ namespace Mvp24Hours.Infrastructure.Extensions
         /// <summary>
         /// See settings at: https://stackexchange.github.io/StackExchange.Redis/Configuration.html
         /// </summary>
-        public static IServiceCollection AddMvp24HoursRedisCache(this IServiceCollection services)
+        public static IServiceCollection AddMvp24HoursRedisCache(this IServiceCollection services, IConfiguration configuration = null)
         {
-            var redisConfiguration = ConfigurationHelper.GetSettings<ConfigurationOptions>("Mvp24Hours:Persistence:Redis");
+            services.AddMvp24HoursLogging();
+
+            ConfigurationOptions redisConfiguration = null;
+
+            if (configuration == null)
+            {
+                redisConfiguration = ConfigurationHelper.GetSettings<ConfigurationOptions>("Mvp24Hours:Persistence:Redis");
+            }
+            else
+            {
+                redisConfiguration = configuration.GetSection("Mvp24Hours:Persistence:Redis").Get<ConfigurationOptions>();
+            }
 
             if (redisConfiguration == null)
             {
@@ -58,6 +69,8 @@ namespace Mvp24Hours.Infrastructure.Extensions
         /// </summary>
         public static IServiceCollection AddMvp24HoursRedisCache(this IServiceCollection services, string connectionStringName, string instanceName = null)
         {
+            services.AddMvp24HoursLogging();
+
             services.AddDistributedRedisCache(options =>
             {
                 options.Configuration = ConfigurationHelper.AppSettings.GetConnectionString(connectionStringName);
