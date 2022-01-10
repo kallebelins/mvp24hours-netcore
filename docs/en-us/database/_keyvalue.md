@@ -35,7 +35,7 @@ You can use structural configuration or connection string.
 ### Installation
 ```csharp
 /// Package Manager Console >
-Install-Package Mvp24Hours.Infrastructure.Data.Caching.Redis
+Install-Package Mvp24Hours.Infrastructure.Caching.Redis
 ```
 
 ### Configuration
