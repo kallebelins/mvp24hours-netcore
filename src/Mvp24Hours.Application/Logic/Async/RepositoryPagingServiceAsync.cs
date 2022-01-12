@@ -50,7 +50,7 @@ namespace Mvp24Hours.Application.Logic
                     offset = criteria.Offset;
                 }
 
-                var repo = UnitOfWork.GetRepositoryAsync<TEntity>();
+                var repo = UnitOfWork.GetRepository<TEntity>();
 
                 var totalCount = await repo.GetByCountAsync(clause, cancellationToken: cancellationToken);
                 var totalPages = (int)Math.Ceiling((double)totalCount / limit);
@@ -95,7 +95,7 @@ namespace Mvp24Hours.Application.Logic
                     offset = criteria.Offset;
                 }
 
-                var repo = UnitOfWork.GetRepositoryAsync<TEntity>();
+                var repo = UnitOfWork.GetRepository<TEntity>();
 
                 var totalCount = await repo.ListCountAsync(cancellationToken: cancellationToken);
                 var totalPages = (int)Math.Ceiling((double)totalCount / limit);

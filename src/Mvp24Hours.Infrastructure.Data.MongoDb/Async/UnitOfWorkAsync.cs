@@ -45,7 +45,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         /// <summary>
         ///  <see cref="IUnitOfWorkAsync"/>
         /// </summary>
-        public IRepositoryAsync<T> GetRepositoryAsync<T>()
+        public IRepositoryAsync<T> GetRepository<T>()
             where T : class, IEntityBase
         {
             if (!repositories.ContainsKey(typeof(T)))

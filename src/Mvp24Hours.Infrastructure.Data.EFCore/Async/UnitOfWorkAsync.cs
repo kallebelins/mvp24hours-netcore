@@ -39,7 +39,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
 
         private readonly Dictionary<Type, object> repositories;
 
-        public IRepositoryAsync<T> GetRepositoryAsync<T>()
+        public IRepositoryAsync<T> GetRepository<T>()
             where T : class, IEntityBase
         {
             if (!this.repositories.ContainsKey(typeof(T)))
