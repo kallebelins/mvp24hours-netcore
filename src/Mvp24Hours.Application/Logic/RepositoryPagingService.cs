@@ -28,42 +28,14 @@ namespace Mvp24Hours.Application.Logic
         #region [ Implements IPagingBaseBO ]
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.GetBy(Expression{Func{T, bool}})"/>
-        /// </summary>
-        public IPagingResult<IList<TEntity>> GetByWithPagination(Expression<Func<TEntity, bool>> clause)
-        {
-            return GetByWithPagination(clause, null);
-        }
-
-        /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.GetBy(Expression{Func{T, bool}}, IPagingCriteria)"/>
         /// </summary>
-        public virtual IPagingResult<IList<TEntity>> GetByWithPagination(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria)
+        public virtual IPagingResult<IList<TEntity>> GetByWithPagination(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria = null)
         {
             try
             {
-                int limit = MaxQtyByQueryPage;
-                int offset = 0;
-
-                if (criteria != null)
-                {
-                    limit = criteria.Limit > 0 ? criteria.Limit : limit;
-                    offset = criteria.Offset;
-                }
-
                 var repo = UnitOfWork.GetRepository<TEntity>();
-
-                var totalCount = repo.GetByCount(clause);
-                var totalPages = (int)Math.Ceiling((double)totalCount / limit);
-
-                var items = repo.GetBy(clause, criteria);
-
-                var result = items.ToBusinessPaging(
-                    new PageResult(limit, offset, items.Count),
-                    new SummaryResult(totalCount, totalPages)
-                );
-
-                return result;
+                return repo.ToBusinessPaging(clause, criteria, MaxQtyByQueryPage);
             }
             catch (Exception ex)
             {
@@ -73,42 +45,14 @@ namespace Mvp24Hours.Application.Logic
         }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.List()"/>
-        /// </summary>
-        public IPagingResult<IList<TEntity>> ListWithPagination()
-        {
-            return this.ListWithPagination(null);
-        }
-
-        /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.List(IPagingCriteria)"/>
         /// </summary>
-        public virtual IPagingResult<IList<TEntity>> ListWithPagination(IPagingCriteria criteria)
+        public virtual IPagingResult<IList<TEntity>> ListWithPagination(IPagingCriteria criteria = null)
         {
             try
             {
-                int limit = MaxQtyByQueryPage;
-                int offset = 0;
-
-                if (criteria != null)
-                {
-                    limit = criteria.Limit > 0 ? criteria.Limit : limit;
-                    offset = criteria.Offset;
-                }
-
                 var repo = UnitOfWork.GetRepository<TEntity>();
-
-                var totalCount = repo.ListCount();
-                var totalPages = (int)Math.Ceiling((double)totalCount / limit);
-
-                var items = repo.List(criteria);
-
-                var result = items.ToBusinessPaging(
-                    new PageResult(limit, offset, items.Count),
-                    new SummaryResult(totalCount, totalPages)
-                );
-
-                return result;
+                return repo.ToBusinessPaging(criteria, MaxQtyByQueryPage);
             }
             catch (Exception ex)
             {

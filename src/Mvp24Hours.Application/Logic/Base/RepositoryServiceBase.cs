@@ -28,37 +28,24 @@ namespace Mvp24Hours.Application.Logic
         #region [ Properties ]
 
         private IUnitOfWork unitOfWork = null;
+        private ILoggingService logger = null;
 
         /// <summary>
         /// Gets unit of work instance
         /// </summary>
         /// <returns>T</returns>
-        protected virtual TUoW UnitOfWork
-        {
-            get { return (TUoW)(unitOfWork ??= ServiceProviderHelper.GetService<TUoW>()); }
-        }
-
-        ILoggingService logger = null;
+        protected virtual TUoW UnitOfWork => (TUoW)(unitOfWork ??= ServiceProviderHelper.GetService<TUoW>());
 
         /// <summary>
         /// Gets instance of log
         /// </summary>
         /// <returns>ILoggingService</returns>
-        protected virtual ILoggingService Logging
-        {
-            get { return logger ??= ServiceProviderHelper.GetService<ILoggingService>(); }
-        }
+        protected virtual ILoggingService Logging => logger ??= ServiceProviderHelper.GetService<ILoggingService>();
 
         /// <summary>
         /// Maximum amount returned in query
         /// </summary>
-        protected virtual int MaxQtyByQueryPage
-        {
-            get
-            {
-                return ConfigurationPropertiesHelper.MaxQtyByQueryPage;
-            }
-        }
+        protected virtual int MaxQtyByQueryPage => ConfigurationPropertiesHelper.MaxQtyByQueryPage;
 
         #endregion
 

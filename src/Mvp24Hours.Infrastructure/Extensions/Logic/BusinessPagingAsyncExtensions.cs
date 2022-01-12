@@ -5,10 +5,14 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Mvp24Hours.Core.Contract.Data;
+using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Core.ValueObjects.Logic;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Mvp24Hours.Infrastructure.Extensions
@@ -54,6 +58,62 @@ namespace Mvp24Hours.Infrastructure.Extensions
                 messages: new ReadOnlyCollection<IMessageResult>(messageResult ?? new List<IMessageResult>()),
                 token: tokenDefault
             );
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static async Task<IPagingResult<IList<TEntity>>> ToBusinessPagingAsync<TEntity>(this IRepositoryAsync<TEntity> repository, Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria = null, int maxQtyByQueryDefault = 300)
+            where TEntity : class, IEntityBase
+        {
+            int limit = maxQtyByQueryDefault;
+            int offset = 0;
+
+            if (criteria != null)
+            {
+                limit = criteria.Limit > 0 ? criteria.Limit : limit;
+                offset = criteria.Offset;
+            }
+
+            var totalCount = await repository.GetByCountAsync(clause);
+            var totalPages = (int)Math.Ceiling((double)totalCount / limit);
+
+            var items = await repository.GetByAsync(clause, criteria);
+
+            var result = items.ToBusinessPaging(
+                new PageResult(limit, offset, items.Count),
+                new SummaryResult(totalCount, totalPages)
+            );
+
+            return result;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static async Task<IPagingResult<IList<TEntity>>> ToBusinessPagingAsync<TEntity>(this IRepositoryAsync<TEntity> repository, IPagingCriteria criteria = null, int maxQtyByQueryDefault = 300)
+            where TEntity : class, IEntityBase
+        {
+            int limit = maxQtyByQueryDefault;
+            int offset = 0;
+
+            if (criteria != null)
+            {
+                limit = criteria.Limit > 0 ? criteria.Limit : limit;
+                offset = criteria.Offset;
+            }
+
+            var totalCount = await repository.ListCountAsync();
+            var totalPages = (int)Math.Ceiling((double)totalCount / limit);
+
+            var items = await repository.ListAsync(criteria);
+
+            var result = items.ToBusinessPaging(
+                new PageResult(limit, offset, items.Count),
+                new SummaryResult(totalCount, totalPages)
+            );
+
+            return result;
         }
     }
 }

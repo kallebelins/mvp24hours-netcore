@@ -20,20 +20,12 @@ namespace Mvp24Hours.Core.Contract.Logic
         where TEntity : IEntityBase
     {
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{TEntity}.List()"/>
-        /// </summary>
-        IPagingResult<IList<TEntity>> ListWithPagination();
-        /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{TEntity}.List(IPagingCriteria)"/>
         /// </summary>
-        IPagingResult<IList<TEntity>> ListWithPagination(IPagingCriteria criteria);
-        /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{TEntity}.GetBy(Expression{Func{TEntity, bool}})"/>
-        /// </summary>
-        IPagingResult<IList<TEntity>> GetByWithPagination(Expression<Func<TEntity, bool>> clause);
+        IPagingResult<IList<TEntity>> ListWithPagination(IPagingCriteria criteria = null);
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Data.IQuery{TEntity}.GetBy(Expression{Func{TEntity, bool}}, IPagingCriteria)"/>
         /// </summary>
-        IPagingResult<IList<TEntity>> GetByWithPagination(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria);
+        IPagingResult<IList<TEntity>> GetByWithPagination(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria = null);
     }
 }

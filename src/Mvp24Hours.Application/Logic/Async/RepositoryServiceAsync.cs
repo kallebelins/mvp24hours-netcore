@@ -36,13 +36,9 @@ namespace Mvp24Hours.Application.Logic
         /// Gets repository instance
         /// </summary>
         /// <returns>T</returns>
-        protected virtual IRepositoryAsync<TEntity> Repository
-        {
-            get { return repository ??= UnitOfWork.GetRepository<TEntity>(); }
-        }
+        protected virtual IRepositoryAsync<TEntity> Repository => repository ??= UnitOfWork.GetRepository<TEntity>();
 
         #endregion
-
 
         #region [ Implements IQueryServiceAsync ]
 

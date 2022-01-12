@@ -33,10 +33,7 @@ namespace Mvp24Hours.Application.Logic
         /// Gets repository instance
         /// </summary>
         /// <returns>T</returns>
-        protected virtual IRepository<TEntity> Repository
-        {
-            get { return repository ??= UnitOfWork.GetRepository<TEntity>(); }
-        }
+        protected virtual IRepository<TEntity> Repository => repository ??= UnitOfWork.GetRepository<TEntity>();
 
         #endregion
 

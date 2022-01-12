@@ -20,20 +20,12 @@ namespace Mvp24Hours.Core.Contract.Logic
     public interface IQueryPagingServiceAsync<TEntity> where TEntity : class
     {
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync{TEntity}.ListAsync(CancellationToken)"/>
-        /// </summary>
-        Task<IPagingResult<IList<TEntity>>> ListWithPaginationAsync(CancellationToken cancellationToken = default);
-        /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync{TEntity}.ListAsync(IPagingCriteria, CancellationToken)"/>
         /// </summary>
-        Task<IPagingResult<IList<TEntity>>> ListWithPaginationAsync(IPagingCriteria criteria, CancellationToken cancellationToken = default);
-        /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync{TEntity}.GetByAsync(Expression{Func{TEntity, bool}}, CancellationToken)"/>
-        /// </summary>
-        Task<IPagingResult<IList<TEntity>>> GetByWithPaginationAsync(Expression<Func<TEntity, bool>> clause, CancellationToken cancellationToken = default);
+        Task<IPagingResult<IList<TEntity>>> ListWithPaginationAsync(IPagingCriteria criteria = null, CancellationToken cancellationToken = default);
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync{TEntity}.GetByAsync(Expression{Func{TEntity, bool}}, IPagingCriteria, CancellationToken)"/>
         /// </summary>
-        Task<IPagingResult<IList<TEntity>>> GetByWithPaginationAsync(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria, CancellationToken cancellationToken = default);
+        Task<IPagingResult<IList<TEntity>>> GetByWithPaginationAsync(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria = null, CancellationToken cancellationToken = default);
     }
 }
