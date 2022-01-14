@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Mvp24Hours.Infrastructure.Extensions
+namespace Mvp24Hours.Extensions
 {
     /// <summary>
     /// 

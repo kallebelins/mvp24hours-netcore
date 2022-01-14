@@ -6,9 +6,6 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Domain.Entity;
-using Mvp24Hours.Core.Contract.Domain.Validations;
-using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
@@ -19,7 +16,7 @@ namespace Mvp24Hours.Core.Entities
     /// <summary>
     /// Represents an entity
     /// </summary>
-    public abstract class EntityBase<TObject, TKey> : IEntityBase, IValidationModel<TObject>
+    public abstract class EntityBase<TObject, TKey> : IEntityBase
     {
         #region [ Primitive members ]
 
@@ -35,37 +32,6 @@ namespace Mvp24Hours.Core.Entities
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [DataMember]
         public virtual TKey Id { get; set; }
-
-        #endregion
-
-        #region [ Valid ]
-
-        /// <summary>
-        /// Checks whether the entity meets the specification (default true)
-        /// </summary>
-        /// <returns>true|false</returns>
-        public virtual bool IsValid(INotificationContext context)
-        {
-            var results = new List<ValidationResult>();
-            var contexto = new ValidationContext(this, null, null);
-            if (!Validator.TryValidateObject(this, contexto, results, true))
-            {
-                if (context != null)
-                {
-                    foreach (var item in results)
-                    {
-                        context.Add(string.Join("|", item.MemberNames), item.ErrorMessage, Enums.MessageType.Error);
-                    }
-                }
-                return false;
-            }
-            return true;
-        }
-
-        public bool IsValid()
-        {
-            return IsValid(null);
-        }
 
         #endregion
     }

@@ -11,7 +11,7 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace Mvp24Hours.Infrastructure.Extensions
+namespace Mvp24Hours.Extensions
 {
     public static class ModelBuilderExtensions
     {

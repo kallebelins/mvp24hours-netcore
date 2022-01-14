@@ -7,11 +7,11 @@
 //=====================================================================================
 using Microsoft.Extensions.Caching.Distributed;
 using Mvp24Hours.Core.Contract.Infrastructure.Logging;
-using Mvp24Hours.Infrastructure.Extensions;
+using Mvp24Hours.Extensions;
 using Newtonsoft.Json;
 using System;
 
-namespace Mvp24Hours.Infrastructure.Helpers
+namespace Mvp24Hours.Helpers
 {
     public static class ObjectCacheHelper
     {

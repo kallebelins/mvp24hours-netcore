@@ -6,8 +6,7 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Infrastructure.Logging;
-using Mvp24Hours.Core.Extensions;
-using Mvp24Hours.Infrastructure.Extensions;
+using Mvp24Hours.Extensions;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -19,7 +18,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace Mvp24Hours.Infrastructure.Helpers
+namespace Mvp24Hours.Helpers
 {
     /// <summary>
     /// Contains functions for web requests

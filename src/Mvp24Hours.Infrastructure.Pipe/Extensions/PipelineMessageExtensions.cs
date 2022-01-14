@@ -7,12 +7,11 @@
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
-using Mvp24Hours.Core.Extensions;
-using Mvp24Hours.Infrastructure.Helpers;
+using Mvp24Hours.Helpers;
 using Mvp24Hours.Infrastructure.Pipe;
 using System.Collections.Generic;
 
-namespace Mvp24Hours.Infrastructure.Extensions
+namespace Mvp24Hours.Extensions
 {
     /// <summary>
     /// 

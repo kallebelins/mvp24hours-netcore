@@ -6,7 +6,7 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
-using Mvp24Hours.Infrastructure.Helpers;
+using Mvp24Hours.Helpers;
 
 namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom.Files
 {

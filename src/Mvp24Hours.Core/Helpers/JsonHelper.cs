@@ -6,7 +6,7 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using System.Collections.Generic;
 
-namespace Mvp24Hours.Infrastructure.Helpers
+namespace Mvp24Hours.Helpers
 {
     /// <summary>
     /// 

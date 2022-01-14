@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Mvp24Hours.Infrastructure.Extensions
+namespace Mvp24Hours.Extensions
 {
     public static class TaskExtensions
     {

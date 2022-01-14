@@ -6,7 +6,7 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Microsoft.AspNetCore.Http.Features;
-using Mvp24Hours.Infrastructure.Helpers;
+using Mvp24Hours.Helpers;
 using NLog;
 using NLog.Config;
 using NLog.LayoutRenderers;

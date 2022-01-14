@@ -8,7 +8,7 @@
 using Microsoft.AspNetCore.Http;
 using System.Linq;
 
-namespace Mvp24Hours.Infrastructure.Helpers
+namespace Mvp24Hours.Helpers
 {
     /// <summary>
     /// Contains functions to register and obtain context of the application that is running
@@ -23,6 +23,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
         public static void SetContext(IHttpContextAccessor accessor)
         {
             httpContextAccessor = accessor;
+            ServiceProviderHelper.SetProvider(accessor?.HttpContext?.RequestServices);
         }
         /// <summary>
         /// Get individual HTTP request context
@@ -36,7 +37,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
         /// </summary>
         public static string GetUserIP()
         {
-            var context = HttpContextHelper.GetContext();
+            var context = GetContext();
 
             if (context != null)
             {

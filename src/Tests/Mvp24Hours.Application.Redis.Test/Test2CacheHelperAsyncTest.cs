@@ -7,8 +7,8 @@
 //=====================================================================================
 using Mvp24Hours.Application.Redis.Test.Support.Entities;
 using Mvp24Hours.Application.Redis.Test.Support.Helpers;
-using Mvp24Hours.Infrastructure.Extensions;
-using Mvp24Hours.Infrastructure.Helpers;
+using Mvp24Hours.Extensions;
+using Mvp24Hours.Helpers;
 using System;
 using System.Threading.Tasks;
 using Xunit;

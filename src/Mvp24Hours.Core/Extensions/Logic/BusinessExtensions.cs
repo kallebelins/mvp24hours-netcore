@@ -7,27 +7,23 @@
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
-using Mvp24Hours.Core.DTOs;
-using Mvp24Hours.Core.Extensions;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
 
-namespace Mvp24Hours.Infrastructure.Extensions
+namespace Mvp24Hours.Extensions
 {
     /// <summary>
     /// 
     /// </summary>
-    public static class BusinessAsyncExtensions
+    public static class BusinessExtensions
     {
         /// <summary>
         /// Transform a message into a business object
         /// </summary>
-        public static async Task<IBusinessResult<T>> ToBusinessAsync<T>(this Task<IPipelineMessage> messageAsync, string key = null, string tokenDefault = null)
+        public static IBusinessResult<T> ToBusiness<T>(this IPipelineMessage message, string key = null, string tokenDefault = null)
         {
-            var message = await messageAsync;
             if (message != null)
             {
                 return new BusinessResult<T>(
@@ -39,16 +35,14 @@ namespace Mvp24Hours.Infrastructure.Extensions
             return new BusinessResult<T>(token: tokenDefault);
         }
 
-
         /// <summary>
         /// Encapsulates object for business
         /// </summary>
-        public static async Task<IBusinessResult<T>> ToBusinessAsync<T>(this Task<IMessageResult> messageResultAsync, string tokenDefault = null)
+        public static IBusinessResult<T> ToBusiness<T>(this IMessageResult messageResult, string tokenDefault = null)
         {
-            var messageResult = await messageResultAsync;
             if (messageResult != null)
             {
-                return await ToBusinessAsync<T>(default, new List<IMessageResult> { messageResult }, tokenDefault);
+                return ToBusiness<T>(default, new List<IMessageResult> { messageResult }, tokenDefault);
             }
             return new BusinessResult<T>(token: tokenDefault);
         }
@@ -56,12 +50,11 @@ namespace Mvp24Hours.Infrastructure.Extensions
         /// <summary>
         /// Encapsulates object for business
         /// </summary>
-        public static async Task<IBusinessResult<T>> ToBusinessAsync<T>(this Task<IList<IMessageResult>> messageResultAsync, string tokenDefault = null)
+        public static IBusinessResult<T> ToBusiness<T>(this IList<IMessageResult> messageResult, string tokenDefault = null)
         {
-            var messageResult = await messageResultAsync;
             if (messageResult != null)
             {
-                return await ToBusinessAsync<T>(default, messageResult, tokenDefault);
+                return ToBusiness<T>(default, messageResult, tokenDefault);
             }
             return new BusinessResult<T>(token: tokenDefault);
         }
@@ -69,45 +62,11 @@ namespace Mvp24Hours.Infrastructure.Extensions
         /// <summary>
         /// Encapsulates object for business
         /// </summary>
-        public static async Task<IBusinessResult<T>> ToBusinessAsync<T>(this Task<T> valueAsync, IMessageResult messageResult, string tokenDefault = null)
+        public static IBusinessResult<T> ToBusiness<T>(this T value, IMessageResult messageResult, string tokenDefault = null)
         {
-            var value = await valueAsync;
-            if (value != null)
-            {
-                return new BusinessResult<T>(
-                    token: tokenDefault,
-                    data: value,
-                    messages: new ReadOnlyCollection<IMessageResult>(new List<IMessageResult>() { messageResult })
-                );
-            }
-            return new BusinessResult<T>(token: tokenDefault);
-        }
-
-        /// <summary>
-        /// Encapsulates object for business
-        /// </summary>
-        public static async Task<IBusinessResult<T>> ToBusinessAsync<T>(this Task<T> valueAsync, IList<IMessageResult> messageResult = null, string tokenDefault = null)
-        {
-            var value = await valueAsync;
-            if (value != null)
-            {
-                return new BusinessResult<T>(
-                    token: tokenDefault,
-                    data: value,
-                    messages: new ReadOnlyCollection<IMessageResult>(messageResult?.ToList() ?? new List<IMessageResult>())
-                );
-            }
-            return new BusinessResult<T>(token: tokenDefault);
-        }
-
-        /// <summary>
-        /// Encapsulates object for business
-        /// </summary>
-        public static async Task<IBusinessResult<VoidResult>> ToBusinessAsync(this Task task, IMessageResult messageResult, string tokenDefault = null)
-        {
-            await task;
-            return new BusinessResult<VoidResult>(
+            return new BusinessResult<T>(
                 token: tokenDefault,
+                data: value,
                 messages: new ReadOnlyCollection<IMessageResult>(new List<IMessageResult>() { messageResult })
             );
         }
@@ -115,18 +74,17 @@ namespace Mvp24Hours.Infrastructure.Extensions
         /// <summary>
         /// Encapsulates object for business
         /// </summary>
-        public static async Task<IBusinessResult<VoidResult>> ToBusinessAsync(this Task task, IList<IMessageResult> messageResult = null, string tokenDefault = null)
+        public static IBusinessResult<T> ToBusiness<T>(this T value, IList<IMessageResult> messageResult = null, string tokenDefault = null)
         {
-            await task;
-            return new BusinessResult<VoidResult>(
+            return new BusinessResult<T>(
                 token: tokenDefault,
+                data: value,
                 messages: new ReadOnlyCollection<IMessageResult>(messageResult?.ToList() ?? new List<IMessageResult>())
             );
         }
 
-        public static async Task<bool> HasDataAsync<T>(this Task<IBusinessResult<T>> valueAsync)
+        public static bool HasData<T>(this IBusinessResult<T> value)
         {
-            var value = await valueAsync;
             if (value == null || value.Data == null)
             {
                 return false;
@@ -140,9 +98,8 @@ namespace Mvp24Hours.Infrastructure.Extensions
             return true;
         }
 
-        public static async Task<T> GetDataValueAsync<T>(this Task<IBusinessResult<T>> valueAsync)
+        public static T GetDataValue<T>(this IBusinessResult<T> value)
         {
-            var value = await valueAsync;
             if (value.HasData())
             {
                 return value.Data;
@@ -150,9 +107,8 @@ namespace Mvp24Hours.Infrastructure.Extensions
             return default;
         }
 
-        public static async Task<int> GetDataCountAsync<T>(this Task<IBusinessResult<T>> valueAsync)
+        public static int GetDataCount<T>(this IBusinessResult<T> value)
         {
-            var value = await valueAsync;
             if (value.HasData())
             {
                 if (value.Data.IsList<T>())
@@ -167,9 +123,8 @@ namespace Mvp24Hours.Infrastructure.Extensions
             return 0;
         }
 
-        public static async Task<bool> HasDataCountAsync<T>(this Task<IBusinessResult<T>> valueAsync, int count)
+        public static bool HasDataCount<T>(this IBusinessResult<T> value, int count)
         {
-            var value = await valueAsync;
             if (value.HasData())
             {
                 if (value.Data.IsList<T>())
@@ -180,9 +135,8 @@ namespace Mvp24Hours.Infrastructure.Extensions
             return false;
         }
 
-        public static async Task<object> GetDataFirstOrDefaultAsync<T>(this Task<IBusinessResult<T>> valueAsync)
+        public static object GetDataFirstOrDefault<T>(this IBusinessResult<T> value)
         {
-            var value = await valueAsync;
             if (value.HasData())
             {
                 if (value.Data.IsList<T>())
@@ -196,6 +150,5 @@ namespace Mvp24Hours.Infrastructure.Extensions
             }
             return null;
         }
-
     }
 }

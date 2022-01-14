@@ -5,8 +5,6 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-using Mvp24Hours.Core.Contract.Domain.Validations;
-using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +14,7 @@ namespace Mvp24Hours.Core.ValueObjects
     /// <summary>
     /// Base value object
     /// </summary>
-    public abstract class BaseVO : IValidationModel<BaseVO>
+    public abstract class BaseVO
     {
         #region [ Equality ]
         /// <summary>
@@ -79,24 +77,6 @@ namespace Mvp24Hours.Core.ValueObjects
         public static bool operator !=(BaseVO a, BaseVO b)
         {
             return !(a == b);
-        }
-
-        #endregion
-
-        #region [ Valid ]
-
-        /// <summary>
-        /// Checks whether the model meets specifications (default true)
-        /// </summary>
-        /// <returns>true|false</returns>
-        public virtual bool IsValid()
-        {
-            return true;
-        }
-
-        public virtual bool IsValid(INotificationContext context)
-        {
-            return IsValid();
         }
 
         #endregion

@@ -6,8 +6,8 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using MongoDB.Driver;
-using Mvp24Hours.Core.Extensions;
-using Mvp24Hours.Infrastructure.Helpers;
+using Mvp24Hours.Extensions;
+using Mvp24Hours.Helpers;
 using System;
 using System.Threading;
 using System.Threading.Tasks;

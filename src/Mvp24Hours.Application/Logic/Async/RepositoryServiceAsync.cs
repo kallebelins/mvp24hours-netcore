@@ -9,8 +9,7 @@ using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.Logic;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
-using Mvp24Hours.Core.Extensions;
-using Mvp24Hours.Infrastructure.Extensions;
+using Mvp24Hours.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -210,7 +209,7 @@ namespace Mvp24Hours.Application.Logic
         {
             try
             {
-                if (await Validate(entity))
+                if (entity.Validate())
                 {
                     await this.UnitOfWork
                         .GetRepository<TEntity>()
@@ -247,7 +246,7 @@ namespace Mvp24Hours.Application.Logic
         {
             try
             {
-                if (await Validate(entity))
+                if (entity.Validate())
                 {
                     await this.UnitOfWork.GetRepository<TEntity>().ModifyAsync(entity, cancellationToken: cancellationToken);
                     return await this.UnitOfWork.SaveChangesAsync(cancellationToken: cancellationToken);

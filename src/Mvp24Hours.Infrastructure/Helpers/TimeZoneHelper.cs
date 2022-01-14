@@ -9,12 +9,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Mvp24Hours.Infrastructure.Helpers
+namespace Mvp24Hours.Helpers
 {
     /// <summary>
     /// Contains timezone functions
     /// </summary>
-    public class TimeZoneHelper
+    public static class TimeZoneHelper
     {
         /// <summary>
         /// Get current date and time based on South America time zone

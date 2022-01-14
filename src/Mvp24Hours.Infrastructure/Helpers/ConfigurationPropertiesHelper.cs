@@ -6,7 +6,7 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 
-namespace Mvp24Hours.Infrastructure.Helpers
+namespace Mvp24Hours.Helpers
 {
     /// <summary>
     /// Contains pre-loaded configurations

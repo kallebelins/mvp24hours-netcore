@@ -8,9 +8,9 @@
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Core.Enums;
 using Mvp24Hours.Core.Enums.Infrastructure;
-using Mvp24Hours.Core.Extensions;
 using Mvp24Hours.Core.ValueObjects.Logic;
-using Mvp24Hours.Infrastructure.Helpers;
+using Mvp24Hours.Extensions;
+using Mvp24Hours.Helpers;
 using Mvp24Hours.Infrastructure.Pipe.Operations;
 using System;
 using System.Collections.Generic;

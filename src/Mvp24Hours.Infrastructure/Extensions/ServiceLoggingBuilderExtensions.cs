@@ -11,7 +11,7 @@ using NLog;
 using NLog.Config;
 using NLog.Targets;
 
-namespace Mvp24Hours.Infrastructure.Extensions
+namespace Mvp24Hours.Extensions
 {
     public static class ServiceLoggingBuilderExtensions
     {

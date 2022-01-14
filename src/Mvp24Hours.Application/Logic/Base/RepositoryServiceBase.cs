@@ -5,16 +5,9 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-using FluentValidation;
 using Mvp24Hours.Core.Contract.Data;
-using Mvp24Hours.Core.Contract.Domain.Entity;
-using Mvp24Hours.Core.Contract.Domain.Validations;
-using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Contract.Infrastructure.Logging;
-using Mvp24Hours.Core.ValueObjects.Infrastructure;
-using Mvp24Hours.Infrastructure.Helpers;
-using System;
-using System.Linq;
+using Mvp24Hours.Helpers;
 
 namespace Mvp24Hours.Application.Logic
 {
@@ -47,54 +40,6 @@ namespace Mvp24Hours.Application.Logic
         /// </summary>
         protected virtual int MaxQtyByQueryPage => ConfigurationPropertiesHelper.MaxQtyByQueryPage;
 
-        #endregion
-
-        #region [ Methods ]
-        protected virtual bool Validate<TEntity>(TEntity entity) where TEntity : class, IEntityBase
-        {
-            try
-            {
-                var context = ServiceProviderHelper.GetService<INotificationContext>();
-                var validator = ServiceProviderHelper.GetService<IValidator<TEntity>>();
-                if (validator != null)
-                {
-                    var validationResult = validator.Validate(entity);
-                    if (!validationResult.IsValid)
-                    {
-                        if (context != null)
-                        {
-                            var notifications = validationResult.Errors
-                            .Select(x => new Notification(x.ErrorCode, x.ErrorMessage, Core.Enums.MessageType.Error))
-                            .ToList();
-
-                            context.Add(notifications);
-                        }
-
-                        return false;
-                    }
-                }
-                else
-                {
-                    bool isValidationModel = entity.GetType()?.GetInterfaces()?.Any(x => x == typeof(IValidationModel<TEntity>)) ?? false;
-                    isValidationModel = isValidationModel || (entity.GetType()?.BaseType?.GetInterfaces()?.Any(x => x == typeof(IValidationModel<TEntity>)) ?? false);
-
-                    if (isValidationModel)
-                    {
-                        if (!((IValidationModel<TEntity>)entity).IsValid(context))
-                        {
-                            return false;
-                        }
-                    }
-                }
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logging.Error(ex);
-                throw;
-            }
-        }
         #endregion
     }
 }

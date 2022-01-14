@@ -10,7 +10,7 @@ using Mvp24Hours.Core.Enums;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using System.Collections.Generic;
 
-namespace Mvp24Hours.Infrastructure.Extensions
+namespace Mvp24Hours.Extensions
 {
     /// <summary>
     /// 

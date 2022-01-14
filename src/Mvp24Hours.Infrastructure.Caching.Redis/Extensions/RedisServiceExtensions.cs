@@ -7,13 +7,13 @@
 //=====================================================================================
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Mvp24Hours.Infrastructure.Helpers;
+using Mvp24Hours.Helpers;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Mvp24Hours.Infrastructure.Extensions
+namespace Mvp24Hours.Extensions
 {
     public static class RedisServiceExtensions
     {

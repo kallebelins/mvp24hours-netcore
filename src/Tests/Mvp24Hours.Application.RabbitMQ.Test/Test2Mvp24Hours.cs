@@ -1,7 +1,7 @@
 using Mvp24Hours.Application.RabbitMQ.Test.Support.Consumers;
 using Mvp24Hours.Application.RabbitMQ.Test.Support.Dto;
 using Mvp24Hours.Application.RabbitMQ.Test.Support.Helpers;
-using Mvp24Hours.Infrastructure.Helpers;
+using Mvp24Hours.Helpers;
 using System;
 using System.Threading;
 using Xunit;

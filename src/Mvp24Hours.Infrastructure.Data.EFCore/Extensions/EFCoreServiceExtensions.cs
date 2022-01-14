@@ -11,7 +11,7 @@ using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Infrastructure.Data.EFCore;
 using System;
 
-namespace Mvp24Hours.Infrastructure.Extensions
+namespace Mvp24Hours.Extensions
 {
     public static class EFCoreServiceExtensions
     {

@@ -5,13 +5,12 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-using Mvp24Hours.Core.Extensions;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Mvp24Hours.Infrastructure.Extensions.Data
+namespace Mvp24Hours.Extensions.Data
 {
     /// <summary>
     /// 

@@ -7,7 +7,7 @@
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Core.ValueObjects.RabbitMQ;
-using Mvp24Hours.Infrastructure.Helpers;
+using Mvp24Hours.Helpers;
 using RabbitMQ.Client;
 using System;
 

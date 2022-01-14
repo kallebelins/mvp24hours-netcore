@@ -8,7 +8,7 @@
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Core.Enums.Infrastructure;
-using Mvp24Hours.Infrastructure.Helpers;
+using Mvp24Hours.Helpers;
 using System.Collections.Generic;
 
 namespace Mvp24Hours.WebAPI.Extensions

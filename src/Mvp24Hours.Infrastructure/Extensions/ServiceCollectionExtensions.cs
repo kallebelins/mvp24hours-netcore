@@ -11,12 +11,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Core.Mappings;
+using Mvp24Hours.Helpers;
 using Mvp24Hours.Infrastructure.Contexts;
-using Mvp24Hours.Infrastructure.Helpers;
 using Mvp24Hours.Infrastructure.Logging;
 using System.Reflection;
 
-namespace Mvp24Hours.Infrastructure.Extensions
+namespace Mvp24Hours.Extensions
 {
     /// <summary>
     /// 

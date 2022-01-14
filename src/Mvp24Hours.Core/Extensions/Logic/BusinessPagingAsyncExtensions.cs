@@ -8,6 +8,7 @@
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
+using Mvp24Hours.Core.DTOs.Models;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using System;
 using System.Collections.Generic;
@@ -15,13 +16,24 @@ using System.Collections.ObjectModel;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Mvp24Hours.Infrastructure.Extensions
+namespace Mvp24Hours.Extensions
 {
     /// <summary>
     /// 
     /// </summary>
     public static class BusinessPagingAsyncExtensions
     {
+        public static async Task<IPagingCriteria> ToPagingCriteriaAsync(this Task<PagingCriteriaRequest> requestAsync)
+        {
+            var request = await requestAsync;
+            return new PagingCriteria(
+                request.Limit,
+                request.Offset,
+                new ReadOnlyCollection<string>(request.OrderBy ?? new List<string>()),
+                new ReadOnlyCollection<string>(request.Navigation ?? new List<string>())
+            );
+        }
+
         /// <summary>
         /// 
         /// </summary>

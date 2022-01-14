@@ -12,8 +12,8 @@ using Mvp24Hours.Application.PostgreSql.Test.Support.Data;
 using Mvp24Hours.Application.PostgreSql.Test.Support.Entities;
 using Mvp24Hours.Application.PostgreSql.Test.Support.Services;
 using Mvp24Hours.Application.PostgreSql.Test.Support.Services.Async;
-using Mvp24Hours.Infrastructure.Extensions;
-using Mvp24Hours.Infrastructure.Helpers;
+using Mvp24Hours.Extensions;
+using Mvp24Hours.Helpers;
 using System;
 using System.Collections.Generic;
 

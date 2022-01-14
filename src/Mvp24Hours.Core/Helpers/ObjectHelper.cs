@@ -5,14 +5,14 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-using Mvp24Hours.Infrastructure.Extensions;
+using Mvp24Hours.Extensions;
 using System;
 using System.Dynamic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace Mvp24Hours.Infrastructure.Helpers
+namespace Mvp24Hours.Helpers
 {
     /// <summary>
     /// Contains functions to transform object (clone, serialize, ...)

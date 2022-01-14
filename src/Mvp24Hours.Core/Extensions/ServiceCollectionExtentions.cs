@@ -10,12 +10,12 @@ using System;
 using System.Linq;
 using System.Reflection;
 
-namespace Mvp24Hours.Infrastructure.Extensions
+namespace Mvp24Hours.Extensions
 {
     /// <summary>
     /// 
     /// </summary>
-    public static class ServiceHelperExtentions
+    public static class ServiceCollectionExtentions
     {
         /// <summary>
         /// Checks if the type has already been added to the service collection

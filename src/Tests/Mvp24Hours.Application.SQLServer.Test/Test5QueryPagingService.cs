@@ -9,7 +9,7 @@ using Mvp24Hours.Application.SQLServer.Test.Support.Entities;
 using Mvp24Hours.Application.SQLServer.Test.Support.Helpers;
 using Mvp24Hours.Application.SQLServer.Test.Support.Services;
 using Mvp24Hours.Core.ValueObjects.Logic;
-using Mvp24Hours.Infrastructure.Helpers;
+using Mvp24Hours.Helpers;
 using System.Collections.Generic;
 using Xunit;
 using Xunit.Priority;

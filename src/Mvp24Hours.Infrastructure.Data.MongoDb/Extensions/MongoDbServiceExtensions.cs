@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Infrastructure.Data.MongoDb;
 
-namespace Mvp24Hours.Infrastructure.Extensions
+namespace Mvp24Hours.Extensions
 {
     public static class MongoDbServiceExtensions
     {

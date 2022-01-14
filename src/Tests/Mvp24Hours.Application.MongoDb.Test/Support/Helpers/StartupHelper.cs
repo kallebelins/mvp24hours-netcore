@@ -7,8 +7,8 @@
 //=====================================================================================
 using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Application.MongoDb.Test.Support.Services;
-using Mvp24Hours.Infrastructure.Extensions;
-using Mvp24Hours.Infrastructure.Helpers;
+using Mvp24Hours.Extensions;
+using Mvp24Hours.Helpers;
 
 namespace Mvp24Hours.Application.MongoDb.Test.Support.Helpers
 {

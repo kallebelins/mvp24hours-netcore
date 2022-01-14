@@ -7,8 +7,8 @@
 //=====================================================================================
 using Microsoft.Extensions.Caching.Distributed;
 using Mvp24Hours.Core.Contract.Data;
+using Mvp24Hours.Extensions;
 using Mvp24Hours.Infrastructure.Caching.Base;
-using Mvp24Hours.Infrastructure.Extensions;
 
 namespace Mvp24Hours.Infrastructure.Caching
 {

@@ -1,4 +1,4 @@
-using Mvp24Hours.Core.Extensions;
+using Mvp24Hours.Extensions;
 using System.Collections.Generic;
 
 namespace Mvp24Hours.Infrastructure.Pipe.Resolvers

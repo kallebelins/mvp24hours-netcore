@@ -8,19 +8,30 @@
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
+using Mvp24Hours.Core.DTOs.Models;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq.Expressions;
 
-namespace Mvp24Hours.Infrastructure.Extensions
+namespace Mvp24Hours.Extensions
 {
     /// <summary>
     /// 
     /// </summary>
     public static class BusinessPagingExtensions
     {
+        public static IPagingCriteria ToPagingCriteria(this PagingCriteriaRequest request)
+        {
+            return new PagingCriteria(
+                request.Limit,
+                request.Offset,
+                new ReadOnlyCollection<string>(request.OrderBy ?? new List<string>()),
+                new ReadOnlyCollection<string>(request.Navigation ?? new List<string>())
+            );
+        }
+
         /// <summary>
         /// 
         /// </summary>

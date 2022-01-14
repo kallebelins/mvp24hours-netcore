@@ -1,7 +1,7 @@
 using AutoMapper;
 using System.Linq;
 
-namespace Mvp24Hours.Infrastructure.Helpers
+namespace Mvp24Hours.Helpers
 {
     /// <summary>
     /// Helper class to assist in mapping multiple entities to one single

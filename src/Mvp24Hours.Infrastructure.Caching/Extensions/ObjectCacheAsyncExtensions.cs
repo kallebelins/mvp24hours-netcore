@@ -7,14 +7,13 @@
 //=====================================================================================
 using Microsoft.Extensions.Caching.Distributed;
 using Mvp24Hours.Core.Contract.Infrastructure.Logging;
-using Mvp24Hours.Core.Extensions;
-using Mvp24Hours.Infrastructure.Helpers;
+using Mvp24Hours.Helpers;
 using Newtonsoft.Json;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Mvp24Hours.Infrastructure.Extensions
+namespace Mvp24Hours.Extensions
 {
     public static class ObjectCacheAsyncExtensions
     {

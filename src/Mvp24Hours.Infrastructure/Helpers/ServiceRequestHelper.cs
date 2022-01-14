@@ -3,7 +3,7 @@ using System;
 using System.Net;
 using System.ServiceModel;
 
-namespace Mvp24Hours.Infrastructure.Helpers
+namespace Mvp24Hours.Helpers
 {
     /// <summary>
     /// 

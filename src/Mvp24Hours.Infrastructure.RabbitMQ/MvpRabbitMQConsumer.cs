@@ -6,7 +6,7 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Mvp24Hours.Core.ValueObjects.RabbitMQ;
-using Mvp24Hours.Infrastructure.Extensions;
+using Mvp24Hours.Extensions;
 using Mvp24Hours.Infrastructure.RabbitMQ.Core.Contract;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;

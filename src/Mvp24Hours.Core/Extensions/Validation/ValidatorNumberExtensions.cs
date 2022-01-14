@@ -5,7 +5,7 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-namespace Mvp24Hours.Core.Extensions
+namespace Mvp24Hours.Extensions
 {
     public static class ValidatorNumberExtensions
     {

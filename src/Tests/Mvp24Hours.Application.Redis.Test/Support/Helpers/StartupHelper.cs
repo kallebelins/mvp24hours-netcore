@@ -8,9 +8,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Application.Redis.Test.Support.Entities;
 using Mvp24Hours.Core.Contract.Data;
+using Mvp24Hours.Extensions;
+using Mvp24Hours.Helpers;
 using Mvp24Hours.Infrastructure.Caching;
-using Mvp24Hours.Infrastructure.Extensions;
-using Mvp24Hours.Infrastructure.Helpers;
 
 namespace Mvp24Hours.Application.Redis.Test.Support.Helpers
 {

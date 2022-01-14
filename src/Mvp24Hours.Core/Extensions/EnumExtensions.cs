@@ -9,7 +9,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
-namespace Mvp24Hours.Core.Extensions
+namespace Mvp24Hours.Extensions
 {
     public static class EnumExtensions
     {

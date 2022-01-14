@@ -13,7 +13,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Mvp24Hours.Core.Extensions
+namespace Mvp24Hours.Extensions
 {
     public static class ConvertExtensions
     {

@@ -7,7 +7,7 @@
 //=====================================================================================
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
-using Mvp24Hours.Core.Extensions;
+using Mvp24Hours.Extensions;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;

@@ -7,7 +7,7 @@
 //=====================================================================================
 using System;
 
-namespace Mvp24Hours.Core.Extensions
+namespace Mvp24Hours.Extensions
 {
     public static class GuidExtensions
     {
