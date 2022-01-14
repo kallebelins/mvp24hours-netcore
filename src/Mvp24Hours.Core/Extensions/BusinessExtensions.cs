@@ -13,9 +13,9 @@ using System.Collections.ObjectModel;
 
 namespace Mvp24Hours.Core.Extensions
 {
-    public static class ConvertLogicExtensions
+    public static class BusinessExtensions
     {
-        public static IPagingCriteria ToPagingService(this PagingCriteriaRequest request)
+        public static IPagingCriteria ToPagingCriteria(this PagingCriteriaRequest request)
         {
             return new PagingCriteria(
                 request.Limit,

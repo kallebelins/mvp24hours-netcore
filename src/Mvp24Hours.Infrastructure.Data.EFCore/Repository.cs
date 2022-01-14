@@ -256,7 +256,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                 return;
             }
 
-            var entityDb = this.dbContext.Set<T>().Find(entity.EntityKey);
+            var entityDb = this.dbContext.Set<T>().Find(new object[] { entity.EntityKey });
 
             if (entityDb == null)
             {

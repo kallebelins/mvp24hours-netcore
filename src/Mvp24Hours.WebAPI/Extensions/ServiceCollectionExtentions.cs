@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
@@ -39,8 +40,10 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// <summary>
         /// Adds IHttpContextAccessor and IActionContextAccessor
         /// </summary>
-        public static IServiceCollection AddMvp24HoursWebHttp(this IServiceCollection services)
+        public static IServiceCollection AddMvp24HoursWeb(this IServiceCollection services, IConfiguration configuration = null)
         {
+            services.AddMvp24Hours(configuration);
+
             if (!services.Exists<IHttpContextAccessor>())
             {
                 services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -59,9 +62,9 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// </summary>
         public static IServiceCollection AddMvp24HoursWebFilters(this IServiceCollection services, bool enableHateoas = false)
         {
+            services.AddMvp24HoursWeb();
             if (enableHateoas && !services.Exists<IHateoasContext>())
             {
-                services.AddMvp24HoursWebHttp();
                 services.AddScoped<IHateoasContext, HateoasContext>();
                 services.AddMvc(options =>
                 {

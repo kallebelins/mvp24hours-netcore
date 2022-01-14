@@ -278,7 +278,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                 return;
             }
 
-            var entityDb = await dbContext.Set<T>().FindAsync(entity.EntityKey, cancellationToken);
+            var entityDb = await dbContext.Set<T>().FindAsync(new object[] { entity.EntityKey }, cancellationToken);
 
             if (entityDb == null)
             {
