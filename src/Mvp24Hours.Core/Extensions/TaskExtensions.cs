@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -57,6 +59,24 @@ namespace Mvp24Hours.Extensions
         public static async Task<bool> IsTrueAsync(this Task<bool> value)
         {
             return await value;
+        }
+
+        public static async Task<T> FirstOrDefaultAsync<T>(this Task<IList<T>> valueAsync, Func<T, bool> predicate = null)
+        {
+            var value = await valueAsync;
+            return predicate == null ? value.FirstOrDefault() : value.FirstOrDefault(predicate);
+        }
+
+        public static async Task<T> LastOrDefaultAsync<T>(this Task<IList<T>> valueAsync, Func<T, bool> predicate = null)
+        {
+            var value = await valueAsync;
+            return predicate == null ? value.LastOrDefault() : value.LastOrDefault(predicate);
+        }
+
+        public static async Task<T> ElementAtOrDefaultAsync<T>(this Task<IList<T>> valueAsync, int index)
+        {
+            var value = await valueAsync;
+            return value.ElementAtOrDefault(index);
         }
 
     }

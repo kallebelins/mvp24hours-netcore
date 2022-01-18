@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
+using Mvp24Hours.Core.Entities;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Helpers;
 using System;
@@ -287,10 +288,10 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
 
             // properties that can not be changed
 
-            if (entity.GetType() == typeof(IEntityLog<>))
+            if (entity.GetType().InheritsOrImplements(typeof(IEntityLog<>)) || entity.GetType().InheritsOrImplements(typeof(EntityBaseLog<,,>)))
             {
-                var entityLog = entity as IEntityLog<object>;
-                var entityDbLog = entityDb as IEntityLog<object>;
+                var entityLog = (dynamic)entity;
+                var entityDbLog = (dynamic)entityDb;
                 entityLog.Created = entityDbLog.Created;
                 entityLog.CreatedBy = entityDbLog.CreatedBy;
                 entityLog.Modified = entityDbLog.Modified;
@@ -317,11 +318,13 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                 return;
             }
 
-            if (entity.GetType() == typeof(IEntityLog<>))
+            // properties that can not be changed
+
+            if (entity.GetType().InheritsOrImplements(typeof(IEntityLog<>)) || entity.GetType().InheritsOrImplements(typeof(EntityBaseLog<,,>)))
             {
-                var entityLog = entity as IEntityLog<object>;
+                var entityLog = (dynamic)entity;
                 entityLog.Removed = TimeZoneHelper.GetTimeZoneNow();
-                entityLog.RemovedBy = EntityLogBy;
+                entityLog.RemovedBy = (dynamic)EntityLogBy;
                 await ModifyAsync(entity);
             }
             else
@@ -389,7 +392,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
 
         #region [ Properties ]
 
-        protected override object EntityLogBy => null;
+        protected override object EntityLogBy => (dbContext as Mvp24HoursContext)?.EntityLogBy;
 
         #endregion
     }

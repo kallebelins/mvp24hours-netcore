@@ -5,8 +5,10 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
+using Mvp24Hours.Core.ValueObjects.Infrastructure;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -33,6 +35,55 @@ namespace Mvp24Hours.Extensions
                 );
             }
             return new BusinessResult<T>(token: tokenDefault);
+        }
+
+        /// <summary>
+        /// Encapsulates notifications for business
+        /// </summary>
+        public static IBusinessResult<T> ToBusiness<T>(this IReadOnlyCollection<Notification> notifications, IMessageResult defaultMessage = null, string tokenDefault = null)
+        {
+            var messages = new List<IMessageResult>();
+            if (notifications.AnyOrNotNull())
+            {
+                foreach (var item in notifications)
+                {
+                    messages.Add(new MessageResult(item.Key, item.Message, item.Type));
+                }
+            }
+            else if (defaultMessage != null)
+            {
+                messages.Add(defaultMessage);
+            }
+
+            return new BusinessResult<T>(
+                token: tokenDefault,
+                data: default,
+                messages: new ReadOnlyCollection<IMessageResult>(messages)
+            );
+        }
+
+        /// <summary>
+        /// Encapsulates notifications for business
+        /// </summary>
+        public static IBusinessResult<T> ToBusiness<T>(this INotificationContext notificationContext, IMessageResult defaultMessage = null, string tokenDefault = null)
+        {
+            var messages = new List<IMessageResult>();
+            if (notificationContext != null && notificationContext.HasNotifications)
+            {
+                foreach (var item in notificationContext.Notifications)
+                {
+                    messages.Add(new MessageResult(item.Key, item.Message, item.Type));
+                }
+            }
+            else if (defaultMessage != null)
+            {
+                messages.Add(defaultMessage);
+            }
+            return new BusinessResult<T>(
+                token: tokenDefault,
+                data: default,
+                messages: new ReadOnlyCollection<IMessageResult>(messages)
+            );
         }
 
         /// <summary>
@@ -96,6 +147,16 @@ namespace Mvp24Hours.Extensions
             }
 
             return true;
+        }
+
+        public static bool HasMessageKey<T>(this IBusinessResult<T> value, string key)
+        {
+            if (value == null || value.Messages == null)
+            {
+                return false;
+            }
+
+            return value.Messages.Any(x => x.Key.HasValue() && x.Key.Equals(key, System.StringComparison.InvariantCultureIgnoreCase));
         }
 
         public static T GetDataValue<T>(this IBusinessResult<T> value)

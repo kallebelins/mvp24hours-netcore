@@ -75,6 +75,56 @@ namespace Mvp24Hours.Extensions
         /// <summary>
         /// 
         /// </summary>
+        public static async Task<IPagingResult<T>> ToBusinessPagingAsync<T>(this Task<T> valueAsync, IMessageResult messageResult, string tokenDefault = null)
+        {
+            T value = default;
+            if (valueAsync != null)
+            {
+                value = await valueAsync;
+            }
+            return new PagingResult<T>(
+                new PageResult(0, 0, 0),
+                new SummaryResult(0, 0),
+                data: value,
+                messages: new ReadOnlyCollection<IMessageResult>(new List<IMessageResult>() { messageResult }),
+                token: tokenDefault
+            );
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static async Task<IPagingResult<T>> ToBusinessPagingAsync<T>(this Task<IList<IMessageResult>> messageResultAsync, string tokenDefault = null)
+        {
+            var messageResult = await messageResultAsync;
+            return new PagingResult<T>(
+                new PageResult(0, 0, 0),
+                new SummaryResult(0, 0),
+                data: default,
+                messages: new ReadOnlyCollection<IMessageResult>(messageResult ?? new List<IMessageResult>()),
+                token: tokenDefault
+            );
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static async Task<IPagingResult<T>> ToBusinessPagingAsync<T>(this Task<IMessageResult> messageResultAsync, string tokenDefault = null)
+        {
+            var messageResult = await messageResultAsync;
+            return new PagingResult<T>(
+                new PageResult(0, 0, 0),
+                new SummaryResult(0, 0),
+                data: default,
+                messages: new ReadOnlyCollection<IMessageResult>(new List<IMessageResult>() { messageResult }),
+                token: tokenDefault
+            );
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public static async Task<IPagingResult<IList<TEntity>>> ToBusinessPagingAsync<TEntity>(this IRepositoryAsync<TEntity> repository, Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria = null, int maxQtyByQueryDefault = 300)
             where TEntity : class, IEntityBase
         {

@@ -21,8 +21,13 @@ namespace Mvp24Hours.Core.ValueObjects.Logic
     public class MessageResult : BaseVO, IMessageResult
     {
         #region [ Ctor ]
+        public MessageResult(string message, int typeCode)
+            : this(null, message, typeCode)
+        {
+        }
+
         public MessageResult(string message, MessageType type)
-            : this(Guid.NewGuid().ToString(), message, type)
+            : this(null, message, type)
         {
         }
 

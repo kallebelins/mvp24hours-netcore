@@ -22,6 +22,16 @@ namespace Mvp24Hours.Core.ValueObjects.Infrastructure
     public class Notification : BaseVO, IMessageResult
     {
         #region [ Ctor ]
+        public Notification(string message, int typeCode)
+            : this(null, message, typeCode)
+        {
+        }
+
+        public Notification(string message, MessageType type)
+            : this(null, message, type)
+        {
+        }
+
         [JsonConstructor]
         public Notification(string key, string message, int typeCode)
         {
@@ -29,6 +39,7 @@ namespace Mvp24Hours.Core.ValueObjects.Infrastructure
             Message = message;
             Type = (MessageType)typeCode;
         }
+
         public Notification(string key, string message, MessageType type = MessageType.Error)
         {
             Key = key;

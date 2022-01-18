@@ -85,22 +85,22 @@ namespace Mvp24Hours.Extensions
 
         public static string OnlyNumbers(this string str)
         {
-            return Regex.Replace(str, @"[^\d]*", "");
+            return Regex.Replace(str.NullSafe(), @"[^\d]*", "");
         }
 
         public static string OnlyNumbersLetters(this string str)
         {
-            return Regex.Replace(str, @"[^\dA-Za-z]*", "");
+            return Regex.Replace(str.NullSafe(), @"[^\dA-Za-z]*", "");
         }
 
         public static string OnlyLetters(this string str)
         {
-            return Regex.Replace(str, @"[^A-Za-z]*", "");
+            return Regex.Replace(str.NullSafe(), @"[^A-Za-z]*", "");
         }
 
         public static string RemoveDiacritics(this string input)
         {
-            string stFormD = input.Normalize(NormalizationForm.FormD);
+            string stFormD = input.NullSafe().Normalize(NormalizationForm.FormD);
             int len = stFormD.Length;
             StringBuilder sb = new();
             for (int i = 0; i < len; i++)
@@ -116,12 +116,12 @@ namespace Mvp24Hours.Extensions
 
         public static string ReplaceSpecialChar(this string target)
         {
-            return target.RemoveDiacritics();
+            return target.NullSafe().RemoveDiacritics();
         }
 
         public static string GetSHA256Hash(this string str)
         {
-            byte[] bytes = Encoding.UTF8.GetBytes(str);
+            byte[] bytes = Encoding.UTF8.GetBytes(str.NullSafe());
             SHA256Managed hashstring = new();
             byte[] hash = hashstring.ComputeHash(bytes);
             StringBuilder hashString = new();
@@ -136,7 +136,7 @@ namespace Mvp24Hours.Extensions
         {
             HashAlgorithm hashAlgorithm = new SHA256CryptoServiceProvider();
 
-            byte[] byteValue = System.Text.Encoding.UTF8.GetBytes(input);
+            byte[] byteValue = System.Text.Encoding.UTF8.GetBytes(input.NullSafe());
 
             byte[] byteHash = hashAlgorithm.ComputeHash(byteValue);
 
@@ -145,7 +145,7 @@ namespace Mvp24Hours.Extensions
 
         public static string ZipBase64(this string str)
         {
-            return System.Convert.ToBase64String(str.ZipByte());
+            return System.Convert.ToBase64String(str.NullSafe().ZipByte());
         }
 
         public static byte[] ZipByte(this string str)
@@ -154,7 +154,7 @@ namespace Mvp24Hours.Extensions
             DeflateStream gzip = new(memory, CompressionMode.Compress);
             using (StreamWriter writer = new(gzip, System.Text.Encoding.UTF8))
             {
-                writer.Write(str);
+                writer.Write(str.NullSafe());
             }
             byte[] btComp = memory.ToArray();
             return btComp;
@@ -162,7 +162,7 @@ namespace Mvp24Hours.Extensions
 
         public static string UnZipBase64(this string str)
         {
-            byte[] bty = System.Convert.FromBase64String(str);
+            byte[] bty = System.Convert.FromBase64String(str.NullSafe());
             return bty.UnZip();
         }
 

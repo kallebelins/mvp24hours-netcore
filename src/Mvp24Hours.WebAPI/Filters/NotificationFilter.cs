@@ -24,6 +24,7 @@ using System.Threading.Tasks;
 
 namespace Mvp24Hours.WebAPI.Filters
 {
+    [Obsolete("Use business objects with relevant messages and ActionResult. See the samples.")]
     public class NotificationFilter : IAsyncResultFilter
     {
         private readonly ILoggingService _logger;
@@ -37,7 +38,14 @@ namespace Mvp24Hours.WebAPI.Filters
             if (!IsLoaded)
             {
                 string configEnableFilter = ConfigurationHelper.GetSettings("Mvp24Hours:Filters:EnableNotification");
-                EnableFilter = !configEnableFilter.HasValue() || (bool)configEnableFilter.ToBoolean();
+                if (configEnableFilter.HasValue())
+                {
+                    EnableFilter = (bool)configEnableFilter.ToBoolean();
+                }
+                else
+                {
+                    EnableFilter = true;
+                }
                 IsLoaded = true;
             }
             _notificationContext = notificationContext;
@@ -84,10 +92,10 @@ namespace Mvp24Hours.WebAPI.Filters
 
                     if (result.HasValue())
                     {
-                        var memoryStreamModified = new MemoryStream();
-                        var sw = new StreamWriter(memoryStreamModified);
-                        sw.Write(result);
-                        sw.Flush();
+                        using var memoryStreamModified = new MemoryStream();
+                        using var sw = new StreamWriter(memoryStreamModified);
+                        await sw.WriteAsync(result);
+                        await sw.FlushAsync();
                         memoryStreamModified.Position = 0;
                         await memoryStreamModified.CopyToAsync(originBody).ConfigureAwait(false);
                     }

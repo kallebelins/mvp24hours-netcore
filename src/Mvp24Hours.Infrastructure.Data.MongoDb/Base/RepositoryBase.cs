@@ -5,11 +5,13 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
+using Mvp24Hours.Core.Entities;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Extensions.Data;
 using Mvp24Hours.Helpers;
@@ -218,7 +220,23 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
 
                 if (_keyInfo == null)
                 {
-                    throw new InvalidOperationException("Key property not found.");
+                    if (typeof(T).InheritsOrImplements(typeof(EntityBase<,>))
+                        || typeof(T).InheritsOrImplements(typeof(EntityBaseLog<,,>)))
+                    {
+                        _keyInfo = typeof(T).GetTypeInfo()
+                            .GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                            .FirstOrDefault(x => x.Name == "Id");
+                    }
+
+                    if (_keyInfo == null)
+                    {
+                        _keyInfo = typeof(T).GetTypeInfo()
+                            .GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                            .FirstOrDefault(x => x.Name == BsonClassMap.LookupClassMap(typeof(T)).IdMemberMap.MemberName);
+                    }
+
+                    if (_keyInfo == null)
+                        throw new InvalidOperationException("Key property not found.");
                 }
             }
 

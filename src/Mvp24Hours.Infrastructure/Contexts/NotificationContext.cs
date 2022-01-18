@@ -35,6 +35,10 @@ namespace Mvp24Hours.Infrastructure.Contexts
 
         #region [ Methods ]
 
+        public void Add(string message, MessageType type)
+        {
+            _notifications.Add(new Notification(message, type));
+        }
         public void Add(string key, string message)
         {
             _notifications.Add(new Notification(key, message));

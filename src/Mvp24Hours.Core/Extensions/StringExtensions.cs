@@ -52,5 +52,13 @@ namespace Mvp24Hours.Extensions
 
             return text.Substring(start, length);
         }
+
+        public static string SqlSafe(this string text)
+        {
+            return text
+                .NullSafe()
+                .Replace("--", "")
+                .Replace("'", "''");
+        }
     }
 }

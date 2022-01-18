@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
@@ -40,9 +39,9 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// <summary>
         /// Adds IHttpContextAccessor and IActionContextAccessor
         /// </summary>
-        public static IServiceCollection AddMvp24HoursWeb(this IServiceCollection services, IConfiguration configuration = null)
+        public static IServiceCollection AddMvp24HoursWebEssential(this IServiceCollection services)
         {
-            services.AddMvp24Hours(configuration);
+            services.AddMvp24HoursEssential();
 
             if (!services.Exists<IHttpContextAccessor>())
             {
@@ -62,7 +61,11 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// </summary>
         public static IServiceCollection AddMvp24HoursWebFilters(this IServiceCollection services, bool enableHateoas = false)
         {
-            services.AddMvp24HoursWeb();
+            if (!services.Exists<IHttpContextAccessor>())
+            {
+                throw new ArgumentNullException("IHttpContextAccessor context not found.");
+            }
+
             if (enableHateoas && !services.Exists<IHateoasContext>())
             {
                 services.AddScoped<IHateoasContext, HateoasContext>();
@@ -70,13 +73,11 @@ namespace Mvp24Hours.WebAPI.Extensions
                 {
                     options.Filters.Add<HateoasFilter>();
                 });
+                if (!services.Exists<IActionContextAccessor>())
+                {
+                    throw new ArgumentNullException("IActionContextAccessor context not found.");
+                }
             }
-
-            services.AddMvp24HoursNotification();
-            services.AddMvc(options =>
-            {
-                options.Filters.Add<NotificationFilter>();
-            });
 
             return services;
         }
@@ -102,7 +103,7 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// <summary>
         /// Add configuration for GzipCompressionProvider
         /// </summary>
-        public static IServiceCollection AddMvp24HoursWebGzip(this IServiceCollection services, bool? enableForHttps = null)
+        public static IServiceCollection AddMvp24HoursWebGzip(this IServiceCollection services, bool enableForHttps = false)
         {
             services.Configure<GzipCompressionProviderOptions>(options =>
             {
@@ -111,7 +112,7 @@ namespace Mvp24Hours.WebAPI.Extensions
 
             services.AddResponseCompression(options =>
             {
-                options.EnableForHttps = enableForHttps ?? ConfigurationHelper.GetSettings<bool>("Mvp24Hours:Web:ResponseCompressionForHttps");
+                options.EnableForHttps = enableForHttps;
                 options.Providers.Add<GzipCompressionProvider>();
             });
 

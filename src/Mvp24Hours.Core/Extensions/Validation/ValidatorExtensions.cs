@@ -466,29 +466,29 @@ namespace Mvp24Hours.Extensions
             {
                 return false;
             }
-
             return values.Contains(text);
         }
 
-        public static bool IsValidPhoneNumber(this string text)
+        public static bool IsNumeric(this string s)
         {
-            return IsValidNumberLength(text, 10);
+            foreach (char c in s)
+            {
+                if (!char.IsDigit(c) && c != '.')
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
-        public static bool IsValidNumberLength(this string text, int length)
+        public static bool IsValidPhoneNumber(this string input)
         {
-            if (length == 0 && !text.HasValue())
-            {
-                return true;
-            }
-            else if (!text.HasValue())
-            {
-                return false;
-            }
-            else
-            {
-                return text.OnlyNumbers().Length == length;
-            }
+            var phoneNumber = input.NullSafe()
+                .Replace(" ", "")
+                .Replace("-", "")
+                .Replace("(", "")
+                .Replace(")", "");
+            return Regex.Match(phoneNumber, @"^([\+]{0,1}[0-9]{9,15})$").Success;
         }
     }
 }

@@ -63,6 +63,48 @@ namespace Mvp24Hours.Extensions
         /// <summary>
         /// 
         /// </summary>
+        public static IPagingResult<T> ToBusinessPaging<T>(this T value, IMessageResult messageResult, string tokenDefault = null)
+        {
+            return new PagingResult<T>(
+                new PageResult(0, 0, 0),
+                new SummaryResult(0, 0),
+                data: value,
+                messages: new ReadOnlyCollection<IMessageResult>(new List<IMessageResult>() { messageResult }),
+                token: tokenDefault
+            );
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static IPagingResult<T> ToBusinessPaging<T>(this IList<IMessageResult> messageResult, string tokenDefault = null)
+        {
+            return new PagingResult<T>(
+                new PageResult(0, 0, 0),
+                new SummaryResult(0, 0),
+                data: default,
+                messages: new ReadOnlyCollection<IMessageResult>(messageResult ?? new List<IMessageResult>()),
+                token: tokenDefault
+            );
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static IPagingResult<T> ToBusinessPaging<T>(this IMessageResult messageResult, string tokenDefault = null)
+        {
+            return new PagingResult<T>(
+                new PageResult(0, 0, 0),
+                new SummaryResult(0, 0),
+                data: default,
+                messages: new ReadOnlyCollection<IMessageResult>(new List<IMessageResult>() { messageResult }),
+                token: tokenDefault
+            );
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public static IPagingResult<IList<TEntity>> ToBusinessPaging<TEntity>(this IRepository<TEntity> repository, Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria = null, int maxQtyByQueryDefault = 300)
             where TEntity : class, IEntityBase
         {

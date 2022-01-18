@@ -5,9 +5,11 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Core.DTOs;
+using Mvp24Hours.Core.ValueObjects.Infrastructure;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -38,6 +40,23 @@ namespace Mvp24Hours.Extensions
             return new BusinessResult<T>(token: tokenDefault);
         }
 
+        /// <summary>
+        /// Encapsulates notifications for business
+        /// </summary>
+        public static async Task<IBusinessResult<T>> ToBusinessAsync<T>(this Task<IReadOnlyCollection<Notification>> notificationsAsync, IMessageResult defaultMessage = null, string tokenDefault = null)
+        {
+            var notifications = await notificationsAsync;
+            return notifications.ToBusiness<T>(defaultMessage: defaultMessage);
+        }
+
+        /// <summary>
+        /// Encapsulates notifications for business
+        /// </summary>
+        public static async Task<IBusinessResult<T>> ToBusinessAsync<T>(this Task<INotificationContext> notificationContextAsync, IMessageResult defaultMessage = null, string tokenDefault = null)
+        {
+            var notificationContext = await notificationContextAsync;
+            return notificationContext.ToBusiness<T>(defaultMessage: defaultMessage);
+        }
 
         /// <summary>
         /// Encapsulates object for business

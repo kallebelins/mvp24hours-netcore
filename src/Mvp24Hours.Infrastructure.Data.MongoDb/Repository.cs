@@ -308,7 +308,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
 
         #region [ Properties ]
 
-        protected override object EntityLogBy => null;
+        protected override object EntityLogBy => throw new NotSupportedException();
 
         #endregion
     }

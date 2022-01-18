@@ -29,6 +29,12 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Contexts
         /// </summary>
         bool HasErrorNotifications { get; }
         /// <summary>
+        /// Adds a notification to the context from the message reference
+        /// </summary>
+        /// <param name="message">Message for notification</param>
+        /// <param name="type">Type of feedback to the client</param>
+        void Add(string message, MessageType type);
+        /// <summary>
         /// Adds a notification to the context from the key and message reference
         /// </summary>
         /// <param name="key">Reference key</param>
