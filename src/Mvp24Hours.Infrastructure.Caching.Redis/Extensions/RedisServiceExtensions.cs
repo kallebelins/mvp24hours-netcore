@@ -67,13 +67,29 @@ namespace Mvp24Hours.Extensions
         /// <summary>
         /// See settings at: https://stackexchange.github.io/StackExchange.Redis/Configuration.html
         /// </summary>
-        public static IServiceCollection AddMvp24HoursRedisCache(this IServiceCollection services, string connectionStringName, string instanceName = null)
+        public static IServiceCollection AddMvp24HoursRedisCache(this IServiceCollection services, string connectionStringName, string instanceName = null, IConfiguration configuration = null)
         {
             services.AddMvp24HoursLogging();
 
+            string connectionString = null;
+
+            if (configuration == null)
+            {
+                connectionString = ConfigurationHelper.AppSettings.GetConnectionString(connectionStringName);
+            }
+            else
+            {
+                connectionString = configuration.GetConnectionString(connectionStringName);
+            }
+
+            if (!connectionString.HasValue())
+            {
+                throw new ArgumentNullException("Connection strings not defined. [ConnectionStrings:ConnectionName]");
+            }
+
             services.AddDistributedRedisCache(options =>
             {
-                options.Configuration = ConfigurationHelper.AppSettings.GetConnectionString(connectionStringName);
+                options.Configuration = connectionString;
                 options.InstanceName = $"{instanceName ?? Assembly.GetEntryAssembly().GetName().Name.Replace(".", "_")}_".ToLower();
             });
 

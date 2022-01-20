@@ -1,4 +1,4 @@
-using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
+using Mvp24Hours.Core.Contract.Application.Pipe;
 using System;
 using System.Collections.Generic;
 

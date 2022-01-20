@@ -13,6 +13,7 @@ using Mvp24Hours.Core.ValueObjects.Infrastructure;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Helpers;
+using Mvp24Hours.Infrastructure.Logging;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,6 @@ using System.Threading.Tasks;
 
 namespace Mvp24Hours.WebAPI.Filters
 {
-    [Obsolete("Use business objects with relevant messages and ActionResult. See the samples.")]
     public class NotificationFilter : IAsyncResultFilter
     {
         private readonly ILoggingService _logger;
@@ -34,7 +34,7 @@ namespace Mvp24Hours.WebAPI.Filters
 
         public NotificationFilter(INotificationContext notificationContext)
         {
-            _logger = ServiceProviderHelper.GetService<ILoggingService>();
+            _logger = LoggingService.GetLoggingService();
             if (!IsLoaded)
             {
                 string configEnableFilter = ConfigurationHelper.GetSettings("Mvp24Hours:Filters:EnableNotification");

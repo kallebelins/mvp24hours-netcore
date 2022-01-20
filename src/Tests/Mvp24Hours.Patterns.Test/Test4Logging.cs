@@ -1,5 +1,4 @@
-using Mvp24Hours.Core.Contract.Infrastructure.Logging;
-using Mvp24Hours.Helpers;
+using Mvp24Hours.Infrastructure.Logging;
 using Mvp24Hours.Patterns.Test.Support.Helpers;
 using System;
 using Xunit;
@@ -18,7 +17,7 @@ namespace Mvp24Hours.Patterns.Test
         [Fact, Priority(1)]
         public void Execute_Log()
         {
-            var logging = ServiceProviderHelper.GetService<ILoggingService>();
+            var logging = LoggingService.GetLoggingService();
             try
             {
                 throw new NotImplementedException();

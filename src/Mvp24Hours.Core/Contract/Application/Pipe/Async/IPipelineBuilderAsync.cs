@@ -5,7 +5,9 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
+using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
+
+namespace Mvp24Hours.Core.Contract.Application.Pipe.Async
 {
     /// <summary>
     /// Strategic for aggregating operations in the pipeline
@@ -13,7 +15,7 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
     /// <example>
     /// <code>
     /// // interface
-    /// public interface IProductCategoryListBuilder : IPipelineBuilder { }
+    /// public interface IProductCategoryListBuilder : IPipelineBuilderAsync { }
     /// 
     /// // implementation
     /// public class ProductCategoryListBuilder : IProductCategoryListBuilder
@@ -31,11 +33,11 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
     /// builder.Builder(pipeline);
     /// </code>
     /// </example>
-    public interface IPipelineBuilder
+    public interface IPipelineBuilderAsync
     {
         /// <summary>
         /// Operations aggregator
         /// </summary>
-        IPipeline Builder(IPipeline pipeline);
+        IPipelineAsync Builder(IPipelineAsync pipeline);
     }
 }

@@ -6,7 +6,6 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Microsoft.AspNetCore.Http;
-using System;
 using System.Linq;
 
 namespace Mvp24Hours.Helpers
@@ -24,11 +23,6 @@ namespace Mvp24Hours.Helpers
         public static void SetContext(IHttpContextAccessor accessor)
         {
             httpContextAccessor = accessor;
-            ServiceProviderHelper.SetProvider(GetProvider);
-        }
-        static void GetProvider(out IServiceProvider provider)
-        {
-            provider = HttpContextHelper.GetContext()?.RequestServices;
         }
         /// <summary>
         /// Get individual HTTP request context

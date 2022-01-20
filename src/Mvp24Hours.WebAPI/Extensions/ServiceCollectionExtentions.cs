@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
@@ -39,9 +40,9 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// <summary>
         /// Adds IHttpContextAccessor and IActionContextAccessor
         /// </summary>
-        public static IServiceCollection AddMvp24HoursWebEssential(this IServiceCollection services)
+        public static IServiceCollection AddMvp24HoursWebEssential(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddMvp24HoursEssential();
+            services.AddMvp24HoursEssential(configuration);
 
             if (!services.Exists<IHttpContextAccessor>())
             {
@@ -57,28 +58,36 @@ namespace Mvp24Hours.WebAPI.Extensions
         }
 
         /// <summary>
-        /// Adds filters HateoasFilter and NotificationFilter
+        /// Adds web filters HATEOAS.
         /// </summary>
-        public static IServiceCollection AddMvp24HoursWebFilters(this IServiceCollection services, bool enableHateoas = false)
+        public static IServiceCollection AddMvp24HoursWebHATEOAS(this IServiceCollection services)
         {
             if (!services.Exists<IHttpContextAccessor>())
             {
                 throw new ArgumentNullException("IHttpContextAccessor context not found.");
             }
-
-            if (enableHateoas && !services.Exists<IHateoasContext>())
+            services.AddScoped<IHateoasContext, HateoasContext>();
+            services.AddMvc(options =>
             {
-                services.AddScoped<IHateoasContext, HateoasContext>();
-                services.AddMvc(options =>
-                {
-                    options.Filters.Add<HateoasFilter>();
-                });
-                if (!services.Exists<IActionContextAccessor>())
-                {
-                    throw new ArgumentNullException("IActionContextAccessor context not found.");
-                }
+                options.Filters.Add<HateoasFilter>();
+            });
+            if (!services.Exists<IActionContextAccessor>())
+            {
+                throw new ArgumentNullException("IActionContextAccessor context not found.");
             }
+            return services;
+        }
 
+        /// <summary>
+        /// Adds web filters notification. Only use if not using ActionResult.
+        /// </summary>
+        public static IServiceCollection AddMvp24HoursWebNotification(this IServiceCollection services)
+        {
+            services.AddMvp24HoursNotification();
+            services.AddMvc(options =>
+            {
+                options.Filters.Add<NotificationFilter>();
+            });
             return services;
         }
 

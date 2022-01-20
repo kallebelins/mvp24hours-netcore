@@ -1,4 +1,5 @@
 using Mvp24Hours.Core.Contract.Infrastructure.Logging;
+using Mvp24Hours.Infrastructure.Logging;
 using System;
 using System.Net;
 using System.ServiceModel;
@@ -14,7 +15,7 @@ namespace Mvp24Hours.Helpers
 
         static ServiceRequestHelper()
         {
-            _logger = ServiceProviderHelper.GetService<ILoggingService>();
+            _logger = LoggingService.GetLoggingService();
         }
 
         /// <summary>

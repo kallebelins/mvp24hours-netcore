@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Helpers;
+using Mvp24Hours.Infrastructure.Logging;
 
 namespace Mvp24Hours.WebAPI.Controller
 {
@@ -35,7 +36,7 @@ namespace Mvp24Hours.WebAPI.Controller
         /// Gets instance of log
         /// </summary>
         /// <returns>ILoggingService</returns>
-        protected virtual ILoggingService Logging => logging ??= ServiceProviderHelper.GetService<ILoggingService>();
+        protected virtual ILoggingService Logging => logging ??= LoggingService.GetLoggingService();
 
         #endregion
     }

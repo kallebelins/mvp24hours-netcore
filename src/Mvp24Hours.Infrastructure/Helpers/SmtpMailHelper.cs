@@ -7,6 +7,7 @@
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Extensions;
+using Mvp24Hours.Infrastructure.Logging;
 using System;
 using System.Net;
 using System.Net.Mail;
@@ -22,7 +23,7 @@ namespace Mvp24Hours.Helpers
 
         static SmtpMailHelper()
         {
-            _logger = ServiceProviderHelper.GetService<ILoggingService>();
+            _logger = LoggingService.GetLoggingService();
         }
 
         /// <summary>

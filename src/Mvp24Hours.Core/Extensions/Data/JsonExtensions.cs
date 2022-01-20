@@ -47,6 +47,19 @@ namespace Mvp24Hours.Extensions
         /// <summary>
         /// 
         /// </summary>
+        public static T ToDeserializeAnonymous<T>(this string value, T anonymousType, JsonSerializerSettings jsonSerializerSettings = null)
+        {
+            if (!value.HasValue())
+            {
+                return default;
+            }
+
+            return JsonHelper.DeserializeAnonymous(value, anonymousType, jsonSerializerSettings);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public static IPagingResult<T> ToDeserializePagingResult<T>(this string value, JsonSerializerSettings jsonSerializerSettings = null)
         {
             return JsonConvert.DeserializeObject<IPagingResult<T>>(value, JsonHelper.JsonPagingResultSettings<T>(jsonSerializerSettings));

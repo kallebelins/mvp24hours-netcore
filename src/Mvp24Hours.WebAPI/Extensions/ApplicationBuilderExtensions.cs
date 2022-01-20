@@ -77,6 +77,12 @@ namespace Mvp24Hours.WebAPI.Extensions
             service.GetService<IHttpContextAccessor>()
                 .AddContext();
 
+            var globalService = service.GetService<IServiceCollection>();
+            if (globalService != null)
+            {
+                ServiceProviderHelper.SetProvider(globalService.BuildServiceProvider());
+            }
+
             return app;
         }
 

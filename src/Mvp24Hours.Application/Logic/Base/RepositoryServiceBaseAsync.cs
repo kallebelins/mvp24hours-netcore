@@ -9,6 +9,7 @@ using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Helpers;
+using Mvp24Hours.Infrastructure.Logging;
 
 namespace Mvp24Hours.Application.Logic
 {
@@ -34,7 +35,7 @@ namespace Mvp24Hours.Application.Logic
         /// Gets instance of log
         /// </summary>
         /// <returns>ILoggingService</returns>
-        protected virtual ILoggingService Logging => logger ??= ServiceProviderHelper.GetService<ILoggingService>();
+        protected virtual ILoggingService Logging => logger ??= LoggingService.GetLoggingService();
 
         /// <summary>
         /// Gets instance of notification context

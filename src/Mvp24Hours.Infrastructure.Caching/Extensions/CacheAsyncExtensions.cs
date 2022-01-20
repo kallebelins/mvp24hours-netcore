@@ -8,6 +8,7 @@
 using Microsoft.Extensions.Caching.Distributed;
 using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Helpers;
+using Mvp24Hours.Infrastructure.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,7 +24,7 @@ namespace Mvp24Hours.Extensions
 #pragma warning disable S3963 // "static" fields should be initialized inline
         static CacheAsyncExtensions()
         {
-            _logger = ServiceProviderHelper.GetService<ILoggingService>();
+            _logger = LoggingService.GetLoggingService();
         }
 #pragma warning restore S3963 // "static" fields should be initialized inline
 

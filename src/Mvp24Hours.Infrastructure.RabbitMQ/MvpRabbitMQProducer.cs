@@ -14,10 +14,11 @@ using System.Text;
 
 namespace Mvp24Hours.Infrastructure.RabbitMQ
 {
-    public abstract class MvpRabbitMQProducer : MvpRabbitMQBase, IMvpRabbitMQProducer
+    public abstract class MvpRabbitMQProducer<T> : MvpRabbitMQBase, IMvpRabbitMQProducer<T>
+        where T : class
     {
         protected MvpRabbitMQProducer()
-            : base()
+            : base(typeof(T).Name)
         {
         }
 
@@ -41,8 +42,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
         {
         }
 
-        public virtual void Publish<T>(T message)
-            where T : class
+        public virtual void Publish(T message)
         {
             Publish(message.ToSerialize());
         }

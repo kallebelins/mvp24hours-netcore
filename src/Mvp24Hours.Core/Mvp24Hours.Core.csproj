@@ -10,9 +10,9 @@
     <Company>Kallebe Lins</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>3.1.101</Version>
-    <AssemblyVersion>3.1.10.1</AssemblyVersion>
-    <FileVersion>3.1.10.1</FileVersion>
+    <Version>3.1.201</Version>
+    <AssemblyVersion>3.1.20.1</AssemblyVersion>
+    <FileVersion>3.1.20.1</FileVersion>
     <RepositoryUrl>https://github.com/kallebelins/mvp24hours-netcore</RepositoryUrl>
   </PropertyGroup>
 
@@ -26,7 +26,7 @@
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="FluentValidation" Version="10.3.5" />
+    <PackageReference Include="FluentValidation" Version="10.3.6" />
   </ItemGroup>
 
 </Project>

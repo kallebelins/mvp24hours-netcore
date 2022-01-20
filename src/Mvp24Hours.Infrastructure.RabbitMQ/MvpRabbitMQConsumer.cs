@@ -22,7 +22,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
         private EventingBasicConsumer _event;
 
         protected MvpRabbitMQConsumer()
-            : base()
+            : base(typeof(T).Name)
         {
         }
 

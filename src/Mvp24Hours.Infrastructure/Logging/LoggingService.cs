@@ -18,6 +18,7 @@ namespace Mvp24Hours.Infrastructure.Logging
     /// </summary>
     public class LoggingService : ILoggingService
     {
+        private static readonly ILoggingService _loggingService;
         private static readonly Logger _logger;
         internal const string LOGGER_NAME = "Mvp24HoursLogger";
 
@@ -29,6 +30,13 @@ namespace Mvp24Hours.Infrastructure.Logging
                 .RegisterDefinition("web_variables", typeof(WebVariablesRenderer));
 
             _logger = LogManager.GetLogger(LOGGER_NAME);
+
+            _loggingService = new LoggingService();
+        }
+
+        public static ILoggingService GetLoggingService()
+        {
+            return _loggingService;
         }
 
         public bool IsDebugEnabled => _logger.IsDebugEnabled;

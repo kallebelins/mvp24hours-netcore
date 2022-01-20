@@ -4,6 +4,7 @@ using Mvp24Hours.Core.ValueObjects.Logic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using System;
 using System.Collections.Generic;
 
 namespace Mvp24Hours.Helpers
@@ -45,6 +46,38 @@ namespace Mvp24Hours.Helpers
         public static T Deserialize<T>(string value, JsonSerializerSettings jsonSerializerSettings = null)
         {
             return JsonConvert.DeserializeObject<T>(value, jsonSerializerSettings ?? JsonDefaultSettings);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static T Deserialize<T>(string value, params JsonConverter[] converters)
+        {
+            return JsonConvert.DeserializeObject<T>(value, converters);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static object Deserialize(string value, Type type, JsonSerializerSettings jsonSerializerSettings)
+        {
+            return JsonConvert.DeserializeObject(value, type, jsonSerializerSettings ?? JsonDefaultSettings);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static object Deserialize(string value, Type type, params JsonConverter[] converters)
+        {
+            return JsonConvert.DeserializeObject(value, type, converters);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static T DeserializeAnonymous<T>(string value, T anonymousType, JsonSerializerSettings jsonSerializerSettings = null)
+        {
+            return JsonConvert.DeserializeAnonymousType(value, anonymousType, jsonSerializerSettings ?? JsonDefaultSettings);
         }
 
         /// <summary>

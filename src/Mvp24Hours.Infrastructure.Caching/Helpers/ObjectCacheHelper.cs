@@ -8,6 +8,7 @@
 using Microsoft.Extensions.Caching.Distributed;
 using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Extensions;
+using Mvp24Hours.Infrastructure.Logging;
 using Newtonsoft.Json;
 using System;
 
@@ -29,7 +30,7 @@ namespace Mvp24Hours.Helpers
 #pragma warning disable S3963 // "static" fields should be initialized inline
         static ObjectCacheHelper()
         {
-            _logger = ServiceProviderHelper.GetService<ILoggingService>();
+            _logger = LoggingService.GetLoggingService();
         }
 #pragma warning restore S3963 // "static" fields should be initialized inline
 

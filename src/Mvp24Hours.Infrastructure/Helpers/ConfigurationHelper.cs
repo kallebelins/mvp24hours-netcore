@@ -49,9 +49,19 @@ namespace Mvp24Hours.Helpers
         /// <summary>
         /// 
         /// </summary>
-        public static IConfigurationRoot AppSettings => _appSettings ??= LoadSettings();
+        public static IConfigurationRoot AppSettings
+        {
+            get
+            {
+                if (_appSettings == null)
+                {
+                    LoadSettings();
+                }
+                return _appSettings;
+            }
+        }
 
-        private static IConfigurationRoot LoadSettings()
+        private static void LoadSettings()
         {
             IConfigurationBuilder builder = new ConfigurationBuilder();
             builder.AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json"), optional: true, reloadOnChange: true);
@@ -60,7 +70,7 @@ namespace Mvp24Hours.Helpers
             {
                 builder.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
             }
-            return builder.Build();
+            _appSettings = builder.Build();
         }
 
         /// <summary>
