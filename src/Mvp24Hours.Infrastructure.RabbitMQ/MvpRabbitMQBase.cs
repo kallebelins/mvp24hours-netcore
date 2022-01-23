@@ -41,24 +41,19 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
 
         protected ILoggingService Logging => _logging ??= LoggingService.GetLoggingService();
 
-        protected MvpRabbitMQBase()
-            : this("mvp24hours-queue")
+        protected MvpRabbitMQBase(string queue)
+            : this("Mvp24Hours:Brokers:RabbitMQ", queue)
         {
         }
 
-        protected MvpRabbitMQBase(string routingKey)
-            : this("Mvp24Hours:Brokers:RabbitMQ", routingKey)
-        {
-        }
-
-        protected MvpRabbitMQBase(string hostAddress, string routingKey)
+        protected MvpRabbitMQBase(string hostAddress, string queue)
             : this(
                   ConfigurationHelper.GetSettings<RabbitMQConfiguration>(hostAddress)
                         ?? throw new ArgumentException("Host address not found in settings."),
                   new RabbitMQQueueOptions
                   {
-                      RoutingKey = routingKey
-                      ?? throw new ArgumentException("Route key is mandatory.")
+                      Queue = queue
+                      ?? throw new ArgumentException("Queue is mandatory.")
                   })
         {
         }
@@ -71,6 +66,11 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
 
         protected MvpRabbitMQBase(RabbitMQConfiguration configuration, RabbitMQQueueOptions options)
         {
+            if (options == null)
+            {
+                throw new ArgumentNullException("Options is mandatory.");
+            }
+
             _brokerConfiguration = configuration ?? new RabbitMQConfiguration
             {
                 HostName = "localhost",
@@ -79,10 +79,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
                 Password = "guest"
             };
 
-            _queueOptions = options ?? new RabbitMQQueueOptions
-            {
-                RoutingKey = "mvp24hours-queue"
-            };
+            _queueOptions = options;
 
             _factory = new ConnectionFactory()
             {
@@ -99,6 +96,9 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
             {
                 _connection ??= _factory.CreateConnection();
                 var channel = _connection.CreateModel();
+
+                channel.ExchangeDeclare(_queueOptions.Exchange ?? "direct", _queueOptions.ExchangeType ?? "direct");
+
                 channel.QueueDeclare(queue: _queueOptions.Queue ?? string.Empty,
                                      durable: _queueOptions.Durable,
                                      exclusive: _queueOptions.Exclusive,

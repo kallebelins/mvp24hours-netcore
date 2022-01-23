@@ -5,6 +5,7 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Mvp24Hours.Infrastructure.RabbitMQ.Core.Enums;
 using System.Threading.Tasks;
 
 namespace Mvp24Hours.Infrastructure.RabbitMQ.Core.Contract
@@ -12,7 +13,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ.Core.Contract
     public interface IMvpRabbitMQConsumer<in T>
         where T : class
     {
-        void Consume();
+        void Consume(MvpRabbitMQPriorityEnum priorityEnum = MvpRabbitMQPriorityEnum.Normal);
         Task Received(T message);
     }
 }

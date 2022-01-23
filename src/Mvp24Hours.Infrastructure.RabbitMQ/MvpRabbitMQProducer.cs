@@ -8,6 +8,7 @@
 using Mvp24Hours.Core.ValueObjects.RabbitMQ;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Infrastructure.RabbitMQ.Core.Contract;
+using Mvp24Hours.Infrastructure.RabbitMQ.Core.Enums;
 using RabbitMQ.Client;
 using System;
 using System.Text;
@@ -42,19 +43,19 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
         {
         }
 
-        public virtual void Publish(T message)
+        public virtual void Publish(T message, MvpRabbitMQPriorityEnum priorityEnum = MvpRabbitMQPriorityEnum.Normal)
         {
-            Publish(message.ToSerialize());
+            Publish(message.ToSerialize(), priorityEnum);
         }
 
-        public virtual void Publish(string message)
+        public virtual void Publish(string message, MvpRabbitMQPriorityEnum priorityEnum = MvpRabbitMQPriorityEnum.Normal)
         {
             try
             {
                 var body = Encoding.UTF8.GetBytes(message);
 
-                Channel.BasicPublish(exchange: Options.Exchange ?? string.Empty,
-                                     routingKey: Options.RoutingKey,
+                Channel.BasicPublish(exchange: Options.Exchange,
+                                     routingKey: Options.OverwiteRoutingKey ?? priorityEnum.ToString(),
                                      basicProperties: Options.BasicProperties,
                                      body: body);
             }

@@ -23,7 +23,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
             this.callback = callback;
             this.state = state;
             this.dueTime = dueTime ?? TimeSpan.Zero;
-            this.period = period ?? TimeSpan.FromSeconds(3);
+            this.period = period ?? TimeSpan.FromSeconds(5);
         }
 
         /// <summary>

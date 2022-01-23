@@ -8,6 +8,7 @@
 using Mvp24Hours.Core.ValueObjects.RabbitMQ;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Infrastructure.RabbitMQ.Core.Contract;
+using Mvp24Hours.Infrastructure.RabbitMQ.Core.Enums;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
@@ -46,7 +47,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
         {
         }
 
-        public virtual void Consume()
+        public virtual void Consume(MvpRabbitMQPriorityEnum priorityEnum = MvpRabbitMQPriorityEnum.Normal)
         {
             try
             {
@@ -54,9 +55,14 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
                 {
                     _event = new EventingBasicConsumer(Channel);
                     _event.Received += Event_Received;
+
+                    Channel.QueueBind(queue: Options.Queue ?? string.Empty,
+                                            exchange: Options.Exchange,
+                                            routingKey: Options.OverwiteRoutingKey ?? priorityEnum.ToString());
                 }
-                Channel.BasicConsume(queue: Options.RoutingKey,
-                     autoAck: false,
+
+                Channel.BasicConsume(queue: Options.Queue ?? string.Empty,
+                     autoAck: Options.AutoAck,
                      consumer: _event);
             }
             catch (Exception ex)
