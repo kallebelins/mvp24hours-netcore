@@ -41,18 +41,19 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
 
         protected ILoggingService Logging => _logging ??= LoggingService.GetLoggingService();
 
-        protected MvpRabbitMQBase(string queue)
-            : this("Mvp24Hours:Brokers:RabbitMQ", queue)
+        protected MvpRabbitMQBase(string queueName)
+            : this("Mvp24Hours:Brokers:RabbitMQ", queueName)
         {
         }
 
-        protected MvpRabbitMQBase(string hostAddress, string queue)
+        protected MvpRabbitMQBase(string hostAddress, string queueName)
             : this(
                   ConfigurationHelper.GetSettings<RabbitMQConfiguration>(hostAddress)
                         ?? throw new ArgumentException("Host address not found in settings."),
                   new RabbitMQQueueOptions
                   {
-                      Queue = queue
+                      Queue = queueName,
+                      RoutingKey = queueName
                       ?? throw new ArgumentException("Queue is mandatory.")
                   })
         {
@@ -97,13 +98,21 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
                 _connection ??= _factory.CreateConnection();
                 var channel = _connection.CreateModel();
 
-                channel.ExchangeDeclare(_queueOptions.Exchange ?? "direct", _queueOptions.ExchangeType ?? "direct");
+                channel.ExchangeDeclare(
+                    exchange: _queueOptions.Exchange, 
+                    type: _queueOptions.ExchangeType.ToString(),
+                    durable: _queueOptions.Durable,
+                    autoDelete: _queueOptions.AutoDelete,
+                    arguments: _queueOptions.Arguments
+                );
 
-                channel.QueueDeclare(queue: _queueOptions.Queue ?? string.Empty,
-                                     durable: _queueOptions.Durable,
-                                     exclusive: _queueOptions.Exclusive,
-                                     autoDelete: _queueOptions.AutoDelete,
-                                     arguments: _queueOptions.Arguments);
+                channel.QueueDeclare(
+                    queue: _queueOptions.Queue ?? string.Empty,
+                    durable: _queueOptions.Durable,
+                    exclusive: _queueOptions.Exclusive,
+                    autoDelete: _queueOptions.AutoDelete,
+                    arguments: _queueOptions.Arguments
+                );
                 return channel;
             }
             catch (Exception ex)

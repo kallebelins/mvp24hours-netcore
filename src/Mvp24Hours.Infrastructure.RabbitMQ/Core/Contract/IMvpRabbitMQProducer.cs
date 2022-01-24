@@ -12,7 +12,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ.Core.Contract
     public interface IMvpRabbitMQProducer<in T>
         where T : class
     {
-        public void Publish(T message, MvpRabbitMQPriorityEnum priorityEnum = MvpRabbitMQPriorityEnum.Normal);
-        public void Publish(string message, MvpRabbitMQPriorityEnum priorityEnum = MvpRabbitMQPriorityEnum.Normal);
+        public void Publish(T message);
+        public void Publish(string message);
     }
 }

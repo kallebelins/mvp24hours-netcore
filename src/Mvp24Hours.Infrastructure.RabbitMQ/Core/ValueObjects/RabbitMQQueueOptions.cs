@@ -5,6 +5,7 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Mvp24Hours.Infrastructure.RabbitMQ.Core.Enums;
 using RabbitMQ.Client;
 using System.Collections.Generic;
 
@@ -14,13 +15,14 @@ namespace Mvp24Hours.Core.ValueObjects.RabbitMQ
     {
         public RabbitMQQueueOptions()
         {
-            Exchange = "direct";
-            ExchangeType = "direct";
+            Exchange = "amq.direct";
+            ExchangeType = MvpRabbitMQExchangeType.direct;
+            Durable = true;
         }
 
         public string Exchange { get; set; }
-        public string ExchangeType { get; set; }
-        public string OverwiteRoutingKey { get; set; }
+        public MvpRabbitMQExchangeType ExchangeType { get; set; }
+        public string RoutingKey { get; set; }
         public string Queue { get; set; }
         public bool Durable { get; set; }
         public bool Exclusive { get; set; }

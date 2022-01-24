@@ -47,7 +47,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
         {
         }
 
-        public virtual void Consume(MvpRabbitMQPriorityEnum priorityEnum = MvpRabbitMQPriorityEnum.Normal)
+        public virtual void Consume()
         {
             try
             {
@@ -58,7 +58,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
 
                     Channel.QueueBind(queue: Options.Queue ?? string.Empty,
                                             exchange: Options.Exchange,
-                                            routingKey: Options.OverwiteRoutingKey ?? priorityEnum.ToString());
+                                            routingKey: Options.RoutingKey);
                 }
 
                 Channel.BasicConsume(queue: Options.Queue ?? string.Empty,

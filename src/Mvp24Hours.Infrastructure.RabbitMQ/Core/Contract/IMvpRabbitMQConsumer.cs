@@ -13,7 +13,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ.Core.Contract
     public interface IMvpRabbitMQConsumer<in T>
         where T : class
     {
-        void Consume(MvpRabbitMQPriorityEnum priorityEnum = MvpRabbitMQPriorityEnum.Normal);
+        void Consume();
         Task Received(T message);
     }
 }

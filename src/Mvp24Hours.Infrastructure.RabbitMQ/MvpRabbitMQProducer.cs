@@ -43,19 +43,19 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
         {
         }
 
-        public virtual void Publish(T message, MvpRabbitMQPriorityEnum priorityEnum = MvpRabbitMQPriorityEnum.Normal)
+        public virtual void Publish(T message)
         {
-            Publish(message.ToSerialize(), priorityEnum);
+            Publish(message.ToSerialize());
         }
 
-        public virtual void Publish(string message, MvpRabbitMQPriorityEnum priorityEnum = MvpRabbitMQPriorityEnum.Normal)
+        public virtual void Publish(string message)
         {
             try
             {
                 var body = Encoding.UTF8.GetBytes(message);
 
                 Channel.BasicPublish(exchange: Options.Exchange,
-                                     routingKey: Options.OverwiteRoutingKey ?? priorityEnum.ToString(),
+                                     routingKey: Options.RoutingKey,
                                      basicProperties: Options.BasicProperties,
                                      body: body);
             }
