@@ -25,11 +25,11 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
     {
         #region [ Ctor ]
 
-        public UnitOfWork()
+        public UnitOfWork(DbContext dbContext, INotificationContext notificationContext)
         {
-            DbContext = ServiceProviderHelper.GetService<DbContext>();
+            this.DbContext = dbContext;
             repositories = new Dictionary<Type, object>();
-            NotificationContext = ServiceProviderHelper.GetService<INotificationContext>();
+            this.NotificationContext = notificationContext;
         }
 
         #endregion

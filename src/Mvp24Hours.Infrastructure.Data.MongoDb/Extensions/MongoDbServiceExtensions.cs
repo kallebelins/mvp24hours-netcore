@@ -29,7 +29,7 @@ namespace Mvp24Hours.Extensions
             });
 
             // register services
-            services.AddScoped<IUnitOfWork>(x => new UnitOfWork());
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
             return services;
@@ -49,7 +49,7 @@ namespace Mvp24Hours.Extensions
             });
 
             // register services
-            services.AddScoped<IUnitOfWork>(x => new UnitOfWork());
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
             return services;
@@ -70,7 +70,7 @@ namespace Mvp24Hours.Extensions
             });
 
             // register services
-            services.AddScoped<IUnitOfWorkAsync>(x => new UnitOfWorkAsync());
+            services.AddScoped<IUnitOfWorkAsync, UnitOfWorkAsync>();
             services.AddScoped(typeof(IRepositoryAsync<>), typeof(RepositoryAsync<>));
 
             return services;
@@ -90,7 +90,7 @@ namespace Mvp24Hours.Extensions
             });
 
             // register services
-            services.AddScoped<IUnitOfWorkAsync>(x => new UnitOfWorkAsync());
+            services.AddScoped<IUnitOfWorkAsync, UnitOfWorkAsync>();
             services.AddScoped(typeof(IRepositoryAsync<>), typeof(RepositoryAsync<>));
 
             return services;

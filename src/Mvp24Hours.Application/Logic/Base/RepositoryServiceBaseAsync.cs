@@ -22,20 +22,20 @@ namespace Mvp24Hours.Application.Logic
         #region [ Properties ]
 
         private IUnitOfWorkAsync unitOfWork = null;
-        private ILoggingService logger = null;
+        private ILoggingService logging = null;
         private INotificationContext context = null;
 
         /// <summary>
         /// Gets unit of work instance
         /// </summary>
         /// <returns>T</returns>
-        protected virtual TUoW UnitOfWork => (TUoW)(unitOfWork ??= ServiceProviderHelper.GetService<TUoW>());
+        protected virtual IUnitOfWorkAsync UnitOfWork => unitOfWork ??= ServiceProviderHelper.GetService<IUnitOfWorkAsync>();
 
         /// <summary>
         /// Gets instance of log
         /// </summary>
         /// <returns>ILoggingService</returns>
-        protected virtual ILoggingService Logging => logger ??= LoggingService.GetLoggingService();
+        protected virtual ILoggingService Logging => logging ??= LoggingService.GetLoggingService();
 
         /// <summary>
         /// Gets instance of notification context

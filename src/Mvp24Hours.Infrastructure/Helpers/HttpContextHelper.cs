@@ -23,6 +23,13 @@ namespace Mvp24Hours.Helpers
         public static void SetContext(IHttpContextAccessor accessor)
         {
             httpContextAccessor = accessor;
+            ServiceProviderHelper.SetProvider((state) =>
+            {
+                var http = state as IHttpContextAccessor;
+                if (http != null)
+                    return http?.HttpContext?.RequestServices;
+                return null;
+            }, accessor);
         }
         /// <summary>
         /// Get individual HTTP request context

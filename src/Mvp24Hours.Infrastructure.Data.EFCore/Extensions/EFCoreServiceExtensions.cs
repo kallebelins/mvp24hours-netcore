@@ -23,7 +23,7 @@ namespace Mvp24Hours.Extensions
         {
             services.AddMvp24HoursLogging();
 
-            services.AddScoped<IUnitOfWorkAsync>(x => new UnitOfWorkAsync());
+            services.AddScoped<IUnitOfWorkAsync, UnitOfWorkAsync>();
 
             if (repositoryAsync != null)
             {
@@ -54,7 +54,7 @@ namespace Mvp24Hours.Extensions
         {
             services.AddMvp24HoursLogging();
 
-            services.AddScoped<IUnitOfWork>(x => new UnitOfWork());
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             if (repository != null)
             {

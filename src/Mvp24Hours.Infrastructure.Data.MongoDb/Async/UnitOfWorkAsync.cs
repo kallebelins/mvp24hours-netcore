@@ -24,11 +24,11 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
     {
         #region [ Ctor ]
 
-        public UnitOfWorkAsync()
+        public UnitOfWorkAsync(Mvp24HoursContext dbContext, INotificationContext notificationContext)
         {
-            DbContext = ServiceProviderHelper.GetService<Mvp24HoursContext>();
+            this.DbContext = dbContext;
             repositories = new Dictionary<Type, object>();
-            NotificationContext = ServiceProviderHelper.GetService<INotificationContext>();
+            this.NotificationContext = notificationContext;
 
             DbContext.StartSessionAsync().Wait();
         }
