@@ -45,8 +45,9 @@ namespace Mvp24Hours.Helpers
         {
             if (_actionProvider != null)
             {
-                return _actionProvider(_state)
-                    ?.GetService(type);
+                var provider = _actionProvider(_state);
+                if (provider != null)
+                    return provider.GetService(type);
             }
             return _serviceProvider?.GetService(type);
         }
