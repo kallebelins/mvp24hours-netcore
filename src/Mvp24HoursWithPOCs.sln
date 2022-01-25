@@ -171,6 +171,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomerAPI.WebAPI", "..\..
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomerAPI.Application", "..\..\mvp24hours-netcore-samples\src\simple-rabbitmq-customer-api\CustomerAPI.Application\CustomerAPI.Application.csproj", "{E90F7494-A6F1-4859-9932-F2F1AF26D583}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "complex-pipeline-ef-customer-api", "complex-pipeline-ef-customer-api", "{A0020CA7-EE41-4548-B90E-7BAA17403096}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomerAPI.Core", "..\..\mvp24hours-netcore-samples\src\complex-pipeline-ef-customer-api\CustomerAPI.Core\CustomerAPI.Core.csproj", "{FAF4AC8C-421C-4D54-BDB8-870B7F07376B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomerAPI.Infrastructure", "..\..\mvp24hours-netcore-samples\src\complex-pipeline-ef-customer-api\CustomerAPI.Infrastructure\CustomerAPI.Infrastructure.csproj", "{5879A231-CEDA-4EE2-AD74-F994E2EBDF26}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomerAPI.WebAPI", "..\..\mvp24hours-netcore-samples\src\complex-pipeline-ef-customer-api\CustomerAPI.WebAPI\CustomerAPI.WebAPI.csproj", "{38ECB5BA-5DC0-456C-B7E1-A20F51018B6B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomerAPI.Application", "..\..\mvp24hours-netcore-samples\src\complex-pipeline-ef-customer-api\CustomerAPI.Application\CustomerAPI.Application.csproj", "{D64456C8-2C63-4B54-A228-E47954FB4D37}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -445,6 +455,22 @@ Global
 		{E90F7494-A6F1-4859-9932-F2F1AF26D583}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E90F7494-A6F1-4859-9932-F2F1AF26D583}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E90F7494-A6F1-4859-9932-F2F1AF26D583}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAF4AC8C-421C-4D54-BDB8-870B7F07376B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAF4AC8C-421C-4D54-BDB8-870B7F07376B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAF4AC8C-421C-4D54-BDB8-870B7F07376B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAF4AC8C-421C-4D54-BDB8-870B7F07376B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5879A231-CEDA-4EE2-AD74-F994E2EBDF26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5879A231-CEDA-4EE2-AD74-F994E2EBDF26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5879A231-CEDA-4EE2-AD74-F994E2EBDF26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5879A231-CEDA-4EE2-AD74-F994E2EBDF26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38ECB5BA-5DC0-456C-B7E1-A20F51018B6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38ECB5BA-5DC0-456C-B7E1-A20F51018B6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38ECB5BA-5DC0-456C-B7E1-A20F51018B6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38ECB5BA-5DC0-456C-B7E1-A20F51018B6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D64456C8-2C63-4B54-A228-E47954FB4D37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D64456C8-2C63-4B54-A228-E47954FB4D37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D64456C8-2C63-4B54-A228-E47954FB4D37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D64456C8-2C63-4B54-A228-E47954FB4D37}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -531,6 +557,11 @@ Global
 		{DD22B149-B496-430A-9E03-9F71577B3935} = {E3FCAA82-3D58-4B18-A4A0-3B9E418DE93B}
 		{1E52E9CC-BE99-4AB7-A279-67766B15790D} = {E3FCAA82-3D58-4B18-A4A0-3B9E418DE93B}
 		{E90F7494-A6F1-4859-9932-F2F1AF26D583} = {E3FCAA82-3D58-4B18-A4A0-3B9E418DE93B}
+		{A0020CA7-EE41-4548-B90E-7BAA17403096} = {A7A9C5B2-77FA-4BA7-AF11-C604DB44C393}
+		{FAF4AC8C-421C-4D54-BDB8-870B7F07376B} = {A0020CA7-EE41-4548-B90E-7BAA17403096}
+		{5879A231-CEDA-4EE2-AD74-F994E2EBDF26} = {A0020CA7-EE41-4548-B90E-7BAA17403096}
+		{38ECB5BA-5DC0-456C-B7E1-A20F51018B6B} = {A0020CA7-EE41-4548-B90E-7BAA17403096}
+		{D64456C8-2C63-4B54-A228-E47954FB4D37} = {A0020CA7-EE41-4548-B90E-7BAA17403096}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1CAAF17E-39C7-40C6-A4BE-09BC5EE90B95}
