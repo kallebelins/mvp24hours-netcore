@@ -22,16 +22,22 @@ You can study different solutions with the Mvp24Hours library. Also, create quic
 * Implement request with Consul (Service Discovery) using service key;
 * Create http log for monitoring unique resources;
 * Create project template using Consul (Service Discovery);
-* Create project template integrated with ElasticSearch (ELK);
-* Create project model with identity;
+* Create project model for observability/monitoring application with ElasticSearch (ELK) - distributed log;
+* Create project model with ASP.Net Identity;
 * Create project model with dynamic generation of classes with [Mvp24Hours-Entity-T4](https://github.com/kallebelins/mvp24hours-entity-t4);
+* Create design model to apply resilience and fault tolerance concepts;
+* Create project template with Grpc over HTTP2 (server and client);
+* Implement integration with Kafka (message broker);
+* Create project template with WatchDog to monitor the health of services;
+* Create project template for gateway (ocelot) with service discovery (consul);
+* Create project template for gateway (ocelot) with aggregator;
 * Record training videos for the community;
 
 ## Donations
 Please consider donating if you think this library is useful to you or that my work is valuable. Glad if you can help me [buy a cup of coffee](https://www.paypal.com/donate/?hosted_button_id=EKA2L256GJVQC). :heart:
 
 ## Community
-Users and development team will be created on Discord soon.
+Users, stakeholders, students, enthusiasts, developers, programmers [connect on discord](https://discord.gg/u3jeH6sY) to follow our growth closely!
 
 ## Sponsors
 Be a sponsor by choosing this project to accelerate your products.
