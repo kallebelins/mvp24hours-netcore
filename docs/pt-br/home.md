@@ -36,7 +36,7 @@ Você poderá estudar diversas soluções com a biblioteca Mvp24Hours. Além dis
 Por favor, considere fazer uma doação se você acha que esta biblioteca é útil para você ou que meu trabalho é valioso. Fico feliz se você puder me ajudar a [comprar uma xícara de café](https://www.paypal.com/donate/?hosted_button_id=EKA2L256GJVQC). :heart:
 
 ## Comunidade
-Usuários, interessados, estudantes, entusiastas, desenvolvedores, programadores [conecte no discord](https://discord.gg/u3jeH6sY) para acompanhar de perto nosso crescimento!
+Usuários, interessados, estudantes, entusiastas, desenvolvedores, programadores [connect on Telegram](https://t.me/+6_sL0y2TE-ZkMmZh) para acompanhar de perto nosso crescimento!
 
 ## Patrocinadores
 Seja um patrocinador escolhendo este projeto para acelerar seus produtos.
