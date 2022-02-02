@@ -8,7 +8,6 @@
 using Mvp24Hours.Core.ValueObjects.RabbitMQ;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Infrastructure.RabbitMQ.Core.Contract;
-using Mvp24Hours.Infrastructure.RabbitMQ.Core.Enums;
 using RabbitMQ.Client;
 using System;
 using System.Text;
@@ -33,8 +32,8 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
         {
         }
 
-        protected MvpRabbitMQProducer(RabbitMQConfiguration configuration)
-            : base(configuration)
+        protected MvpRabbitMQProducer(RabbitMQConfiguration configuration, string routingKey)
+            : base(configuration, routingKey)
         {
         }
 
@@ -65,6 +64,5 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
                 throw;
             }
         }
-
     }
 }

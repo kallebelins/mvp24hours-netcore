@@ -5,13 +5,14 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using System.Threading.Tasks;
 
 namespace Mvp24Hours.Infrastructure.RabbitMQ.Core.Contract
 {
-    public interface IMvpRabbitMQProducer<in T>
+    public interface IMvpRabbitMQConsumerAsync<in T>
         where T : class
     {
-        public void Publish(T message);
-        public void Publish(string message);
+        void Consume();
+        Task ReceivedAsync(T message);
     }
 }

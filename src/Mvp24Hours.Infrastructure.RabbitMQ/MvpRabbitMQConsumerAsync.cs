@@ -12,37 +12,39 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Mvp24Hours.Infrastructure.RabbitMQ
 {
-    public abstract class MvpRabbitMQConsumer<T> : MvpRabbitMQBase, IMvpRabbitMQConsumer<T>
+    public abstract class MvpRabbitMQConsumerAsync<T> : MvpRabbitMQBase, IMvpRabbitMQConsumerAsync<T>
         where T : class
     {
+        protected override bool DispatchConsumersAsync => true;
         protected event EventHandler<Exception, BasicDeliverEventArgs> Failure;
 
-        private EventingBasicConsumer _event;
+        private AsyncEventingBasicConsumer _event;
 
-        protected MvpRabbitMQConsumer()
+        protected MvpRabbitMQConsumerAsync()
             : base(typeof(T).Name)
         {
         }
 
-        protected MvpRabbitMQConsumer(string routingKey)
+        protected MvpRabbitMQConsumerAsync(string routingKey)
             : base(routingKey)
         {
         }
 
-        protected MvpRabbitMQConsumer(string hostAddress, string routingKey)
+        protected MvpRabbitMQConsumerAsync(string hostAddress, string routingKey)
             : base(hostAddress, routingKey)
         {
         }
 
-        protected MvpRabbitMQConsumer(RabbitMQConfiguration configuration, string routingKey)
+        protected MvpRabbitMQConsumerAsync(RabbitMQConfiguration configuration, string routingKey)
             : base(configuration, routingKey)
         {
         }
 
-        protected MvpRabbitMQConsumer(RabbitMQConfiguration configuration, RabbitMQQueueOptions options)
+        protected MvpRabbitMQConsumerAsync(RabbitMQConfiguration configuration, RabbitMQQueueOptions options)
             : base(configuration, options)
         {
         }
@@ -53,8 +55,8 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
             {
                 if (_event == null)
                 {
-                    _event = new EventingBasicConsumer(Channel);
-                    _event.Received += EventReceived;
+                    _event = new AsyncEventingBasicConsumer(Channel);
+                    _event.Received += EventReceivedAsync;
 
                     Channel.QueueBind(queue: Options.Queue ?? string.Empty,
                                             exchange: Options.Exchange,
@@ -72,14 +74,14 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
             }
         }
 
-        private void EventReceived(object sender, BasicDeliverEventArgs e)
+        private async Task EventReceivedAsync(object sender, BasicDeliverEventArgs e)
         {
             try
             {
                 var body = e.Body.ToArray();
                 string messageString = Encoding.UTF8.GetString(body);
                 T message = messageString.ToDeserialize<T>();
-                Received(message);
+                await ReceivedAsync(message);
                 if (!Options.AutoAck)
                 {
                     Channel.BasicAck(e.DeliveryTag, false);
@@ -96,6 +98,6 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
             }
         }
 
-        public abstract void Received(T message);
+        public abstract Task ReceivedAsync(T message);
     }
 }

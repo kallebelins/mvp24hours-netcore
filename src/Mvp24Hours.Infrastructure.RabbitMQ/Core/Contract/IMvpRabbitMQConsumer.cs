@@ -5,8 +5,6 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-using Mvp24Hours.Infrastructure.RabbitMQ.Core.Enums;
-using System.Threading.Tasks;
 
 namespace Mvp24Hours.Infrastructure.RabbitMQ.Core.Contract
 {
@@ -14,6 +12,6 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ.Core.Contract
         where T : class
     {
         void Consume();
-        Task Received(T message);
+        void Received(T message);
     }
 }

@@ -1,4 +1,11 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿//=====================================================================================
+// Developed by Kallebe Lins (kallebe.santos@outlook.com)
+// Teacher, Architect, Consultant and Project Leader
+// Virtual Card: https://www.linkedin.com/in/kallebelins
+//=====================================================================================
+// Reproduction or sharing is free! Contribute to a better world!
+//=====================================================================================
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,7 +30,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
             this.callback = callback;
             this.state = state;
             this.dueTime = dueTime ?? TimeSpan.Zero;
-            this.period = period ?? TimeSpan.FromSeconds(5);
+            this.period = period ?? TimeSpan.FromSeconds(3);
         }
 
         /// <summary>

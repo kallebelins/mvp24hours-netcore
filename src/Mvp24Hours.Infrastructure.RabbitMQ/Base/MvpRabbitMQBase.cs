@@ -24,10 +24,10 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
         private IModel _channel;
         private IConnection _connection;
 
-        protected RabbitMQConfiguration Configuration => _brokerConfiguration;
-        protected RabbitMQQueueOptions Options => _queueOptions;
-        protected IConnection Connection => _connection;
-        protected IModel Channel
+        protected virtual RabbitMQConfiguration Configuration => _brokerConfiguration;
+        protected virtual RabbitMQQueueOptions Options => _queueOptions;
+        protected virtual IConnection Connection => _connection;
+        protected virtual IModel Channel
         {
             get
             {
@@ -38,8 +38,8 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
                 return _channel;
             }
         }
-
-        protected ILoggingService Logging => _logging ??= LoggingService.GetLoggingService();
+        protected virtual bool DispatchConsumersAsync => false;
+        protected virtual ILoggingService Logging => _logging ??= LoggingService.GetLoggingService();
 
         protected MvpRabbitMQBase(string queueName)
             : this("Mvp24Hours:Brokers:RabbitMQ", queueName)
@@ -54,23 +54,26 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
                   {
                       Queue = queueName,
                       RoutingKey = queueName
-                      ?? throw new ArgumentException("Queue is mandatory.")
+                        ?? throw new ArgumentException("Queue is mandatory.")
                   })
         {
         }
 
-        protected MvpRabbitMQBase(RabbitMQConfiguration configuration)
-            : this(configuration, null)
+        protected MvpRabbitMQBase(RabbitMQConfiguration configuration, string queueName)
+            : this(configuration,
+                  new RabbitMQQueueOptions
+                  {
+                      Queue = queueName,
+                      RoutingKey = queueName
+                        ?? throw new ArgumentException("Queue is mandatory.")
+                  })
         {
 
         }
 
         protected MvpRabbitMQBase(RabbitMQConfiguration configuration, RabbitMQQueueOptions options)
         {
-            if (options == null)
-            {
-                throw new ArgumentNullException("Options is mandatory.");
-            }
+            _queueOptions = options ?? throw new ArgumentNullException("Options is mandatory.");
 
             _brokerConfiguration = configuration ?? new RabbitMQConfiguration
             {
@@ -80,14 +83,13 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
                 Password = "guest"
             };
 
-            _queueOptions = options;
-
             _factory = new ConnectionFactory()
             {
                 HostName = _brokerConfiguration.HostName,
                 Port = _brokerConfiguration.Port,
                 UserName = _brokerConfiguration.UserName,
-                Password = _brokerConfiguration.Password
+                Password = _brokerConfiguration.Password,
+                DispatchConsumersAsync = DispatchConsumersAsync
             };
         }
 
@@ -99,7 +101,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
                 var channel = _connection.CreateModel();
 
                 channel.ExchangeDeclare(
-                    exchange: _queueOptions.Exchange, 
+                    exchange: _queueOptions.Exchange,
                     type: _queueOptions.ExchangeType.ToString(),
                     durable: _queueOptions.Durable,
                     autoDelete: _queueOptions.AutoDelete,
