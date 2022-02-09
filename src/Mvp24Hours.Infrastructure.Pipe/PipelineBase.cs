@@ -1,13 +1,10 @@
 //=====================================================================================
-// Developed by Kallebe Lins (kallebe.santos@outlook.com)
-// Teacher, Architect, Consultant and Project Leader
-// Virtual Card: https://www.linkedin.com/in/kallebelins
+// Developed by Kallebe Lins (https://github.com/kallebelins)
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
-using Mvp24Hours.Helpers;
 using System;
 
 namespace Mvp24Hours.Infrastructure.Pipe
@@ -18,24 +15,11 @@ namespace Mvp24Hours.Infrastructure.Pipe
     public abstract class PipelineBase
     {
         #region [ Ctor ]
-        protected PipelineBase()
-            : this(true)
-        {
-        }
-        protected PipelineBase(string token)
-            : this(token, true)
-        {
-        }
-        protected PipelineBase(bool isBreakOnFail)
-            : this(null, isBreakOnFail)
-        {
-        }
-        protected PipelineBase(string token, bool isBreakOnFail)
+        protected PipelineBase(INotificationContext notificationContext, bool isBreakOnFail = false)
         {
             this.IsBreakOnFail = isBreakOnFail;
-            this.Token = token;
 
-            Context = ServiceProviderHelper.GetService<INotificationContext>();
+            Context = notificationContext;
 
             if (Context == null)
             {
@@ -48,7 +32,6 @@ namespace Mvp24Hours.Infrastructure.Pipe
 
         #region [ Fields ]
         protected readonly bool IsBreakOnFail;
-        protected string Token { get; set; }
         protected IPipelineMessage Message { get; set; }
         #endregion
 
@@ -59,13 +42,12 @@ namespace Mvp24Hours.Infrastructure.Pipe
         /// <summary>
         /// Indicates whether there are failures in the notification context
         /// </summary>
-        protected bool IsValidContext => !Context.HasErrorNotifications;
+        protected bool IsValidContext => !Context?.HasErrorNotifications ?? true;
         #endregion
 
         #region [ Methods ]
 
         public IPipelineMessage GetMessage() => Message;
-        public string GetToken() => Token;
 
         #endregion
     }

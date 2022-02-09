@@ -1,7 +1,5 @@
 //=====================================================================================
-// Developed by Kallebe Lins (kallebe.santos@outlook.com)
-// Teacher, Architect, Consultant and Project Leader
-// Virtual Card: https://www.linkedin.com/in/kallebelins
+// Developed by Kallebe Lins (https://github.com/kallebelins)
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
@@ -34,7 +32,7 @@ namespace Mvp24Hours.Application.Logic
             try
             {
                 var repo = UnitOfWork.GetRepository<TEntity>();
-                return repo.ToBusinessPaging(clause, criteria, MaxQtyByQueryPage);
+                return repo.ToBusinessPaging(clause, criteria);
             }
             catch (Exception ex)
             {
@@ -51,7 +49,7 @@ namespace Mvp24Hours.Application.Logic
             try
             {
                 var repo = UnitOfWork.GetRepository<TEntity>();
-                return repo.ToBusinessPaging(criteria, MaxQtyByQueryPage);
+                return repo.ToBusinessPaging(criteria);
             }
             catch (Exception ex)
             {

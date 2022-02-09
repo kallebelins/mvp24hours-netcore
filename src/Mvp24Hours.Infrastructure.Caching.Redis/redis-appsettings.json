@@ -3,7 +3,7 @@
     "RedisDbContext": null
   },
   "Mvp24Hours": {
-    "Persistence": {
+    "Infrastructure": {
       "Redis": {
         "Enable": true,
         "DefaultExpiration": null,

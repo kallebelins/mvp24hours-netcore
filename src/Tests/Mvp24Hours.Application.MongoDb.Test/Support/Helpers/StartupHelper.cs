@@ -1,7 +1,5 @@
 //=====================================================================================
-// Developed by Kallebe Lins (kallebe.santos@outlook.com)
-// Teacher, Architect, Consultant and Project Leader
-// Virtual Card: https://www.linkedin.com/in/kallebelins
+// Developed by Kallebe Lins (https://github.com/kallebelins)
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
@@ -18,7 +16,11 @@ namespace Mvp24Hours.Application.MongoDb.Test.Support.Helpers
         {
             var services = new ServiceCollection().AddSingleton(ConfigurationHelper.AppSettings);
 
-            services.AddMvp24HoursMongoDb("customers", ConfigurationHelper.GetSettings("ConnectionStrings:CustomerMongoContext"));
+            services.AddMvp24HoursMongoDb(options =>
+            {
+                options.DatabaseName = "customers";
+                options.ConnectionString = ConfigurationHelper.GetSettings("ConnectionStrings:CustomerMongoContext");
+            });
 
             // register my services
             services.AddScoped<CustomerService, CustomerService>();

@@ -1,17 +1,19 @@
 //=====================================================================================
-// Developed by Kallebe Lins (kallebe.santos@outlook.com)
-// Teacher, Architect, Consultant and Project Leader
-// Virtual Card: https://www.linkedin.com/in/kallebelins
+// Developed by Kallebe Lins (https://github.com/kallebelins)
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Mvp24Hours.Core.Contract.Application.Pipe;
+using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Core.Enums;
 using Mvp24Hours.Core.Enums.Infrastructure;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Helpers;
+using Mvp24Hours.Infrastructure.Pipe.Configuration;
 using Mvp24Hours.Infrastructure.Pipe.Operations;
 using System;
 using System.Collections.Generic;
@@ -26,37 +28,97 @@ namespace Mvp24Hours.Infrastructure.Pipe
     public class Pipeline : PipelineBase, IPipeline
     {
         #region [ Ctor ]
-        public Pipeline()
-            : base()
+        public Pipeline(INotificationContext notificationContext)
+            : base(notificationContext)
         {
+            Init(
+                out operations,
+                out dictionaryInterceptors,
+                out preCustomInterceptors,
+                out postCustomInterceptors,
+                out dictionaryEventInterceptors,
+                out preEventCustomInterceptors,
+                out postEventCustomInterceptors
+            );
         }
-        public Pipeline(string token)
-            : base(token)
+
+        [ActivatorUtilitiesConstructor]
+        public Pipeline(INotificationContext notificationContext, IOptions<PipelineOptions> options)
+        : base(notificationContext, options?.Value?.IsBreakOnFail ?? false)
         {
+            if (options?.Value?.Pipeline != null)
+            {
+                var pipe = (Pipeline)options.Value.Pipeline;
+
+                operations = pipe.GetOperations();
+
+                dictionaryInterceptors = pipe.GetInterceptors();
+                preCustomInterceptors = pipe.GetPreInterceptors();
+                postCustomInterceptors = pipe.GetPostInterceptors();
+
+                dictionaryEventInterceptors = pipe.GetEvents();
+                preEventCustomInterceptors = pipe.GetPreEvents();
+                postEventCustomInterceptors = pipe.GetPostEvents();
+            }
+            else
+            {
+                Init(
+                    out operations,
+                    out dictionaryInterceptors,
+                    out preCustomInterceptors,
+                    out postCustomInterceptors,
+                    out dictionaryEventInterceptors,
+                    out preEventCustomInterceptors,
+                    out postEventCustomInterceptors
+                );
+            }
         }
-        public Pipeline(bool isBreakOnFail)
-            : base(isBreakOnFail)
+
+        protected virtual void Init(
+            out IList<IOperation> _operations,
+            out IDictionary<PipelineInterceptorType, IList<IOperation>> _dictionaryInterceptors,
+            out IList<KeyValuePair<Func<IPipelineMessage, bool>, IOperation>> _preCustomInterceptors,
+            out IList<KeyValuePair<Func<IPipelineMessage, bool>, IOperation>> _postCustomInterceptors,
+            out IDictionary<PipelineInterceptorType, IList<EventHandler<IPipelineMessage, EventArgs>>> _dictionaryEventInterceptors,
+            out IList<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>> _preEventCustomInterceptors,
+            out IList<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>> _postEventCustomInterceptors
+        )
         {
-        }
-        public Pipeline(string token, bool isBreakOnFail)
-            : base(token, isBreakOnFail)
-        {
+            _operations = new List<IOperation>();
+
+            _preCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, IOperation>>();
+            _postCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, IOperation>>();
+            _dictionaryInterceptors = new Dictionary<PipelineInterceptorType, IList<IOperation>>();
+
+            _dictionaryEventInterceptors = new Dictionary<PipelineInterceptorType, IList<EventHandler<IPipelineMessage, EventArgs>>>();
+            _preEventCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>>();
+            _postEventCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>>();
         }
         #endregion
 
         #region [ Fields / Properties ]
-        private readonly IList<IOperation> operations = new List<IOperation>();
+        private readonly IList<IOperation> operations;
 
-        private readonly IDictionary<PipelineInterceptorType, IList<IOperation>> dictionaryInterceptors = new Dictionary<PipelineInterceptorType, IList<IOperation>>();
-        private readonly IList<KeyValuePair<Func<IPipelineMessage, bool>, IOperation>> preCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, IOperation>>();
-        private readonly IList<KeyValuePair<Func<IPipelineMessage, bool>, IOperation>> postCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, IOperation>>();
+        private readonly IDictionary<PipelineInterceptorType, IList<IOperation>> dictionaryInterceptors;
+        private readonly IList<KeyValuePair<Func<IPipelineMessage, bool>, IOperation>> preCustomInterceptors;
+        private readonly IList<KeyValuePair<Func<IPipelineMessage, bool>, IOperation>> postCustomInterceptors;
 
-        private readonly IDictionary<PipelineInterceptorType, IList<EventHandler<IPipelineMessage, EventArgs>>> dictionaryEventInterceptors = new Dictionary<PipelineInterceptorType, IList<EventHandler<IPipelineMessage, EventArgs>>>();
-        private readonly IList<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>> preEventCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>>();
-        private readonly IList<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>> postEventCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>>();
+        private readonly IDictionary<PipelineInterceptorType, IList<EventHandler<IPipelineMessage, EventArgs>>> dictionaryEventInterceptors;
+        private readonly IList<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>> preEventCustomInterceptors;
+        private readonly IList<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>> postEventCustomInterceptors;
         #endregion
 
         #region [ Methods ]
+
+        #region [ Get ]
+        public IList<IOperation> GetOperations() => operations;
+        public IDictionary<PipelineInterceptorType, IList<IOperation>> GetInterceptors() => dictionaryInterceptors;
+        public IList<KeyValuePair<Func<IPipelineMessage, bool>, IOperation>> GetPreInterceptors() => preCustomInterceptors;
+        public IList<KeyValuePair<Func<IPipelineMessage, bool>, IOperation>> GetPostInterceptors() => postCustomInterceptors;
+        public IDictionary<PipelineInterceptorType, IList<EventHandler<IPipelineMessage, EventArgs>>> GetEvents() => dictionaryEventInterceptors;
+        public IList<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>> GetPreEvents() => preEventCustomInterceptors;
+        public IList<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>> GetPostEvents() => postEventCustomInterceptors;
+        #endregion
 
         public IPipeline Add<T>() where T : IOperation
         {
@@ -270,11 +332,6 @@ namespace Mvp24Hours.Infrastructure.Pipe
                 input = new PipelineMessage();
             }
 
-            if (!Token.HasValue())
-            {
-                Token = input.Token.HasValue() ? input.Token : Guid.NewGuid().ToString();
-            }
-
             if (!onlyOperationDefault)
             {
                 RunEventInterceptors(input, PipelineInterceptorType.FirstOperation);
@@ -283,8 +340,6 @@ namespace Mvp24Hours.Infrastructure.Pipe
 
             _ = _operations.Aggregate(input, (current, operation) =>
               {
-                  current.SetToken(this.Token);
-
                   if ((current.IsFaulty || !IsValidContext) && this.IsBreakOnFail)
                   {
                       return current;

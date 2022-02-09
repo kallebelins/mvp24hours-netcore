@@ -1,16 +1,15 @@
 //=====================================================================================
-// Developed by Kallebe Lins (kallebe.santos@outlook.com)
-// Teacher, Architect, Consultant and Project Leader
-// Virtual Card: https://www.linkedin.com/in/kallebelins
+// Developed by Kallebe Lins (https://github.com/kallebelins)
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Extensions.Data;
-using Mvp24Hours.Helpers;
+using Mvp24Hours.Infrastructure.Data.EFCore.Configuration;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -28,10 +27,11 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
     {
         #region [ Ctor ]
 
-        protected RepositoryBase(DbContext _dbContext)
+        protected RepositoryBase(DbContext _dbContext, IOptions<EFCoreRepositoryOptions> options)
         {
             this.dbContext = _dbContext ?? throw new ArgumentNullException("dbContext");
             this.dbEntities = _dbContext.Set<T>();
+            this.Options = options?.Value ?? new EFCoreRepositoryOptions();
         }
 
         #endregion
@@ -50,20 +50,10 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
         /// Gets the value of the user logged in the context or logged into the database
         /// </summary>
         protected abstract object EntityLogBy { get; }
-
-        private static bool? _enableReadUncommitedQuery;
-        protected static bool EnableReadUncommitedQuery
-        {
-            get
-            {
-                if (_enableReadUncommitedQuery == null)
-                {
-                    string value = ConfigurationHelper.GetSettings("Mvp24Hours:Persistence:ReadUncommitedQuery");
-                    _enableReadUncommitedQuery = value.ToBoolean(false);
-                }
-                return (bool)_enableReadUncommitedQuery;
-            }
-        }
+        /// <summary>
+        /// Repository configuration options
+        /// </summary>
+        protected EFCoreRepositoryOptions Options { get; private set; }
 
         #endregion
 
@@ -87,7 +77,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
             if (!onlyNavigation)
             {
                 int offset = 0;
-                int limit = MaxQtyByQueryPage;
+                int limit = Options.MaxQtyByQueryPage;
 
                 if (criteria != null)
                 {
@@ -201,30 +191,15 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
 
         protected TransactionScope CreateTransactionScope(bool isAggregate = false)
         {
-            if (isAggregate || EnableReadUncommitedQuery)
+            if (isAggregate || Options.TransactionIsolationLevel != null)
             {
                 return new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
                 {
-                    IsolationLevel = IsolationLevel.ReadUncommitted,
+                    IsolationLevel = Options.TransactionIsolationLevel.Value,
                     Timeout = TransactionManager.MaximumTimeout
                 }, TransactionScopeAsyncFlowOption.Enabled);
             }
             return null;
-        }
-
-        #endregion
-
-        #region [ Properties ]
-
-        /// <summary>
-        /// Maximum amount returned in query
-        /// </summary>
-        protected int MaxQtyByQueryPage
-        {
-            get
-            {
-                return ConfigurationPropertiesHelper.MaxQtyByQueryPage;
-            }
         }
 
         #endregion

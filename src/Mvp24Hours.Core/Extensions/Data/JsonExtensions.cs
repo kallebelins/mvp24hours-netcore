@@ -1,7 +1,5 @@
 //=====================================================================================
-// Developed by Kallebe Lins (kallebe.santos@outlook.com)
-// Teacher, Architect, Consultant and Project Leader
-// Virtual Card: https://www.linkedin.com/in/kallebelins
+// Developed by Kallebe Lins (https://github.com/kallebelins)
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
@@ -42,6 +40,19 @@ namespace Mvp24Hours.Extensions
             }
 
             return JsonHelper.Deserialize<T>(value, jsonSerializerSettings);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static object ToDeserialize(this string value, Type type, JsonSerializerSettings jsonSerializerSettings = null)
+        {
+            if (!value.HasValue())
+            {
+                return default;
+            }
+
+            return JsonHelper.Deserialize(value, type, jsonSerializerSettings);
         }
 
         /// <summary>

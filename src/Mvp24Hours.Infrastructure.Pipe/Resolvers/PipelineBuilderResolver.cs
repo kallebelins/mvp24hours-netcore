@@ -1,3 +1,8 @@
+//=====================================================================================
+// Developed by Kallebe Lins (https://github.com/kallebelins)
+//=====================================================================================
+// Reproduction or sharing is free! Contribute to a better world!
+//=====================================================================================
 using Mvp24Hours.Core.Contract.Application.Pipe;
 using System;
 using System.Collections.Generic;

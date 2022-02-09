@@ -1,15 +1,17 @@
 //=====================================================================================
-// Developed by Kallebe Lins (kallebe.santos@outlook.com)
-// Teacher, Architect, Consultant and Project Leader
-// Virtual Card: https://www.linkedin.com/in/kallebelins
+// Developed by Kallebe Lins (https://github.com/kallebelins)
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
+using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
+using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Core.Contract.Logic;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Extensions;
+using Mvp24Hours.Helpers;
+using Mvp24Hours.Infrastructure.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -20,13 +22,34 @@ namespace Mvp24Hours.Application.Logic
     /// Base service for using repository and unit of work
     /// </summary>
     /// <typeparam name="TEntity">Represents an entity</typeparam>
-    public class RepositoryService<TEntity, TUoW> : RepositoryServiceBase<TUoW>, IQueryService<TEntity>, ICommandService<TEntity>
+    public class RepositoryService<TEntity, TUoW> : IQueryService<TEntity>, ICommandService<TEntity>
         where TEntity : class, IEntityBase
         where TUoW : IUnitOfWork
     {
         #region [ Properties ]
 
         private IRepository<TEntity> repository = null;
+        private IUnitOfWork unitOfWork = null;
+        private ILoggingService logging = null;
+        private INotificationContext context = null;
+
+        /// <summary>
+        /// Gets unit of work instance
+        /// </summary>
+        /// <returns>T</returns>
+        protected virtual IUnitOfWork UnitOfWork => unitOfWork ??= ServiceProviderHelper.GetService<IUnitOfWork>();
+
+        /// <summary>
+        /// Gets instance of log
+        /// </summary>
+        /// <returns>ILoggingService</returns>
+        protected virtual ILoggingService Logging => logging ??= LoggingService.GetLoggingService();
+
+        /// <summary>
+        /// Gets instance of notification context
+        /// </summary>
+        /// <returns>ILoggingService</returns>
+        protected virtual INotificationContext NotificationContext => context ??= ServiceProviderHelper.GetService<INotificationContext>();
 
         /// <summary>
         /// Gets repository instance

@@ -1,7 +1,5 @@
 //=====================================================================================
-// Developed by Kallebe Lins (kallebe.santos@outlook.com)
-// Teacher, Architect, Consultant and Project Leader
-// Virtual Card: https://www.linkedin.com/in/kallebelins
+// Developed by Kallebe Lins (https://github.com/kallebelins)
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
@@ -15,7 +13,7 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom.Files
     /// </summary>
     public class FileLogWriteOperation : OperationBase
     {
-        static bool _enable = ConfigurationHelper.GetSettings<bool>("Mvp24Hours:Operation:FileLog:Enable");
+        static readonly bool _enable = ConfigurationHelper.GetSettings<bool>("Mvp24Hours:Operation:FileLog:Enable");
 
         public override bool IsRequired => true;
         public virtual string FileLogPath => null;

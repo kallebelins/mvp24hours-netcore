@@ -1,7 +1,5 @@
 //=====================================================================================
-// Developed by Kallebe Lins (kallebe.santos@outlook.com)
-// Teacher, Architect, Consultant and Project Leader
-// Virtual Card: https://www.linkedin.com/in/kallebelins
+// Developed by Kallebe Lins (https://github.com/kallebelins)
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
@@ -9,6 +7,7 @@ using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Core.DTOs.Models;
+using Mvp24Hours.Core.Helpers;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using System;
 using System.Collections.Generic;
@@ -105,10 +104,10 @@ namespace Mvp24Hours.Extensions
         /// <summary>
         /// 
         /// </summary>
-        public static IPagingResult<IList<TEntity>> ToBusinessPaging<TEntity>(this IRepository<TEntity> repository, Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria = null, int maxQtyByQueryDefault = 300)
+        public static IPagingResult<IList<TEntity>> ToBusinessPaging<TEntity>(this IRepository<TEntity> repository, Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria = null, int? maxQtyByQueryDefault = null)
             where TEntity : class, IEntityBase
         {
-            int limit = maxQtyByQueryDefault;
+            int limit = maxQtyByQueryDefault ?? ContantsHelper.Data.MaxQtyByQueryPage;
             int offset = 0;
 
             if (criteria != null)
@@ -133,10 +132,10 @@ namespace Mvp24Hours.Extensions
         /// <summary>
         /// 
         /// </summary>
-        public static IPagingResult<IList<TEntity>> ToBusinessPaging<TEntity>(this IRepository<TEntity> repository, IPagingCriteria criteria = null, int maxQtyByQueryDefault = 300)
+        public static IPagingResult<IList<TEntity>> ToBusinessPaging<TEntity>(this IRepository<TEntity> repository, IPagingCriteria criteria = null, int? maxQtyByQueryDefault = null)
             where TEntity : class, IEntityBase
         {
-            int limit = maxQtyByQueryDefault;
+            int limit = maxQtyByQueryDefault ?? ContantsHelper.Data.MaxQtyByQueryPage;
             int offset = 0;
 
             if (criteria != null)

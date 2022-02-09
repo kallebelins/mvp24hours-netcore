@@ -1,7 +1,5 @@
 //=====================================================================================
-// Developed by Kallebe Lins (kallebe.santos@outlook.com)
-// Teacher, Architect, Consultant and Project Leader
-// Virtual Card: https://www.linkedin.com/in/kallebelins
+// Developed by Kallebe Lins (https://github.com/kallebelins)
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
@@ -32,7 +30,7 @@ namespace Mvp24Hours.Extensions
             {
                 if (_enable == null)
                 {
-                    string value = ConfigurationHelper.GetSettings("Mvp24Hours:Persistence:Cache:Enable");
+                    string value = ConfigurationHelper.GetSettings("Mvp24Hours:Infrastructure:Cache:Enable");
                     _enable = value.ToBoolean(true);
                 }
                 return (bool)_enable;
@@ -45,7 +43,7 @@ namespace Mvp24Hours.Extensions
             {
                 if (_defaultExpiration == null)
                 {
-                    string value = ConfigurationHelper.GetSettings("Mvp24Hours:Persistence:Cache:DefaultExpiration");
+                    string value = ConfigurationHelper.GetSettings("Mvp24Hours:Infrastructure:Cache:DefaultExpiration");
                     _defaultExpiration = value.ToDateTime();
                 }
                 return _defaultExpiration;

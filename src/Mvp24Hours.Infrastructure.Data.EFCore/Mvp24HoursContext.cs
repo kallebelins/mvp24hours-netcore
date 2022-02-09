@@ -1,7 +1,5 @@
 //=====================================================================================
-// Developed by Kallebe Lins (kallebe.santos@outlook.com)
-// Teacher, Architect, Consultant and Project Leader
-// Virtual Card: https://www.linkedin.com/in/kallebelins
+// Developed by Kallebe Lins (https://github.com/kallebelins)
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
@@ -17,7 +15,7 @@ using System.Threading.Tasks;
 namespace Mvp24Hours.Infrastructure.Data.EFCore
 {
     /// <summary>
-    /// 
+    /// A Mvp24HoursContext instance represents a session with the database and can be used to query and save instances of your entities.
     /// </summary>
     public abstract class Mvp24HoursContext : DbContext
     {

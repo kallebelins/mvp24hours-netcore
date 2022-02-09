@@ -1,13 +1,12 @@
 //=====================================================================================
-// Developed by Kallebe Lins (kallebe.santos@outlook.com)
-// Teacher, Architect, Consultant and Project Leader
-// Virtual Card: https://www.linkedin.com/in/kallebelins
+// Developed by Kallebe Lins (https://github.com/kallebelins)
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Microsoft.AspNetCore.Mvc;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Core.Enums.Infrastructure;
+using Mvp24Hours.Core.Helpers;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using System;
 using System.Collections.Generic;
@@ -17,6 +16,10 @@ namespace Mvp24Hours.Helpers
 {
     public static class HateoasHelper
     {
+        #region [ Properties / Fields ]
+        private static readonly int MaxQtyByQueryPage = ContantsHelper.Data.MaxQtyByQueryPage;
+        #endregion
+
         #region [ ResolveUrl ]
 
         private static string ResolveUrl(string routeName, object routeValues)
@@ -181,7 +184,7 @@ namespace Mvp24Hours.Helpers
             if (type == HateoasType.Previous)
             {
                 int offset = (Paging != null ? Paging.Offset : 0);
-                int limit = (Paging != null ? Paging.Limit : ConfigurationPropertiesHelper.MaxQtyByQueryPage);
+                int limit = (Paging != null ? Paging.Limit : MaxQtyByQueryPage);
                 if (offset > 0)
                 {
                     var routeValues = new Dictionary<string, object>()
@@ -196,7 +199,7 @@ namespace Mvp24Hours.Helpers
             if (type == HateoasType.First)
             {
                 int offset = (Paging != null ? Paging.Offset : 0);
-                int limit = (Paging != null ? Paging.Limit : ConfigurationPropertiesHelper.MaxQtyByQueryPage);
+                int limit = (Paging != null ? Paging.Limit : MaxQtyByQueryPage);
                 if (offset > 0)
                 {
                     var routeValues = new Dictionary<string, object>()
@@ -211,7 +214,7 @@ namespace Mvp24Hours.Helpers
             if (type == HateoasType.Next)
             {
                 int offset = (Paging != null ? Paging.Offset : 0);
-                int limit = (Paging != null ? Paging.Limit : ConfigurationPropertiesHelper.MaxQtyByQueryPage);
+                int limit = (Paging != null ? Paging.Limit : MaxQtyByQueryPage);
                 if (result?.Summary != null &&
                     offset < result.Summary.TotalPages - 1)
                 {
@@ -227,7 +230,7 @@ namespace Mvp24Hours.Helpers
             if (type == HateoasType.Last)
             {
                 int offset = (Paging != null ? Paging.Offset : 0);
-                int limit = (Paging != null ? Paging.Limit : ConfigurationPropertiesHelper.MaxQtyByQueryPage);
+                int limit = (Paging != null ? Paging.Limit : MaxQtyByQueryPage);
                 if (result?.Summary != null
                     && offset < result.Summary.TotalPages - 1)
                 {
@@ -244,6 +247,5 @@ namespace Mvp24Hours.Helpers
         }
 
         #endregion
-
     }
 }

@@ -51,17 +51,17 @@ namespace Mvp24Hours.Helpers
         /// <summary>
         /// 
         /// </summary>
-        public static T Deserialize<T>(string value, params JsonConverter[] converters)
+        public static object Deserialize(string value, Type type, JsonSerializerSettings jsonSerializerSettings = null)
         {
-            return JsonConvert.DeserializeObject<T>(value, converters);
+            return JsonConvert.DeserializeObject(value, type, jsonSerializerSettings ?? JsonDefaultSettings);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public static object Deserialize(string value, Type type, JsonSerializerSettings jsonSerializerSettings)
+        public static T Deserialize<T>(string value, params JsonConverter[] converters)
         {
-            return JsonConvert.DeserializeObject(value, type, jsonSerializerSettings ?? JsonDefaultSettings);
+            return JsonConvert.DeserializeObject<T>(value, converters);
         }
 
         /// <summary>
@@ -104,6 +104,16 @@ namespace Mvp24Hours.Helpers
             settings.Converters.Add(new ValueObjectConverter<ISummaryResult, SummaryResult>());
             settings.Converters.Add(new ValueObjectConverter<ILinkResult, LinkResult>());
             settings.Converters.Add(new ValueObjectConverter<IMessageResult, MessageResult>());
+            return settings;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static JsonSerializerSettings JsonBusinessEventSettings(JsonSerializerSettings jsonSerializerSettings = null)
+        {
+            var settings = jsonSerializerSettings ?? JsonDefaultSettings;
+            settings.Converters.Add(new ValueObjectConverter<IBusinessEvent, BusinessEvent>());
             return settings;
         }
     }

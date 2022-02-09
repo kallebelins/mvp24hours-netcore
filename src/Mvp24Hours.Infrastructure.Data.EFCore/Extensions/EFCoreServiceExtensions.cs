@@ -1,7 +1,5 @@
 //=====================================================================================
-// Developed by Kallebe Lins (kallebe.santos@outlook.com)
-// Teacher, Architect, Consultant and Project Leader
-// Virtual Card: https://www.linkedin.com/in/kallebelins
+// Developed by Kallebe Lins (https://github.com/kallebelins)
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
@@ -9,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Infrastructure.Data.EFCore;
+using Mvp24Hours.Infrastructure.Data.EFCore.Configuration;
 using System;
 
 namespace Mvp24Hours.Extensions
@@ -18,10 +17,22 @@ namespace Mvp24Hours.Extensions
         /// <summary>
         /// Add database context services
         /// </summary>
-        public static IServiceCollection AddMvp24HoursDbServiceAsync<TDbContext>(this IServiceCollection services, Func<IServiceProvider, TDbContext> dbFactory = null, Type repositoryAsync = null)
+        public static IServiceCollection AddMvp24HoursDbServiceAsync<TDbContext>(this IServiceCollection services,
+            Func<IServiceProvider, TDbContext> dbFactory = null,
+            Type repositoryAsync = null,
+            Action<EFCoreRepositoryOptions> options = null)
             where TDbContext : DbContext
         {
             services.AddMvp24HoursLogging();
+
+            if (options != null)
+            {
+                services.Configure(options);
+            }
+            else
+            {
+                services.Configure<EFCoreRepositoryOptions>(options => { });
+            }
 
             services.AddScoped<IUnitOfWorkAsync, UnitOfWorkAsync>();
 
@@ -49,10 +60,22 @@ namespace Mvp24Hours.Extensions
         /// <summary>
         /// Add database context services
         /// </summary>
-        public static IServiceCollection AddMvp24HoursDbService<TDbContext>(this IServiceCollection services, Func<IServiceProvider, TDbContext> dbFactory = null, Type repository = null)
+        public static IServiceCollection AddMvp24HoursDbService<TDbContext>(this IServiceCollection services,
+            Func<IServiceProvider, TDbContext> dbFactory = null,
+            Type repository = null,
+            Action<EFCoreRepositoryOptions> options = null)
                where TDbContext : DbContext
         {
             services.AddMvp24HoursLogging();
+
+            if (options != null)
+            {
+                services.Configure(options);
+            }
+            else
+            {
+                services.Configure<EFCoreRepositoryOptions>(options => { });
+            }
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 

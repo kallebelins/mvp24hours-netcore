@@ -1,7 +1,5 @@
 //=====================================================================================
-// Developed by Kallebe Lins (kallebe.santos@outlook.com)
-// Teacher, Architect, Consultant and Project Leader
-// Virtual Card: https://www.linkedin.com/in/kallebelins
+// Developed by Kallebe Lins (https://github.com/kallebelins)
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
@@ -28,23 +26,23 @@ namespace Mvp24Hours.Extensions
 
             if (configuration == null)
             {
-                redisConfiguration = ConfigurationHelper.GetSettings<ConfigurationOptions>("Mvp24Hours:Persistence:Redis");
+                redisConfiguration = ConfigurationHelper.GetSettings<ConfigurationOptions>("Mvp24Hours:Infrastructure:Redis");
             }
             else
             {
-                redisConfiguration = configuration.GetSection("Mvp24Hours:Persistence:Redis").Get<ConfigurationOptions>();
+                redisConfiguration = configuration.GetSection("Mvp24Hours:Infrastructure:Redis").Get<ConfigurationOptions>();
             }
 
             if (redisConfiguration == null)
             {
-                throw new ArgumentNullException("Redis configuration not defined. [Mvp24Hours:Persistence:Redis]");
+                throw new ArgumentNullException("Redis configuration not defined. [Mvp24Hours:Infrastructure:Redis]");
             }
 
-            var hosts = ConfigurationHelper.GetSettings<List<string>>("Mvp24Hours:Persistence:Redis:Hosts");
+            var hosts = ConfigurationHelper.GetSettings<List<string>>("Mvp24Hours:Infrastructure:Redis:Hosts");
 
             if (hosts == null)
             {
-                throw new ArgumentNullException("Redis hosts configuration not defined. [Mvp24Hours:Persistence:Redis:Hosts]");
+                throw new ArgumentNullException("Redis hosts configuration not defined. [Mvp24Hours:Infrastructure:Redis:Hosts]");
             }
 
             foreach (var h in hosts)
@@ -52,7 +50,7 @@ namespace Mvp24Hours.Extensions
                 redisConfiguration.EndPoints.Add(h);
             }
 
-            string instanceName = ConfigurationHelper.GetSettings("Mvp24Hours:Persistence:Redis:InstanceName")
+            string instanceName = ConfigurationHelper.GetSettings("Mvp24Hours:Infrastructure:Redis:InstanceName")
                 ?? Assembly.GetEntryAssembly().GetName().Name.Replace(".", "_");
 
             services.AddDistributedRedisCache(options =>

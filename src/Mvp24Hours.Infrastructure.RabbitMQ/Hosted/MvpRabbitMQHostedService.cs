@@ -1,11 +1,12 @@
 ﻿//=====================================================================================
-// Developed by Kallebe Lins (kallebe.santos@outlook.com)
-// Teacher, Architect, Consultant and Project Leader
-// Virtual Card: https://www.linkedin.com/in/kallebelins
+// Developed by Kallebe Lins (https://github.com/kallebelins)
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+using Mvp24Hours.Infrastructure.RabbitMQ.Configuration;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,12 +26,26 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
         /// <summary>
         /// 
         /// </summary>
-        public MvpRabbitMQHostedService(TimerCallback callback, object state = null, TimeSpan? dueTime = null, TimeSpan? period = null)
+        [ActivatorUtilitiesConstructor]
+        public MvpRabbitMQHostedService(IOptions<RabbitMQHostedOptions> options)
+            : this(options?.Value)
         {
-            this.callback = callback;
-            this.state = state;
-            this.dueTime = dueTime ?? TimeSpan.Zero;
-            this.period = period ?? TimeSpan.FromSeconds(3);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public MvpRabbitMQHostedService(RabbitMQHostedOptions options)
+        {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options), "Options is required.");
+            }
+
+            this.callback = options.Callback;
+            this.state = options.State;
+            this.dueTime = options.DueTime;
+            this.period = options.Period;
         }
 
         /// <summary>

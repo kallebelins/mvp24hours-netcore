@@ -24,19 +24,31 @@
 
   <ItemGroup>
     <None Remove="infra-appsettings.json" />
-    <None Remove="Logging\NLogSample1.config" />
-    <None Remove="Logging\NLogSample2.config" />
-    <None Remove="Logging\NLogSample3.config" />
+    <None Remove="Logging\NLogConsole.config" />
+    <None Remove="Logging\NLogElasticSearch.config" />
+    <None Remove="Logging\NLogEmail.config" />
+    <None Remove="Logging\NLogFileCsv.config" />
+    <None Remove="Logging\NLogFileLog.config" />
+    <None Remove="Logging\NLogSqlServer.config" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Logging\NLogSample3.config">
+    <Content Include="Logging\NLogElasticSearch.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Logging\NLogSample2.config">
+    <Content Include="Logging\NLogSqlServer.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Logging\NLogSample1.config">
+    <Content Include="Logging\NLogFileLog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Logging\NLogEmail.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Logging\NLogFileCsv.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Logging\NLogConsole.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="infra-appsettings.json">

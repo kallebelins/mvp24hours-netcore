@@ -1,7 +1,5 @@
 //=====================================================================================
-// Developed by Kallebe Lins (kallebe.santos@outlook.com)
-// Teacher, Architect, Consultant and Project Leader
-// Virtual Card: https://www.linkedin.com/in/kallebelins
+// Developed by Kallebe Lins (https://github.com/kallebelins)
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
@@ -37,25 +35,25 @@ namespace Mvp24Hours.Core.ValueObjects.Logic
         #region [ Properties ]
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IBusinessResult{T}.Data"/>
+        /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IBusinessResult{T}.Data"/>
         /// </summary>
         [DataMember]
         public T Data { get; }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IBusinessResult{T}.Messages"/>
+        /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IBusinessResult{T}.Messages"/>
         /// </summary>
         [DataMember]
         public IReadOnlyCollection<IMessageResult> Messages { get; }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IBusinessResult{T}.HasErrors"/>
+        /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IBusinessResult{T}.HasErrors"/>
         /// </summary>
         [DataMember]
         public bool HasErrors => Messages?.Where(x => x.Type == Enums.MessageType.Error)?.Any() ?? false;
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IBusinessResult{T}.Token"/>
+        /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IBusinessResult{T}.Token"/>
         /// </summary>
         [DataMember]
         public string Token { get; private set; }

@@ -1,12 +1,11 @@
 //=====================================================================================
-// Developed by Kallebe Lins (kallebe.santos@outlook.com)
-// Teacher, Architect, Consultant and Project Leader
-// Virtual Card: https://www.linkedin.com/in/kallebelins
+// Developed by Kallebe Lins (https://github.com/kallebelins)
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -20,13 +19,24 @@ namespace Mvp24Hours.Infrastructure.Pipe
         #region [ Ctor ]
 
         public PipelineMessage()
-            : this(null)
+            : this(Guid.NewGuid().ToString(), args: null)
         {
         }
 
         public PipelineMessage(params object[] args)
+            : this(Guid.NewGuid().ToString(), args)
+        {
+        }
+
+        public PipelineMessage(string token)
+            : this(token, args: null)
+        {
+        }
+
+        public PipelineMessage(string token, params object[] args)
         {
             this._contents = new Dictionary<string, object>();
+            this.Token = token;
 
             if (args?.Count() > 0)
             {
@@ -117,14 +127,6 @@ namespace Mvp24Hours.Infrastructure.Pipe
         public void SetLock()
         {
             IsLocked = true;
-        }
-        public void SetToken(string token)
-        {
-            if (string.IsNullOrEmpty(Token)
-                && !string.IsNullOrEmpty(token))
-            {
-                Token = token;
-            }
         }
         public void SetFailure()
         {

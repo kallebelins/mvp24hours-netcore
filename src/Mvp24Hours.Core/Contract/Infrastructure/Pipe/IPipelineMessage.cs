@@ -1,7 +1,5 @@
 //=====================================================================================
-// Developed by Kallebe Lins (kallebe.santos@outlook.com)
-// Teacher, Architect, Consultant and Project Leader
-// Virtual Card: https://www.linkedin.com/in/kallebelins
+// Developed by Kallebe Lins (https://github.com/kallebelins)
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
@@ -67,10 +65,6 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
         /// Blocks message for non-mandatory operations
         /// </summary>
         void SetLock();
-        /// <summary>
-        /// Sets content token only if it is empty or null
-        /// </summary>
-        void SetToken(string token);
         /// <summary>
         /// Defines whether an operation failed or broke the message
         /// </summary>

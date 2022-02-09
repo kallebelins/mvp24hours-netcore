@@ -1,12 +1,13 @@
 //=====================================================================================
-// Developed by Kallebe Lins (kallebe.santos@outlook.com)
-// Teacher, Architect, Consultant and Project Leader
-// Virtual Card: https://www.linkedin.com/in/kallebelins
+// Developed by Kallebe Lins (https://github.com/kallebelins)
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-using Mvp24Hours.Core.ValueObjects.RabbitMQ;
+using Microsoft.Extensions.Options;
+using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Extensions;
+using Mvp24Hours.Helpers;
+using Mvp24Hours.Infrastructure.RabbitMQ.Configuration;
 using Mvp24Hours.Infrastructure.RabbitMQ.Core.Contract;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -15,39 +16,26 @@ using System.Text;
 
 namespace Mvp24Hours.Infrastructure.RabbitMQ
 {
-    public abstract class MvpRabbitMQConsumer<T> : MvpRabbitMQBase, IMvpRabbitMQConsumer<T>
-        where T : class
+    public abstract class MvpRabbitMQConsumer : MvpRabbitMQBase, IMvpRabbitMQConsumer
     {
+        #region [ Properties / Fields ]
         protected event EventHandler<Exception, BasicDeliverEventArgs> Failure;
-
         private EventingBasicConsumer _event;
+        #endregion
 
-        protected MvpRabbitMQConsumer()
-            : base(typeof(T).Name)
+        #region [ Ctors ]
+        protected MvpRabbitMQConsumer(IOptions<RabbitMQOptions> options, string queueName = null, string routingKey = null)
+           : base(options?.Value, queueName, routingKey: routingKey)
         {
         }
-
-        protected MvpRabbitMQConsumer(string routingKey)
-            : base(routingKey)
+        protected MvpRabbitMQConsumer(RabbitMQOptions options, string queueName = null, string routingKey = null)
+           : base(options, queueName, routingKey: routingKey)
         {
         }
+        #endregion
 
-        protected MvpRabbitMQConsumer(string hostAddress, string routingKey)
-            : base(hostAddress, routingKey)
-        {
-        }
-
-        protected MvpRabbitMQConsumer(RabbitMQConfiguration configuration, string routingKey)
-            : base(configuration, routingKey)
-        {
-        }
-
-        protected MvpRabbitMQConsumer(RabbitMQConfiguration configuration, RabbitMQQueueOptions options)
-            : base(configuration, options)
-        {
-        }
-
-        public virtual void Consume()
+        #region [ Methods ]
+        public virtual void Consume(string queueName = null, string routingKey = null)
         {
             try
             {
@@ -56,12 +44,12 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
                     _event = new EventingBasicConsumer(Channel);
                     _event.Received += EventReceived;
 
-                    Channel.QueueBind(queue: Options.Queue ?? string.Empty,
+                    Channel.QueueBind(queue: queueName ?? Options.Queue ?? string.Empty,
                                             exchange: Options.Exchange,
-                                            routingKey: Options.RoutingKey);
+                                            routingKey: routingKey ?? Options.RoutingKey);
                 }
 
-                Channel.BasicConsume(queue: Options.Queue ?? string.Empty,
+                Channel.BasicConsume(queue: queueName ?? Options.Queue ?? string.Empty,
                      autoAck: Options.AutoAck,
                      consumer: _event);
             }
@@ -72,14 +60,14 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
             }
         }
 
-        private void EventReceived(object sender, BasicDeliverEventArgs e)
+        protected virtual void EventReceived(object sender, BasicDeliverEventArgs e)
         {
             try
             {
                 var body = e.Body.ToArray();
                 string messageString = Encoding.UTF8.GetString(body);
-                T message = messageString.ToDeserialize<T>();
-                Received(message);
+                IBusinessEvent message = messageString.ToDeserialize<IBusinessEvent>(JsonHelper.JsonBusinessEventSettings());
+                Received(message.GetDataObject());
                 if (!Options.AutoAck)
                 {
                     Channel.BasicAck(e.DeliveryTag, false);
@@ -96,6 +84,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
             }
         }
 
-        public abstract void Received(T message);
+        public abstract void Received(object message);
+        #endregion
     }
 }

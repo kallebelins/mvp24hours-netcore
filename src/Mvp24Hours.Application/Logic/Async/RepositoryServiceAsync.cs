@@ -1,15 +1,17 @@
 //=====================================================================================
-// Developed by Kallebe Lins (kallebe.santos@outlook.com)
-// Teacher, Architect, Consultant and Project Leader
-// Virtual Card: https://www.linkedin.com/in/kallebelins
+// Developed by Kallebe Lins (https://github.com/kallebelins)
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
+using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
+using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Core.Contract.Logic;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Extensions;
+using Mvp24Hours.Helpers;
+using Mvp24Hours.Infrastructure.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,13 +25,34 @@ namespace Mvp24Hours.Application.Logic
     /// Asynchronous service for using repository and unit of work
     /// </summary>
     /// <typeparam name="TEntity">Represents an entity</typeparam>
-    public class RepositoryServiceAsync<TEntity, TUoW> : RepositoryServiceBaseAsync<TUoW>, IQueryServiceAsync<TEntity>, ICommandServiceAsync<TEntity>
+    public class RepositoryServiceAsync<TEntity, TUoW> : IQueryServiceAsync<TEntity>, ICommandServiceAsync<TEntity>
         where TEntity : class, IEntityBase
         where TUoW : IUnitOfWorkAsync
     {
         #region [ Properties ]
 
         private IRepositoryAsync<TEntity> repository = null;
+        private IUnitOfWorkAsync unitOfWork = null;
+        private ILoggingService logging = null;
+        private INotificationContext context = null;
+
+        /// <summary>
+        /// Gets unit of work instance
+        /// </summary>
+        /// <returns>T</returns>
+        protected virtual IUnitOfWorkAsync UnitOfWork => unitOfWork ??= ServiceProviderHelper.GetService<IUnitOfWorkAsync>();
+
+        /// <summary>
+        /// Gets instance of log
+        /// </summary>
+        /// <returns>ILoggingService</returns>
+        protected virtual ILoggingService Logging => logging ??= LoggingService.GetLoggingService();
+
+        /// <summary>
+        /// Gets instance of notification context
+        /// </summary>
+        /// <returns>ILoggingService</returns>
+        protected virtual INotificationContext NotificationContext => context ??= ServiceProviderHelper.GetService<INotificationContext>();
 
         /// <summary>
         /// Gets repository instance

@@ -1,17 +1,17 @@
 //=====================================================================================
-// Developed by Kallebe Lins (kallebe.santos@outlook.com)
-// Teacher, Architect, Consultant and Project Leader
-// Virtual Card: https://www.linkedin.com/in/kallebelins
+// Developed by Kallebe Lins (https://github.com/kallebelins)
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Core.Entities;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Helpers;
+using Mvp24Hours.Infrastructure.Data.EFCore.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,8 +27,8 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
     {
         #region [ Ctor ]
 
-        public Repository(DbContext dbContext)
-            : base(dbContext)
+        public Repository(DbContext dbContext, IOptions<EFCoreRepositoryOptions> options)
+            : base(dbContext, options)
         {
         }
 

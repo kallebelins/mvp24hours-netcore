@@ -1,14 +1,12 @@
 //=====================================================================================
-// Developed by Kallebe Lins (kallebe.santos@outlook.com)
-// Teacher, Architect, Consultant and Project Leader
-// Virtual Card: https://www.linkedin.com/in/kallebelins
+// Developed by Kallebe Lins (https://github.com/kallebelins)
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Infrastructure.RabbitMQ;
+using Mvp24Hours.Infrastructure.RabbitMQ.Configuration;
 using System;
-using System.Threading;
 
 namespace Mvp24Hours.Extensions
 {
@@ -17,18 +15,38 @@ namespace Mvp24Hours.Extensions
         /// <summary>
         /// Add rabbitmq
         /// </summary>
-        public static IServiceCollection AddMvp24HoursRabbitMQ(this IServiceCollection services)
+        public static IServiceCollection AddMvp24HoursRabbitMQ(this IServiceCollection services,
+            Action<RabbitMQOptions> options = null)
         {
             services.AddMvp24HoursLogging();
+
+            if (options != null)
+            {
+                services.Configure(options);
+            }
+            else
+            {
+                services.Configure<RabbitMQOptions>(options => { });
+            }
+
             return services;
         }
 
         /// <summary>
         /// Add hosted service
         /// </summary>
-        public static IServiceCollection AddMvp24HoursHostedService(this IServiceCollection services, TimerCallback callback, object state = null, TimeSpan? dueTime = null, TimeSpan? period = null)
+        public static IServiceCollection AddMvp24HoursHostedService(this IServiceCollection services,
+            Action<RabbitMQHostedOptions> options = null)
         {
-            services.AddHostedService<MvpRabbitMQHostedService>((x) => new MvpRabbitMQHostedService(callback, state, dueTime, period));
+            if (options != null)
+            {
+                services.Configure(options);
+            }
+            else
+            {
+                services.Configure<RabbitMQHostedOptions>(options => { });
+            }
+            services.AddHostedService<MvpRabbitMQHostedService>();
             return services;
         }
     }

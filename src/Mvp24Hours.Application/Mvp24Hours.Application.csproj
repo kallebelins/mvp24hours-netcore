@@ -17,10 +17,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Logic\Base\BaseMapperBO.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="FluentValidation" Version="10.3.6" />
   </ItemGroup>

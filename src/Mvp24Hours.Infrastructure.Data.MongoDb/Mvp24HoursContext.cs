@@ -1,13 +1,13 @@
 //=====================================================================================
-// Developed by Kallebe Lins (kallebe.santos@outlook.com)
-// Teacher, Architect, Consultant and Project Leader
-// Virtual Card: https://www.linkedin.com/in/kallebelins
+// Developed by Kallebe Lins (https://github.com/kallebelins)
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using Mvp24Hours.Extensions;
-using Mvp24Hours.Helpers;
+using Mvp24Hours.Infrastructure.Data.MongoDb.Configuration;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,10 +15,11 @@ using System.Threading.Tasks;
 namespace Mvp24Hours.Infrastructure.Data.MongoDb
 {
     /// <summary>
-    /// 
+    /// A Mvp24HoursContext instance represents a session with the database MongoDb and can be used to query and save instances of your entities.
     /// </summary>
     public class Mvp24HoursContext : IDisposable
     {
+        #region [ Properties / Fields ]
         public string DatabaseName { get; private set; }
         public string ConnectionString { get; private set; }
         public bool EnableTls { get; private set; }
@@ -30,33 +31,26 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         public IClientSessionHandle Session { get; private set; }
 
         private bool _isTransactionAsync;
+        #endregion
 
-
-        public Mvp24HoursContext(string databaseName)
-            : this(databaseName,
-                  ConfigurationHelper.GetSettings("ConnectionStrings:MongoDbContext"),
-                  (bool)ConfigurationHelper.GetSettings("Mvp24Hours:Persistence:MongoDb:EnableTls").ToBoolean(false),
-                  (bool)ConfigurationHelper.GetSettings("Mvp24Hours:Persistence:MongoDb:EnableTransaction").ToBoolean(false))
+        #region [ Ctors ]
+        [ActivatorUtilitiesConstructor]
+        public Mvp24HoursContext(IOptions<MongoDbOptions> options)
         {
+            if (options == null)
+            {
+                throw new ArgumentNullException("Options is required.");
+            }
+
+            DatabaseName = options.Value.DatabaseName;
+            ConnectionString = options.Value.ConnectionString;
+            EnableTls = options.Value.EnableTls;
+            EnableTransaction = options.Value.EnableTransaction;
+
+            Configure();
         }
 
-        public Mvp24HoursContext(string databaseName, string connectionString)
-            : this(databaseName,
-                  connectionString,
-                  (bool)ConfigurationHelper.GetSettings("Mvp24Hours:Persistence:MongoDb:EnableTls").ToBoolean(false),
-                  (bool)ConfigurationHelper.GetSettings("Mvp24Hours:Persistence:MongoDb:EnableTransaction").ToBoolean(false))
-        {
-        }
-
-        public Mvp24HoursContext(string databaseName, string connectionString, bool enableTls)
-            : this(databaseName,
-                  connectionString,
-                  enableTls,
-                  (bool)ConfigurationHelper.GetSettings("Mvp24Hours:Persistence:MongoDb:EnableTransaction").ToBoolean(false))
-        {
-        }
-
-        public Mvp24HoursContext(string databaseName, string connectionString, bool enableTls, bool enableTransaction)
+        public Mvp24HoursContext(string databaseName, string connectionString, bool enableTls = false, bool enableTransaction = false)
         {
             if (!databaseName.HasValue())
             {
@@ -73,6 +67,11 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
             EnableTls = enableTls;
             EnableTransaction = enableTransaction;
 
+            Configure();
+        }
+
+        private void Configure()
+        {
             try
             {
                 MongoClientSettings settings = MongoClientSettings.FromConnectionString(ConnectionString);
@@ -87,8 +86,11 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
             {
                 throw new Exception("Unable to connect to server.", ex);
             }
-        }
 
+        }
+        #endregion
+
+        #region [ Methods ]
         public IMongoCollection<TEntity> Set<TEntity>()
         {
             return Set<TEntity>(typeof(TEntity).Name);
@@ -183,5 +185,6 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
 
             GC.SuppressFinalize(this);
         }
+        #endregion
     }
 }

@@ -1,7 +1,5 @@
 //=====================================================================================
-// Developed by Kallebe Lins (kallebe.santos@outlook.com)
-// Teacher, Architect, Consultant and Project Leader
-// Virtual Card: https://www.linkedin.com/in/kallebelins
+// Developed by Kallebe Lins (https://github.com/kallebelins)
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
@@ -22,6 +20,8 @@ namespace Mvp24Hours.Infrastructure.Logging
         private static readonly Logger _logger;
         internal const string LOGGER_NAME = "Mvp24HoursLogger";
 
+        #region [ Ctor ]
+
         static LoggingService()
         {
             ConfigurationItemFactory.Default.LayoutRenderers
@@ -30,9 +30,17 @@ namespace Mvp24Hours.Infrastructure.Logging
                 .RegisterDefinition("web_variables", typeof(WebVariablesRenderer));
 
             _logger = LogManager.GetLogger(LOGGER_NAME);
-
+            _logger.Info("Starting the log engine.");
             _loggingService = new LoggingService();
         }
+
+        ~LoggingService()
+        {
+            _logger.Info("Shutting down log engine.");
+            LogManager.Shutdown();
+        }
+
+        #endregion
 
         public static ILoggingService GetLoggingService()
         {

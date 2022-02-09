@@ -1,10 +1,9 @@
 //=====================================================================================
-// Developed by Kallebe Lins (kallebe.santos@outlook.com)
-// Teacher, Architect, Consultant and Project Leader
-// Virtual Card: https://www.linkedin.com/in/kallebelins
+// Developed by Kallebe Lins (https://github.com/kallebelins)
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Microsoft.Extensions.Options;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
@@ -14,7 +13,7 @@ using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Core.Entities;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Extensions.Data;
-using Mvp24Hours.Helpers;
+using Mvp24Hours.Infrastructure.Data.MongoDb.Configuration;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
@@ -30,10 +29,11 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
     {
         #region [ Ctor ]
 
-        protected RepositoryBase(Mvp24HoursContext dbContext)
+        protected RepositoryBase(Mvp24HoursContext dbContext, IOptions<MongoDbRepositoryOptions> options)
         {
             this.dbContext = dbContext ?? throw new ArgumentNullException("dbContext");
             dbEntities = dbContext.Set<T>();
+            this.Options = options?.Value ?? new MongoDbRepositoryOptions();
         }
 
         #endregion
@@ -52,6 +52,10 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
         /// Gets the value of the user logged in the context or logged into the database
         /// </summary>
         protected abstract object EntityLogBy { get; }
+        /// <summary>
+        /// Repository configuration options
+        /// </summary>
+        protected MongoDbRepositoryOptions Options { get; private set; }
 
         #endregion
 
@@ -75,7 +79,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
             if (!onlyNavigation)
             {
                 int offset = 0;
-                int limit = MaxQtyByQueryPage;
+                int limit = Options.MaxQtyByQueryPage;
 
                 if (clause != null)
                 {
@@ -179,21 +183,6 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
             }
 
             return query;
-        }
-
-        #endregion
-
-        #region [ Properties ]
-
-        /// <summary>
-        /// Maximum amount returned in query
-        /// </summary>
-        protected int MaxQtyByQueryPage
-        {
-            get
-            {
-                return ConfigurationPropertiesHelper.MaxQtyByQueryPage;
-            }
         }
 
         #endregion

@@ -1,10 +1,9 @@
 //=====================================================================================
-// Developed by Kallebe Lins (kallebe.santos@outlook.com)
-// Teacher, Architect, Consultant and Project Leader
-// Virtual Card: https://www.linkedin.com/in/kallebelins
+// Developed by Kallebe Lins (https://github.com/kallebelins)
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using Mvp24Hours.Core.Contract.Data;
@@ -13,6 +12,7 @@ using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Helpers;
 using Mvp24Hours.Infrastructure.Data.MongoDb.Base;
+using Mvp24Hours.Infrastructure.Data.MongoDb.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,8 +25,8 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
     {
         #region [ Ctor ]
 
-        public Repository(Mvp24HoursContext dbContext)
-            : base(dbContext)
+        public Repository(Mvp24HoursContext dbContext, IOptions<MongoDbRepositoryOptions> options)
+            : base(dbContext, options)
         {
         }
 

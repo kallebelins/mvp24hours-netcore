@@ -1,17 +1,13 @@
 //=====================================================================================
-// Developed by Kallebe Lins (kallebe.santos@outlook.com)
-// Teacher, Architect, Consultant and Project Leader
-// Virtual Card: https://www.linkedin.com/in/kallebelins
+// Developed by Kallebe Lins (https://github.com/kallebelins)
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 
 namespace Mvp24Hours.Infrastructure.RabbitMQ.Core.Contract
 {
-    public interface IMvpRabbitMQProducer<in T>
-        where T : class
+    public interface IMvpRabbitMQProducer
     {
-        public void Publish(T message);
-        public void Publish(string message);
+        public void Publish(object message, string routingKey = null, string tokenDefault = null);
     }
 }

@@ -1,11 +1,9 @@
 //=====================================================================================
-// Developed by Kallebe Lins (kallebe.santos@outlook.com)
-// Teacher, Architect, Consultant and Project Leader
-// Virtual Card: https://www.linkedin.com/in/kallebelins
+// Developed by Kallebe Lins (https://github.com/kallebelins)
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Mvp24Hours.Infrastructure.Logging;
 using NLog;
 using NLog.Config;
@@ -18,54 +16,38 @@ namespace Mvp24Hours.Extensions
         /// <summary>
         /// Adds ConsoleTraceListener logging to the logging listeners.
         /// </summary>
-        public static IServiceCollection UseMvp24HoursConsoleLogging(this IServiceCollection services)
+        public static IHostBuilder UseMvp24HoursLoggingConsole(this IHostBuilder builder, string layout = null)
         {
-            ConsoleTarget target = new();
-            AddNLogTarget(target, "Mvp24HoursConsole");
-            return services;
-        }
-
-        /// <summary>
-        /// Adds network logging.
-        /// </summary>
-        public static IServiceCollection UseMvp24HoursLog2ConsoleLogging(this IServiceCollection services)
-        {
-            ChainsawTarget target = new()
-            {
-                AppInfo = "Mvp24Hours",
-                Address = "udp://127.0.0.1:7071"
-            };
-
-            AddNLogTarget(target, "Mvp24HoursLog2Console");
-            return services;
+            ConsoleTarget target = new("Mvp24HoursConsole");
+            AddNLogTarget(target, layout);
+            return builder;
         }
 
         /// <summary>
         /// Adds rolling file logging.
         /// </summary>
-        public static IServiceCollection UseMvp24HoursFileLogging(this IServiceCollection services)
+        public static IHostBuilder UseMvp24HoursFileLogging(this IHostBuilder builder, string fileName = null, string layout = null)
         {
-            FileTarget target = new()
+            FileTarget target = new("Mvp24HoursFile")
             {
-                FileName = @"${basedir}/logs/${shortdate}.log",
+                FileName = fileName ?? @"${basedir}/logs/${shortdate}.log",
                 KeepFileOpen = false,
                 ArchiveNumbering = ArchiveNumberingMode.Rolling
             };
-            AddNLogTarget(target, "Mvp24HoursFile");
-            return services;
+            AddNLogTarget(target, layout);
+            return builder;
         }
 
         /// <summary>
         /// Assigns the target to the Mvp24Hours rule and sets its layout to [longdate] [utc_date] [level] [message] [error-source] [error-class] [error-method] [error-message] [inner-error-message]
         /// </summary>
-        private static void AddNLogTarget(TargetWithLayout target, string name, string defaultLayout = "Server-Date: ${longdate}; UTC-Date: ${utc_date}; Level: ${level}; Log-Message: ${message}; Error-Source: ${event-context:item=error-source}; Error-Class: ${event-context:item=error-class}; Error-Method: ${event-context:item=error-method}; Error-Message: ${event-context:item=error-message}; Inner-Error-Message: ${event-context:item=inner-error-message}")
+        private static void AddNLogTarget(TargetWithLayout target, string defaultLayout = null)
         {
-            target.Layout = defaultLayout;
-            target.Name = name;
+            target.Layout = defaultLayout ?? "Server-Date: ${longdate}; UTC-Date: ${utc_date}; Level: ${level}; Log-Message: ${message}; Error-Source: ${event-context:item=error-source}; Error-Class: ${event-context:item=error-class}; Error-Method: ${event-context:item=error-method}; Error-Message: ${event-context:item=error-message}; Inner-Error-Message: ${event-context:item=inner-error-message}";
 
             if (!LogManager.Configuration.AllTargets.Contains(target))
             {
-                LogManager.Configuration.AddTarget(name, target);
+                LogManager.Configuration.AddTarget(target);
 
                 LoggingRule rule = new(LoggingService.LOGGER_NAME, target);
 
