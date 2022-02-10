@@ -4,8 +4,6 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Microsoft.Extensions.Caching.Distributed;
-using Mvp24Hours.Core.Contract.Infrastructure.Logging;
-using Mvp24Hours.Infrastructure.Logging;
 using Newtonsoft.Json;
 using System;
 
@@ -13,85 +11,51 @@ namespace Mvp24Hours.Extensions
 {
     public static class ObjectCacheExtensions
     {
-        private static readonly ILoggingService _logger;
-
-#pragma warning disable S3963 // "static" fields should be initialized inline
-        static ObjectCacheExtensions()
+        public static T GetObject<T>(this IDistributedCache cache, string key, JsonSerializerSettings jsonSerializerSettings = null)
+            where T : class
         {
-            _logger = LoggingService.GetLoggingService();
-        }
-#pragma warning restore S3963 // "static" fields should be initialized inline
-
-        public static T GetCacheObject<T>(this IDistributedCache cache, string key, JsonSerializerSettings jsonSerializerSettings = null)
-        {
-            try
+            if (cache == null || key.HasValue())
             {
-                string value = cache.GetString(key);
-                if (!value.HasValue())
-                {
-                    return default;
-                }
-                return value.ToDeserialize<T>(jsonSerializerSettings);
+                return default;
             }
-            catch (Exception ex)
+            string value = cache.GetString(key);
+            if (!value.HasValue())
             {
-                _logger.Error(ex);
+                return default;
             }
-            return default;
+            return value.ToDeserialize<T>(jsonSerializerSettings);
         }
 
-        public static void SetCacheObject<T>(this IDistributedCache cache, string key, T value, JsonSerializerSettings jsonSerializerSettings = null)
+        public static void SetObject<T>(this IDistributedCache cache, string key, T value, JsonSerializerSettings jsonSerializerSettings = null)
+            where T : class
         {
-            if (value == null)
+            if (cache == null || key.HasValue() || value == null)
             {
                 return;
             }
-
-            try
-            {
-                string result = value.ToSerialize(jsonSerializerSettings);
-                cache.SetCacheString(key, result);
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex);
-            }
+            string result = value.ToSerialize(jsonSerializerSettings);
+            cache.SetString(key, result);
         }
 
-        public static void SetCacheObject<T>(this IDistributedCache cache, string key, T value, int minutes, JsonSerializerSettings jsonSerializerSettings = null)
+        public static void SetObject<T>(this IDistributedCache cache, string key, T value, int minutes, JsonSerializerSettings jsonSerializerSettings = null)
+            where T : class
         {
-            if (value == null)
+            if (cache == null || key.HasValue() || value == null)
             {
                 return;
             }
-
-            try
-            {
-                string result = value.ToSerialize(jsonSerializerSettings);
-                cache.SetCacheString(key, result, minutes);
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex);
-            }
+            string result = value.ToSerialize(jsonSerializerSettings);
+            cache.SetString(key, result, minutes);
         }
 
-        public static void SetCacheObject(this IDistributedCache cache, string key, object value, DateTimeOffset time, JsonSerializerSettings jsonSerializerSettings = null)
+        public static void SetObject(this IDistributedCache cache, string key, object value, DateTimeOffset time, JsonSerializerSettings jsonSerializerSettings = null)
         {
-            if (value == null)
+            if (cache == null || key.HasValue() || value == null)
             {
                 return;
             }
-
-            try
-            {
-                string result = value.ToSerialize(jsonSerializerSettings);
-                cache.SetCacheString(key, result, time);
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex);
-            }
+            string result = value.ToSerialize(jsonSerializerSettings);
+            cache.SetString(key, result, time);
         }
     }
 }

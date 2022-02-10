@@ -13,20 +13,26 @@ namespace Mvp24Hours.Application.Pipe.Test.Support.Helpers
     {
         public static void ConfigureServices()
         {
-            var services = new ServiceCollection().AddSingleton(ConfigurationHelper.AppSettings);
+            var services = new ServiceCollection()
+                .AddSingleton(ConfigurationHelper.AppSettings);
 
-            services.AddMvp24HoursNotification();
-            services.AddMvp24HoursPipeline();
+            services.AddMvp24HoursPipeline(options =>
+            {
+                options.IsBreakOnFail = false;
+            });
 
             services.UseMvp24Hours();
         }
 
         public static void ConfigureServicesAsync()
         {
-            var services = new ServiceCollection().AddSingleton(ConfigurationHelper.AppSettings);
+            var services = new ServiceCollection()
+                .AddSingleton(ConfigurationHelper.AppSettings);
 
-            services.AddMvp24HoursNotification();
-            services.AddMvp24HoursPipelineAsync();
+            services.AddMvp24HoursPipelineAsync(options =>
+            {
+                options.IsBreakOnFail = false;
+            });
 
             services.UseMvp24Hours();
         }

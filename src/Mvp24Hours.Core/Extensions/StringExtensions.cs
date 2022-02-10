@@ -58,5 +58,10 @@ namespace Mvp24Hours.Extensions
                 .Replace("--", "")
                 .Replace("'", "''");
         }
+
+        public static string Format(this string text, params object?[] args)
+        {
+            return string.Format(text, args);
+        }
     }
 }

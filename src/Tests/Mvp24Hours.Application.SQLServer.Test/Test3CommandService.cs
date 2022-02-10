@@ -3,6 +3,7 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Mvp24Hours.Application.SQLServer.Test.Support.Data;
 using Mvp24Hours.Application.SQLServer.Test.Support.Entities;
 using Mvp24Hours.Application.SQLServer.Test.Support.Helpers;
 using Mvp24Hours.Application.SQLServer.Test.Support.Services;
@@ -10,6 +11,7 @@ using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Helpers;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 using Xunit.Priority;
 
@@ -21,11 +23,24 @@ namespace Mvp24Hours.Application.SQLServer.Test
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
     public class Test3CommandService
     {
+        #region [ Ctor ]
         public Test3CommandService()
         {
-            StartupHelper.ConfigureServices();
+            var startup = new StartupHelper();
+            startup.ConfigureServices();
         }
 
+        [Fact, Priority(99)]
+        public void Database_Ensure_Delete()
+        {
+            // ensure database drop
+            var db = ServiceProviderHelper.GetService<DataContext>();
+            if (db != null)
+                Assert.True(db.Database.EnsureDeleted());
+        }
+        #endregion
+
+        #region [ Actions ]
         [Fact, Priority(1)]
         public void Create_Customer()
         {
@@ -58,14 +73,16 @@ namespace Mvp24Hours.Application.SQLServer.Test
         public void Update_Customer()
         {
             var service = ServiceProviderHelper.GetService<CustomerService>();
-            var customer = service.GetById(1)
-                .GetDataFirstOrDefault() as Customer;
+            var paging = new PagingCriteria(1, 0);
+            var customer = service.List(paging)
+                .GetDataValue()
+                .FirstOrDefault();
             if (customer != null)
             {
                 customer.Name = "Test Updated";
                 service.Modify(customer);
                 customer = service.GetById(customer.Id)
-                    .GetDataFirstOrDefault() as Customer;
+                    .GetDataValue();
             }
             Assert.True(customer != null && customer.Name == "Test Updated");
         }
@@ -94,12 +111,13 @@ namespace Mvp24Hours.Application.SQLServer.Test
             var service = ServiceProviderHelper.GetService<CustomerService>();
             var paging = new PagingCriteria(1, 0);
             var customer = service.List(paging)
-                .GetDataFirstOrDefault() as Customer;
+                .GetDataValue()
+                .FirstOrDefault();
             if (customer != null)
             {
                 service.RemoveById(customer.Id);
                 customer = service.GetById(customer.Id)
-                    .GetDataFirstOrDefault() as Customer;
+                    .GetDataValue();
             }
             Assert.True(customer == null);
         }
@@ -112,5 +130,6 @@ namespace Mvp24Hours.Application.SQLServer.Test
             int count = service.ListCount().GetDataValue();
             Assert.True(count == 0);
         }
+        #endregion
     }
 }

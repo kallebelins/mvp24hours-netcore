@@ -30,7 +30,6 @@ namespace Mvp24Hours.Patterns.Test
         public void Create_Consumer()
         {
             StartupHelper.ConfigureConsumerServices();
-
             var source = new CancellationTokenSource(TimeSpan.FromSeconds(5));
             while (!source.IsCancellationRequested)
             {

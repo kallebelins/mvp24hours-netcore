@@ -108,7 +108,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
                 throw new ArgumentNullException(nameof(options), "Options is required.");
             }
 
-            if (!queueName.HasValue())
+            if (queueName.HasValue())
             {
                 options.Queue = queueName;
             }

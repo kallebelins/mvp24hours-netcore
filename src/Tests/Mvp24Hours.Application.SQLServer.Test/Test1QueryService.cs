@@ -3,6 +3,7 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Mvp24Hours.Application.SQLServer.Test.Support.Data;
 using Mvp24Hours.Application.SQLServer.Test.Support.Entities;
 using Mvp24Hours.Application.SQLServer.Test.Support.Helpers;
 using Mvp24Hours.Application.SQLServer.Test.Support.Services;
@@ -22,11 +23,23 @@ namespace Mvp24Hours.Application.SQLServer.Test
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
     public class Test1QueryService
     {
+        #region [ Ctor ]
         public Test1QueryService()
         {
-            StartupHelper.ConfigureServices();
-            StartupHelper.LoadData();
+            var startup = new StartupHelper();
+            startup.ConfigureServices();
+            startup.LoadData();
         }
+
+        [Fact, Priority(99)]
+        public void Database_Ensure_Delete()
+        {
+            // ensure database drop
+            var db = ServiceProviderHelper.GetService<DataContext>();
+            if (db != null)
+                Assert.True(db.Database.EnsureDeleted());
+        }
+        #endregion
 
         #region [ List ]
         [Fact, Priority(2)]
@@ -115,9 +128,10 @@ namespace Mvp24Hours.Application.SQLServer.Test
             var service = ServiceProviderHelper.GetService<CustomerService>();
             var paging = new PagingCriteria(1, 0);
             var customer = service.GetBy(x => x.Name.Contains("Test"), paging)
-                .GetDataFirstOrDefault() as Customer;
+                .GetDataValue()
+                .FirstOrDefault();
             customer = service.GetById(customer?.Id)
-                .GetDataFirstOrDefault() as Customer;
+                .GetDataValue();
             Assert.True(customer != null);
         }
         [Fact, Priority(2)]
@@ -126,9 +140,10 @@ namespace Mvp24Hours.Application.SQLServer.Test
             var service = ServiceProviderHelper.GetService<CustomerService>();
             var paging = new PagingCriteria(1, 0, navigation: new List<string> { "Contacts" });
             var customer = service.GetBy(x => x.Contacts.Any(), paging)
-                .GetDataFirstOrDefault() as Customer;
+                .GetDataValue()
+                .FirstOrDefault();
             customer = service.GetById(customer?.Id, paging)
-                .GetDataFirstOrDefault() as Customer;
+                .GetDataValue();
             Assert.True(customer.Contacts.AnyOrNotNull());
         }
         [Fact, Priority(2)]

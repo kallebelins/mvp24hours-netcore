@@ -21,21 +21,22 @@ namespace Mvp24Hours.Extensions
         /// </summary>
         public static bool IsList(this object Value)
         {
-            var type = Value.GetType();
-            return typeof(IEnumerable).IsAssignableFrom(type)
-                || typeof(ICollection).IsAssignableFrom(type)
-                || typeof(IList).IsAssignableFrom(type);
+            if (Value == null) return false;
+            return Value is IEnumerable
+                || Value is ICollection
+                || Value is IList
+                || (Value.GetType().IsGenericType
+                        && Value.GetType().GetGenericTypeDefinition().IsAssignableFrom(typeof(List<>)))
+                || (Value.GetType().IsGenericType
+                        && Value.GetType().GetGenericTypeDefinition().IsAssignableFrom(typeof(ArrayList)));
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public static bool IsList<T>(this object Value)
+        public static bool IsDictionary(this object Value)
         {
-            var type = Value.GetType();
-            return typeof(IEnumerable<T>).IsAssignableFrom(type)
-                || typeof(ICollection<T>).IsAssignableFrom(type)
-                || typeof(IList<T>).IsAssignableFrom(type);
+            if (Value == null) return false;
+            return Value is IDictionary &&
+                   Value.GetType().IsGenericType &&
+                   Value.GetType().GetGenericTypeDefinition().IsAssignableFrom(typeof(Dictionary<,>));
         }
 
         /// <summary>

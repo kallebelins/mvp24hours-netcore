@@ -14,7 +14,8 @@ namespace Mvp24Hours.Application.MongoDb.Test.Support.Helpers
     {
         public static void ConfigureServices()
         {
-            var services = new ServiceCollection().AddSingleton(ConfigurationHelper.AppSettings);
+            var services = new ServiceCollection()
+                .AddSingleton(ConfigurationHelper.AppSettings);
 
             services.AddMvp24HoursMongoDb(options =>
             {

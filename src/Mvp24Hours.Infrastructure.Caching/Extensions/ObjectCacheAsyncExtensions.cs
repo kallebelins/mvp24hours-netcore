@@ -4,8 +4,6 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Microsoft.Extensions.Caching.Distributed;
-using Mvp24Hours.Core.Contract.Infrastructure.Logging;
-using Mvp24Hours.Infrastructure.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Threading;
@@ -15,85 +13,51 @@ namespace Mvp24Hours.Extensions
 {
     public static class ObjectCacheAsyncExtensions
     {
-        private static readonly ILoggingService _logger;
-
-#pragma warning disable S3963 // "static" fields should be initialized inline
-        static ObjectCacheAsyncExtensions()
+        public static async Task<T> GetObjectAsync<T>(this IDistributedCache cache, string key, JsonSerializerSettings jsonSerializerSettings = null, CancellationToken token = default)
+            where T : class
         {
-            _logger = LoggingService.GetLoggingService();
-        }
-#pragma warning restore S3963 // "static" fields should be initialized inline
-
-        public static async Task<T> GetCacheObjectAsync<T>(this IDistributedCache cache, string key, JsonSerializerSettings jsonSerializerSettings = null, CancellationToken token = default)
-        {
-            try
+            if (cache == null || key.HasValue())
             {
-                string value = await cache.GetStringAsync(key, token);
-                if (!value.HasValue())
-                {
-                    return default;
-                }
-                return value.ToDeserialize<T>(jsonSerializerSettings);
+                return default;
             }
-            catch (Exception ex)
+            string value = await cache.GetStringAsync(key, token);
+            if (!value.HasValue())
             {
-                _logger.Error(ex);
+                return default;
             }
-            return default;
+            return value.ToDeserialize<T>(jsonSerializerSettings);
         }
 
-        public static async Task SetCacheObjectAsync<T>(this IDistributedCache cache, string key, T value, JsonSerializerSettings jsonSerializerSettings = null, CancellationToken token = default)
+        public static async Task SetObjectAsync<T>(this IDistributedCache cache, string key, T value, JsonSerializerSettings jsonSerializerSettings = null, CancellationToken token = default)
+            where T : class
         {
-            if (value == null)
+            if (cache == null || key.HasValue() || value == null)
             {
                 return;
             }
-
-            try
-            {
-                string result = value.ToSerialize(jsonSerializerSettings);
-                await cache.SetCacheStringAsync(key, result, token);
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex);
-            }
+            string result = value.ToSerialize(jsonSerializerSettings);
+            await cache.SetStringAsync(key, result, token);
         }
 
-        public static async Task SetCacheObjectAsync<T>(this IDistributedCache cache, string key, T value, int minutes, JsonSerializerSettings jsonSerializerSettings = null, CancellationToken token = default)
+        public static async Task SetObjectAsync<T>(this IDistributedCache cache, string key, T value, int minutes, JsonSerializerSettings jsonSerializerSettings = null, CancellationToken token = default)
+            where T : class
         {
-            if (value == null)
+            if (cache == null || key.HasValue() || value == null)
             {
                 return;
             }
-
-            try
-            {
-                string result = value.ToSerialize(jsonSerializerSettings);
-                await cache.SetCacheStringAsync(key, result, minutes, token);
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex);
-            }
+            string result = value.ToSerialize(jsonSerializerSettings);
+            await cache.SetStringAsync(key, result, minutes, token);
         }
 
-        public static async Task SetCacheObjectAsync(this IDistributedCache cache, string key, object value, DateTimeOffset time, JsonSerializerSettings jsonSerializerSettings = null, CancellationToken token = default)
+        public static async Task SetObjectAsync(this IDistributedCache cache, string key, object value, DateTimeOffset time, JsonSerializerSettings jsonSerializerSettings = null, CancellationToken token = default)
         {
-            if (value == null)
+            if (cache == null || key.HasValue() || value == null)
             {
                 return;
             }
-
-            try
-            {
-                string result = value.ToSerialize(jsonSerializerSettings);
-                await cache.SetCacheStringAsync(key, result, time, token);
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex);
-            }
+            string result = value.ToSerialize(jsonSerializerSettings);
+            await cache.SetStringAsync(key, result, time, token);
         }
     }
 }

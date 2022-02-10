@@ -14,13 +14,9 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
     {
         #region [ Ctors ]
         protected MvpRabbitMQConsumer(IOptions<RabbitMQOptions> options)
-            : base(options, queueName: typeof(T).Name)
+            : base(options, queueName: typeof(T).Name, routingKey: typeof(T).Name)
         {
         }
-        #endregion
-
-        #region [ Methods ]
-        public abstract void Received(T message);
         #endregion
     }
 }

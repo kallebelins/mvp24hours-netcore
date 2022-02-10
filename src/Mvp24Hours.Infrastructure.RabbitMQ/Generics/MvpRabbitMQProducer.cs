@@ -14,7 +14,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
     {
         #region [ Ctors ]
         protected MvpRabbitMQProducer(IOptions<RabbitMQOptions> options)
-            : base(options?.Value, queueName: typeof(T).Name)
+            : base(options?.Value, queueName: typeof(T).Name, routingKey: typeof(T).Name)
         {
         }
         #endregion

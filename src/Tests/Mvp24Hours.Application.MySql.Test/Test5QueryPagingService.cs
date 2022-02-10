@@ -3,6 +3,7 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Mvp24Hours.Application.MySql.Test.Support.Data;
 using Mvp24Hours.Application.MySql.Test.Support.Entities;
 using Mvp24Hours.Application.MySql.Test.Support.Helpers;
 using Mvp24Hours.Application.MySql.Test.Support.Services;
@@ -20,11 +21,23 @@ namespace Mvp24Hours.Application.MySql.Test
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
     public class Test5QueryPagingService
     {
+        #region [ Ctor ]
         public Test5QueryPagingService()
         {
-            StartupHelper.ConfigureServices();
-            StartupHelper.LoadData();
+            var startup = new StartupHelper();
+            startup.ConfigureServices();
+            startup.LoadData();
         }
+
+        [Fact, Priority(99)]
+        public void Database_Ensure_Delete()
+        {
+            // ensure database drop
+            var db = ServiceProviderHelper.GetService<DataContext>();
+            if (db != null)
+                Assert.True(db.Database.EnsureDeleted());
+        }
+        #endregion
 
         #region [ List ]
         [Fact, Priority(2)]

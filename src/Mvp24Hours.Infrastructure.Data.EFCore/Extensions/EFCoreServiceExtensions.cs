@@ -15,13 +15,12 @@ namespace Mvp24Hours.Extensions
     public static class EFCoreServiceExtensions
     {
         /// <summary>
-        /// Add database context services
+        /// Add database context
         /// </summary>
-        public static IServiceCollection AddMvp24HoursDbServiceAsync<TDbContext>(this IServiceCollection services,
+        public static IServiceCollection AddMvp24HoursDbContext<TDbContext>(this IServiceCollection services,
             Func<IServiceProvider, TDbContext> dbFactory = null,
-            Type repositoryAsync = null,
-            Action<EFCoreRepositoryOptions> options = null)
-            where TDbContext : DbContext
+            Action<EFCoreRepositoryOptions> options = null,
+            ServiceLifetime lifetime = ServiceLifetime.Scoped) where TDbContext : DbContext
         {
             services.AddMvp24HoursLogging();
 
@@ -34,67 +33,77 @@ namespace Mvp24Hours.Extensions
                 services.Configure<EFCoreRepositoryOptions>(options => { });
             }
 
-            services.AddScoped<IUnitOfWorkAsync, UnitOfWorkAsync>();
-
-            if (repositoryAsync != null)
-            {
-                services.AddScoped(typeof(IRepositoryAsync<>), repositoryAsync);
-            }
-            else
-            {
-                services.AddScoped(typeof(IRepositoryAsync<>), typeof(RepositoryAsync<>));
-            }
-
             if (dbFactory != null)
             {
-                services.AddScoped<DbContext>(dbFactory);
+                services.Add(new ServiceDescriptor(typeof(DbContext), dbFactory, lifetime));
             }
             else
             {
-                services.AddScoped<DbContext, TDbContext>();
+                services.Add(new ServiceDescriptor(typeof(DbContext), typeof(TDbContext), lifetime));
             }
 
             return services;
         }
 
         /// <summary>
-        /// Add database context services
+        /// Add repository
         /// </summary>
-        public static IServiceCollection AddMvp24HoursDbService<TDbContext>(this IServiceCollection services,
-            Func<IServiceProvider, TDbContext> dbFactory = null,
+        public static IServiceCollection AddMvp24HoursRepository(this IServiceCollection services,
             Type repository = null,
-            Action<EFCoreRepositoryOptions> options = null)
-               where TDbContext : DbContext
+            Type unitOfWork = null,
+            ServiceLifetime lifetime = ServiceLifetime.Scoped)
         {
             services.AddMvp24HoursLogging();
+            services.AddMvp24HoursNotification();
 
-            if (options != null)
+            if (unitOfWork != null)
             {
-                services.Configure(options);
+                services.Add(new ServiceDescriptor(typeof(IUnitOfWork), unitOfWork, lifetime));
             }
             else
             {
-                services.Configure<EFCoreRepositoryOptions>(options => { });
+                services.Add(new ServiceDescriptor(typeof(IUnitOfWork), typeof(UnitOfWork), lifetime));
             }
-
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             if (repository != null)
             {
-                services.AddScoped(typeof(IRepository<>), repository);
+                services.Add(new ServiceDescriptor(typeof(IRepository<>), repository, lifetime));
             }
             else
             {
-                services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+                services.Add(new ServiceDescriptor(typeof(IRepository<>), typeof(Repository<>), lifetime));
             }
 
-            if (dbFactory != null)
+            return services;
+        }
+
+        /// <summary>
+        /// Add repository
+        /// </summary>
+        public static IServiceCollection AddMvp24HoursRepositoryAsync(this IServiceCollection services,
+            Type repositoryAsync = null,
+            Type unitOfWorkAsync = null,
+            ServiceLifetime lifetime = ServiceLifetime.Scoped)
+        {
+            services.AddMvp24HoursLogging();
+            services.AddMvp24HoursNotification();
+
+            if (unitOfWorkAsync != null)
             {
-                services.AddScoped<DbContext>(dbFactory);
+                services.Add(new ServiceDescriptor(typeof(IUnitOfWorkAsync), unitOfWorkAsync, lifetime));
             }
             else
             {
-                services.AddScoped<DbContext, TDbContext>();
+                services.Add(new ServiceDescriptor(typeof(IUnitOfWorkAsync), typeof(UnitOfWorkAsync), lifetime));
+            }
+
+            if (repositoryAsync != null)
+            {
+                services.Add(new ServiceDescriptor(typeof(IRepositoryAsync<>), repositoryAsync, lifetime));
+            }
+            else
+            {
+                services.Add(new ServiceDescriptor(typeof(IRepositoryAsync<>), typeof(RepositoryAsync<>), lifetime));
             }
 
             return services;

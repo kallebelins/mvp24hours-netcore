@@ -10,22 +10,28 @@ using Mvp24Hours.Application.MySql.Test.Support.Data;
 using Mvp24Hours.Application.MySql.Test.Support.Entities;
 using Mvp24Hours.Application.MySql.Test.Support.Services;
 using Mvp24Hours.Application.MySql.Test.Support.Services.Async;
+using Mvp24Hours.Core.Helpers;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Helpers;
 using System.Collections.Generic;
 
 namespace Mvp24Hours.Application.MySql.Test.Support.Helpers
 {
-    public static class StartupHelper
+    public class StartupHelper
     {
-        public static void ConfigureServices()
+        public void ConfigureServices()
         {
             var services = new ServiceCollection().AddSingleton(ConfigurationHelper.AppSettings);
 
             services.AddDbContext<DataContext>(options =>
-                options.UseMySQL(ConfigurationHelper.AppSettings.GetConnectionString("DataContext")));
+                options.UseMySQL(ConfigurationHelper.AppSettings.GetConnectionString("DataContext")
+                    .Format(StringHelper.GenerateKey(10))));
 
-            services.AddMvp24HoursDbService<DataContext>();
+            services.AddMvp24HoursDbContext<DataContext>(options: options =>
+            {
+                options.MaxQtyByQueryPage = 100;
+            });
+            services.AddMvp24HoursRepository();
 
             // register my services
             services.AddScoped<CustomerService, CustomerService>();
@@ -39,7 +45,7 @@ namespace Mvp24Hours.Application.MySql.Test.Support.Helpers
             db.Database.EnsureCreated();
         }
 
-        public static void LoadData()
+        public void LoadData()
         {
             var service = ServiceProviderHelper.GetService<CustomerService>();
             List<Customer> customers = new();
@@ -67,14 +73,18 @@ namespace Mvp24Hours.Application.MySql.Test.Support.Helpers
             service.Add(customers);
         }
 
-        public static void ConfigureServicesAsync()
+        public void ConfigureServicesAsync()
         {
             var services = new ServiceCollection().AddSingleton(ConfigurationHelper.AppSettings);
 
             services.AddDbContext<DataContext>(options =>
                 options.UseMySQL(ConfigurationHelper.AppSettings.GetConnectionString("DataContext")));
 
-            services.AddMvp24HoursDbServiceAsync<DataContext>();
+            services.AddMvp24HoursDbContext<DataContext>(options: options =>
+            {
+                options.MaxQtyByQueryPage = 100;
+            });
+            services.AddMvp24HoursRepositoryAsync();
 
             // register my services
             services.AddScoped<CustomerServiceAsync, CustomerServiceAsync>();
@@ -88,7 +98,7 @@ namespace Mvp24Hours.Application.MySql.Test.Support.Helpers
             db.Database.EnsureCreated();
         }
 
-        public static async void LoadDataAsync()
+        public async void LoadDataAsync()
         {
             var service = ServiceProviderHelper.GetService<CustomerServiceAsync>();
             List<Customer> customers = new();

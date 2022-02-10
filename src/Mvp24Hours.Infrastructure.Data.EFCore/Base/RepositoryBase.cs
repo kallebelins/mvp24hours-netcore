@@ -195,7 +195,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
             {
                 return new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
                 {
-                    IsolationLevel = Options.TransactionIsolationLevel.Value,
+                    IsolationLevel = Options.TransactionIsolationLevel ?? IsolationLevel.ReadUncommitted,
                     Timeout = TransactionManager.MaximumTimeout
                 }, TransactionScopeAsyncFlowOption.Enabled);
             }

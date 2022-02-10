@@ -139,9 +139,9 @@ namespace Mvp24Hours.Extensions
                 return false;
             }
 
-            if (value.Data.IsList<T>())
+            if (value.Data.IsList())
             {
-                return ((IEnumerable<T>)value.Data).AnyOrNotNull();
+                return (value.Data as IEnumerable<object>).AnyOrNotNull();
             }
 
             return true;
@@ -170,9 +170,9 @@ namespace Mvp24Hours.Extensions
         {
             if (value.HasData())
             {
-                if (value.Data.IsList<T>())
+                if (value.Data.IsList())
                 {
-                    return ((IEnumerable<T>)value.Data).Count();
+                    return (value.Data as IEnumerable<object>).Count();
                 }
                 else
                 {
@@ -186,9 +186,9 @@ namespace Mvp24Hours.Extensions
         {
             if (value.HasData())
             {
-                if (value.Data.IsList<T>())
+                if (value.Data.IsList())
                 {
-                    return ((IEnumerable<T>)value.Data).Count() == count;
+                    return (value.Data as IEnumerable<object>).Count() == count;
                 }
             }
             return false;
@@ -198,9 +198,9 @@ namespace Mvp24Hours.Extensions
         {
             if (value.HasData())
             {
-                if (value.Data.IsList<T>())
+                if (value.Data.IsList())
                 {
-                    return ((IEnumerable<T>)value.Data).FirstOrDefault();
+                    return (value.Data as IEnumerable<object>).FirstOrDefault();
                 }
                 else
                 {

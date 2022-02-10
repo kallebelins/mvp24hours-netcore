@@ -7,7 +7,6 @@ using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Extensions;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
 
 namespace Mvp24Hours.Core.ValueObjects.Logic
@@ -31,7 +30,7 @@ namespace Mvp24Hours.Core.ValueObjects.Logic
             Token = token ?? Guid.NewGuid().ToString();
             DataType = data.GetType();
 
-            if (DataType.IsClass)
+            if (DataType.IsClass && DataType != typeof(string))
             {
                 Data = data.ToSerialize();
             }
@@ -71,7 +70,7 @@ namespace Mvp24Hours.Core.ValueObjects.Logic
         #region [ Methods ]
         public object GetDataObject()
         {
-            if (DataType.IsClass)
+            if (DataType.IsClass && DataType != typeof(string))
             {
                 return Data.ToDeserialize(DataType);
             }

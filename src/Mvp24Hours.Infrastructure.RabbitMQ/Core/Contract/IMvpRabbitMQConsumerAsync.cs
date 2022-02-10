@@ -13,10 +13,8 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ.Core.Contract
         Task ReceivedAsync(object message);
     }
 
-    public interface IMvpRabbitMQConsumerAsync<T>
+    public interface IMvpRabbitMQConsumerAsync<T> : IMvpRabbitMQConsumerAsync
         where T : class
     {
-        void Consume(string queueName = null, string routingKey = null);
-        Task ReceivedAsync(T message);
     }
 }

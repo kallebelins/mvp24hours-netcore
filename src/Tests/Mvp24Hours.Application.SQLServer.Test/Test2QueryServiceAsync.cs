@@ -3,6 +3,7 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Mvp24Hours.Application.SQLServer.Test.Support.Data;
 using Mvp24Hours.Application.SQLServer.Test.Support.Entities;
 using Mvp24Hours.Application.SQLServer.Test.Support.Helpers;
 using Mvp24Hours.Application.SQLServer.Test.Support.Services.Async;
@@ -23,11 +24,23 @@ namespace Mvp24Hours.Application.SQLServer.Test
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
     public class Test2QueryServiceAsync
     {
+        #region [ Ctor ]
         public Test2QueryServiceAsync()
         {
-            StartupHelper.ConfigureServicesAsync();
-            StartupHelper.LoadDataAsync();
+            var startup = new StartupHelper();
+            startup.ConfigureServicesAsync();
+            startup.LoadDataAsync();
         }
+
+        [Fact, Priority(99)]
+        public void Database_Ensure_Delete()
+        {
+            // ensure database drop
+            var db = ServiceProviderHelper.GetService<DataContext>();
+            if (db != null)
+                Assert.True(db.Database.EnsureDeleted());
+        }
+        #endregion
 
         #region [ List ]
         [Fact, Priority(2)]

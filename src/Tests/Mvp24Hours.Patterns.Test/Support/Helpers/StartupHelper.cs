@@ -30,7 +30,12 @@ namespace Mvp24Hours.Patterns.Test.Support.Helpers
                 options.UseSqlServer(ConfigurationHelper.AppSettings.GetConnectionString("DataContext")));
 
             services.AddMvp24HoursNotification();
-            services.AddMvp24HoursDbService<DataContext>();
+
+            services.AddMvp24HoursDbContext<DataContext>(options: options =>
+            {
+                options.MaxQtyByQueryPage = 100;
+            });
+            services.AddMvp24HoursRepository();
 
             if (enableFluentValidation)
             {
@@ -84,7 +89,12 @@ namespace Mvp24Hours.Patterns.Test.Support.Helpers
                 options.UseSqlServer(ConfigurationHelper.AppSettings.GetConnectionString("DataContext")));
 
             services.AddMvp24HoursNotification();
-            services.AddMvp24HoursDbServiceAsync<DataContext>();
+
+            services.AddMvp24HoursDbContext<DataContext>(options: options =>
+            {
+                options.MaxQtyByQueryPage = 100;
+            });
+            services.AddMvp24HoursRepositoryAsync();
 
             if (enableFluentValidation)
             {

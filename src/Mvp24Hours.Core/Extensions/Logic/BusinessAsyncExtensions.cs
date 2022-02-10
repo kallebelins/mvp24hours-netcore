@@ -44,7 +44,7 @@ namespace Mvp24Hours.Extensions
         public static async Task<IBusinessResult<T>> ToBusinessAsync<T>(this Task<IReadOnlyCollection<Notification>> notificationsAsync, IMessageResult defaultMessage = null, string tokenDefault = null)
         {
             var notifications = await notificationsAsync;
-            return notifications.ToBusiness<T>(defaultMessage: defaultMessage);
+            return notifications.ToBusiness<T>(defaultMessage: defaultMessage, tokenDefault: tokenDefault);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace Mvp24Hours.Extensions
         public static async Task<IBusinessResult<T>> ToBusinessAsync<T>(this Task<INotificationContext> notificationContextAsync, IMessageResult defaultMessage = null, string tokenDefault = null)
         {
             var notificationContext = await notificationContextAsync;
-            return notificationContext.ToBusiness<T>(defaultMessage: defaultMessage);
+            return notificationContext.ToBusiness<T>(defaultMessage: defaultMessage, tokenDefault: tokenDefault);
         }
 
         /// <summary>
@@ -148,9 +148,9 @@ namespace Mvp24Hours.Extensions
                 return false;
             }
 
-            if (value.Data.IsList<T>())
+            if (value.Data.IsList())
             {
-                return ((IEnumerable<T>)value.Data).AnyOrNotNull();
+                return (value.Data as IEnumerable<object>).AnyOrNotNull();
             }
 
             return true;
@@ -171,9 +171,9 @@ namespace Mvp24Hours.Extensions
             var value = await valueAsync;
             if (value.HasData())
             {
-                if (value.Data.IsList<T>())
+                if (value.Data.IsList())
                 {
-                    return ((IEnumerable<T>)value.Data).Count();
+                    return (value.Data as IEnumerable<object>).Count();
                 }
                 else
                 {
@@ -188,9 +188,9 @@ namespace Mvp24Hours.Extensions
             var value = await valueAsync;
             if (value.HasData())
             {
-                if (value.Data.IsList<T>())
+                if (value.Data.IsList())
                 {
-                    return ((IEnumerable<T>)value.Data).Count() == count;
+                    return (value.Data as IEnumerable<object>).Count() == count;
                 }
             }
             return false;
@@ -201,9 +201,9 @@ namespace Mvp24Hours.Extensions
             var value = await valueAsync;
             if (value.HasData())
             {
-                if (value.Data.IsList<T>())
+                if (value.Data.IsList())
                 {
-                    return ((IEnumerable<T>)value.Data).FirstOrDefault();
+                    return (value.Data as IEnumerable<object>).FirstOrDefault();
                 }
                 else
                 {

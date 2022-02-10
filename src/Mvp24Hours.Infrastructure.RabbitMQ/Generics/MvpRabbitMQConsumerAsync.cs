@@ -6,7 +6,6 @@
 using Microsoft.Extensions.Options;
 using Mvp24Hours.Infrastructure.RabbitMQ.Configuration;
 using Mvp24Hours.Infrastructure.RabbitMQ.Core.Contract;
-using System.Threading.Tasks;
 
 namespace Mvp24Hours.Infrastructure.RabbitMQ
 {
@@ -15,13 +14,9 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
     {
         #region [ Ctors ]
         protected MvpRabbitMQConsumerAsync(IOptions<RabbitMQOptions> options)
-            : base(options?.Value, queueName: typeof(T).Name)
+            : base(options?.Value, queueName: typeof(T).Name, routingKey: typeof(T).Name)
         {
         }
-        #endregion
-
-        #region [ Methods ]
-        public abstract Task ReceivedAsync(T message);
         #endregion
     }
 }

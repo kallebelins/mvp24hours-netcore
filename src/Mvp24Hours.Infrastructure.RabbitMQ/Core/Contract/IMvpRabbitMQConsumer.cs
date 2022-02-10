@@ -12,11 +12,8 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ.Core.Contract
         void Received(object message);
     }
 
-    public interface IMvpRabbitMQConsumer<T>
+    public interface IMvpRabbitMQConsumer<T> : IMvpRabbitMQConsumer
         where T : class
     {
-        void Consume(string queueName = null, string routingKey = null);
-        void Received(T message);
     }
-
 }

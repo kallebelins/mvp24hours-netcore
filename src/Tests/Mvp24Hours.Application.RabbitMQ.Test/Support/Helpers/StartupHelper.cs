@@ -14,7 +14,13 @@ namespace Mvp24Hours.Application.RabbitMQ.Test.Support.Helpers
     {
         public static void ConfigureProducerServices()
         {
-            var services = new ServiceCollection().AddSingleton(ConfigurationHelper.AppSettings);
+            var services = new ServiceCollection()
+                .AddSingleton(ConfigurationHelper.AppSettings);
+
+            services.AddMvp24HoursRabbitMQ(options =>
+            {
+                options.ConnectionString = ConfigurationHelper.GetSettings("ConnectionStrings:HostBus");
+            });
 
             services.AddScoped<CustomerProducer, CustomerProducer>();
 
@@ -23,7 +29,13 @@ namespace Mvp24Hours.Application.RabbitMQ.Test.Support.Helpers
 
         public static void ConfigureConsumerServices()
         {
-            var services = new ServiceCollection().AddSingleton(ConfigurationHelper.AppSettings);
+            var services = new ServiceCollection()
+                .AddSingleton(ConfigurationHelper.AppSettings);
+
+            services.AddMvp24HoursRabbitMQ(options =>
+            {
+                options.ConnectionString = ConfigurationHelper.GetSettings("ConnectionStrings:HostBus");
+            });
 
             services.AddScoped<CustomerConsumer, CustomerConsumer>();
 

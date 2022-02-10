@@ -17,12 +17,12 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
     public abstract class MvpRabbitMQProducer : MvpRabbitMQBase, IMvpRabbitMQProducer
     {
         #region [ Ctors ]
-        protected MvpRabbitMQProducer(IOptions<RabbitMQOptions> options, string queueName = null)
-           : base(options?.Value, queueName)
+        protected MvpRabbitMQProducer(IOptions<RabbitMQOptions> options, string queueName = null, string routingKey = null)
+           : base(options?.Value, queueName, routingKey: routingKey)
         {
         }
-        protected MvpRabbitMQProducer(RabbitMQOptions options, string queueName = null)
-           : base(options, queueName)
+        protected MvpRabbitMQProducer(RabbitMQOptions options, string queueName = null, string routingKey = null)
+           : base(options, queueName, routingKey: routingKey)
         {
         }
         #endregion

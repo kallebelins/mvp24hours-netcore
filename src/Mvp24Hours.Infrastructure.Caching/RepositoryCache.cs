@@ -14,6 +14,7 @@ namespace Mvp24Hours.Infrastructure.Caching
     ///  <see cref="IRepositoryCache{T}"/>
     /// </summary>
     public class RepositoryCache<T> : RepositoryCacheBase, IRepositoryCache<T>
+        where T : class
     {
         public RepositoryCache(IDistributedCache cache)
             : base(cache)
@@ -22,27 +23,27 @@ namespace Mvp24Hours.Infrastructure.Caching
 
         public virtual T Get(string key)
         {
-            return Cache.GetCacheObject<T>(key);
+            return Cache.GetObject<T>(key);
         }
 
         public virtual string GetString(string key)
         {
-            return Cache.GetCacheString(key);
+            return Cache.GetString(key);
         }
 
         public virtual void Set(string key, T model)
         {
-            Cache.SetCacheObject(key, model);
+            Cache.SetObject(key, model);
         }
 
         public virtual void SetString(string key, string value)
         {
-            Cache.SetCacheString(key, value);
+            Cache.SetString(key, value);
         }
 
         public virtual void Remove(string key)
         {
-            Cache.RemoveCacheString(key);
+            Cache.Remove(key);
         }
     }
 }

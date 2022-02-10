@@ -15,6 +15,7 @@ namespace Mvp24Hours.Infrastructure.Caching
     ///  <see cref="Mvp24Hours.Core.Contract.Data.IRepositoryCacheAsync{T}"/>
     /// </summary>
     public class RepositoryCacheAsync<T> : RepositoryCacheBase, IRepositoryCacheAsync<T>
+        where T : class
     {
         public RepositoryCacheAsync(IDistributedCache cache)
             : base(cache)
@@ -23,27 +24,27 @@ namespace Mvp24Hours.Infrastructure.Caching
 
         public virtual async Task<T> GetAsync(string key)
         {
-            return await Cache.GetCacheObjectAsync<T>(key);
+            return await Cache.GetObjectAsync<T>(key);
         }
 
         public virtual async Task<string> GetStringAsync(string key)
         {
-            return await Cache.GetCacheStringAsync(key);
+            return await Cache.GetStringAsync(key);
         }
 
         public virtual async Task SetAsync(string key, T model)
         {
-            await Cache.SetCacheObjectAsync(key, model);
+            await Cache.SetObjectAsync(key, model);
         }
 
         public virtual async Task SetStringAsync(string key, string value)
         {
-            await Cache.SetCacheStringAsync(key, value);
+            await Cache.SetStringAsync(key, value);
         }
 
         public virtual async Task RemoveAsync(string key)
         {
-            await Cache.RemoveCacheStringAsync(key);
+            await Cache.RemoveAsync(key);
         }
     }
 }

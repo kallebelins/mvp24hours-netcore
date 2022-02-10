@@ -3,6 +3,7 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Mvp24Hours.Application.MySql.Test.Support.Data;
 using Mvp24Hours.Application.MySql.Test.Support.Entities;
 using Mvp24Hours.Application.MySql.Test.Support.Helpers;
 using Mvp24Hours.Application.MySql.Test.Support.Services.Async;
@@ -22,11 +23,24 @@ namespace Mvp24Hours.Application.MySql.Test
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
     public class Test4CommandServiceAsync
     {
+        #region [ Ctor ]
         public Test4CommandServiceAsync()
         {
-            StartupHelper.ConfigureServicesAsync();
+            var startup = new StartupHelper();
+            startup.ConfigureServicesAsync();
         }
 
+        [Fact, Priority(99)]
+        public void Database_Ensure_Delete()
+        {
+            // ensure database drop
+            var db = ServiceProviderHelper.GetService<DataContext>();
+            if (db != null)
+                Assert.True(db.Database.EnsureDeleted());
+        }
+        #endregion
+
+        #region [ Actions ]
         [Fact, Priority(1)]
         public async Task Create_Customer()
         {
@@ -38,7 +52,7 @@ namespace Mvp24Hours.Application.MySql.Test
             };
             await service.AddAsync(customer);
             customer = await service.GetByIdAsync(customer.Id)
-                .GetDataFirstOrDefaultAsync() as Customer;
+                .GetDataValueAsync();
             Assert.True(customer != null);
         }
         [Fact, Priority(2)]
@@ -64,14 +78,15 @@ namespace Mvp24Hours.Application.MySql.Test
         {
             var service = ServiceProviderHelper.GetService<CustomerServiceAsync>();
             var paging = new PagingCriteria(1, 0);
-            var customer = (await service.ListAsync(paging))
-                .GetDataFirstOrDefault() as Customer;
+            var customer = await service.ListAsync(paging)
+                .GetDataValueAsync()
+                .FirstOrDefaultAsync();
             if (customer != null)
             {
                 customer.Name = "Test Updated";
                 await service.ModifyAsync(customer);
                 customer = await service.GetByIdAsync(customer.Id)
-                    .GetDataFirstOrDefaultAsync() as Customer;
+                    .GetDataValueAsync();
             }
             Assert.True(customer != null && customer.Name == "Test Updated");
         }
@@ -80,7 +95,8 @@ namespace Mvp24Hours.Application.MySql.Test
         {
             var service = ServiceProviderHelper.GetService<CustomerServiceAsync>();
             var paging = new PagingCriteria(3, 0);
-            var customers = (await service.ListAsync(paging)).Data;
+            var customers = await service.ListAsync(paging)
+                .GetDataValueAsync();
             foreach (var item in customers)
             {
                 item.Active = false;
@@ -96,13 +112,14 @@ namespace Mvp24Hours.Application.MySql.Test
         {
             var service = ServiceProviderHelper.GetService<CustomerServiceAsync>();
             var paging = new PagingCriteria(1, 0);
-            var customer = (await service.ListAsync(paging))
-                .GetDataFirstOrDefault() as Customer;
+            var customer = await service.ListAsync(paging)
+                .GetDataValueAsync()
+                .FirstOrDefaultAsync();
             if (customer != null)
             {
                 await service.RemoveByIdAsync(customer.Id);
                 customer = await service.GetByIdAsync(customer.Id)
-                    .GetDataFirstOrDefaultAsync() as Customer;
+                    .GetDataValueAsync();
             }
             Assert.True(customer == null);
         }
@@ -116,5 +133,6 @@ namespace Mvp24Hours.Application.MySql.Test
                 .GetDataValueAsync();
             Assert.True(count == 0);
         }
+        #endregion
     }
 }

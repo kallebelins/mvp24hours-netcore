@@ -3,6 +3,7 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Microsoft.Extensions.Caching.Distributed;
 using Mvp24Hours.Application.Redis.Test.Support.Entities;
 using Mvp24Hours.Application.Redis.Test.Support.Helpers;
 using Mvp24Hours.Extensions;
@@ -14,14 +15,16 @@ using Xunit.Priority;
 namespace Mvp24Hours.Application.Redis.Test
 {
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
-    public class Test1CacheHelperTest
+    public class Test1cacheTest
     {
         private readonly string _keyString = "string_test";
         private readonly string _keyObject = "object_test";
+        private readonly IDistributedCache cache;
 
-        public Test1CacheHelperTest()
+        public Test1cacheTest()
         {
             StartupHelper.ConfigureServices();
+            cache = ServiceProviderHelper.GetService<IDistributedCache>();
         }
 
         [Fact, Priority(1)]
@@ -35,21 +38,21 @@ namespace Mvp24Hours.Application.Redis.Test
                 Active = true
             };
             string content = customer.ToSerialize();
-            CacheHelper.SetString(_keyString, content);
+            DistributedCacheExtensions.SetString(cache, _keyString, content);
         }
 
         [Fact, Priority(2)]
         public void Get_String()
         {
-            string content = CacheHelper.GetString(_keyString);
+            string content = cache.GetString(_keyString);
             Assert.True(!string.IsNullOrEmpty(content));
         }
 
         [Fact, Priority(3)]
         public void Remove_String()
         {
-            CacheHelper.RemoveString(_keyString);
-            string content = CacheHelper.GetString(_keyString);
+            cache.Remove(_keyString);
+            string content = cache.GetString(_keyString);
             Assert.True(string.IsNullOrEmpty(content));
         }
 
@@ -63,21 +66,21 @@ namespace Mvp24Hours.Application.Redis.Test
                 Name = "Test 1",
                 Active = true
             };
-            ObjectCacheHelper.SetObject(_keyObject, customer);
+            cache.SetObject(_keyObject, customer);
         }
 
         [Fact, Priority(5)]
         public void Get_Object()
         {
-            var customer = ObjectCacheHelper.GetObject<Customer>(_keyObject);
+            var customer = cache.GetObject<Customer>(_keyObject);
             Assert.True(customer != null);
         }
 
         [Fact, Priority(6)]
         public void Remove_Object()
         {
-            CacheHelper.RemoveString(_keyObject);
-            var customer = ObjectCacheHelper.GetObject<Customer>(_keyObject);
+            cache.Remove(_keyObject);
+            var customer = cache.GetObject<Customer>(_keyObject);
             Assert.True(customer == null);
         }
     }

@@ -3,12 +3,9 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Mvp24Hours.Helpers;
 using StackExchange.Redis;
 using System;
-using System.Collections.Generic;
 using System.Reflection;
 
 namespace Mvp24Hours.Extensions
@@ -18,45 +15,22 @@ namespace Mvp24Hours.Extensions
         /// <summary>
         /// See settings at: https://stackexchange.github.io/StackExchange.Redis/Configuration.html
         /// </summary>
-        public static IServiceCollection AddMvp24HoursRedisCache(this IServiceCollection services, IConfiguration configuration = null)
+        public static IServiceCollection AddMvp24HoursCachingRedis(this IServiceCollection services,
+            ConfigurationOptions configurationOptions,
+            string instanceName = null)
         {
             services.AddMvp24HoursLogging();
+            services.AddMvp24HoursNotification();
 
-            ConfigurationOptions redisConfiguration = null;
-
-            if (configuration == null)
+            if (configurationOptions == null)
             {
-                redisConfiguration = ConfigurationHelper.GetSettings<ConfigurationOptions>("Mvp24Hours:Infrastructure:Redis");
+                throw new ArgumentNullException(nameof(configurationOptions), "Configuration options is required.");
             }
-            else
-            {
-                redisConfiguration = configuration.GetSection("Mvp24Hours:Infrastructure:Redis").Get<ConfigurationOptions>();
-            }
-
-            if (redisConfiguration == null)
-            {
-                throw new ArgumentNullException("Redis configuration not defined. [Mvp24Hours:Infrastructure:Redis]");
-            }
-
-            var hosts = ConfigurationHelper.GetSettings<List<string>>("Mvp24Hours:Infrastructure:Redis:Hosts");
-
-            if (hosts == null)
-            {
-                throw new ArgumentNullException("Redis hosts configuration not defined. [Mvp24Hours:Infrastructure:Redis:Hosts]");
-            }
-
-            foreach (var h in hosts)
-            {
-                redisConfiguration.EndPoints.Add(h);
-            }
-
-            string instanceName = ConfigurationHelper.GetSettings("Mvp24Hours:Infrastructure:Redis:InstanceName")
-                ?? Assembly.GetEntryAssembly().GetName().Name.Replace(".", "_");
 
             services.AddDistributedRedisCache(options =>
             {
-                options.ConfigurationOptions = redisConfiguration;
-                options.InstanceName = $"{instanceName}".ToLower();
+                options.ConfigurationOptions = configurationOptions;
+                options.InstanceName = $"{(instanceName ?? Assembly.GetEntryAssembly().GetName().Name.Replace(".", "_"))}".ToLower();
             });
 
             return services;
@@ -65,24 +39,16 @@ namespace Mvp24Hours.Extensions
         /// <summary>
         /// See settings at: https://stackexchange.github.io/StackExchange.Redis/Configuration.html
         /// </summary>
-        public static IServiceCollection AddMvp24HoursRedisCache(this IServiceCollection services, string connectionStringName, string instanceName = null, IConfiguration configuration = null)
+        public static IServiceCollection AddMvp24HoursCachingRedis(this IServiceCollection services,
+            string connectionString,
+            string instanceName = null)
         {
             services.AddMvp24HoursLogging();
-
-            string connectionString = null;
-
-            if (configuration == null)
-            {
-                connectionString = ConfigurationHelper.AppSettings.GetConnectionString(connectionStringName);
-            }
-            else
-            {
-                connectionString = configuration.GetConnectionString(connectionStringName);
-            }
+            services.AddMvp24HoursNotification();
 
             if (!connectionString.HasValue())
             {
-                throw new ArgumentNullException("Connection strings not defined. [ConnectionStrings:ConnectionName]");
+                throw new ArgumentNullException("Connection strings is required.");
             }
 
             services.AddDistributedRedisCache(options =>

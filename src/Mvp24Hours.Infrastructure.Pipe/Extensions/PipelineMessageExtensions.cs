@@ -76,9 +76,9 @@ namespace Mvp24Hours.Extensions
             {
                 if (bo.Data != null)
                 {
-                    if (bo.Data.IsList<T>())
+                    if (bo.Data.IsList())
                     {
-                        foreach (var item in bo.Data as IEnumerable<T>)
+                        foreach (var item in bo.Data as IEnumerable<object>)
                         {
                             message.AddContent(item);
                         }
@@ -110,16 +110,16 @@ namespace Mvp24Hours.Extensions
             {
                 if (bo.Data != null)
                 {
-                    if (bo.Data.IsList<T>())
+                    if (bo.Data.IsList())
                     {
-                        foreach (var item in bo.Data as IEnumerable<T>)
+                        foreach (var item in bo.Data as IEnumerable<object>)
                         {
-                            message.AddContent(ObjectHelper.Clone<T>(item));
+                            message.AddContent(ObjectHelper.Clone(item));
                         }
                     }
                     else
                     {
-                        message.AddContent(ObjectHelper.Clone<T>(bo.Data));
+                        message.AddContent(ObjectHelper.Clone(bo.Data));
                     }
                 }
             }

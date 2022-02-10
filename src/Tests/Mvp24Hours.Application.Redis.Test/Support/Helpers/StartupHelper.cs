@@ -16,14 +16,16 @@ namespace Mvp24Hours.Application.Redis.Test.Support.Helpers
     {
         public static void ConfigureServices()
         {
-            var services = new ServiceCollection().AddSingleton(ConfigurationHelper.AppSettings);
+            var services = new ServiceCollection()
+                .AddSingleton(ConfigurationHelper.AppSettings);
 
             // caching
             services.AddScoped<IRepositoryCache<Customer>, RepositoryCache<Customer>>();
             services.AddScoped<IRepositoryCacheAsync<Customer>, RepositoryCacheAsync<Customer>>();
 
             // caching.redis
-            services.AddMvp24HoursRedisCache();
+            services.AddMvp24HoursCaching();
+            services.AddMvp24HoursCachingRedis(ConfigurationHelper.GetSettings("ConnectionStrings:RedisDbContext"));
 
             services.UseMvp24Hours();
         }
