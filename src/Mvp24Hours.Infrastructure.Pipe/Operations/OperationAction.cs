@@ -11,12 +11,12 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations
     /// <summary>  
     /// Action operation
     /// </summary>
-    public class OperationAction : OperationBase
+    public class OperationAction : IOperation
     {
         private readonly Action<IPipelineMessage> _action;
         private readonly bool _isRequired;
 
-        public override bool IsRequired => this._isRequired;
+        public virtual bool IsRequired => this._isRequired;
 
         public OperationAction(Action<IPipelineMessage> action, bool isRequired = false)
         {
@@ -24,7 +24,7 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations
             this._isRequired = isRequired;
         }
 
-        public override IPipelineMessage Execute(IPipelineMessage input)
+        public virtual IPipelineMessage Execute(IPipelineMessage input)
         {
             this._action?.Invoke(input);
             return input;

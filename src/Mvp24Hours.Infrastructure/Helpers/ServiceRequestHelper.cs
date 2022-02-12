@@ -1,3 +1,8 @@
+//=====================================================================================
+// Developed by Kallebe Lins (https://github.com/kallebelins)
+//=====================================================================================
+// Reproduction or sharing is free! Contribute to a better world!
+//=====================================================================================
 using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Infrastructure.Logging;
 using System;

@@ -49,7 +49,11 @@ namespace Mvp24Hours.Helpers
                 if (provider != null)
                     return provider.GetService(type);
             }
-            return _serviceProvider?.GetService(type);
+            if (_serviceProvider == null)
+            {
+                throw new EntryPointNotFoundException("Service provider not loaded. Use: \"Mvp24Hours.Helpers.ServiceProviderHelper.SetProvider(IServiceProvider)\" on startup.");
+            }
+            return _serviceProvider.GetService(type);
         }
     }
 }

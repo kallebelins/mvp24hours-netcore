@@ -14,7 +14,7 @@ namespace Mvp24Hours.Extensions
         public static T GetObject<T>(this IDistributedCache cache, string key, JsonSerializerSettings jsonSerializerSettings = null)
             where T : class
         {
-            if (cache == null || key.HasValue())
+            if (cache == null || !key.HasValue())
             {
                 return default;
             }
@@ -29,7 +29,7 @@ namespace Mvp24Hours.Extensions
         public static void SetObject<T>(this IDistributedCache cache, string key, T value, JsonSerializerSettings jsonSerializerSettings = null)
             where T : class
         {
-            if (cache == null || key.HasValue() || value == null)
+            if (cache == null || !key.HasValue() || value == null)
             {
                 return;
             }
@@ -40,7 +40,7 @@ namespace Mvp24Hours.Extensions
         public static void SetObject<T>(this IDistributedCache cache, string key, T value, int minutes, JsonSerializerSettings jsonSerializerSettings = null)
             where T : class
         {
-            if (cache == null || key.HasValue() || value == null)
+            if (cache == null || !key.HasValue() || value == null)
             {
                 return;
             }
@@ -50,7 +50,7 @@ namespace Mvp24Hours.Extensions
 
         public static void SetObject(this IDistributedCache cache, string key, object value, DateTimeOffset time, JsonSerializerSettings jsonSerializerSettings = null)
         {
-            if (cache == null || key.HasValue() || value == null)
+            if (cache == null || !key.HasValue() || value == null)
             {
                 return;
             }

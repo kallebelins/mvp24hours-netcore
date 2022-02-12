@@ -9,12 +9,13 @@ using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Helpers;
 using Mvp24Hours.Infrastructure.Caching;
+using System;
 
-namespace Mvp24Hours.Application.Redis.Test.Support.Helpers
+namespace Mvp24Hours.Application.Redis.Test.Setup
 {
-    public static class StartupHelper
+    public class Startup
     {
-        public static void ConfigureServices()
+        public IServiceProvider Initialize()
         {
             var services = new ServiceCollection()
                 .AddSingleton(ConfigurationHelper.AppSettings);
@@ -27,7 +28,7 @@ namespace Mvp24Hours.Application.Redis.Test.Support.Helpers
             services.AddMvp24HoursCaching();
             services.AddMvp24HoursCachingRedis(ConfigurationHelper.GetSettings("ConnectionStrings:RedisDbContext"));
 
-            services.UseMvp24Hours();
+            return services.BuildServiceProvider();
         }
     }
 }

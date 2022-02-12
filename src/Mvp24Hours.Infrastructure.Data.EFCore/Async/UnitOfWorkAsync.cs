@@ -14,18 +14,27 @@ using System.Data;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Mvp24Hours.Infrastructure.Data.EFCore
 {
     public class UnitOfWorkAsync : IUnitOfWorkAsync, IDisposable
     {
         #region [ Ctor ]
-
-        public UnitOfWorkAsync(DbContext dbContext, INotificationContext notificationContext)
+        public UnitOfWorkAsync(DbContext _dbContext, INotificationContext _notificationContext, Dictionary<Type, object> _repositories)
         {
-            this.DbContext = dbContext;
+            this.DbContext = _dbContext;
+            this.repositories = _repositories;
+            this.NotificationContext = _notificationContext;
+        }
+
+        [ActivatorUtilitiesConstructor]
+        public UnitOfWorkAsync(DbContext _dbContext, INotificationContext _notificationContext, IServiceProvider _serviceProvider)
+        {
+            this.DbContext = _dbContext;
             this.repositories = new Dictionary<Type, object>();
-            this.NotificationContext = notificationContext;
+            this.NotificationContext = _notificationContext;
+            this.serviceProvider = _serviceProvider;
         }
 
         #endregion
@@ -36,13 +45,14 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
         protected INotificationContext NotificationContext { get; private set; }
 
         private readonly Dictionary<Type, object> repositories;
+        private readonly IServiceProvider serviceProvider;
 
         public IRepositoryAsync<T> GetRepository<T>()
             where T : class, IEntityBase
         {
             if (!this.repositories.ContainsKey(typeof(T)))
             {
-                this.repositories.Add(typeof(T), ServiceProviderHelper.GetService<IRepositoryAsync<T>>());
+                this.repositories.Add(typeof(T), serviceProvider.GetService<IRepositoryAsync<T>>());
             }
             return repositories[typeof(T)] as IRepositoryAsync<T>;
         }

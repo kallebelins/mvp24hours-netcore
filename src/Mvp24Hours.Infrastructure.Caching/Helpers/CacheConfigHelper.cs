@@ -1,4 +1,9 @@
-﻿using Microsoft.Extensions.Caching.Distributed;
+﻿//=====================================================================================
+// Developed by Kallebe Lins (https://github.com/kallebelins)
+//=====================================================================================
+// Reproduction or sharing is free! Contribute to a better world!
+//=====================================================================================
+using Microsoft.Extensions.Caching.Distributed;
 using System;
 
 namespace Mvp24Hours.Infrastructure.Caching.Helpers

@@ -3,226 +3,316 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-using Mvp24Hours.Application.SQLServer.Test.Support.Data;
+using Mvp24Hours.Application.SQLServer.Test.Setup;
 using Mvp24Hours.Application.SQLServer.Test.Support.Entities;
-using Mvp24Hours.Application.SQLServer.Test.Support.Helpers;
 using Mvp24Hours.Application.SQLServer.Test.Support.Services;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Helpers;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 using Xunit.Priority;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Mvp24Hours.Application.SQLServer.Test
 {
     /// <summary>
     /// 
     /// </summary>
-    [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
-    public class Test1QueryService
+    [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Name)]
+    public class Test1QueryService : IDisposable
     {
+        private readonly Startup startup;
+        private readonly IServiceProvider serviceProvider;
+
         #region [ Ctor ]
+        /// <summary>
+        /// Initialize
+        /// </summary>
         public Test1QueryService()
         {
-            var startup = new StartupHelper();
-            startup.ConfigureServices();
-            startup.LoadData();
+            startup = new Startup();
+            serviceProvider = startup.Initialize();
         }
 
-        [Fact, Priority(99)]
-        public void Database_Ensure_Delete()
+        /// <summary>
+        /// Cleanup
+        /// </summary>
+        public void Dispose()
         {
-            // ensure database drop
-            var db = ServiceProviderHelper.GetService<DataContext>();
-            if (db != null)
-                Assert.True(db.Database.EnsureDeleted());
+            startup.Cleanup(serviceProvider);
         }
         #endregion
 
         #region [ List ]
-        [Fact, Priority(2)]
+        [Fact, Priority(1)]
         public void Get_Filter_Customer_List()
         {
-            var service = ServiceProviderHelper.GetService<CustomerService>();
-            Assert.True(service.List().HasData());
+            // arrange
+            var service = serviceProvider.GetService<CustomerService>();
+            // act
+            var result = service.List();
+            // assert
+            Assert.True(result.HasData());
         }
-        [Fact, Priority(3)]
+        [Fact, Priority(2)]
         public void Get_Filter_Customer_List_Any()
         {
-            var service = ServiceProviderHelper.GetService<CustomerService>();
-            Assert.True(service.ListAny().GetDataValue());
+            // arrange
+            var service = serviceProvider.GetService<CustomerService>();
+            // act
+            var result = service.ListAny();
+            // assert
+            Assert.True(result.GetDataValue());
         }
-        [Fact, Priority(4)]
+        [Fact, Priority(3)]
         public void Get_Filter_Customer_List_Count()
         {
-            var service = ServiceProviderHelper.GetService<CustomerService>();
-            Assert.True(service.ListCount().GetDataValue() > 0);
+            // arrange
+            var service = serviceProvider.GetService<CustomerService>();
+            // act
+            var result = service.ListCount();
+            // assert
+            Assert.True(result.GetDataValue() > 0);
         }
-        [Fact, Priority(5)]
+        [Fact, Priority(4)]
         public void Get_Filter_Customer_List_Paging()
         {
-            var service = ServiceProviderHelper.GetService<CustomerService>();
+            // arrange
+            var service = serviceProvider.GetService<CustomerService>();
             var paging = new PagingCriteria(3, 0);
-            Assert.True(service.List(paging).HasDataCount(3));
+            // act
+            var result = service.List(paging);
+            // assert
+            Assert.True(result.HasDataCount(3));
         }
         [Fact, Priority(5)]
         public void Get_Filter_Customer_List_Navigation()
         {
-            var service = ServiceProviderHelper.GetService<CustomerService>();
+            // arrange
+            var service = serviceProvider.GetService<CustomerService>();
             var paging = new PagingCriteria(3, 0, navigation: new List<string> { "Contacts" });
-            Assert.True(service.List(paging).HasDataCount(3));
+            // act
+            var result = service.List(paging);
+            // assert
+            Assert.True(result.HasDataCount(3));
         }
         [Fact, Priority(6)]
         public void Get_Filter_Customer_List_Order_Asc()
         {
-            var service = ServiceProviderHelper.GetService<CustomerService>();
+            // arrange
+            var service = serviceProvider.GetService<CustomerService>();
             var paging = new PagingCriteria(3, 0, new List<string> { "Name" });
-            Assert.True(service.List(paging).HasDataCount(3));
-        }
-        [Fact, Priority(6)]
-        public void Get_Filter_Customer_List_Order_Desc()
-        {
-            var service = ServiceProviderHelper.GetService<CustomerService>();
-            var paging = new PagingCriteria(3, 0, new List<string> { "Name desc" });
-            Assert.True(service.List(paging).HasDataCount(3));
+            // act
+            var result = service.List(paging);
+            // assert
+            Assert.True(result.HasDataCount(3));
         }
         [Fact, Priority(7)]
-        public void Get_Filter_Customer_List_Order_Asc_Expression()
+        public void Get_Filter_Customer_List_Order_Desc()
         {
-            var service = ServiceProviderHelper.GetService<CustomerService>();
-            var paging = new PagingCriteriaExpression<Customer>(3, 0);
-            paging.OrderByAscendingExpr.Add(x => x.Name);
-            Assert.True(service.List(paging).HasDataCount(3));
+            // arrange
+            var service = serviceProvider.GetService<CustomerService>();
+            var paging = new PagingCriteria(3, 0, new List<string> { "Name desc" });
+            // act
+            var result = service.List(paging);
+            // assert
+            Assert.True(result.HasDataCount(3));
         }
         [Fact, Priority(8)]
+        public void Get_Filter_Customer_List_Order_Asc_Expression()
+        {
+            // arrange
+            var service = serviceProvider.GetService<CustomerService>();
+            var paging = new PagingCriteriaExpression<Customer>(3, 0);
+            paging.OrderByAscendingExpr.Add(x => x.Name);
+            // act
+            var result = service.List(paging);
+            // assert
+            Assert.True(result.HasDataCount(3));
+        }
+        [Fact, Priority(9)]
         public void Get_Filter_Customer_List_Order_Desc_Expression()
         {
-            var service = ServiceProviderHelper.GetService<CustomerService>();
+            // arrange
+            var service = serviceProvider.GetService<CustomerService>();
             var paging = new PagingCriteriaExpression<Customer>(3, 0);
             paging.OrderByDescendingExpr.Add(x => x.Name);
-            Assert.True(service.List(paging).HasDataCount(3));
+            // act
+            var result = service.List(paging);
+            // assert
+            Assert.True(result.HasDataCount(3));
         }
-        [Fact, Priority(9)]
+        [Fact, Priority(10)]
         public void Get_Filter_Customer_List_Paging_Expression()
         {
-            var service = ServiceProviderHelper.GetService<CustomerService>();
+            // arrange
+            var service = serviceProvider.GetService<CustomerService>();
             var paging = new PagingCriteriaExpression<Customer>(3, 0);
-            Assert.True(service.List(paging).HasDataCount(3));
+            // act
+            var result = service.List(paging);
+            // assert
+            Assert.True(result.HasDataCount(3));
         }
-        [Fact, Priority(9)]
+        [Fact, Priority(11)]
         public void Get_Filter_Customer_List_Navigation_Expression()
         {
-            var service = ServiceProviderHelper.GetService<CustomerService>();
+            // arrange
+            var service = serviceProvider.GetService<CustomerService>();
             var paging = new PagingCriteriaExpression<Customer>(3, 0);
             paging.NavigationExpr.Add(x => x.Contacts);
-            Assert.True(service.List(paging).HasDataCount(3));
+            // act
+            var result = service.List(paging);
+            // assert
+            Assert.True(result.HasDataCount(3));
         }
         #endregion
 
         #region [ GetBy ]
-        [Fact, Priority(2)]
+        [Fact, Priority(12)]
         public void Get_Filter_Customer_GetById()
         {
-            var service = ServiceProviderHelper.GetService<CustomerService>();
-            var paging = new PagingCriteria(1, 0);
-            var customer = service.GetBy(x => x.Name.Contains("Test"), paging)
-                .GetDataValue()
-                .FirstOrDefault();
-            customer = service.GetById(customer?.Id)
-                .GetDataValue();
-            Assert.True(customer != null);
+            // arrange
+            var service = serviceProvider.GetService<CustomerService>();
+            // act
+            var result = service.GetById(1);
+            // assert
+            Assert.True(result.GetDataValue() != null);
         }
-        [Fact, Priority(2)]
+        [Fact, Priority(13)]
         public void Get_Filter_Customer_GetById_Navigation()
         {
-            var service = ServiceProviderHelper.GetService<CustomerService>();
+            // arrange
+            var service = serviceProvider.GetService<CustomerService>();
             var paging = new PagingCriteria(1, 0, navigation: new List<string> { "Contacts" });
-            var customer = service.GetBy(x => x.Contacts.Any(), paging)
-                .GetDataValue()
-                .FirstOrDefault();
-            customer = service.GetById(customer?.Id, paging)
-                .GetDataValue();
-            Assert.True(customer.Contacts.AnyOrNotNull());
+            // act
+            var result = service.GetById(1, paging);
+            // assert
+            Assert.True(result.GetDataValue().Contacts.AnyOrNotNull());
         }
-        [Fact, Priority(2)]
+        [Fact, Priority(14)]
         public void Get_Filter_Customer_GetBy()
         {
-            var service = ServiceProviderHelper.GetService<CustomerService>();
-            Assert.True(service.GetBy(x => x.Name.Contains("Test")).HasData());
+            // arrange
+            var service = serviceProvider.GetService<CustomerService>();
+            // act
+            var result = service.GetBy(x => x.Name.Contains("Test"));
+            // assert
+            Assert.True(result.HasData());
         }
-        [Fact, Priority(3)]
+        [Fact, Priority(15)]
         public void Get_Filter_Customer_GetBy_Any()
         {
-            var service = ServiceProviderHelper.GetService<CustomerService>();
-            Assert.True(service.GetByAny(x => x.Name.Contains("Test")).GetDataValue());
+            // arrange
+            var service = serviceProvider.GetService<CustomerService>();
+            // act
+            var result = service.GetByAny(x => x.Name.Contains("Test"));
+            // assert
+            Assert.True(result.GetDataValue());
         }
-        [Fact, Priority(4)]
+        [Fact, Priority(16)]
         public void Get_Filter_Customer_GetBy_Count()
         {
-            var service = ServiceProviderHelper.GetService<CustomerService>();
-            Assert.True(service.GetByCount(x => x.Name.Contains("Test")).GetDataValue() > 0);
+            // arrange
+            var service = serviceProvider.GetService<CustomerService>();
+            // act
+            var result = service.GetByCount(x => x.Name.Contains("Test"));
+            // assert
+            Assert.True(result.GetDataValue() > 0);
         }
-        [Fact, Priority(5)]
+        [Fact, Priority(17)]
         public void Get_Filter_Customer_GetBy_Paging()
         {
-            var service = ServiceProviderHelper.GetService<CustomerService>();
+            // arrange
+            var service = serviceProvider.GetService<CustomerService>();
             var paging = new PagingCriteria(3, 0);
-            Assert.True(service.GetBy(x => x.Name.Contains("Test"), paging).HasDataCount(3));
+            // act
+            var result = service.GetBy(x => x.Name.Contains("Test"), paging);
+            // assert
+            Assert.True(result.HasDataCount(3));
         }
-        [Fact, Priority(5)]
+        [Fact, Priority(18)]
         public void Get_Filter_Customer_GetBy_Navigation()
         {
-            var service = ServiceProviderHelper.GetService<CustomerService>();
+            // arrange
+            var service = serviceProvider.GetService<CustomerService>();
             var paging = new PagingCriteria(3, 0, navigation: new List<string> { "Contacts" });
-            Assert.True(service.GetBy(x => x.Name.Contains("Test"), paging).HasDataCount(3));
+            // act
+            var result = service.GetBy(x => x.Name.Contains("Test"), paging);
+            // assert
+            Assert.True(result.HasDataCount(3));
         }
-        [Fact, Priority(6)]
+        [Fact, Priority(19)]
         public void Get_Filter_Customer_GetBy_Order_Asc()
         {
-            var service = ServiceProviderHelper.GetService<CustomerService>();
+            // arrange
+            var service = serviceProvider.GetService<CustomerService>();
             var paging = new PagingCriteria(3, 0, orderBy: new List<string> { "Name" });
-            Assert.True(service.GetBy(x => x.Name.Contains("Test"), paging).HasDataCount(3));
+            // act
+            var result = service.GetBy(x => x.Name.Contains("Test"), paging);
+            // assert
+            Assert.True(result.HasDataCount(3));
         }
-        [Fact, Priority(6)]
+        [Fact, Priority(20)]
         public void Get_Filter_Customer_GetBy_Order_Desc()
         {
-            var service = ServiceProviderHelper.GetService<CustomerService>();
+            // arrange
+            var service = serviceProvider.GetService<CustomerService>();
             var paging = new PagingCriteria(3, 0, orderBy: new List<string> { "Name desc" });
-            Assert.True(service.GetBy(x => x.Name.Contains("Test"), paging).HasDataCount(3));
+            // act
+            var result = service.GetBy(x => x.Name.Contains("Test"), paging);
+            // assert
+            Assert.True(result.HasDataCount(3));
         }
-        [Fact, Priority(7)]
+        [Fact, Priority(21)]
         public void Get_Filter_Customer_GetBy_Order_Asc_Expression()
         {
-            var service = ServiceProviderHelper.GetService<CustomerService>();
+            // arrange
+            var service = serviceProvider.GetService<CustomerService>();
             var paging = new PagingCriteriaExpression<Customer>(3, 0);
             paging.OrderByAscendingExpr.Add(x => x.Name);
-            Assert.True(service.GetBy(x => x.Name.Contains("Test"), paging).HasDataCount(3));
+            // act
+            var result = service.GetBy(x => x.Name.Contains("Test"), paging);
+            // assert
+            Assert.True(result.HasDataCount(3));
         }
-        [Fact, Priority(8)]
+        [Fact, Priority(22)]
         public void Get_Filter_Customer_GetBy_Order_Desc_Expression()
         {
-            var service = ServiceProviderHelper.GetService<CustomerService>();
+            // arrange
+            var service = serviceProvider.GetService<CustomerService>();
             var paging = new PagingCriteriaExpression<Customer>(3, 0);
             paging.OrderByDescendingExpr.Add(x => x.Name);
-            Assert.True(service.GetBy(x => x.Name.Contains("Test"), paging).HasDataCount(3));
+            // act
+            var result = service.GetBy(x => x.Name.Contains("Test"), paging);
+            // assert
+            Assert.True(result.HasDataCount(3));
         }
-        [Fact, Priority(9)]
+        [Fact, Priority(23)]
         public void Get_Filter_Customer_GetBy_Paging_Expression()
         {
-            var service = ServiceProviderHelper.GetService<CustomerService>();
+            // arrange
+            var service = serviceProvider.GetService<CustomerService>();
             var paging = new PagingCriteriaExpression<Customer>(3, 0);
-            Assert.True(service.GetBy(x => x.Name.Contains("Test"), paging).HasDataCount(3));
+            // act
+            var result = service.GetBy(x => x.Name.Contains("Test"), paging);
+            // assert
+            Assert.True(result.HasDataCount(3));
         }
-        [Fact, Priority(9)]
+        [Fact, Priority(24)]
         public void Get_Filter_Customer_GetBy_Navigation_Expression()
         {
-            var service = ServiceProviderHelper.GetService<CustomerService>();
+            // arrange
+            var service = serviceProvider.GetService<CustomerService>();
             var paging = new PagingCriteriaExpression<Customer>(3, 0);
             paging.NavigationExpr.Add(x => x.Contacts);
-            Assert.True(service.GetBy(x => x.Name.Contains("Test"), paging).HasDataCount(3));
+            // act
+            var result = service.GetBy(x => x.Name.Contains("Test"), paging);
+            // assert
+            Assert.True(result.HasDataCount(3));
         }
+
         #endregion
     }
 }

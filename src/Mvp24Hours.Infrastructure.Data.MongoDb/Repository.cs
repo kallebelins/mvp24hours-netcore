@@ -153,7 +153,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         /// </summary>
         public void Add(IList<T> entities)
         {
-            if (entities != null && entities.Count > 0)
+            if (entities.AnyOrNotNull())
             {
                 foreach (var entity in entities)
                 {
@@ -199,7 +199,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         /// </summary>
         public void Modify(IList<T> entities)
         {
-            if (entities != null && entities.Count > 0)
+            if (entities.AnyOrNotNull())
             {
                 foreach (var entity in entities)
                 {
@@ -236,7 +236,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         /// </summary>
         public void Remove(IList<T> entities)
         {
-            if (entities != null && entities.Count > 0)
+            if (entities.AnyOrNotNull())
             {
                 foreach (var entity in entities)
                 {

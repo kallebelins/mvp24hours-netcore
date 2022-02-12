@@ -3,7 +3,9 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
+using Mvp24Hours.Extensions;
 using Mvp24Hours.Helpers;
 
 namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom.Files
@@ -13,15 +15,26 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom.Files
     /// </summary>
     public class FileTokenReadOperation<T> : OperationBase
     {
-        static readonly bool _enable = ConfigurationHelper.GetSettings<bool>("Mvp24Hours:Operation:FileToken:Enable");
+        public override bool IsRequired => true;
+        private readonly string filePath;
+        public virtual string FilePath => filePath;
 
-        public virtual string FileLogPath => null;
+        public FileTokenReadOperation(string _filePath)
+        {
+            this.filePath = _filePath;
+        }
+
+        public FileTokenReadOperation(INotificationContext _notificationContext, string _filePath)
+            : base(_notificationContext)
+        {
+            this.filePath = _filePath;
+        }
 
         public override IPipelineMessage Execute(IPipelineMessage input)
         {
-            if (_enable)
+            if (FilePath.HasValue())
             {
-                var dto = FileLogHelper.ReadLogToken<T>(input.Token, typeof(T).Name.ToLower(), FileLogPath);
+                var dto = FileLogHelper.ReadLogToken<T>(input.Token, typeof(T).Name.ToLower(), FilePath);
                 if (dto != null)
                 {
                     input.AddContent(dto);

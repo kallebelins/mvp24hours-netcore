@@ -16,7 +16,7 @@ namespace Mvp24Hours.Extensions
         public static async Task<T> GetObjectAsync<T>(this IDistributedCache cache, string key, JsonSerializerSettings jsonSerializerSettings = null, CancellationToken token = default)
             where T : class
         {
-            if (cache == null || key.HasValue())
+            if (cache == null || !key.HasValue())
             {
                 return default;
             }
@@ -31,7 +31,7 @@ namespace Mvp24Hours.Extensions
         public static async Task SetObjectAsync<T>(this IDistributedCache cache, string key, T value, JsonSerializerSettings jsonSerializerSettings = null, CancellationToken token = default)
             where T : class
         {
-            if (cache == null || key.HasValue() || value == null)
+            if (cache == null || !key.HasValue() || value == null)
             {
                 return;
             }
@@ -42,7 +42,7 @@ namespace Mvp24Hours.Extensions
         public static async Task SetObjectAsync<T>(this IDistributedCache cache, string key, T value, int minutes, JsonSerializerSettings jsonSerializerSettings = null, CancellationToken token = default)
             where T : class
         {
-            if (cache == null || key.HasValue() || value == null)
+            if (cache == null || !key.HasValue() || value == null)
             {
                 return;
             }
@@ -52,7 +52,7 @@ namespace Mvp24Hours.Extensions
 
         public static async Task SetObjectAsync(this IDistributedCache cache, string key, object value, DateTimeOffset time, JsonSerializerSettings jsonSerializerSettings = null, CancellationToken token = default)
         {
-            if (cache == null || key.HasValue() || value == null)
+            if (cache == null || !key.HasValue() || value == null)
             {
                 return;
             }

@@ -3,7 +3,9 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
+using Mvp24Hours.Extensions;
 using Mvp24Hours.Helpers;
 using System.Threading.Tasks;
 
@@ -14,16 +16,26 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom.Files
     /// </summary>
     public class FileLogWriteOperationAsync : OperationBaseAsync
     {
-        static readonly bool _enable = ConfigurationHelper.GetSettings<bool>("Mvp24Hours:Operation:FileLog:Enable");
-
         public override bool IsRequired => true;
-        public virtual string FileLogPath => null;
+        private readonly string filePath;
+        public virtual string FilePath => filePath;
+
+        public FileLogWriteOperationAsync(string _filePath)
+        {
+            this.filePath = _filePath;
+        }
+
+        public FileLogWriteOperationAsync(INotificationContext _notificationContext, string _filePath)
+            : base(_notificationContext)
+        {
+            this.filePath = _filePath;
+        }
 
         public override Task<IPipelineMessage> ExecuteAsync(IPipelineMessage input)
         {
-            if (_enable)
+            if (FilePath.HasValue())
             {
-                FileLogHelper.WriteLog(input.GetContentAll(), "message", $"Token: {input.Token} / IsSuccess: {input.IsFaulty} / Warnings: {string.Join('/', input.Messages)}", FileLogPath);
+                FileLogHelper.WriteLog(input.GetContentAll(), "message", $"Token: {input.Token} / IsSuccess: {input.IsFaulty} / Warnings: {string.Join('/', input.Messages)}", FilePath);
             }
             return Task.FromResult(input);
         }

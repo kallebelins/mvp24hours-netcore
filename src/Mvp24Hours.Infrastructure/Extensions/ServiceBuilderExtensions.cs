@@ -5,6 +5,7 @@
 //=====================================================================================
 using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Helpers;
+using System;
 
 namespace Mvp24Hours.Extensions
 {
@@ -16,16 +17,26 @@ namespace Mvp24Hours.Extensions
         /// <summary>
         /// Create a ServiceProvider
         /// </summary>
-        public static IServiceCollection UseMvp24Hours(this IServiceCollection services, ServiceProviderOptions options = null)
+        public static IServiceCollection UseMvp24Hours(this IServiceCollection services, ServiceProviderOptions options = null, bool scoped = false)
         {
-            if (options == null)
+            IServiceProvider provider =
+                (options == null)
+                    ? services.BuildServiceProvider()
+                        : services.BuildServiceProvider(options);
+
+            ServiceProviderHelper.SetProvider(provider);
+
+            if (scoped)
             {
-                ServiceProviderHelper.SetProvider(services.BuildServiceProvider());
+                ServiceProviderHelper.SetProvider((scope) =>
+                {
+                    var service = scope as IServiceScope;
+                    if (service != null)
+                        return service.ServiceProvider;
+                    return null;
+                }, provider.CreateScope());
             }
-            else
-            {
-                ServiceProviderHelper.SetProvider(services.BuildServiceProvider(options));
-            }
+
             return services;
         }
     }

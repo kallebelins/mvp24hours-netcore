@@ -3,12 +3,13 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-using Mvp24Hours.Application.Pipe.Test.Support.Helpers;
+using Microsoft.Extensions.DependencyInjection;
+using Mvp24Hours.Application.Pipe.Test.Setup;
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Core.Enums.Infrastructure;
 using Mvp24Hours.Extensions;
-using Mvp24Hours.Helpers;
+using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,18 +21,27 @@ namespace Mvp24Hours.Application.Pipe.Test
     /// <summary>
     /// 
     /// </summary>
-    [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
+    [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Name)]
     public class PipelineAsyncTest
     {
+        private readonly StartupAsync startup;
+
+        /// <summary>
+        /// Initialize
+        /// </summary>
         public PipelineAsyncTest()
         {
-            StartupHelper.ConfigureServicesAsync();
+            startup = new StartupAsync();
         }
 
         [Fact, Priority(1)]
         public async Task Pipeline_Started()
         {
-            var pipeline = ServiceProviderHelper.GetService<IPipelineAsync>();
+            // arrange
+            var serviceProvider = startup.Initialize();
+            var pipeline = serviceProvider.GetService<IPipelineAsync>();
+
+            // act
             pipeline.Add(_ =>
             {
                 Trace.WriteLine("Test 1");
@@ -45,13 +55,19 @@ namespace Mvp24Hours.Application.Pipe.Test
                 Trace.WriteLine("Test 3");
             });
             await pipeline.ExecuteAsync();
+
+            // assert
             Assert.True(pipeline.GetMessage() != null);
         }
 
         [Fact, Priority(2)]
         public async Task Pipeline_Message_Content_Get()
         {
-            var pipeline = ServiceProviderHelper.GetService<IPipelineAsync>();
+            // arrange
+            var serviceProvider = startup.Initialize();
+            var pipeline = serviceProvider.GetService<IPipelineAsync>();
+
+            // act
 
             // add operations
             pipeline.Add(input =>
@@ -74,13 +90,19 @@ namespace Mvp24Hours.Application.Pipe.Test
             var message = "Parameter received.".ToMessage();
 
             await pipeline.ExecuteAsync(message);
+
+            // assert
             Assert.True(pipeline.GetMessage() != null);
         }
 
         [Fact, Priority(3)]
         public async Task Pipeline_Message_Content_Add()
         {
-            var pipeline = ServiceProviderHelper.GetService<IPipelineAsync>();
+            // arrange
+            var serviceProvider = startup.Initialize();
+            var pipeline = serviceProvider.GetService<IPipelineAsync>();
+
+            // act
 
             // add operations
             pipeline.Add(input =>
@@ -113,13 +135,18 @@ namespace Mvp24Hours.Application.Pipe.Test
                 }
             }
 
+            // assert
             Assert.True(pipeline.GetMessage() != null);
         }
 
         [Fact, Priority(4)]
         public async Task Pipeline_Message_Content_Validate()
         {
-            var pipeline = ServiceProviderHelper.GetService<IPipelineAsync>();
+            // arrange
+            var serviceProvider = startup.Initialize();
+            var pipeline = serviceProvider.GetService<IPipelineAsync>();
+
+            // act
 
             // add operations
             pipeline.Add(input =>
@@ -135,6 +162,8 @@ namespace Mvp24Hours.Application.Pipe.Test
                 }
             });
 
+            // assert
+
             var result1 = (await pipeline.ExecuteAsync()).GetMessage();
             var result2 = (await pipeline.ExecuteAsync("Parameter received.".ToMessage())).GetMessage();
 
@@ -144,7 +173,11 @@ namespace Mvp24Hours.Application.Pipe.Test
         [Fact, Priority(5)]
         public async Task Pipeline_Operation_Lock()
         {
-            var pipeline = ServiceProviderHelper.GetService<IPipelineAsync>();
+            // arrange
+            var serviceProvider = startup.Initialize();
+            var pipeline = serviceProvider.GetService<IPipelineAsync>();
+
+            // act
 
             // add operations
             pipeline.Add(input =>
@@ -166,13 +199,19 @@ namespace Mvp24Hours.Application.Pipe.Test
             });
 
             await pipeline.ExecuteAsync("Parameter received.".ToMessage());
+
+            // assert
             Assert.True(pipeline.GetMessage() != null);
         }
 
         [Fact, Priority(5)]
         public async Task Pipeline_Operation_Lock_Execute_Force()
         {
-            var pipeline = ServiceProviderHelper.GetService<IPipelineAsync>();
+            // arrange
+            var serviceProvider = startup.Initialize();
+            var pipeline = serviceProvider.GetService<IPipelineAsync>();
+
+            // act
 
             // add operations
             pipeline.Add(input =>
@@ -210,13 +249,19 @@ namespace Mvp24Hours.Application.Pipe.Test
             }, PipelineInterceptorType.Locked);
 
             await pipeline.ExecuteAsync("Parameter received.".ToMessage());
+
+            // assert
             Assert.True(pipeline.GetMessage() != null);
         }
 
         [Fact, Priority(6)]
         public async Task Pipeline_Operation_Failure()
         {
-            var pipeline = ServiceProviderHelper.GetService<IPipelineAsync>();
+            // arrange
+            var serviceProvider = startup.Initialize();
+            var pipeline = serviceProvider.GetService<IPipelineAsync>();
+
+            // act
 
             // add operations
             pipeline.Add(input =>
@@ -244,18 +289,24 @@ namespace Mvp24Hours.Application.Pipe.Test
             }, PipelineInterceptorType.Faulty);
 
             await pipeline.ExecuteAsync("Parameter received.".ToMessage());
+
+            // assert
             Assert.True(pipeline.GetMessage() != null);
         }
 
         [Fact, Priority(7)]
         public async Task Pipeline_Operation_Lock_With_Notification()
         {
-            var pipeline = ServiceProviderHelper.GetService<IPipelineAsync>();
+            // arrange
+            var serviceProvider = startup.Initialize();
+            var pipeline = serviceProvider.GetService<IPipelineAsync>();
+
+            // act
 
             // add operations
             pipeline.Add(input =>
             {
-                var notfCtxIn = ServiceProviderHelper.GetService<INotificationContext>();
+                var notfCtxIn = serviceProvider.GetService<INotificationContext>();
                 notfCtxIn.AddIfTrue(!input.HasContent<string>(), "Content not found", Core.Enums.MessageType.Error);
             });
             pipeline.Add(input =>
@@ -271,7 +322,7 @@ namespace Mvp24Hours.Application.Pipe.Test
 
             await pipeline.ExecuteAsync();
 
-            var notfCtxOut = ServiceProviderHelper.GetService<INotificationContext>();
+            var notfCtxOut = serviceProvider.GetService<INotificationContext>();
             if (notfCtxOut.HasErrorNotifications)
             {
                 foreach (var item in notfCtxOut.Notifications)
@@ -280,13 +331,18 @@ namespace Mvp24Hours.Application.Pipe.Test
                 }
             }
 
+            // assert
             Assert.True(notfCtxOut.HasErrorNotifications);
         }
 
         [Fact, Priority(8)]
         public async Task Pipeline_Interceptors()
         {
-            var pipeline = ServiceProviderHelper.GetService<IPipelineAsync>();
+            // arrange
+            var serviceProvider = startup.Initialize();
+            var pipeline = serviceProvider.GetService<IPipelineAsync>();
+
+            // act
 
             // operations
             pipeline.Add(_ =>
@@ -351,13 +407,19 @@ namespace Mvp24Hours.Application.Pipe.Test
             });
 
             await pipeline.ExecuteAsync();
+
+            // assert
             Assert.True(pipeline.GetMessage() != null);
         }
 
         [Fact, Priority(9)]
         public async Task Pipeline_Event_Interceptors()
         {
-            var pipeline = ServiceProviderHelper.GetService<IPipelineAsync>();
+            // arrange
+            var serviceProvider = startup.Initialize();
+            var pipeline = serviceProvider.GetService<IPipelineAsync>();
+
+            // act
 
             // operations
             pipeline.Add(_ =>
@@ -429,13 +491,19 @@ namespace Mvp24Hours.Application.Pipe.Test
             });
 
             await pipeline.ExecuteAsync();
+
+            // assert
             Assert.True(pipeline.GetMessage() != null);
         }
 
         [Fact, Priority(10)]
         public async Task Pipeline_Event_Interceptors_With_Lock()
         {
-            var pipeline = ServiceProviderHelper.GetService<IPipelineAsync>();
+            // arrange
+            var serviceProvider = startup.Initialize();
+            var pipeline = serviceProvider.GetService<IPipelineAsync>();
+
+            // act
 
             // operations
             pipeline.Add(_ =>
@@ -509,7 +577,33 @@ namespace Mvp24Hours.Application.Pipe.Test
             });
 
             await pipeline.ExecuteAsync();
+
+            // assert
             Assert.True(pipeline.GetMessage() != null);
         }
+
+        [Fact, Priority(11)]
+        public async Task Pipeline_Factory()
+        {
+            // arrange
+            var serviceProvider = startup.InitializeWithFactory();
+            var pipeline = serviceProvider.GetService<IPipelineAsync>();
+
+            // act
+            pipeline.Add(_ =>
+            {
+                Trace.WriteLine("Test 1");
+            });
+            pipeline.Add(_ =>
+            {
+                Trace.WriteLine("Test 2");
+            });
+            await pipeline.ExecuteAsync();
+
+            // assert
+            var message = pipeline.GetMessage();
+            Assert.True(message.GetContent<int>("factory") == 1);
+        }
+
     }
 }

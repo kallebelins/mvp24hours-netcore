@@ -5,6 +5,7 @@
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
+using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Core.Contract.Logic;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Extensions;
@@ -22,23 +23,26 @@ namespace Mvp24Hours.Application.Logic
         where TEntity : class, IEntityBase
         where TUoW : IUnitOfWork
     {
-        #region [ Implements IPagingBaseBO ]
+        #region [ Ctor ]
+        /// <summary>
+        /// 
+        /// </summary>
+        public RepositoryPagingService(IUnitOfWork _unitOfWork, ILoggingService _logging)
+            : base(_unitOfWork, _logging)
+        {            
+        }
+        #endregion
+
+        #region [ Implements IQueryPagingService ]
 
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.GetBy(Expression{Func{T, bool}}, IPagingCriteria)"/>
         /// </summary>
         public virtual IPagingResult<IList<TEntity>> GetByWithPagination(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria = null)
         {
-            try
-            {
-                var repo = UnitOfWork.GetRepository<TEntity>();
-                return repo.ToBusinessPaging(clause, criteria);
-            }
-            catch (Exception ex)
-            {
-                Logging.Error(ex);
-                throw;
-            }
+            Logging.Trace("RepositoryPagingService.GetBy(Expression{Func{T, bool}}, IPagingCriteria)");
+            var repo = UnitOfWork.GetRepository<TEntity>();
+            return repo.ToBusinessPaging(clause, criteria);
         }
 
         /// <summary>
@@ -46,16 +50,9 @@ namespace Mvp24Hours.Application.Logic
         /// </summary>
         public virtual IPagingResult<IList<TEntity>> ListWithPagination(IPagingCriteria criteria = null)
         {
-            try
-            {
-                var repo = UnitOfWork.GetRepository<TEntity>();
-                return repo.ToBusinessPaging(criteria);
-            }
-            catch (Exception ex)
-            {
-                Logging.Error(ex);
-                throw;
-            }
+            Logging.Trace("RepositoryPagingService.List(IPagingCriteria)");
+            var repo = UnitOfWork.GetRepository<TEntity>();
+            return repo.ToBusinessPaging(criteria);
         }
 
         #endregion

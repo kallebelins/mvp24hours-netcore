@@ -3,6 +3,7 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Mvp24Hours.Core.Contract.Application.Pipe.Async;
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
@@ -28,7 +29,10 @@ namespace Mvp24Hours.Infrastructure.Pipe
     {
         #region [ Ctor ]
         public PipelineAsync(INotificationContext notificationContext)
-            : base(notificationContext)
+            : this(notificationContext, false) { }
+
+        public PipelineAsync(INotificationContext notificationContext, bool isBreakOnFail)
+            : base(notificationContext, isBreakOnFail)
         {
             Init(
                 out operations,
@@ -41,35 +45,19 @@ namespace Mvp24Hours.Infrastructure.Pipe
             );
         }
 
+        [ActivatorUtilitiesConstructor]
         public PipelineAsync(INotificationContext notificationContext, IOptions<PipelineAsyncOptions> options)
             : base(notificationContext, options?.Value?.IsBreakOnFail ?? false)
         {
-            if (options?.Value?.PipelineAsync != null)
-            {
-                var pipe = (PipelineAsync)options.Value.PipelineAsync;
-
-                operations = pipe.GetOperations();
-
-                dictionaryInterceptors = pipe.GetInterceptors();
-                preCustomInterceptors = pipe.GetPreInterceptors();
-                postCustomInterceptors = pipe.GetPostInterceptors();
-
-                dictionaryEventInterceptors = pipe.GetEvents();
-                preEventCustomInterceptors = pipe.GetPreEvents();
-                postEventCustomInterceptors = pipe.GetPostEvents();
-            }
-            else
-            {
-                Init(
-                    out operations,
-                    out dictionaryInterceptors,
-                    out preCustomInterceptors,
-                    out postCustomInterceptors,
-                    out dictionaryEventInterceptors,
-                    out preEventCustomInterceptors,
-                    out postEventCustomInterceptors
-                );
-            }
+            Init(
+                out operations,
+                out dictionaryInterceptors,
+                out preCustomInterceptors,
+                out postCustomInterceptors,
+                out dictionaryEventInterceptors,
+                out preEventCustomInterceptors,
+                out postEventCustomInterceptors
+            );
         }
 
         protected virtual void Init(

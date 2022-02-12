@@ -3,13 +3,12 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-using Mvp24Hours.Application.PostgreSql.Test.Support.Data;
+using Microsoft.Extensions.DependencyInjection;
+using Mvp24Hours.Application.PostgreSql.Test.Setup;
 using Mvp24Hours.Application.PostgreSql.Test.Support.Entities;
-using Mvp24Hours.Application.PostgreSql.Test.Support.Helpers;
 using Mvp24Hours.Application.PostgreSql.Test.Support.Services;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Extensions;
-using Mvp24Hours.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -20,43 +19,48 @@ namespace Mvp24Hours.Application.PostgreSql.Test
     /// <summary>
     /// 
     /// </summary>
-    [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
+    [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Name)]
     public class Test3CommandService
     {
+        private readonly Startup startup;
+
         #region [ Ctor ]
+        /// <summary>
+        /// Initialize
+        /// </summary>
         public Test3CommandService()
         {
-            var startup = new StartupHelper();
-            startup.ConfigureServices();
+            startup = new Startup();
         }
 
-        [Fact, Priority(99)]
-        public void Database_Ensure_Delete()
-        {
-            // ensure database drop
-            var db = ServiceProviderHelper.GetService<DataContext>();
-            if (db != null)
-                Assert.True(db.Database.EnsureDeleted());
-        }
         #endregion
 
         #region [ Actions ]
         [Fact, Priority(1)]
         public void Create_Customer()
         {
-            var service = ServiceProviderHelper.GetService<CustomerService>();
+            // arrange
+            var serviceProvider = startup.Initialize(false);
+            var service = serviceProvider.GetService<CustomerService>();
+            // act
             var customer = new Customer
             {
                 Name = "Test 1",
                 Active = true
             };
             service.Add(customer);
-            Assert.True(service.GetById(customer.Id).HasData());
+            // assert
+            Assert.True(customer.Id > 0);
+            // dispose
+            startup.Cleanup(serviceProvider);
         }
         [Fact, Priority(2)]
         public void Create_Many_Customers()
         {
-            var service = ServiceProviderHelper.GetService<CustomerService>();
+            // arrange
+            var serviceProvider = startup.Initialize(false);
+            var service = serviceProvider.GetService<CustomerService>();
+            // act
             List<Customer> customers = new();
             for (int i = 2; i <= 10; i++)
             {
@@ -67,68 +71,75 @@ namespace Mvp24Hours.Application.PostgreSql.Test
                 });
             }
             service.Add(customers);
-            Assert.True(service.GetByCount(x => x.Active).GetDataValue() > 0);
+            // assert
+            Assert.True(!customers.Any(x => x.Id == 0));
+            // dispose
+            startup.Cleanup(serviceProvider);
         }
         [Fact, Priority(3)]
         public void Update_Customer()
         {
-            var service = ServiceProviderHelper.GetService<CustomerService>();
-            var paging = new PagingCriteria(1, 0);
-            var customer = service.List(paging)
-                .GetDataValue()
-                .FirstOrDefault();
-            if (customer != null)
-            {
-                customer.Name = "Test Updated";
-                service.Modify(customer);
-                customer = service.GetById(customer.Id)
-                    .GetDataValue();
-            }
-            Assert.True(customer != null && customer.Name == "Test Updated");
+            // arrange
+            var serviceProvider = startup.Initialize();
+            var service = serviceProvider.GetService<CustomerService>();
+            // act
+            var customer = service.GetById(1).GetDataValue();
+            customer.Name = "Test Updated";
+            service.Modify(customer);
+            customer = service.GetById(1).GetDataValue();
+            // assert
+            Assert.True(customer?.Name == "Test Updated");
+            // dispose
+            startup.Cleanup(serviceProvider);
         }
         [Fact, Priority(4)]
         public void Update_Many_Customers()
         {
-            var service = ServiceProviderHelper.GetService<CustomerService>();
-            List<Customer> customers = new();
-            for (int i = 2; i <= 10; i++)
-            {
-                customers.Add(new Customer
-                {
-                    Id = i,
-                    Name = $"Test {i} Updated",
-                    Active = false
-                });
-            }
-            service.Modify(customers);
-            int count = service.GetByCount(x => !x.Active)
+            // arrange
+            var serviceProvider = startup.Initialize();
+            var service = serviceProvider.GetService<CustomerService>();
+            // act
+            var paging = new PagingCriteria(1, 0);
+            var customers = service.List(paging)
                 .GetDataValue();
-            Assert.True(count > 0);
+            foreach (var item in customers)
+                item.Active = false;
+            service.Modify(customers);
+            var result = service.GetByCount(x => !x.Active);
+            // assert
+            Assert.True(result.GetDataValue() > 0);
+            // dispose
+            startup.Cleanup(serviceProvider);
         }
         [Fact, Priority(5)]
         public void Delete_Customer()
         {
-            var service = ServiceProviderHelper.GetService<CustomerService>();
-            var paging = new PagingCriteria(1, 0);
-            var customer = service.List(paging)
-                .GetDataValue()
-                .FirstOrDefault();
-            if (customer != null)
-            {
-                service.RemoveById(customer.Id);
-                customer = service.GetById(customer.Id)
-                    .GetDataValue();
-            }
-            Assert.True(customer == null);
+            // arrange
+            var serviceProvider = startup.Initialize();
+            var service = serviceProvider.GetService<CustomerService>();
+            // act
+            var customer = service.GetById(1).GetDataValue();
+            service.RemoveById(customer.Id);
+            var result = service.GetById(customer.Id);
+            // assert
+            Assert.True(result.GetDataValue() == null);
+            // dispose
+            startup.Cleanup(serviceProvider);
         }
         [Fact, Priority(6)]
         public void Delete_Many_Customers()
         {
-            var service = ServiceProviderHelper.GetService<CustomerService>();
+            // arrange
+            var serviceProvider = startup.Initialize();
+            var service = serviceProvider.GetService<CustomerService>();
+            // act
             var customers = service.List().Data;
             service.Remove(customers);
-            int count = service.ListCount().GetDataValue();
-            Assert.True(count == 0);
+            var result = service.ListCount();
+            // assert
+            Assert.True(result.GetDataValue() == 0);
+            // dispose
+            startup.Cleanup(serviceProvider);
         }
         #endregion
     }

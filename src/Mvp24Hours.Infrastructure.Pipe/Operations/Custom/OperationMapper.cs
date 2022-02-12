@@ -3,6 +3,8 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Microsoft.Extensions.DependencyInjection;
+using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 
 namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom
@@ -12,6 +14,14 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom
     /// </summary>
     public abstract class OperationMapper<T> : OperationBase
     {
+        #region [ Ctors ]
+        public OperationMapper() { }
+
+        [ActivatorUtilitiesConstructor]
+        public OperationMapper(INotificationContext _notificationContext)
+            :base(_notificationContext) { }
+        #endregion
+
         /// <summary>
         /// Key defined for content attached to the message (mapped object)
         /// </summary>

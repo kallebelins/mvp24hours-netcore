@@ -8,6 +8,7 @@ using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Helpers;
 using System;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Mvp24Hours.Infrastructure.Pipe.Operations
 {
@@ -17,22 +18,24 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations
     public abstract class OperationBase : IOperation
     {
         #region [ Ctors ]
-        public OperationBase()
+        protected OperationBase()
+            : this(ServiceProviderHelper.GetService<INotificationContext>())
         {
-            NotificationContext = ServiceProviderHelper.GetService<INotificationContext>();
+        }
 
-            if (NotificationContext == null)
-            {
-                throw new ArgumentNullException("Notification context is mandatory.");
-            }
+        [ActivatorUtilitiesConstructor]
+        protected OperationBase(INotificationContext _notificationContext)
+        {
+            notificationContext = _notificationContext ?? throw new ArgumentNullException(nameof(_notificationContext), "Notification context is mandatory."); ;
         }
         #endregion
 
-        #region [ Props ]
+        #region [ Properties / Fields ]
+        private readonly INotificationContext notificationContext;
         /// <summary>
         /// Notification context based on individual HTTP request
         /// </summary>
-        protected INotificationContext NotificationContext { get; private set; }
+        protected INotificationContext NotificationContext => notificationContext;
         public virtual bool IsRequired => false;
         #endregion
 

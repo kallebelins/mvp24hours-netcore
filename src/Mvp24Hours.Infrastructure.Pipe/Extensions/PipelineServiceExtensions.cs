@@ -16,12 +16,13 @@ namespace Mvp24Hours.Extensions
         /// <summary>
         /// Add pipeline engine
         /// </summary>
-        public static IServiceCollection AddMvp24HoursPipeline(this IServiceCollection services, Action<PipelineOptions> options = null)
+        public static IServiceCollection AddMvp24HoursPipeline(this IServiceCollection services,
+            Action<PipelineOptions> options = null,
+            Func<IServiceProvider, IPipeline> factory = null,
+            ServiceLifetime lifetime = ServiceLifetime.Scoped)
         {
             services.AddMvp24HoursLogging();
             services.AddMvp24HoursNotification();
-
-            services.AddScoped<IPipeline, Pipeline>();
 
             if (options != null)
             {
@@ -35,18 +36,28 @@ namespace Mvp24Hours.Extensions
                 });
             }
 
+            if (factory != null)
+            {
+                services.Add(new ServiceDescriptor(typeof(IPipeline), factory, lifetime));
+            }
+            else
+            {
+                services.Add(new ServiceDescriptor(typeof(IPipeline), typeof(Pipeline), lifetime));
+            }
+
             return services;
         }
 
         /// <summary>
         /// Add pipeline engine async
         /// </summary>
-        public static IServiceCollection AddMvp24HoursPipelineAsync(this IServiceCollection services, Action<PipelineAsyncOptions> options = null)
+        public static IServiceCollection AddMvp24HoursPipelineAsync(this IServiceCollection services,
+            Action<PipelineAsyncOptions> options = null,
+            Func<IServiceProvider, IPipelineAsync> factory = null,
+            ServiceLifetime lifetime = ServiceLifetime.Scoped)
         {
             services.AddMvp24HoursLogging();
             services.AddMvp24HoursNotification();
-
-            services.AddScoped<IPipelineAsync, PipelineAsync>();
 
             if (options != null)
             {
@@ -58,6 +69,15 @@ namespace Mvp24Hours.Extensions
                 {
                     options.IsBreakOnFail = false;
                 });
+            }
+
+            if (factory != null)
+            {
+                services.Add(new ServiceDescriptor(typeof(IPipelineAsync), factory, lifetime));
+            }
+            else
+            {
+                services.Add(new ServiceDescriptor(typeof(IPipelineAsync), typeof(PipelineAsync), lifetime));
             }
 
             return services;

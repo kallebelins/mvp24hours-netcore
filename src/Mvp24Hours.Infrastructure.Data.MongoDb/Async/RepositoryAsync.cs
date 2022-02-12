@@ -159,7 +159,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         /// </summary>
         public async Task AddAsync(IList<T> entities, CancellationToken cancellationToken = default)
         {
-            if (entities != null && entities.Count > 0)
+            if (entities.AnyOrNotNull())
             {
                 foreach (var entity in entities)
                 {
@@ -205,7 +205,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         /// </summary>
         public async Task ModifyAsync(IList<T> entities, CancellationToken cancellationToken = default)
         {
-            if (entities != null && entities.Count > 0)
+            if (entities.AnyOrNotNull())
             {
                 foreach (var entity in entities)
                 {
@@ -242,7 +242,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         /// </summary>
         public async Task RemoveAsync(IList<T> entities, CancellationToken cancellationToken = default)
         {
-            if (entities != null && entities.Count > 0)
+            if (entities.AnyOrNotNull())
             {
                 foreach (var entity in entities)
                 {

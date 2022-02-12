@@ -3,7 +3,9 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
+using Mvp24Hours.Extensions;
 using Mvp24Hours.Helpers;
 using System.Threading.Tasks;
 
@@ -14,20 +16,31 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom.Files
     /// </summary>
     public class FileTokenWriteOperationAsync<T> : OperationBaseAsync
     {
-        static readonly bool _enable = ConfigurationHelper.GetSettings<bool>("Mvp24Hours:Operation:FileToken:Enable");
+        public override bool IsRequired => true;
+        private readonly string filePath;
+        public virtual string FilePath => filePath;
 
-        public virtual string FileLogPath => null;
+        public FileTokenWriteOperationAsync(string _filePath)
+        {
+            this.filePath = _filePath;
+        }
+
+        public FileTokenWriteOperationAsync(INotificationContext _notificationContext, string _filePath)
+            : base(_notificationContext)
+        {
+            this.filePath = _filePath;
+        }
 
         public override Task<IPipelineMessage> ExecuteAsync(IPipelineMessage input)
         {
-            if (_enable)
+            if (FilePath.HasValue())
             {
                 var dto = input.GetContent<T>();
                 if (dto == null)
                 {
                     return Task.FromResult(input);
                 }
-                FileLogHelper.WriteLogToken(input.Token, typeof(T).Name.ToLower(), dto, FileLogPath);
+                FileLogHelper.WriteLogToken(input.Token, typeof(T).Name.ToLower(), dto, FilePath);
             }
             return Task.FromResult(input);
         }

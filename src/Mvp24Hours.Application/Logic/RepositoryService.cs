@@ -26,37 +26,42 @@ namespace Mvp24Hours.Application.Logic
         where TEntity : class, IEntityBase
         where TUoW : IUnitOfWork
     {
-        #region [ Properties ]
+        #region [ Properties / Fields ]
 
-        private IRepository<TEntity> repository = null;
-        private IUnitOfWork unitOfWork = null;
-        private ILoggingService logging = null;
-        private INotificationContext context = null;
+        private readonly IRepository<TEntity> repository = null;
+        private readonly IUnitOfWork unitOfWork = null;
+        private readonly ILoggingService logging = null;
 
         /// <summary>
         /// Gets unit of work instance
         /// </summary>
         /// <returns>T</returns>
-        protected virtual IUnitOfWork UnitOfWork => unitOfWork ??= ServiceProviderHelper.GetService<IUnitOfWork>();
+        protected virtual IUnitOfWork UnitOfWork => unitOfWork;
 
         /// <summary>
         /// Gets instance of log
         /// </summary>
         /// <returns>ILoggingService</returns>
-        protected virtual ILoggingService Logging => logging ??= LoggingService.GetLoggingService();
-
-        /// <summary>
-        /// Gets instance of notification context
-        /// </summary>
-        /// <returns>ILoggingService</returns>
-        protected virtual INotificationContext NotificationContext => context ??= ServiceProviderHelper.GetService<INotificationContext>();
+        protected virtual ILoggingService Logging => logging;
 
         /// <summary>
         /// Gets repository instance
         /// </summary>
         /// <returns>T</returns>
-        protected virtual IRepository<TEntity> Repository => repository ??= UnitOfWork.GetRepository<TEntity>();
+        protected virtual IRepository<TEntity> Repository => repository;
 
+        #endregion
+
+        #region [ Ctor ]
+        /// <summary>
+        /// 
+        /// </summary>
+        public RepositoryService(IUnitOfWork unitOfWork, ILoggingService logging)
+        {
+            this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            this.repository = unitOfWork.GetRepository<TEntity>();
+            this.logging = logging ?? throw new ArgumentNullException(nameof(logging));
+        }
         #endregion
 
         #region [ Implements IQueryService ]
@@ -66,18 +71,11 @@ namespace Mvp24Hours.Application.Logic
         /// </summary>
         public virtual IBusinessResult<bool> ListAny()
         {
-            try
-            {
-                return this.UnitOfWork
-                    .GetRepository<TEntity>()
-                    .ListAny()
-                    .ToBusiness();
-            }
-            catch (Exception ex)
-            {
-                Logging.Error(ex);
-                throw;
-            }
+            Logging.Trace("RepositoryService.ListAny()");
+            return this.UnitOfWork
+                .GetRepository<TEntity>()
+                .ListAny()
+                .ToBusiness();
         }
 
         /// <summary>
@@ -85,18 +83,11 @@ namespace Mvp24Hours.Application.Logic
         /// </summary>
         public virtual IBusinessResult<int> ListCount()
         {
-            try
-            {
-                return this.UnitOfWork
-                    .GetRepository<TEntity>()
-                    .ListCount()
-                    .ToBusiness();
-            }
-            catch (Exception ex)
-            {
-                Logging.Error(ex);
-                throw;
-            }
+            Logging.Trace("RepositoryService.ListCount()");
+            return this.UnitOfWork
+                .GetRepository<TEntity>()
+                .ListCount()
+                .ToBusiness();
         }
 
         /// <summary>
@@ -104,6 +95,7 @@ namespace Mvp24Hours.Application.Logic
         /// </summary>
         public IBusinessResult<IList<TEntity>> List()
         {
+            Logging.Trace("RepositoryService.List()");
             return this.List(null);
         }
 
@@ -112,56 +104,35 @@ namespace Mvp24Hours.Application.Logic
         /// </summary>
         public virtual IBusinessResult<IList<TEntity>> List(IPagingCriteria criteria)
         {
-            try
-            {
-                return this.UnitOfWork
-                    .GetRepository<TEntity>()
-                    .List(criteria)
-                    .ToBusiness();
-            }
-            catch (Exception ex)
-            {
-                Logging.Error(ex);
-                throw;
-            }
+            Logging.Trace("RepositoryService.List(IPagingCriteria)");
+            return this.UnitOfWork
+                .GetRepository<TEntity>()
+                .List(criteria)
+                .ToBusiness();
         }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.GetByAny(Expression{Func{T, bool}})()"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.GetByAny(Expression{Func{T, bool}})"/>
         /// </summary>
         public virtual IBusinessResult<bool> GetByAny(Expression<Func<TEntity, bool>> clause)
         {
-            try
-            {
-                return this.UnitOfWork
-                    .GetRepository<TEntity>()
-                    .GetByAny(clause)
-                    .ToBusiness();
-            }
-            catch (Exception ex)
-            {
-                Logging.Error(ex);
-                throw;
-            }
+            Logging.Trace("RepositoryService.GetByAny(Expression{Func{T, bool}})");
+            return this.UnitOfWork
+                .GetRepository<TEntity>()
+                .GetByAny(clause)
+                .ToBusiness();
         }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.GetByCount(Expression{Func{T, bool}})()"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.GetByCount(Expression{Func{T, bool}})"/>
         /// </summary>
         public virtual IBusinessResult<int> GetByCount(Expression<Func<TEntity, bool>> clause)
         {
-            try
-            {
-                return this.UnitOfWork
-                    .GetRepository<TEntity>()
-                    .GetByCount(clause)
-                    .ToBusiness();
-            }
-            catch (Exception ex)
-            {
-                Logging.Error(ex);
-                throw;
-            }
+            Logging.Trace("RepositoryService.GetByCount(Expression{Func{T, bool}})");
+            return this.UnitOfWork
+                .GetRepository<TEntity>()
+                .GetByCount(clause)
+                .ToBusiness();
         }
 
         /// <summary>
@@ -169,6 +140,7 @@ namespace Mvp24Hours.Application.Logic
         /// </summary>
         public IBusinessResult<IList<TEntity>> GetBy(Expression<Func<TEntity, bool>> clause)
         {
+            Logging.Trace("RepositoryService.GetBy(Expression{Func{T, bool}})");
             return GetBy(clause, null);
         }
 
@@ -177,18 +149,11 @@ namespace Mvp24Hours.Application.Logic
         /// </summary>
         public virtual IBusinessResult<IList<TEntity>> GetBy(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria)
         {
-            try
-            {
-                return UnitOfWork
-                    .GetRepository<TEntity>()
-                    .GetBy(clause, criteria)
-                    .ToBusiness();
-            }
-            catch (Exception ex)
-            {
-                Logging.Error(ex);
-                throw;
-            }
+            Logging.Trace("RepositoryService.GetBy(Expression{Func{T, bool}}, IPagingCriteria)");
+            return UnitOfWork
+                .GetRepository<TEntity>()
+                .GetBy(clause, criteria)
+                .ToBusiness();
         }
 
         /// <summary>
@@ -196,6 +161,7 @@ namespace Mvp24Hours.Application.Logic
         /// </summary>
         public IBusinessResult<TEntity> GetById(object id)
         {
+            Logging.Trace("RepositoryService.GetById(int)");
             return this.GetById(id, null);
         }
 
@@ -204,18 +170,11 @@ namespace Mvp24Hours.Application.Logic
         /// </summary>
         public virtual IBusinessResult<TEntity> GetById(object id, IPagingCriteria criteria)
         {
-            try
-            {
-                return this.UnitOfWork
-                    .GetRepository<TEntity>()
-                    .GetById(id, criteria)
-                    .ToBusiness();
-            }
-            catch (Exception ex)
-            {
-                Logging.Error(ex);
-                throw;
-            }
+            Logging.Trace("RepositoryService.GetById(int, IPagingCriteria)");
+            return this.UnitOfWork
+                .GetRepository<TEntity>()
+                .GetById(id, criteria)
+                .ToBusiness();
         }
 
         #endregion
@@ -227,45 +186,31 @@ namespace Mvp24Hours.Application.Logic
         /// </summary>
         public virtual int Add(TEntity entity)
         {
-            try
+            Logging.Trace("RepositoryService.Add(T)");
+            if (entity.Validate())
             {
-                if (entity.Validate())
-                {
-                    this.UnitOfWork.GetRepository<TEntity>().Add(entity);
-                    return this.UnitOfWork.SaveChanges();
-                }
-                return 0;
+                this.UnitOfWork.GetRepository<TEntity>().Add(entity);
+                return this.UnitOfWork.SaveChanges();
             }
-            catch (Exception ex)
-            {
-                Logging.Error(ex);
-                throw;
-            }
+            return 0;
         }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.ICommandService{T}.Add(T)"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.ICommandService{T}.Add(IList{T})"/>
         /// </summary>
         public virtual int Add(IList<TEntity> entities)
         {
+            Logging.Trace("RepositoryService.Add(IList{T})");
             if (!entities.AnyOrNotNull())
             {
                 return 0;
             }
 
-            try
+            foreach (var entity in entities)
             {
-                foreach (var entity in entities)
-                {
-                    this.UnitOfWork.GetRepository<TEntity>().Add(entity);
-                }
-                return this.UnitOfWork.SaveChanges();
+                this.UnitOfWork.GetRepository<TEntity>().Add(entity);
             }
-            catch (Exception ex)
-            {
-                Logging.Error(ex);
-                throw;
-            }
+            return this.UnitOfWork.SaveChanges();
         }
 
         /// <summary>
@@ -273,45 +218,31 @@ namespace Mvp24Hours.Application.Logic
         /// </summary>
         public virtual int Modify(TEntity entity)
         {
-            try
+            Logging.Trace("RepositoryService.Modify(T)");
+            if (entity.Validate())
             {
-                if (entity.Validate())
-                {
-                    this.UnitOfWork.GetRepository<TEntity>().Modify(entity);
-                    return this.UnitOfWork.SaveChanges();
-                }
-                return 0;
+                this.UnitOfWork.GetRepository<TEntity>().Modify(entity);
+                return this.UnitOfWork.SaveChanges();
             }
-            catch (Exception ex)
-            {
-                Logging.Error(ex);
-                throw;
-            }
+            return 0;
         }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.ICommandService{T}.Modify(T)"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.ICommandService{T}.Modify(IList{T})"/>
         /// </summary>
         public virtual int Modify(IList<TEntity> entities)
         {
+            Logging.Trace("RepositoryService.Modify(IList{T})");
             if (!entities.AnyOrNotNull())
             {
                 return 0;
             }
 
-            try
+            foreach (var entity in entities)
             {
-                foreach (var entity in entities)
-                {
-                    this.UnitOfWork.GetRepository<TEntity>().Modify(entity);
-                }
-                return this.UnitOfWork.SaveChanges();
+                this.UnitOfWork.GetRepository<TEntity>().Modify(entity);
             }
-            catch (Exception ex)
-            {
-                Logging.Error(ex);
-                throw;
-            }
+            return this.UnitOfWork.SaveChanges();
         }
 
         /// <summary>
@@ -319,41 +250,27 @@ namespace Mvp24Hours.Application.Logic
         /// </summary>
         public virtual int Remove(TEntity entity)
         {
-            try
-            {
-                this.UnitOfWork.GetRepository<TEntity>().Remove(entity);
-                return this.UnitOfWork.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                Logging.Error(ex);
-                throw;
-            }
+            Logging.Trace("RepositoryService.Remove(T)");
+            this.UnitOfWork.GetRepository<TEntity>().Remove(entity);
+            return this.UnitOfWork.SaveChanges();
         }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.ICommandService{T}.Remove(T)"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.ICommandService{T}.Remove(IList{T})"/>
         /// </summary>
         public virtual int Remove(IList<TEntity> entities)
         {
+            Logging.Trace("RepositoryService.Remove(IList{T})");
             if (!entities.AnyOrNotNull())
             {
                 return 0;
             }
 
-            try
+            foreach (var entity in entities)
             {
-                foreach (var entity in entities)
-                {
-                    this.UnitOfWork.GetRepository<TEntity>().Remove(entity);
-                }
-                return this.UnitOfWork.SaveChanges();
+                this.UnitOfWork.GetRepository<TEntity>().Remove(entity);
             }
-            catch (Exception ex)
-            {
-                Logging.Error(ex);
-                throw;
-            }
+            return this.UnitOfWork.SaveChanges();
         }
 
         /// <summary>
@@ -361,41 +278,27 @@ namespace Mvp24Hours.Application.Logic
         /// </summary>
         public virtual int RemoveById(object id)
         {
-            try
-            {
-                this.UnitOfWork.GetRepository<TEntity>().RemoveById(id);
-                return this.UnitOfWork.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                Logging.Error(ex);
-                throw;
-            }
+            Logging.Trace("RepositoryService.RemoveById(object)");
+            this.UnitOfWork.GetRepository<TEntity>().RemoveById(id);
+            return this.UnitOfWork.SaveChanges();
         }
 
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.ICommandService{T}.RemoveById(T)"/>
+        /// <see cref="Mvp24Hours.Core.Contract.Logic.ICommandService{T}.RemoveById(IList{object})"/>
         /// </summary>
         public virtual int RemoveById(IList<object> ids)
         {
+            Logging.Trace("RepositoryService.RemoveById(IList{object})");
             if (!ids.AnyOrNotNull())
             {
                 return 0;
             }
 
-            try
+            foreach (var id in ids)
             {
-                foreach (var id in ids)
-                {
-                    this.UnitOfWork.GetRepository<TEntity>().RemoveById(id);
-                }
-                return this.UnitOfWork.SaveChanges();
+                this.UnitOfWork.GetRepository<TEntity>().RemoveById(id);
             }
-            catch (Exception ex)
-            {
-                Logging.Error(ex);
-                throw;
-            }
+            return this.UnitOfWork.SaveChanges();
         }
 
         #endregion

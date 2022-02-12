@@ -7,15 +7,16 @@ using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Application.RabbitMQ.Test.Support.Consumers;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Helpers;
+using System;
 
-namespace Mvp24Hours.Application.RabbitMQ.Test.Support.Helpers
+namespace Mvp24Hours.Application.RabbitMQ.Test.Setup
 {
-    public static class StartupHelper
+    public class Startup
     {
-        public static void ConfigureProducerServices()
+        public IServiceProvider InitializeProducer()
         {
             var services = new ServiceCollection()
-                .AddSingleton(ConfigurationHelper.AppSettings);
+                            .AddSingleton(ConfigurationHelper.AppSettings);
 
             services.AddMvp24HoursRabbitMQ(options =>
             {
@@ -24,13 +25,13 @@ namespace Mvp24Hours.Application.RabbitMQ.Test.Support.Helpers
 
             services.AddScoped<CustomerProducer, CustomerProducer>();
 
-            services.UseMvp24Hours();
+            return services.BuildServiceProvider();
         }
 
-        public static void ConfigureConsumerServices()
+        public IServiceProvider InitializeConsumer()
         {
             var services = new ServiceCollection()
-                .AddSingleton(ConfigurationHelper.AppSettings);
+                            .AddSingleton(ConfigurationHelper.AppSettings);
 
             services.AddMvp24HoursRabbitMQ(options =>
             {
@@ -39,7 +40,7 @@ namespace Mvp24Hours.Application.RabbitMQ.Test.Support.Helpers
 
             services.AddScoped<CustomerConsumer, CustomerConsumer>();
 
-            services.UseMvp24Hours();
+            return services.BuildServiceProvider();
         }
 
     }

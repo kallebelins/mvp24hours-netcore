@@ -29,7 +29,10 @@ namespace Mvp24Hours.Infrastructure.Pipe
     {
         #region [ Ctor ]
         public Pipeline(INotificationContext notificationContext)
-            : base(notificationContext)
+            : this(notificationContext, false) { }
+
+        public Pipeline(INotificationContext notificationContext, bool isBreakOnFail)
+            : base(notificationContext, isBreakOnFail)
         {
             Init(
                 out operations,
@@ -44,34 +47,17 @@ namespace Mvp24Hours.Infrastructure.Pipe
 
         [ActivatorUtilitiesConstructor]
         public Pipeline(INotificationContext notificationContext, IOptions<PipelineOptions> options)
-        : base(notificationContext, options?.Value?.IsBreakOnFail ?? false)
+            : base(notificationContext, options?.Value?.IsBreakOnFail ?? false)
         {
-            if (options?.Value?.Pipeline != null)
-            {
-                var pipe = (Pipeline)options.Value.Pipeline;
-
-                operations = pipe.GetOperations();
-
-                dictionaryInterceptors = pipe.GetInterceptors();
-                preCustomInterceptors = pipe.GetPreInterceptors();
-                postCustomInterceptors = pipe.GetPostInterceptors();
-
-                dictionaryEventInterceptors = pipe.GetEvents();
-                preEventCustomInterceptors = pipe.GetPreEvents();
-                postEventCustomInterceptors = pipe.GetPostEvents();
-            }
-            else
-            {
-                Init(
-                    out operations,
-                    out dictionaryInterceptors,
-                    out preCustomInterceptors,
-                    out postCustomInterceptors,
-                    out dictionaryEventInterceptors,
-                    out preEventCustomInterceptors,
-                    out postEventCustomInterceptors
-                );
-            }
+            Init(
+                out operations,
+                out dictionaryInterceptors,
+                out preCustomInterceptors,
+                out postCustomInterceptors,
+                out dictionaryEventInterceptors,
+                out preEventCustomInterceptors,
+                out postEventCustomInterceptors
+            );
         }
 
         protected virtual void Init(

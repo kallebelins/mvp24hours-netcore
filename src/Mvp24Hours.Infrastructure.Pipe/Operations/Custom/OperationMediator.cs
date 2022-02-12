@@ -3,6 +3,8 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Microsoft.Extensions.DependencyInjection;
+using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Extensions;
 
@@ -13,6 +15,14 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom
     /// </summary>
     public abstract class OperationMediator<T, U> : OperationBase
     {
+        #region [ Ctors ]
+        public OperationMediator() { }
+
+        [ActivatorUtilitiesConstructor]
+        public OperationMediator(INotificationContext _notificationContext)
+            : base(_notificationContext) { }
+        #endregion
+
         /// <summary>
         /// Key defined for the content attached to the message (mapped object) for request
         /// </summary>

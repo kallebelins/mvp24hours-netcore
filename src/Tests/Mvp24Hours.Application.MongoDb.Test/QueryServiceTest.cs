@@ -20,7 +20,7 @@ namespace Mvp24Hours.Application.MongoDb.Test
     /// <summary>
     /// 
     /// </summary>
-    [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
+   [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Name)]
     public class QueryServiceTest
     {
         public QueryServiceTest()

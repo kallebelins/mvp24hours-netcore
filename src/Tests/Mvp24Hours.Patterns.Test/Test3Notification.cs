@@ -6,7 +6,7 @@ using Xunit.Priority;
 
 namespace Mvp24Hours.Patterns.Test
 {
-    [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
+   [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Name)]
     public class Test3Notification
     {
         public Test3Notification()

@@ -321,7 +321,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
         /// </summary>
         public void Remove(IList<T> entities)
         {
-            if (entities != null && entities.Count > 0)
+            if (entities.AnyOrNotNull())
             {
                 foreach (var entity in entities)
                 {

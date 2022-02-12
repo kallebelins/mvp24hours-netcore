@@ -4,6 +4,7 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
@@ -22,12 +23,20 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
     public class UnitOfWork : IUnitOfWork, IDisposable
     {
         #region [ Ctor ]
-
-        public UnitOfWork(DbContext dbContext, INotificationContext notificationContext)
+        public UnitOfWork(DbContext _dbContext, INotificationContext _notificationContext, Dictionary<Type, object> _repositories)
         {
-            this.DbContext = dbContext;
+            this.DbContext = _dbContext;
+            this.repositories = _repositories;
+            this.NotificationContext = _notificationContext;
+        }
+
+        [ActivatorUtilitiesConstructor]
+        public UnitOfWork(DbContext _dbContext, INotificationContext _notificationContext, IServiceProvider _serviceProvider)
+        {
+            this.DbContext = _dbContext;
             repositories = new Dictionary<Type, object>();
-            this.NotificationContext = notificationContext;
+            this.NotificationContext = _notificationContext;
+            this.serviceProvider = _serviceProvider;
         }
 
         #endregion
@@ -36,6 +45,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
 
         protected DbContext DbContext { get; private set; }
         protected INotificationContext NotificationContext { get; private set; }
+        private readonly IServiceProvider serviceProvider;
 
         readonly Dictionary<Type, object> repositories;
 
@@ -44,7 +54,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
         {
             if (!this.repositories.ContainsKey(typeof(T)))
             {
-                this.repositories.Add(typeof(T), ServiceProviderHelper.GetService<IRepository<T>>());
+                this.repositories.Add(typeof(T), serviceProvider.GetService<IRepository<T>>());
             }
             return repositories[typeof(T)] as IRepository<T>;
         }
