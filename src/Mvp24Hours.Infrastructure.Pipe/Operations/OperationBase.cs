@@ -4,11 +4,11 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 
+using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Helpers;
 using System;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Mvp24Hours.Infrastructure.Pipe.Operations
 {

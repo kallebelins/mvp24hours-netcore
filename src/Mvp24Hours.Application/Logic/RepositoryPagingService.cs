@@ -29,7 +29,7 @@ namespace Mvp24Hours.Application.Logic
         /// </summary>
         public RepositoryPagingService(IUnitOfWork _unitOfWork, ILoggingService _logging)
             : base(_unitOfWork, _logging)
-        {            
+        {
         }
         #endregion
 

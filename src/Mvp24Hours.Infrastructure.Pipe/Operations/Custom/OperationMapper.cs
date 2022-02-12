@@ -19,7 +19,7 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom
 
         [ActivatorUtilitiesConstructor]
         public OperationMapper(INotificationContext _notificationContext)
-            :base(_notificationContext) { }
+            : base(_notificationContext) { }
         #endregion
 
         /// <summary>

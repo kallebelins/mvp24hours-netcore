@@ -18,7 +18,7 @@ namespace Mvp24Hours.Application.MongoDb.Test
     /// <summary>
     /// 
     /// </summary>
-   [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Name)]
+    [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Name)]
     public class CommandServiceTest
     {
         private readonly ObjectId _oid = ObjectId.GenerateNewId();
@@ -49,18 +49,20 @@ namespace Mvp24Hours.Application.MongoDb.Test
         {
             var service = ServiceProviderHelper.GetService<CustomerService>();
 
-            var boCustomer = service.GetById(_oid);
-
-            if (boCustomer?.Data != null)
+            var customer = new Customer
             {
-                var customer = boCustomer?.Data;
+                Oid = _oid,
+                Created = DateTime.Now,
+                Name = "Test 1",
+                Active = true
+            };
+            service.Add(customer);
 
-                customer.Name = "Test Updated";
+            customer.Name = "Test Updated";
 
-                service.Modify(customer);
+            service.Modify(customer);
 
-                boCustomer = service.GetById(_oid);
-            }
+            var boCustomer = service.GetById(_oid);
 
             Assert.True(boCustomer != null && boCustomer?.Data?.Name == "Test Updated");
         }

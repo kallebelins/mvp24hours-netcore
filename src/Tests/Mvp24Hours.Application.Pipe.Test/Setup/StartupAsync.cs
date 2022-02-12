@@ -8,7 +8,6 @@ using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Helpers;
 using Mvp24Hours.Infrastructure.Pipe;
-using Mvp24Hours.Infrastructure.Pipe.Operations;
 using System;
 
 namespace Mvp24Hours.Application.Pipe.Test.Setup

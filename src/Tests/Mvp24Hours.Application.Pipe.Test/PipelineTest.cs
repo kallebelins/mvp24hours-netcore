@@ -9,7 +9,6 @@ using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Core.Enums.Infrastructure;
 using Mvp24Hours.Extensions;
-using System;
 using System.Diagnostics;
 using Xunit;
 using Xunit.Priority;
@@ -29,7 +28,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         /// </summary>
         public PipelineTest()
         {
-            startup = new Startup();            
+            startup = new Startup();
         }
 
         [Fact, Priority(1)]
@@ -132,7 +131,7 @@ namespace Mvp24Hours.Application.Pipe.Test
                     Trace.WriteLine(item);
                 }
             }
-            
+
             // assert
             Assert.True(pipeline.GetMessage() != null);
         }
@@ -197,7 +196,7 @@ namespace Mvp24Hours.Application.Pipe.Test
             });
 
             pipeline.Execute("Parameter received.".ToMessage());
-            
+
             // assert
             Assert.True(pipeline.GetMessage() != null);
         }

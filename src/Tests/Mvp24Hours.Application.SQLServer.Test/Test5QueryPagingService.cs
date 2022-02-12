@@ -3,16 +3,15 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Application.SQLServer.Test.Setup;
 using Mvp24Hours.Application.SQLServer.Test.Support.Entities;
 using Mvp24Hours.Application.SQLServer.Test.Support.Services;
 using Mvp24Hours.Core.ValueObjects.Logic;
-using Mvp24Hours.Helpers;
 using System;
 using System.Collections.Generic;
 using Xunit;
 using Xunit.Priority;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Mvp24Hours.Application.SQLServer.Test
 {

@@ -11,7 +11,6 @@ using Mvp24Hours.Application.SQLServer.Test.Support.Enums;
 using Mvp24Hours.Application.SQLServer.Test.Support.Services.Async;
 using Mvp24Hours.Core.Helpers;
 using Mvp24Hours.Extensions;
-using Mvp24Hours.Helpers;
 using System;
 using System.Collections.Generic;
 

@@ -5,13 +5,10 @@
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
-using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Core.Contract.Logic;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Extensions;
-using Mvp24Hours.Helpers;
-using Mvp24Hours.Infrastructure.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;

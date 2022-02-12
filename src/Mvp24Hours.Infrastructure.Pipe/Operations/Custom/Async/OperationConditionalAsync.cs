@@ -6,7 +6,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
-using Mvp24Hours.Extensions;
 using System.Threading.Tasks;
 
 namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom
