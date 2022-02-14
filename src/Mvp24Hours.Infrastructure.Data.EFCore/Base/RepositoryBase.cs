@@ -188,7 +188,9 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
 
             return query;
         }
-
+        /// <summary>
+        /// Makes a code block transactional.
+        /// </summary>
         protected TransactionScope CreateTransactionScope(bool isAggregate = false)
         {
             if (isAggregate || Options.TransactionIsolationLevel != null)

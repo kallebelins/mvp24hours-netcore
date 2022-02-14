@@ -1,4 +1,4 @@
-# Mvp24Hours
+# Mvp24Hours (v3.2.142)
 This project was developed to contribute to the rapid construction of services. I used the reference of solutions for building microservices.
 
 ## Features

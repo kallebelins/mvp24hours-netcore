@@ -143,10 +143,10 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
             return GetByIdAsync(id, null, cancellationToken);
         }
 
-        public Task<T> GetByIdAsync(object id, IPagingCriteria clause, CancellationToken cancellationToken = default)
+        public async Task<T> GetByIdAsync(object id, IPagingCriteria clause, CancellationToken cancellationToken = default)
         {
             using var scope = CreateTransactionScope();
-            var result = GetDynamicFilter(GetQuery(clause, true), GetKeyInfo(), id).SingleOrDefaultAsync(cancellationToken);
+            var result = await GetDynamicFilter(GetQuery(clause, true), GetKeyInfo(), id).SingleOrDefaultAsync(cancellationToken);
             if (scope != null)
             {
                 scope.Complete();

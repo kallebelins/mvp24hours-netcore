@@ -6,4 +6,4 @@
 
 ---
 
-Maintained by [@kallebelins](https://www.linkedin.com/in/kallebelins). Proudly published with [Docsify](https://docsify.js.io)
+Version 3.2.142. [.NET Core 3.1](https://docs.microsoft.com/pt-br/dotnet/core/whats-new/dotnet-core-3-1). Maintained by [@kallebelins](https://www.linkedin.com/in/kallebelins). Proudly published with [Docsify](https://docsify.js.io).

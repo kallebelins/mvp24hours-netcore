@@ -1,4 +1,4 @@
-# Mvp24Hours
+# Mvp24Hours (v3.2.142)
 Este projeto foi desenvolvido para contribuir com a construção rápida de serviços. Usei a referência de soluções para construção de microserviços.
 
 ## Características
