@@ -30,7 +30,7 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom.Files
             this.filePath = _filePath;
         }
 
-        public override IPipelineMessage Execute(IPipelineMessage input)
+        public override void Execute(IPipelineMessage input)
         {
             if (FilePath.HasValue())
             {
@@ -40,7 +40,6 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom.Files
                     input.AddContent(dto);
                 }
             }
-            return input;
         }
     }
 }

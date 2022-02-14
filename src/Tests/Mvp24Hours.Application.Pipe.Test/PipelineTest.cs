@@ -158,12 +158,12 @@ namespace Mvp24Hours.Application.Pipe.Test
                     Trace.WriteLine("Content not found");
                 }
             });
+            pipeline.Execute();
+            var result1 = pipeline.GetMessage();
+            pipeline.Execute("Parameter received.".ToMessage());
+            var result2 = pipeline.GetMessage();
 
             // assert
-
-            var result1 = pipeline.Execute().GetMessage();
-            var result2 = pipeline.Execute("Parameter received.".ToMessage()).GetMessage();
-
             Assert.True(result1 != null && result2 != null);
         }
 

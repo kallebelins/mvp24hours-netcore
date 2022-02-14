@@ -30,18 +30,16 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom.Files
             this.filePath = _filePath;
         }
 
-        public override IPipelineMessage Execute(IPipelineMessage input)
+        public override void Execute(IPipelineMessage input)
         {
             if (FilePath.HasValue())
             {
                 var dto = input.GetContent<T>();
-                if (dto == null)
+                if (dto != null)
                 {
-                    return input;
+                    FileLogHelper.WriteLogToken(input.Token, typeof(T).Name.ToLower(), dto, FilePath);
                 }
-                FileLogHelper.WriteLogToken(input.Token, typeof(T).Name.ToLower(), dto, FilePath);
             }
-            return input;
         }
     }
 }

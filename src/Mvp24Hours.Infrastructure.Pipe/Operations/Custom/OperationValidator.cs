@@ -22,14 +22,12 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom
             : base(_notificationContext) { }
         #endregion
 
-        public override IPipelineMessage Execute(IPipelineMessage input)
+        public override void Execute(IPipelineMessage input)
         {
             if (!IsValid(input))
             {
                 input.SetLock();
             }
-
-            return input;
         }
 
         public abstract bool IsValid(IPipelineMessage input);

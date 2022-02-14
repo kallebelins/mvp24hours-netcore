@@ -31,18 +31,17 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom.Files
             this.filePath = _filePath;
         }
 
-        public override Task<IPipelineMessage> ExecuteAsync(IPipelineMessage input)
+        public override Task ExecuteAsync(IPipelineMessage input)
         {
             if (FilePath.HasValue())
             {
                 var dto = input.GetContent<T>();
-                if (dto == null)
+                if (dto != null)
                 {
-                    return Task.FromResult(input);
+                    FileLogHelper.WriteLogToken(input.Token, typeof(T).Name.ToLower(), dto, FilePath);
                 }
-                FileLogHelper.WriteLogToken(input.Token, typeof(T).Name.ToLower(), dto, FilePath);
             }
-            return Task.FromResult(input);
+            return Task.CompletedTask;
         }
     }
 }

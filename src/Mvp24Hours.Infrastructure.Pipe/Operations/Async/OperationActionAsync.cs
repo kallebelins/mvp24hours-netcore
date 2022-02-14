@@ -25,10 +25,10 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations
             this._isRequired = isRequired;
         }
 
-        public virtual Task<IPipelineMessage> ExecuteAsync(IPipelineMessage input)
+        public virtual async Task ExecuteAsync(IPipelineMessage input)
         {
             this._action?.Invoke(input);
-            return Task.FromResult(input);
+            await Task.CompletedTask;
         }
     }
 }

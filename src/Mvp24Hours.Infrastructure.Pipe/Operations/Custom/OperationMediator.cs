@@ -40,7 +40,7 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom
         /// </summary>
         public virtual U ModelResponse { get; private set; }
 
-        public override IPipelineMessage Execute(IPipelineMessage input)
+        public override void Execute(IPipelineMessage input)
         {
             ModelRequest = MapperRequest(input);
             if (ModelRequest != null)
@@ -69,7 +69,6 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom
                     input.AddContent(ModelResponse);
                 }
             }
-            return input;
         }
 
         public abstract T MapperRequest(IPipelineMessage input);

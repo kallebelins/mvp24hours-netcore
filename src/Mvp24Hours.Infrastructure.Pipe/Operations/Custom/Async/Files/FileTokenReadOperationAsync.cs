@@ -31,7 +31,7 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom.Files
             this.filePath = _filePath;
         }
 
-        public override Task<IPipelineMessage> ExecuteAsync(IPipelineMessage input)
+        public override Task ExecuteAsync(IPipelineMessage input)
         {
             if (FilePath.HasValue())
             {
@@ -41,7 +41,7 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom.Files
                     input.AddContent(dto);
                 }
             }
-            return Task.FromResult(input);
+            return Task.CompletedTask;
         }
     }
 }

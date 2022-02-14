@@ -300,11 +300,10 @@ namespace Mvp24Hours.Infrastructure.Pipe
             return this;
         }
 
-        public IPipeline Execute(IPipelineMessage input = null)
+        public void Execute(IPipelineMessage input = null)
         {
             Message = input ?? Message;
             Message = RunOperations(this.operations, Message);
-            return this;
         }
         protected virtual IPipelineMessage RunOperations(IList<IOperation> _operations, IPipelineMessage input, bool onlyOperationDefault = false)
         {

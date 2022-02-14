@@ -301,11 +301,10 @@ namespace Mvp24Hours.Infrastructure.Pipe
             return this;
         }
 
-        public async Task<IPipelineAsync> ExecuteAsync(IPipelineMessage input = null)
+        public async Task ExecuteAsync(IPipelineMessage input = null)
         {
             Message = input ?? Message;
             Message = await RunOperationsAsync(this.operations, Message);
-            return this;
         }
         internal virtual async Task<IPipelineMessage> RunOperationsAsync(IList<IOperationAsync> _operations, IPipelineMessage input, bool onlyOperationDefault = false)
         {

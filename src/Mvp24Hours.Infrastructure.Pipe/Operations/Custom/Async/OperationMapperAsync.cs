@@ -28,15 +28,7 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom
         /// </summary>
         public virtual string ContentKey => null;
 
-        /// <summary>
-        /// Get default value for object mapping
-        /// </summary>
-        protected virtual Task<T> GetDefaultValue()
-        {
-            return Task.FromResult<T>(default);
-        }
-
-        public override async Task<IPipelineMessage> ExecuteAsync(IPipelineMessage input)
+        public override async Task ExecuteAsync(IPipelineMessage input)
         {
             var result = await MapperAsync(input);
             if (result != null)
@@ -50,7 +42,6 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom
                     input.AddContent(ContentKey, result);
                 }
             }
-            return input;
         }
 
         public abstract Task<T> MapperAsync(IPipelineMessage input);

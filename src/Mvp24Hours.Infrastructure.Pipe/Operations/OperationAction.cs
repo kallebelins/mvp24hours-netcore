@@ -24,10 +24,9 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations
             this._isRequired = isRequired;
         }
 
-        public virtual IPipelineMessage Execute(IPipelineMessage input)
+        public virtual void Execute(IPipelineMessage input)
         {
             this._action?.Invoke(input);
-            return input;
         }
     }
 }

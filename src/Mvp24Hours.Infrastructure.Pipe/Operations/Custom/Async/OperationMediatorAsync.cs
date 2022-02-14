@@ -41,7 +41,7 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom
         /// </summary>
         public virtual U ModelResponse { get; private set; }
 
-        public override async Task<IPipelineMessage> ExecuteAsync(IPipelineMessage input)
+        public override async Task ExecuteAsync(IPipelineMessage input)
         {
             ModelRequest = await MapperRequest(input);
             if (ModelRequest != null)
@@ -70,7 +70,6 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom
                     input.AddContent(ModelResponse);
                 }
             }
-            return input;
         }
 
         public abstract Task<T> MapperRequest(IPipelineMessage input);

@@ -23,7 +23,7 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom
             : base(_notificationContext) { }
         #endregion
 
-        public override async Task<IPipelineMessage> ExecuteAsync(IPipelineMessage input)
+        public override async Task ExecuteAsync(IPipelineMessage input)
         {
             if (await ConditionAsync(input))
             {
@@ -33,11 +33,10 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom
             {
                 await FalseResultAsync(input);
             }
-            return input;
         }
 
         public abstract Task<bool> ConditionAsync(IPipelineMessage input);
-        public virtual async Task TrueResultAsync(IPipelineMessage input) { await Task.Yield(); }
-        public virtual async Task FalseResultAsync(IPipelineMessage input) { await Task.Yield(); }
+        public virtual async Task TrueResultAsync(IPipelineMessage input) { await Task.CompletedTask; }
+        public virtual async Task FalseResultAsync(IPipelineMessage input) { await Task.CompletedTask; }
     }
 }

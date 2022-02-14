@@ -13,7 +13,7 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
         /// <summary>  
         /// Perform an operation
         /// </summary>
-        IPipelineMessage Execute(IPipelineMessage input);
+        void Execute(IPipelineMessage input);
 
         /// <summary>
         /// Indicates whether operation is mandatory (even with failure)

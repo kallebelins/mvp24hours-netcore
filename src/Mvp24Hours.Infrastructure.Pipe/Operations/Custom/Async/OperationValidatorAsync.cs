@@ -23,14 +23,12 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom
             : base(_notificationContext) { }
         #endregion
 
-        public override async Task<IPipelineMessage> ExecuteAsync(IPipelineMessage input)
+        public override async Task ExecuteAsync(IPipelineMessage input)
         {
             if (!await IsValid(input))
             {
                 input.SetLock();
             }
-
-            return input;
         }
 
         public abstract Task<bool> IsValid(IPipelineMessage input);

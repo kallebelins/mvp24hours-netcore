@@ -73,6 +73,6 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
         /// <summary>
         /// Performs operations 
         /// </summary>
-        IPipeline Execute(IPipelineMessage input = null);
+        void Execute(IPipelineMessage input = null);
     }
 }

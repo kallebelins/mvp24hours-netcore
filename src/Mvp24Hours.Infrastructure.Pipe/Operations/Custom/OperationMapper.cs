@@ -27,7 +27,7 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom
         /// </summary>
         public virtual string ContentKey => null;
 
-        public override IPipelineMessage Execute(IPipelineMessage input)
+        public override void Execute(IPipelineMessage input)
         {
             var result = Mapper(input);
             if (result != null)
@@ -41,7 +41,6 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom
                     input.AddContent(ContentKey, result);
                 }
             }
-            return input;
         }
 
         public abstract T Mapper(IPipelineMessage input);
