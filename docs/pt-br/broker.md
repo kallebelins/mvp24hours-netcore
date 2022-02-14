@@ -3,33 +3,21 @@
 
 ## RabbitMQ
 
-## Pré-Requisitos
-Adicione um arquivo de configuração ao projeto com nome "appsettings.json", conforme abaixo:
-```json
-{
-  "Mvp24Hours": {
-    "Brokers": {
-      "RabbitMQ": {
-        "HostName": "localhost",
-        "Port": 6672,
-        "UserName": "admin",
-        "Password": "admin@123"
-      }
-    }
-  }
-}
-
-```
-
 ### Instalação
 ```csharp
 /// Package Manager Console >
-Install-Package Mvp24Hours.Infrastructure.RabbitMQ
+Install-Package Mvp24Hours.Infrastructure.RabbitMQ -Version 3.2.14
 ```
 
 ### Configuração
 ```csharp
 /// Startup.cs
+
+services.AddMvp24HoursRabbitMQ(options =>
+{
+    options.ConnectionString = Configuration.GetConnectionString("RabbitMQContext"); // amqp://guest:guest@localhost:5672
+});
+
 services.AddScoped<CustomerProducer, CustomerProducer>();
 services.AddScoped<CustomerConsumer, CustomerConsumer>();
 
@@ -39,10 +27,12 @@ services.AddScoped<CustomerConsumer, CustomerConsumer>();
 
 ```csharp
 /// CustomerProducer.cs
-public class CustomerProducer : MvpRabbitMQProducer
+public class CustomerProducer : MvpRabbitMQProducer<CustomerDto>
 {
-    public CustomerProducer()
-        : base("RoutingKey") { }
+    public CustomerProducer(IOptions<RabbitMQOptions> options)
+        : base(options)
+    {
+    }
 }
 
 /// CustomerService.cs // Save Method
@@ -56,15 +46,13 @@ producer.Publish(new CustomerDto
 /// CustomerConsumer.cs
 public class CustomerConsumer : MvpRabbitMQConsumer<CustomerDto>
 {
-    public CustomerConsumer()
-        : base("RoutingKey")
+    public CustomerConsumer(IOptions<RabbitMQOptions> options)
+        : base(options)
     {
     }
-
-    public override Task Received(CustomerDto message)
+    public override void Received(object message)
     {
-        Trace.WriteLine($"Received customer {message?.Name}");
-        return Task.FromResult(false);
+        Trace.WriteLine($"Received customer {(message as CustomerDto)?.Name}");
     }
 } 
 
@@ -72,8 +60,8 @@ public class CustomerConsumer : MvpRabbitMQConsumer<CustomerDto>
 var source = new CancellationTokenSource(TimeSpan.FromSeconds(5));
 while (!source.IsCancellationRequested)
 {
-    var consumer = ServiceProviderHelper.GetService<CustomerConsumer>();
-    consumer?.Consume();
+    var consumer = serviceProvider.GetService<CustomerConsumer>();
+    consumer.Consume();
 }
 
 ```

@@ -8,59 +8,59 @@ Perform installation and configuration to use a [relational](en-us/database/rela
 # Repository
 Use unit of work to load the repository, like this:
 ```csharp
-IRepository<Entity> rpEntity = UnitOfWork.GetRepository<Entity>();
+IRepository<Entity> rpEntity = UnitOfWork.GetRepository<Entity>(); // async => IRepositoryAsync = UnitOfWorkAsync.GetRepository
 ```
 
 ## Predefined Methods
 ```csharp
-// IQuery
-bool ListAny();
-int ListCount();
-IList<TEntity> List();
-IList<TEntity> List(IPagingCriteria criteria);
-bool GetByAny(Expression<Func<TEntity, bool>> clause);
-int GetByCount(Expression<Func<TEntity, bool>> clause);
-IList<TEntity> GetBy(Expression<Func<TEntity, bool>> clause);
-IList<TEntity> GetBy(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria);
-TEntity GetById(object id);
-TEntity GetById(object id, IPagingCriteria criteria);
+// IQuery / IQueryAsync
+bool ListAny(); // async => ListAnyAsync
+int ListCount(); // async => ListCountAsync
+IList<TEntity> List(); // async => ListAsync
+IList<TEntity> List(IPagingCriteria criteria); // async => ListAsync
+bool GetByAny(Expression<Func<TEntity, bool>> clause); // async => GetByAnyAsync
+int GetByCount(Expression<Func<TEntity, bool>> clause); // async => GetByCountAsync
+IList<TEntity> GetBy(Expression<Func<TEntity, bool>> clause); // async => GetByAsync
+IList<TEntity> GetBy(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria); // async => GetByAsync
+TEntity GetById(object id); // async => GetByIdAsync
+TEntity GetById(object id, IPagingCriteria criteria); // async => GetByIdAsync
 
-// ICommand
-void Add(TEntity entity);
-void Add(IList<TEntity> entities);
-void Modify(TEntity entity);
-void Modify(IList<TEntity> entities);
-void Remove(TEntity entity);
-void Remove(IList<TEntity> entities);
-void RemoveById(object id);
-void RemoveById(IList<object> ids);
+// ICommand /  ICommandAsync
+void Add(TEntity entity); // async => AddAsync
+void Add(IList<TEntity> entities); // async => AddAsync
+void Modify(TEntity entity); // async => ModifyAsync
+void Modify(IList<TEntity> entities); // async => ModifyAsync
+void Remove(TEntity entity); // async => RemoveAsync
+void Remove(IList<TEntity> entities); // async => RemoveAsync
+void RemoveById(object id); // async => RemoveByIdAsync
+void RemoveById(IList<object> ids); // async => RemoveByIdAsync
 
-// IRelation
+// IRelation / IRelationAsync
 void LoadRelation<TProperty>(TEntity entity,
 	Expression<Func<TEntity, TProperty>> propertyExpression)
-	where TProperty : class;
+	where TProperty : class; // async => LoadRelationAsync
 void LoadRelation<TProperty>(TEntity entity,
 	Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression,
 	Expression<Func<TProperty, bool>> clause = null,
 	int limit = 0)
-	where TProperty : class;
+	where TProperty : class; // async => LoadRelationAsync
 void LoadRelationSortByAscending<TProperty, TKey>(TEntity entity,
 	Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression,
 	Expression<Func<TProperty, TKey>> orderKey,
 	Expression<Func<TProperty, bool>> clause = null,
 	int limit = 0)
-	where TProperty : class;
+	where TProperty : class; // async => LoadRelationSortByAscendingAsync
 void LoadRelationSortByDescending<TProperty, TKey>(TEntity entity,
 	Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression,
 	Expression<Func<TProperty, TKey>> orderKey,
 	Expression<Func<TProperty, bool>> clause = null,
 	int limit = 0)
-	where TProperty : class;
+	where TProperty : class; // async => LoadRelationSortByDescendingAsync
 ```
 
 ## Usage Example
 ```csharp
-IRepository<Entity> rpEntity = UnitOfWork.GetRepository<Entity>();
+IRepository<Entity> rpEntity = UnitOfWork.GetRepository<Entity>(); // async => IRepositoryAsync = UnitOfWorkAsync.GetRepository
 
 // list all
 var entities = rpEntity.List();

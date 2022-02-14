@@ -63,7 +63,7 @@ Você poderá capturar as mensagens de validação a partir do contexto de notif
 ```csharp
 
 // tenta criar um cliente, onde nome é obrigatório
-var service = ServiceProviderHelper.GetService<CustomerService>();
+var service = serviceProvider.GetService<CustomerService>();
 var customer = new Customer
 {
     Active = true
@@ -71,7 +71,7 @@ var customer = new Customer
 service.Add(customer); // tenta adicionar entidade
 
 // notification pattern
-var notfCtxOut = ServiceProviderHelper.GetService<INotificationContext>();
+var notfCtxOut = serviceProvider.GetService<INotificationContext>();
 if (notfCtxOut.HasErrorNotifications)
 {
     foreach (var item in notfCtxOut.Notifications)

@@ -7,22 +7,26 @@ Realizar instalação e configuração para usar um banco de dados [relacional](
 ## Serviço de Repositório Básico
 ### Herança
 ```csharp
-public class EntityService : RepositoryService<Entity, IUnitOfWork> { ... }
+public class EntityService : RepositoryService<Entity, IUnitOfWork> { ... } // async => RepositoryServiceAsync<Entity, IUnitOfWorkAsync>
 ```
 
 ### Métodos Pré-Definidos
 Utilizamos o padrão de BusinessService / BusinessObject para encapsular os dados de resposta na camada de aplicação. Os métodos são:
 ```csharp
-IBusinessResult<bool> ListAny();
-IBusinessResult<int> ListCount();
-IBusinessResult<IList<TEntity>> List();
-IBusinessResult<IList<TEntity>> List(IPagingCriteria criteria);
-IBusinessResult<bool> GetByAny(Expression<Func<TEntity, bool>> clause);
-IBusinessResult<int> GetByCount(Expression<Func<TEntity, bool>> clause);
-IBusinessResult<IList<TEntity>> GetBy(Expression<Func<TEntity, bool>> clause);
-IBusinessResult<IList<TEntity>> GetBy(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria);
-IBusinessResult<TEntity> GetById(object id);
-IBusinessResult<TEntity> GetById(object id, IPagingCriteria criteria);
+IBusinessResult<bool> ListAny(); // async => Task<IBusinessResult<bool>> ListAnyAsync
+IBusinessResult<int> ListCount(); // async => Task<IBusinessResult<int>> ListCountAsync
+IBusinessResult<IList<TEntity>> List(); // async => Task<IBusinessResult<IList<TEntity>>> ListAsync
+IBusinessResult<IList<TEntity>> List(IPagingCriteria criteria); // async => Task<IBusinessResult<IList<TEntity>>> ListAsync
+IBusinessResult<bool> GetByAny(Expression<Func<TEntity, bool>> clause); // async => Task<IBusinessResult<bool>> GetByAnyAsync
+IBusinessResult<int> GetByCount(Expression<Func<TEntity, bool>> clause); // async => Task<IBusinessResult<int>> GetByCountAsync
+IBusinessResult<IList<TEntity>> GetBy(Expression<Func<TEntity, bool>> clause); // async => Task<IBusinessResult<IList<TEntity>>> GetByAsync
+IBusinessResult<IList<TEntity>> GetBy(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria); // async => Task<IBusinessResult<IList<TEntity>>> GetByAsync
+IBusinessResult<TEntity> GetById(object id); // async => Task<IBusinessResult<TEntity>> GetByIdAsync
+IBusinessResult<TEntity> GetById(object id, IPagingCriteria criteria); // async => Task<IBusinessResult<TEntity>> GetByIdAsync
+
+// Para resultados paginados use:
+IPagingResult<IList<TEntity>> ListWithPagination(IPagingCriteria criteria = null); // async => Task<IPagingResult<IList<TEntity>>> ListWithPaginationAsync
+IPagingResult<IList<TEntity>> GetByWithPagination(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria = null); // async => Task<IPagingResult<IList<TEntity>>> GetByWithPaginationAsync
 ```
 
 ### Métodos Definidos pelo Usuário

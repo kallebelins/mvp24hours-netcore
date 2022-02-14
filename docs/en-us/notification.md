@@ -4,7 +4,7 @@
 ### Installation
 ```csharp
 /// Package Manager Console >
-Install-Package Mvp24Hours.Infrastructure
+Install-Package Mvp24Hours.Infrastructure -Version 3.2.14
 ```
 
 ### Configuration
@@ -15,7 +15,7 @@ services.AddMvp24HoursNotification();
 
 ### Usage Example
 ```csharp
-var notify = ServiceProviderHelper.GetService<INotificationContext>();
+var notify = serviceProvider.GetService<INotificationContext>();
 
 // basic
 notify.Add("Test", "Message", Core.Enums.MessageType.Error); // MessageType: Success, Info, Warning, Error

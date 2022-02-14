@@ -5,8 +5,11 @@
 //=====================================================================================
 using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Application.RabbitMQ.Test.Support.Consumers;
+using Mvp24Hours.Application.RabbitMQ.Test.Support.Dto;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Helpers;
+using Mvp24Hours.Infrastructure.RabbitMQ;
+using Mvp24Hours.Infrastructure.RabbitMQ.Core.Contract;
 using System;
 
 namespace Mvp24Hours.Application.RabbitMQ.Test.Setup
@@ -23,7 +26,7 @@ namespace Mvp24Hours.Application.RabbitMQ.Test.Setup
                 options.ConnectionString = ConfigurationHelper.GetSettings("ConnectionStrings:HostBus");
             });
 
-            services.AddScoped<CustomerProducer, CustomerProducer>();
+            services.AddScoped<MvpRabbitMQProducer<CustomerEvent>, CustomerProducer>();
 
             return services.BuildServiceProvider();
         }
@@ -38,7 +41,7 @@ namespace Mvp24Hours.Application.RabbitMQ.Test.Setup
                 options.ConnectionString = ConfigurationHelper.GetSettings("ConnectionStrings:HostBus");
             });
 
-            services.AddScoped<CustomerConsumer, CustomerConsumer>();
+            services.AddScoped<MvpRabbitMQConsumer<CustomerEvent>, CustomerConsumer>();
 
             return services.BuildServiceProvider();
         }

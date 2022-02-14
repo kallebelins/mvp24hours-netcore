@@ -4,6 +4,7 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Application.SQLServer.Test.Support.Data;
 using Mvp24Hours.Application.SQLServer.Test.Support.Entities;
@@ -11,6 +12,7 @@ using Mvp24Hours.Application.SQLServer.Test.Support.Enums;
 using Mvp24Hours.Application.SQLServer.Test.Support.Services;
 using Mvp24Hours.Core.Helpers;
 using Mvp24Hours.Extensions;
+using Mvp24Hours.Helpers;
 using System;
 using System.Collections.Generic;
 
@@ -64,6 +66,7 @@ namespace Mvp24Hours.Application.SQLServer.Test.Setup
             services.AddMvp24HoursDbContext<DataContext>(options: options =>
             {
                 options.MaxQtyByQueryPage = 100;
+                options.TransactionIsolationLevel = System.Transactions.IsolationLevel.ReadCommitted;
             });
             services.AddMvp24HoursRepository();
 

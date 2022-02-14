@@ -1,49 +1,45 @@
 # Pipeline (Pipe and Filters Pattern)
 It is a design pattern that represents a tube with several operations (filters), executed sequentially, in order to travel, integrate and/or handle a package/message.
 
-## Prerequisites (Not Required)
-Add a configuration file to the project named "appsettings.json", as below:
-```json
-{
-  "Mvp24Hours": {
-    "Pipe": {
-      "Operation": {
-        "FileLog": {
-          "Enable": false,
-          "Path": ""
-        },
-        "FileToken": {
-          "Enable": false,
-          "Path": ""
-        }        
-      }
-    }
-  }
-}
-```
-
 ## Installation
 ```csharp
 /// Package Manager Console >
-Install-Package Mvp24Hours.Infrastructure.Pipe
+Install-Package Mvp24Hours.Infrastructure.Pipe -Version 3.2.14
 ```
 
 ## Configuration
 ```csharp
 /// Startup.cs
-services.AddMvp24HoursPipeline();
+
+// default
+services.AddMvp24HoursPipeline(options => // async => AddMvp24HoursPipelineAsync
+{
+    options.IsBreakOnFail = false;
+});
+
+// with factory
+services.AddMvp24HoursPipeline(factory: (x) => // async => AddMvp24HoursPipelineAsync
+{
+    var pipeline = new Pipeline(x.GetRequiredService<INotificationContext>()); // async => PipelineAsync
+    pipeline.AddInterceptors(input =>
+    {
+        input.AddContent<int>("factory", 1);
+        System.Diagnostics.Trace.WriteLine("Interceptor factory.");
+    }, Core.Enums.Infrastructure.PipelineInterceptorType.PostOperation);
+    return pipeline;
+});
 ```
 
 ## Usage Example
 ```csharp
-var pipeline = ServiceProviderHelper.GetService<IPipeline>();
+var pipeline = serviceProvider.GetService<IPipeline>(); // async => IPipelineAsync
 
 // run pipeline
-pipeline.Execute();
+pipeline.Execute(); // async => ExecuteAsync
 
 // run with package/message
 var message = "Parameter received.".ToMessage();
-pipeline.Execute(message);
+pipeline.Execute(message); // async => ExecuteAsync
 
 // get package after run
 pipeline.GetMessage();
@@ -116,11 +112,11 @@ To create an operation, simply implement an IOperation or an OperationBase:
 
 ```csharp
 /// MyOperation.cs
-public class MyOperation : OperationBase
+public class MyOperation : OperationBase // async => OperationBaseAsync
 {
     public override bool IsRequired => false; // indicates if the operation will execute even with the locked package
 
-    public override IPipelineMessage Execute(IPipelineMessage input)
+    public override void Execute(IPipelineMessage input) // async => Task ExecuteAsync
     {
         // perform action
         return input;
@@ -136,12 +132,12 @@ You can add dynamic operations using a build pattern (builder). Generally, we us
 
 ```csharp
 /// ..my-core/contract/builders/IProductCategoryListBuilder.cs
-public interface IProductCategoryListBuilder : IPipelineBuilder { }
+public interface IProductCategoryListBuilder : IPipelineBuilder { } // async => IPipelineBuilderAsync
 
 /// ..my-adapter-application/application/builders/ProductCategoryListBuilder.cs
 public class ProductCategoryListBuilder : IProductCategoryListBuilder
 {
-    public IPipelineAsync Builder(IPipelineAsync pipeline)
+    public IPipeline Builder(IPipeline pipeline) // async => IPipelineAsync
     {
         return pipeline
             .Add<ProductCategoryFileOperation>()
@@ -153,7 +149,7 @@ public class ProductCategoryListBuilder : IProductCategoryListBuilder
 services.AddScoped<IProductCategoryListBuilder, ProductCategoryListBuilder>();
 
 /// ..my-application/application/services/MyService.cs /MyMethod
-var pipeline = ServiceProviderHelper.GetService<IPipeline>();
-var builder = ServiceProviderHelper.GetService<IProductCategoryListBuilder>();
+var pipeline = serviceProvider.GetService<IPipeline>(); // async => IPipelineAsync
+var builder = serviceProvider.GetService<IProductCategoryListBuilder>();
 builder.Builder(pipeline);
 ```

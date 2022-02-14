@@ -8,17 +8,27 @@ Perform installation and configuration to use a [relacional](en-us/database/rela
 # Unit of Work
 To obtain this, just apply the injection concept through the constructor or use the Mvp24Hours architecture help provider, like this:
 ```csharp
-IUnitOfWork unitOfWork = ServiceProviderHelper.GetService<IUnitOfWork>();
+IUnitOfWork unitOfWork = serviceProvider.GetService<IUnitOfWork>(); // async => IUnitOfWorkAsync
 ```
 
 ## Predefined Methods
 ```csharp
-// IUnitOfWork
-int SaveChanges(CancellationToken cancellationToken = default);
-void Rollback(CancellationToken cancellationToken = default);
+// IUnitOfWork / IUnitOfWorkAsync
+int SaveChanges(CancellationToken cancellationToken = default); // async => SaveChangesAsync
+void Rollback(); // async => RollbackAsync
 IRepository<T> GetRepository<T>() where T : class, IEntityBase;
+IDbConnection GetConnection();
+```
 
-// ISQL - Mvp24Hours.Infrastructure.Data.EFCore.SQLServer
-IList<T> ExecuteQuery<T>(string sqlQuery, params object[] parameters) where T : class;
-int ExecuteCommand(string sqlCommand, params object[] parameters);
+## Using Dapper
+Below is a package for installing and executing SQL commands/queries with Dapper.
+
+```csharp
+/// Package Manager Console >
+Install-Package Dapper -Version 2.0.123
+
+/// Example
+var result = await UnitOfWork
+    .GetConnection()
+    .QueryAsync<Contact>("select * from Contact where CustomerId = @customerId;", new { customerId });
 ```

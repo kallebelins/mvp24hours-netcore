@@ -6,49 +6,34 @@
 
 Foi implementado padrão de repositório com critérios de pesquisa e paginação, além de unidade de trabalho ([Veja Repositório](pt-br/database/use-repository)). Esta implementação não oferece suporte apenas a carga tardia de objetos relacionados. 
 
-### Pré-Requisitos (Não Obrigatório)
+### MongoDB
+
+#### Pré-Requisitos (Não Obrigatório)
 Adicione um arquivo de configuração ao projeto com nome "appsettings.json". O arquivo deverá conter um chave com dados de conexão, por exemplo, ConnectionStrings/DataContext conforme abaixo:
 ```json
 {
   "ConnectionStrings": {
     "DataContext": "String de conexão"
-  },
-  "Mvp24Hours": {
-    "Persistence": {
-      "MaxQtyByQueryPage": 30
-    }
   }
 }
 ```
 Você poderá usar a conexão de banco de dados direto, o que não é recomendado. Acesse o site [ConnectionStrings](https://www.connectionstrings.com/) e veja como montar a conexão com seu banco.
-
-### MongoDB
-Configuração adicional para MongoDb registrado no "appsettings.json":
-```json
-{
-  "Mvp24Hours": {
-    "Persistence": {
-      "MongoDb": {
-        "EnableTls": false,
-        "EnableTransaction": false
-      }
-    }
-  }
-}
-```
 
 #### Instalação
 ```csharp
 /// Package Manager Console >
 
 Install-Package MongoDB.Driver -Version 2.13.2
-Install-Package Mvp24Hours.Infrastructure.Data.MongoDb
+Install-Package Mvp24Hours.Infrastructure.Data.MongoDb -Version 3.2.14
 ```
 #### Configuração
 ```csharp
 /// Startup.cs
-
-services.AddMvp24HoursMongoDb("mycollection", ConfigurationHelper.GetSettings("ConnectionStrings:DataContext"));
+services.AddMvp24HoursMongoDb(options =>
+{
+    options.DatabaseName = "mydatabase";
+    options.ConnectionString = Configuration.GetConnectionString("DataContext");
+});
 
 ```
 
@@ -85,22 +70,6 @@ Adicione um arquivo de configuração ao projeto com nome "appsettings.json", co
 {
   "ConnectionStrings": {
     "RedisDbContext": null
-  },
-  "Mvp24Hours": {
-    "Persistence": {
-      "Redis": {
-        "Enable": true,
-        "DefaultExpiration": null,
-        "Hosts": [ "localhost:6379" ],
-        "InstanceName": null,
-        "DefaultDatabase": 0,
-        "AbortOnConnectFail": false,
-        "AllowAdmin": true,
-        "Ssl": false,
-        "ConnectTimeout": 6000,
-        "ConnectRetry": 2
-      }
-    }
   }
 }
 
@@ -110,18 +79,18 @@ Você poderá usar configuração estrutural ou string de conexão.
 #### Instalação
 ```csharp
 /// Package Manager Console >
-Install-Package Mvp24Hours.Infrastructure.Caching.Redis
+Install-Package Mvp24Hours.Infrastructure.Caching.Redis -Version 3.2.14
 ```
 
 #### Configuração
 ```csharp
 /// Startup.cs
 
-// estrutural
-services.AddMvp24HoursRedisCache();
+// structural
+services.AddMvp24HoursCaching();
 
-// string de conexão
-services.AddMvp24HoursRedisCache("ConnectionString");
+// connection string
+services.AddMvp24HoursCachingRedis(Configuration.GetConnectionString("RedisDbContext"));
 
 ```
 
@@ -130,6 +99,8 @@ Você poderá usar o Redis para registrar valor simples ou objetos complexos, as
 
 
 ```csharp
+// obtém cache
+var cache = serviceProvider.GetService<IDistributedCache>();
 
 // objeto de referência
 var customer = new Customer
@@ -142,22 +113,22 @@ var customer = new Customer
 
 // adicionar valor simples
 string content = customer.ToSerialize();
-CacheHelper.SetString("key", content);
+cache.SetString("key", content);
 
 // recuperar valor simples
-string content = CacheHelper.GetString("key");
+string content = cache.GetString("key");
 
 // remover valor simples
-CacheHelper.RemoveString("key");
+cache.Remove("key");
 
 // adicionar valor complexo
-ObjectCacheHelper.SetObject("key", customer);
+cache.SetObject("key", customer);
 
 // recuperar valor complexo
-var customer = ObjectCacheHelper.GetObject<Customer>("key");
+var customer = cache.GetObject<Customer>("key");
 
 // remover valor complexo
-CacheHelper.RemoveString("key");
+cache.Remove("key");
 
 ```
 
@@ -166,7 +137,6 @@ Você poderá usar extensions para interagir com a interface IDistributedCache n
 Você ainda poderá usar o conceito de repositório para restringir os tipos exclusivos para uso.
 
 ```csharp
-
 /// Startup.cs
 services.AddScoped<IRepositoryCache<Customer>, RepositoryCache<Customer>>();
 
@@ -181,23 +151,23 @@ var customer = new Customer
 
 // adicionar no formato texto
 string content = customer.ToSerialize();
-var repo = ServiceProviderHelper.GetService<IRepositoryCache<Customer>>();
+var repo = serviceProvider.GetService<IRepositoryCache<Customer>>();
 repo.SetString("key", content);
 
 // recuperar no formato texto
-var repo = ServiceProviderHelper.GetService<IRepositoryCache<Customer>>();
+var repo = serviceProvider.GetService<IRepositoryCache<Customer>>();
 string content = repo.GetString("key");
 
 // remover
-var repo = ServiceProviderHelper.GetService<IRepositoryCache<Customer>>();
+var repo = serviceProvider.GetService<IRepositoryCache<Customer>>();
 repo.Remove(_keyString);
 
 // adicionar valor complexo
-var repo = ServiceProviderHelper.GetService<IRepositoryCache<Customer>>();
+var repo = serviceProvider.GetService<IRepositoryCache<Customer>>();
 repo.Set("key", customer);
 
 // recuperar valor complexo
-var repo = ServiceProviderHelper.GetService<IRepositoryCache<Customer>>();
+var repo = serviceProvider.GetService<IRepositoryCache<Customer>>();
 var customer = repo.Get("key");
 
 ```

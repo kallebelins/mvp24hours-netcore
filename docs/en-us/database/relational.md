@@ -9,16 +9,44 @@ Add a configuration file to the project named "appsettings.json". The file must 
 {
   "ConnectionStrings": {
     "DataContext": "connection string"
-  },
-  "Mvp24Hours": {
-    "Persistence": {
-      "MaxQtyByQueryPage": 30,
-      "ReadUncommitedQuery": false
-    }
   }
 }
 ```
 You will be able to use direct database connection, which is not recommended. Access the [ConnectionStrings](https://www.connectionstrings.com/) website and see how to set up the connection with your bank.
+
+
+## SQL Server
+### Installation
+```csharp
+/// Package Manager Console >
+Install-Package Microsoft.Extensions.DependencyInjection -Version 6.0.0
+Install-Package Microsoft.EntityFrameworkCore.SqlServer -Version 5.0.10
+Install-Package Mvp24Hours.Infrastructure.Data.EFCore -Version 3.2.14
+```
+### Configuration
+```csharp
+/// Startup.cs
+
+services.AddDbContext<DataContext>(options =>
+    options.UseSqlServer(Configuration.GetConnectionString("DataContext")));
+
+services.AddMvp24HoursDbContext<DataContext>(options: options =>
+{
+    options.MaxQtyByQueryPage = 100;
+    options.TransactionIsolationLevel = System.Transactions.IsolationLevel.ReadCommitted;
+});
+services.AddMvp24HoursRepository(); // async => services.AddMvp24HoursRepositoryAsync();
+
+```
+### Using Docker
+```
+// Command
+docker run --name sqlserver -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=MyPass@word" -p 1433:1433 -d mcr.microsoft.com/mssql/server
+
+// ConnectionString
+Data Source=.,1433;Initial Catalog=MyTestDb;Persist Security Info=True;User ID=sa;Password=MyPass@word;Pooling=False;
+
+```
 
 ## PostgreSql
 ### Installation
@@ -26,18 +54,23 @@ You will be able to use direct database connection, which is not recommended. Ac
 /// Package Manager Console >
 Install-Package Microsoft.Extensions.DependencyInjection -Version 6.0.0
 Install-Package Npgsql.EntityFrameworkCore.PostgreSQL -Version 5.0.10
-Install-Package Mvp24Hours.Infrastructure.Data.EFCore
+Install-Package Mvp24Hours.Infrastructure.Data.EFCore -Version 3.2.14
 ```
 ### Configuration
 ```csharp
 /// Startup.cs
 
 services.AddDbContext<DataContext>(
-    options => options.UseNpgsql(ConfigurationHelper.AppSettings.GetConnectionString("DataContext"),
+    options => options.UseNpgsql(Configuration.GetConnectionString("DataContext"),
     options => options.SetPostgresVersion(new Version(9, 6)))
 );
 
-services.AddMvp24HoursDbService<DataContext>();
+services.AddMvp24HoursDbContext<DataContext>(options: options =>
+{
+    options.MaxQtyByQueryPage = 100;
+    options.TransactionIsolationLevel = System.Transactions.IsolationLevel.ReadCommitted;
+});
+services.AddMvp24HoursRepository(); // async => services.AddMvp24HoursRepositoryAsync();
 
 ```
 ### Using Docker
@@ -56,16 +89,21 @@ Host=localhost;Port=5432;Pooling=true;Database=MyTestDb;User Id=postgres;Passwor
 /// Package Manager Console >
 Install-Package Microsoft.Extensions.DependencyInjection -Version 6.0.0
 Install-Package MySql.EntityFrameworkCore -Version 5.0.8
-Install-Package Mvp24Hours.Infrastructure.Data.EFCore
+Install-Package Mvp24Hours.Infrastructure.Data.EFCore -Version 3.2.14
 ```
 ### Configuration
 ```csharp
 /// Startup.cs
 
 services.AddDbContext<DataContext>(options =>
-    options.UseMySQL(ConfigurationHelper.AppSettings.GetConnectionString("DataContext")));
+    options.UseMySQL(Configuration.GetConnectionString("DataContext")));
 
-services.AddMvp24HoursDbService<DataContext>();
+services.AddMvp24HoursDbContext<DataContext>(options: options =>
+{
+    options.MaxQtyByQueryPage = 100;
+    options.TransactionIsolationLevel = System.Transactions.IsolationLevel.ReadCommitted;
+});
+services.AddMvp24HoursRepository(); // async => services.AddMvp24HoursRepositoryAsync();
 
 ```
 ### Using Docker
@@ -75,36 +113,5 @@ docker run --name mysql -v /mysql/data/:/var/lib/mysql -d -p 3306:3306 -e MYSQL_
 
 // ConnectionString
 server=localhost;user=root;password=MyPass@word;database=MyTestDb
-
-```
-
-## SQL Server
-### Installation
-```csharp
-/// Package Manager Console >
-Install-Package Microsoft.Extensions.DependencyInjection -Version 6.0.0
-Install-Package Microsoft.EntityFrameworkCore.SqlServer -Version 5.0.10
-Install-Package Mvp24Hours.Infrastructure.Data.EFCore
-
-// to run commands in the database (functions, procedures, projections)
-Install-Package Mvp24Hours.Infrastructure.Data.EFCore.SQLServer
-```
-### Configuration
-```csharp
-/// Startup.cs
-
-services.AddDbContext<DataContext>(options =>
-    options.UseSqlServer(ConfigurationHelper.AppSettings.GetConnectionString("DataContext")));
-
-services.AddMvp24HoursDbService<DataContext>();
-
-```
-### Using Docker
-```
-// Command
-docker run --name sqlserver -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=MyPass@word" -p 1433:1433 -d mcr.microsoft.com/mssql/server
-
-// ConnectionString
-Data Source=.,1433;Initial Catalog=MyTestDb;Persist Security Info=True;User ID=sa;Password=MyPass@word;Pooling=False;
 
 ```
