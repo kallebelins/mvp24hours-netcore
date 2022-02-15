@@ -4,8 +4,9 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using Mvp24Hours.Extensions;
-using Mvp24Hours.Helpers;
+using Mvp24Hours.WebAPI.Configuration;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -17,35 +18,34 @@ namespace Mvp24Hours.Infrastructure.Middlewares
     public class CorsMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly CorsOptions options;
 
-        public CorsMiddleware(RequestDelegate next)
+        public CorsMiddleware(RequestDelegate next, IOptions<CorsOptions> options)
         {
+            this.options = options?.Value ?? throw new System.ArgumentNullException(nameof(options), "[CorsMiddleware] Options is required. Check: services.AddMvp24HoursWebCors().");
             _next = next;
         }
 
         public async Task Invoke(HttpContext context)
         {
-            string credentialsCors = ConfigurationHelper.GetSettings("Mvp24Hours:Filters:Cors:Credentials");
-
-            if (credentialsCors.HasValue())
+            if (options.Credentials.HasValue())
             {
-                context.Response.Headers.Add("Access-Control-Allow-Credentials", credentialsCors);
+                context.Response.Headers.Add("Access-Control-Allow-Credentials", options.Credentials);
             }
 
-            string allCors = ConfigurationHelper.GetSettings("Mvp24Hours:Filters:Cors:All");
             string originCors, headersCors, methodsCors;
 
-            if (allCors.HasValue())
+            if (options.AllowAll)
             {
-                originCors = allCors;
-                headersCors = allCors;
-                methodsCors = allCors;
+                originCors = "*";
+                headersCors = "*";
+                methodsCors = "*";
             }
             else
             {
-                originCors = ConfigurationHelper.GetSettings("Mvp24Hours:Filters:Cors:Origin");
-                headersCors = ConfigurationHelper.GetSettings("Mvp24Hours:Filters:Cors:Headers");
-                methodsCors = ConfigurationHelper.GetSettings("Mvp24Hours:Filters:Cors:Methods");
+                originCors = options.Origin;
+                headersCors = options.Headers;
+                methodsCors = options.Methods;
             }
 
             if (originCors.HasValue())

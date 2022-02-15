@@ -16,85 +16,127 @@ namespace Mvp24Hours.Extensions
         /// <summary>
         /// Add database context services
         /// </summary>
-        public static IServiceCollection AddMvp24HoursMongoDb(this IServiceCollection services,
+        public static IServiceCollection AddMvp24HoursDbContext(this IServiceCollection services,
             Action<MongoDbOptions> options = null,
-            Action<MongoDbRepositoryOptions> repositoryOptions = null)
+            Func<IServiceProvider, Mvp24HoursContext> dbFactory = null,
+            ServiceLifetime lifetime = ServiceLifetime.Scoped)
         {
-            return services.AddMvp24HoursMongoDb<Mvp24HoursContext>(options, repositoryOptions);
+            return services.AddMvp24HoursDbContext<Mvp24HoursContext>(options, dbFactory, lifetime);
         }
 
         /// <summary>
         /// Add database context services
         /// </summary>
-        public static IServiceCollection AddMvp24HoursMongoDb<DbContext>(this IServiceCollection services,
-            Action<MongoDbOptions> options = null,
-            Action<MongoDbRepositoryOptions> repositoryOptions = null)
-            where DbContext : Mvp24HoursContext
+        public static IServiceCollection AddMvp24HoursDbContext<DbContext>(this IServiceCollection services,
+        Action<MongoDbOptions> options = null,
+        Func<IServiceProvider, DbContext> dbFactory = null,
+        ServiceLifetime lifetime = ServiceLifetime.Scoped)
+        where DbContext : Mvp24HoursContext
         {
             services.AddMvp24HoursLogging();
             services.AddMvp24HoursNotification();
 
-            if (options == null)
+            if (options != null)
             {
-                throw new ArgumentNullException(nameof(options), "Options is required.");
+                services.Configure(options);
+            }
+            else
+            {
+                services.Configure<MongoDbOptions>(options => { });
             }
 
-            services.Configure(options);
-
-            if (repositoryOptions != null)
+            if (dbFactory != null)
             {
-                services.Configure(repositoryOptions);
+                services.Add(new ServiceDescriptor(typeof(DbContext), dbFactory, lifetime));
             }
-
-            // register db context
-            services.AddScoped<Mvp24HoursContext, DbContext>();
-
-            // register services
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            else
+            {
+                services.Add(new ServiceDescriptor(typeof(DbContext), typeof(DbContext), lifetime));
+            }
 
             return services;
         }
 
         /// <summary>
-        /// Add database context services
+        /// Add repository
         /// </summary>
-        public static IServiceCollection AddMvp24HoursMongoDbAsync(this IServiceCollection services,
-            Action<MongoDbOptions> options = null,
-            Action<MongoDbRepositoryOptions> repositoryOptions = null)
-        {
-            return services.AddMvp24HoursMongoDbAsync<Mvp24HoursContext>(options, repositoryOptions);
-        }
-
-        /// <summary>
-        /// Add database context services
-        /// </summary>
-        public static IServiceCollection AddMvp24HoursMongoDbAsync<DbContext>(this IServiceCollection services,
-            Action<MongoDbOptions> options = null,
-            Action<MongoDbRepositoryOptions> repositoryOptions = null)
-            where DbContext : Mvp24HoursContext
+        public static IServiceCollection AddMvp24HoursRepository(this IServiceCollection services,
+            Action<MongoDbRepositoryOptions> repositoryOptions = null,
+            Type repository = null,
+            Type unitOfWork = null,
+            ServiceLifetime lifetime = ServiceLifetime.Scoped)
         {
             services.AddMvp24HoursLogging();
             services.AddMvp24HoursNotification();
-
-            if (options == null)
-            {
-                throw new ArgumentNullException(nameof(options), "Options is required.");
-            }
-
-            services.Configure(options);
 
             if (repositoryOptions != null)
             {
                 services.Configure(repositoryOptions);
             }
+            else
+            {
+                services.Configure<MongoDbRepositoryOptions>(repositoryOptions => { });
+            }
 
-            // register db context
-            services.AddScoped<Mvp24HoursContext, DbContext>();
+            if (unitOfWork != null)
+            {
+                services.Add(new ServiceDescriptor(typeof(IUnitOfWork), unitOfWork, lifetime));
+            }
+            else
+            {
+                services.Add(new ServiceDescriptor(typeof(IUnitOfWork), typeof(UnitOfWork), lifetime));
+            }
 
-            // register services
-            services.AddScoped<IUnitOfWorkAsync, UnitOfWorkAsync>();
-            services.AddScoped(typeof(IRepositoryAsync<>), typeof(RepositoryAsync<>));
+            if (repository != null)
+            {
+                services.Add(new ServiceDescriptor(typeof(IRepository<>), repository, lifetime));
+            }
+            else
+            {
+                services.Add(new ServiceDescriptor(typeof(IRepository<>), typeof(Repository<>), lifetime));
+            }
+
+            return services;
+        }
+
+        /// <summary>
+        /// Add repository
+        /// </summary>
+        public static IServiceCollection AddMvp24HoursRepositoryAsync(this IServiceCollection services,
+            Action<MongoDbRepositoryOptions> repositoryOptions = null,
+            Type repositoryAsync = null,
+            Type unitOfWorkAsync = null,
+            ServiceLifetime lifetime = ServiceLifetime.Scoped)
+        {
+            services.AddMvp24HoursLogging();
+            services.AddMvp24HoursNotification();
+
+            if (repositoryOptions != null)
+            {
+                services.Configure(repositoryOptions);
+            }
+            else
+            {
+                services.Configure<MongoDbRepositoryOptions>(repositoryOptions => { });
+            }
+
+            if (unitOfWorkAsync != null)
+            {
+                services.Add(new ServiceDescriptor(typeof(IUnitOfWorkAsync), unitOfWorkAsync, lifetime));
+            }
+            else
+            {
+                services.Add(new ServiceDescriptor(typeof(IUnitOfWorkAsync), typeof(UnitOfWorkAsync), lifetime));
+            }
+
+            if (repositoryAsync != null)
+            {
+                services.Add(new ServiceDescriptor(typeof(IRepositoryAsync<>), repositoryAsync, lifetime));
+            }
+            else
+            {
+                services.Add(new ServiceDescriptor(typeof(IRepositoryAsync<>), typeof(RepositoryAsync<>), lifetime));
+            }
 
             return services;
         }

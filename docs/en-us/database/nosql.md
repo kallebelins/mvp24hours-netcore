@@ -23,16 +23,17 @@ You will be able to use direct database connection, which is not recommended. Ac
 ```csharp
 /// Package Manager Console >
 Install-Package MongoDB.Driver -Version 2.13.2
-Install-Package Mvp24Hours.Infrastructure.Data.MongoDb -Version 3.2.142
+Install-Package Mvp24Hours.Infrastructure.Data.MongoDb -Version 3.2.151
 ```
 #### Configuration
 ```csharp
 /// Startup.cs
-services.AddMvp24HoursMongoDb(options =>
+services.AddMvp24HoursDbContext(options =>
 {
-    options.DatabaseName = "mydatabase";
+    options.DatabaseName = "customers";
     options.ConnectionString = Configuration.GetConnectionString("DataContext");
 });
+services.AddMvp24HoursRepository(); // async => AddMvp24HoursRepositoryAsync()
 ```
 
 #### Using Docker
@@ -77,7 +78,7 @@ You can use structural configuration or connection string.
 #### Installation
 ```csharp
 /// Package Manager Console >
-Install-Package Mvp24Hours.Infrastructure.Caching.Redis -Version 3.2.142
+Install-Package Mvp24Hours.Infrastructure.Caching.Redis -Version 3.2.151
 ```
 
 #### Configuration

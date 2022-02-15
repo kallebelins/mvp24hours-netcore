@@ -24,16 +24,17 @@ Você poderá usar a conexão de banco de dados direto, o que não é recomendad
 /// Package Manager Console >
 
 Install-Package MongoDB.Driver -Version 2.13.2
-Install-Package Mvp24Hours.Infrastructure.Data.MongoDb -Version 3.2.142
+Install-Package Mvp24Hours.Infrastructure.Data.MongoDb -Version 3.2.151
 ```
 #### Configuração
 ```csharp
 /// Startup.cs
-services.AddMvp24HoursMongoDb(options =>
+services.AddMvp24HoursDbContext(options =>
 {
-    options.DatabaseName = "mydatabase";
+    options.DatabaseName = "customers";
     options.ConnectionString = Configuration.GetConnectionString("DataContext");
 });
+services.AddMvp24HoursRepository(); // async => AddMvp24HoursRepositoryAsync()
 
 ```
 
@@ -79,7 +80,7 @@ Você poderá usar configuração estrutural ou string de conexão.
 #### Instalação
 ```csharp
 /// Package Manager Console >
-Install-Package Mvp24Hours.Infrastructure.Caching.Redis -Version 3.2.142
+Install-Package Mvp24Hours.Infrastructure.Caching.Redis -Version 3.2.151
 ```
 
 #### Configuração

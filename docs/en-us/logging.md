@@ -6,7 +6,7 @@ In our library we use NLog for ease of definition and deployment.
 ## Installation
 ```csharp
 /// Package Manager Console >
-Install-Package Mvp24Hours.Infrastructure -Version 3.2.142
+Install-Package Mvp24Hours.Infrastructure -Version 3.2.151
 ```
 
 ## Configuration
@@ -226,5 +226,11 @@ Install-Package NLog.Targets.ElasticSearch
 * error-message
 * inner-error-message
 * error-stack-trace
+
+#### Activity Properties
+* ActivityId
+* TraceId
+* SpanId
+* ParentId
 
 See other options in [NLog-Project](https://nlog-project.org/config/?tab=layout-renderers).

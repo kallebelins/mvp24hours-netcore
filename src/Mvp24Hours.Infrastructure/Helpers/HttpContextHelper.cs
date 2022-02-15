@@ -23,8 +23,7 @@ namespace Mvp24Hours.Helpers
             httpContextAccessor = accessor;
             ServiceProviderHelper.SetProvider((state) =>
             {
-                var http = state as IHttpContextAccessor;
-                if (http != null)
+                if (state is IHttpContextAccessor http)
                     return http?.HttpContext?.RequestServices;
                 return null;
             }, accessor);

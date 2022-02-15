@@ -7,26 +7,30 @@ using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Application.MongoDb.Test.Support.Services;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Helpers;
+using System;
 
 namespace Mvp24Hours.Application.MongoDb.Test.Support.Helpers
 {
     public static class StartupHelper
     {
-        public static void ConfigureServices()
+        public static IServiceProvider ConfigureServices()
         {
             var services = new ServiceCollection()
                 .AddSingleton(ConfigurationHelper.AppSettings);
 
-            services.AddMvp24HoursMongoDb(options =>
+            services.AddMvp24HoursDbContext(options =>
             {
                 options.DatabaseName = "customers";
                 options.ConnectionString = ConfigurationHelper.GetSettings("ConnectionStrings:CustomerMongoContext");
             });
+            services.AddMvp24HoursRepository();
 
             // register my services
             services.AddScoped<CustomerService, CustomerService>();
 
-            services.UseMvp24Hours();
+            var provider = services.BuildServiceProvider();
+            ServiceProviderHelper.SetProvider(provider);
+            return provider;
         }
     }
 }

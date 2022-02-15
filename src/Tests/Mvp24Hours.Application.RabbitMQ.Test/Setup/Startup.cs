@@ -9,7 +9,6 @@ using Mvp24Hours.Application.RabbitMQ.Test.Support.Dto;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Helpers;
 using Mvp24Hours.Infrastructure.RabbitMQ;
-using Mvp24Hours.Infrastructure.RabbitMQ.Core.Contract;
 using System;
 
 namespace Mvp24Hours.Application.RabbitMQ.Test.Setup

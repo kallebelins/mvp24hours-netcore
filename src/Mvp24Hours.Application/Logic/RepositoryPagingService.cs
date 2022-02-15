@@ -3,8 +3,11 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
+using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Core.Contract.Logic;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
@@ -29,6 +32,23 @@ namespace Mvp24Hours.Application.Logic
         /// </summary>
         public RepositoryPagingService(IUnitOfWork _unitOfWork, ILoggingService _logging)
             : base(_unitOfWork, _logging)
+        {
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public RepositoryPagingService(IUnitOfWork _unitOfWork, ILoggingService _logging, INotificationContext notificationContext)
+            : base(_unitOfWork, _logging, notificationContext)
+        {
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [ActivatorUtilitiesConstructor]
+        public RepositoryPagingService(IUnitOfWork _unitOfWork, ILoggingService _logging, INotificationContext notificationContext, IValidator<TEntity> validator)
+            : base(_unitOfWork, _logging, notificationContext, validator)
         {
         }
         #endregion

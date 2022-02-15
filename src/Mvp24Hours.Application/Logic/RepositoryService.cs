@@ -3,8 +3,11 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
+using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Core.Contract.Logic;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
@@ -28,6 +31,8 @@ namespace Mvp24Hours.Application.Logic
         private readonly IRepository<TEntity> repository = null;
         private readonly IUnitOfWork unitOfWork = null;
         private readonly ILoggingService logging = null;
+        private readonly IValidator<TEntity> validator = null;
+        private readonly INotificationContext notificationContext = null;
 
         /// <summary>
         /// Gets unit of work instance
@@ -47,6 +52,16 @@ namespace Mvp24Hours.Application.Logic
         /// <returns>T</returns>
         protected virtual IRepository<TEntity> Repository => repository;
 
+        /// <summary>
+        /// Defines a validator for a particular type.
+        /// </summary>
+        protected virtual IValidator<TEntity> Validator => validator;
+
+        /// <summary>
+        /// Context that represents a container for in-app notifications
+        /// </summary>
+        protected virtual INotificationContext NotificationContext => notificationContext;
+
         #endregion
 
         #region [ Ctor ]
@@ -54,10 +69,29 @@ namespace Mvp24Hours.Application.Logic
         /// 
         /// </summary>
         public RepositoryService(IUnitOfWork unitOfWork, ILoggingService logging)
+            : this(unitOfWork, logging, null)
+        {
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public RepositoryService(IUnitOfWork unitOfWork, ILoggingService logging, INotificationContext notificationContext)
+            : this(unitOfWork, logging, notificationContext, null)
+        {
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [ActivatorUtilitiesConstructor]
+        public RepositoryService(IUnitOfWork unitOfWork, ILoggingService logging, INotificationContext notificationContext, IValidator<TEntity> validator)
         {
             this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             this.repository = unitOfWork.GetRepository<TEntity>();
             this.logging = logging ?? throw new ArgumentNullException(nameof(logging));
+            this.notificationContext = notificationContext;
+            this.validator = validator;
         }
         #endregion
 
@@ -184,7 +218,7 @@ namespace Mvp24Hours.Application.Logic
         public virtual int Add(TEntity entity)
         {
             Logging.Trace("RepositoryService.Add(T)");
-            if (entity.Validate())
+            if (entity.Validate(NotificationContext, Validator))
             {
                 this.UnitOfWork.GetRepository<TEntity>().Add(entity);
                 return this.UnitOfWork.SaveChanges();
@@ -216,7 +250,7 @@ namespace Mvp24Hours.Application.Logic
         public virtual int Modify(TEntity entity)
         {
             Logging.Trace("RepositoryService.Modify(T)");
-            if (entity.Validate())
+            if (entity.Validate(NotificationContext, Validator))
             {
                 this.UnitOfWork.GetRepository<TEntity>().Modify(entity);
                 return this.UnitOfWork.SaveChanges();

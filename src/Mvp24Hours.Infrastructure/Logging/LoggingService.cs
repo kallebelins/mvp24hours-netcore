@@ -4,10 +4,12 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Infrastructure.Logging;
+using Mvp24Hours.Infrastructure.Extensions;
 using Mvp24Hours.Infrastructure.Logging.Renderer;
 using NLog;
 using NLog.Config;
 using System;
+using System.Diagnostics;
 
 namespace Mvp24Hours.Infrastructure.Logging
 {
@@ -200,6 +202,16 @@ namespace Mvp24Hours.Infrastructure.Logging
             logEvent.Properties["error-message"] = messageProp;
             logEvent.Properties["inner-error-message"] = innerMessageProp;
             logEvent.Properties["error-stack-trace"] = stackTraceProp;
+
+            // activity
+            var activity = Activity.Current;
+            if (activity != null)
+            {
+                logEvent.Properties["ActivityId"] = activity.Id;
+                logEvent.Properties["TraceId"] = activity.GetTraceId();
+                logEvent.Properties["SpanId"] = activity.GetSpanId();
+                logEvent.Properties["ParentId"] = activity.GetParentId();
+            }
 
             return logEvent;
         }

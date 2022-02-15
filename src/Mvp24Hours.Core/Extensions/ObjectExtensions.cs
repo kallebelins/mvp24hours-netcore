@@ -48,7 +48,7 @@ namespace Mvp24Hours.Extensions
                                select i
                              ).Contains(srcProp.Name)
                            && (!IgnoreNullProperties || srcProp.GetValue(source, null) != null)
-                           select new { sourceProperty = srcProp, targetProperty = targetProperty }).ToList();
+                           select new { sourceProperty = srcProp, targetProperty }).ToList();
 
             bool PropertyChanged = false;
             //map the properties
@@ -97,8 +97,8 @@ namespace Mvp24Hours.Extensions
         public static T DeepClone<T>(this T objectToClone)
             where T : class
         {
-            BinaryFormatter bFormatter = new BinaryFormatter();
-            MemoryStream stream = new MemoryStream();
+            BinaryFormatter bFormatter = new();
+            MemoryStream stream = new();
             bFormatter.Serialize(stream, objectToClone);
             stream.Seek(0, SeekOrigin.Begin);
             T clonedObject = (T)bFormatter.Deserialize(stream);
@@ -183,7 +183,7 @@ namespace Mvp24Hours.Extensions
         public static T GetPropValue<T>(this object obj, string name)
         {
             object retval = GetPropValue(obj, name);
-            if (retval == null) { return default(T); }
+            if (retval == null) { return default; }
 
             // throws InvalidCastException if types are incompatible
             return (T)retval;

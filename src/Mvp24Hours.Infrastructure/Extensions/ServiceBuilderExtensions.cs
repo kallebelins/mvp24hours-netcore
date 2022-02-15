@@ -30,8 +30,7 @@ namespace Mvp24Hours.Extensions
             {
                 ServiceProviderHelper.SetProvider((scope) =>
                 {
-                    var service = scope as IServiceScope;
-                    if (service != null)
+                    if (scope is IServiceScope service)
                         return service.ServiceProvider;
                     return null;
                 }, provider.CreateScope());

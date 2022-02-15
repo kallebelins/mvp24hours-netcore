@@ -3,10 +3,10 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
-using Mvp24Hours.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -20,6 +20,30 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
     /// </summary>
     public class UnitOfWorkAsync : IUnitOfWorkAsync, IDisposable
     {
+        #region [ Ctor ]
+
+        public UnitOfWorkAsync(Mvp24HoursContext dbContext, INotificationContext notificationContext, Dictionary<Type, object> _repositories)
+        {
+            this.DbContext = dbContext;
+            this.repositories = _repositories;
+            this.NotificationContext = notificationContext;
+
+            DbContext.StartSessionAsync().Wait();
+        }
+
+        [ActivatorUtilitiesConstructor]
+        public UnitOfWorkAsync(Mvp24HoursContext _dbContext, INotificationContext _notificationContext, IServiceProvider _serviceProvider)
+        {
+            this.DbContext = _dbContext;
+            repositories = new Dictionary<Type, object>();
+            this.NotificationContext = _notificationContext;
+            this.serviceProvider = _serviceProvider;
+
+            DbContext.StartSessionAsync().Wait();
+        }
+
+        #endregion
+
         #region [ Ctor ]
 
         public UnitOfWorkAsync(Mvp24HoursContext dbContext, INotificationContext notificationContext)
@@ -39,6 +63,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
 
         protected Mvp24HoursContext DbContext { get; private set; }
         protected INotificationContext NotificationContext { get; private set; }
+        private readonly IServiceProvider serviceProvider;
 
         /// <summary>
         ///  <see cref="IUnitOfWorkAsync"/>
@@ -48,7 +73,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         {
             if (!repositories.ContainsKey(typeof(T)))
             {
-                repositories.Add(typeof(T), ServiceProviderHelper.GetService<IRepositoryAsync<T>>());
+                repositories.Add(typeof(T), serviceProvider.GetService<IRepositoryAsync<T>>());
             }
             return repositories[typeof(T)] as IRepositoryAsync<T>;
         }

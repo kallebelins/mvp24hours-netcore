@@ -26,7 +26,7 @@ namespace Mvp24Hours.Infrastructure.Logging.Renderer
         /// <summary>
         /// 
         /// </summary>
-        protected int GetEstimatedBufferSize(LogEventInfo ev)
+        protected int GetEstimatedBufferSize(LogEventInfo _)
         {
             return 10;
         }

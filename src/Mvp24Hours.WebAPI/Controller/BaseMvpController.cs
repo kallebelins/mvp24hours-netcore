@@ -6,8 +6,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Contract.Infrastructure.Logging;
-using Mvp24Hours.Helpers;
-using Mvp24Hours.Infrastructure.Logging;
 
 namespace Mvp24Hours.WebAPI.Controller
 {
@@ -18,24 +16,33 @@ namespace Mvp24Hours.WebAPI.Controller
     {
         #region [ Properties ]
 
-        private INotificationContext notificationContext;
-        private ILoggingService logging;
-        private IHateoasContext hateoasContext;
+        private readonly INotificationContext notificationContext;
+        private readonly ILoggingService logging;
+        private readonly IHateoasContext hateoasContext;
 
         /// <summary>
         /// 
         /// </summary>
-        protected virtual INotificationContext NotificationContext => notificationContext ??= ServiceProviderHelper.GetService<INotificationContext>();
+        protected virtual INotificationContext NotificationContext => notificationContext;
         /// <summary>
         /// 
         /// </summary>
-        protected virtual IHateoasContext HateoasContext => hateoasContext ??= ServiceProviderHelper.GetService<IHateoasContext>();
+        protected virtual IHateoasContext HateoasContext => hateoasContext;
         /// <summary>
         /// Gets instance of log
         /// </summary>
         /// <returns>ILoggingService</returns>
-        protected virtual ILoggingService Logging => logging ??= LoggingService.GetLoggingService();
+        protected virtual ILoggingService Logging => logging;
 
+        #endregion
+
+        #region [ Ctor ]
+        protected BaseMvpController(ILoggingService logging = null, INotificationContext notificationContext = null, IHateoasContext hateoasContext = null)
+        {
+            this.logging = logging;
+            this.notificationContext = notificationContext;
+            this.hateoasContext = hateoasContext;
+        }
         #endregion
     }
 }

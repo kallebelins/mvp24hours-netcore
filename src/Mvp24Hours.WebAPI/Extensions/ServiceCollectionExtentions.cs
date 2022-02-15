@@ -16,6 +16,7 @@ using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Helpers;
 using Mvp24Hours.Infrastructure.Contexts;
+using Mvp24Hours.WebAPI.Configuration;
 using Mvp24Hours.WebAPI.Filters;
 using Mvp24Hours.WebAPI.Filters.Swagger;
 using Mvp24Hours.WebAPI.Models;
@@ -58,12 +59,22 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// <summary>
         /// Adds web filters HATEOAS.
         /// </summary>
-        public static IServiceCollection AddMvp24HoursWebHATEOAS(this IServiceCollection services)
+        public static IServiceCollection AddMvp24HoursWebHATEOAS(this IServiceCollection services, Action<HateoasFilterOptions> options = null)
         {
             if (!services.Exists<IHttpContextAccessor>())
             {
                 throw new ArgumentNullException("IHttpContextAccessor context not found.");
             }
+
+            if (options != null)
+            {
+                services.Configure(options);
+            }
+            else
+            {
+                services.Configure<HateoasFilterOptions>(options => { });
+            }
+
             services.AddScoped<IHateoasContext, HateoasContext>();
             services.AddMvc(options =>
             {
@@ -79,9 +90,19 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// <summary>
         /// Adds web filters notification. Only use if not using ActionResult.
         /// </summary>
-        public static IServiceCollection AddMvp24HoursWebNotification(this IServiceCollection services)
+        public static IServiceCollection AddMvp24HoursWebNotification(this IServiceCollection services, Action<NotificationFilterOptions> options = null)
         {
             services.AddMvp24HoursNotification();
+
+            if (options != null)
+            {
+                services.Configure(options);
+            }
+            else
+            {
+                services.Configure<NotificationFilterOptions>(options => { });
+            }
+
             services.AddMvc(options =>
             {
                 options.Filters.Add<NotificationFilter>();
@@ -224,6 +245,38 @@ namespace Mvp24Hours.WebAPI.Extensions
                 services.AddSwaggerExamplesFromAssemblies(Assembly.GetEntryAssembly());
             }
 
+            return services;
+        }
+
+        /// <summary>
+        /// Add configuration cors middleware
+        /// </summary>
+        public static IServiceCollection AddMvp24HoursWebCors(this IServiceCollection services, Action<CorsOptions> options = null)
+        {
+            if (options != null)
+            {
+                services.Configure(options);
+            }
+            else
+            {
+                services.Configure<CorsOptions>(options => { });
+            }
+            return services;
+        }
+
+        /// <summary>
+        /// Add configuration exception middleware
+        /// </summary>
+        public static IServiceCollection AddMvp24HoursWebExceptions(this IServiceCollection services, Action<ExceptionOptions> options = null)
+        {
+            if (options != null)
+            {
+                services.Configure(options);
+            }
+            else
+            {
+                services.Configure<ExceptionOptions>(options => { });
+            }
             return services;
         }
     }

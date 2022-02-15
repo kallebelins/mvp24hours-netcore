@@ -4,11 +4,13 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Core.DTOs;
 using Mvp24Hours.Core.Enums;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Helpers;
+using Mvp24Hours.WebAPI.Configuration;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -19,13 +21,13 @@ namespace Mvp24Hours.Infrastructure.Middlewares
     {
         private readonly RequestDelegate _next;
         private readonly ILoggingService _logger;
-        private readonly bool _traceMiddleware;
+        private readonly ExceptionOptions options;
 
-        public ExceptionMiddleware(RequestDelegate next, ILoggingService logger)
+        public ExceptionMiddleware(RequestDelegate next, ILoggingService logger, IOptions<ExceptionOptions> options)
         {
             _next = next;
             _logger = logger;
-            _traceMiddleware = ConfigurationHelper.GetSettings<bool>("Mvp24Hours:Web:TraceMiddleware");
+            this.options = options?.Value ?? throw new System.ArgumentNullException(nameof(options), "[ExceptionMiddleware] Options is required. Check: services.AddMvp24HoursWebExceptions().");
         }
 
         public async Task InvokeAsync(HttpContext httpContext)
@@ -54,7 +56,7 @@ namespace Mvp24Hours.Infrastructure.Middlewares
 
             string message;
 
-            if (_traceMiddleware)
+            if (options.TraceMiddleware)
             {
                 message = $"Message: {(exception?.InnerException ?? exception).Message} / Trace: {exception.StackTrace}";
             }

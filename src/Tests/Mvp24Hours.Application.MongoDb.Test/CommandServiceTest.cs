@@ -3,12 +3,12 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Bson;
 using Mvp24Hours.Application.MongoDb.Test.Support.Entities;
 using Mvp24Hours.Application.MongoDb.Test.Support.Helpers;
 using Mvp24Hours.Application.MongoDb.Test.Support.Services;
 using Mvp24Hours.Extensions;
-using Mvp24Hours.Helpers;
 using System;
 using Xunit;
 using Xunit.Priority;
@@ -21,17 +21,18 @@ namespace Mvp24Hours.Application.MongoDb.Test
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Name)]
     public class CommandServiceTest
     {
+        private readonly IServiceProvider serviceProvider;
         private readonly ObjectId _oid = ObjectId.GenerateNewId();
 
         public CommandServiceTest()
         {
-            StartupHelper.ConfigureServices();
+            serviceProvider = StartupHelper.ConfigureServices();
         }
 
         [Fact, Priority(1)]
         public void Create_Customer()
         {
-            var service = ServiceProviderHelper.GetService<CustomerService>();
+            var service = serviceProvider.GetService<CustomerService>();
 
             service.Add(new Customer
             {
@@ -41,13 +42,15 @@ namespace Mvp24Hours.Application.MongoDb.Test
                 Active = true
             });
 
-            Assert.True(service.GetById(_oid).HasData());
+            var result = service.GetById(_oid);
+
+            Assert.True(result.HasData());
         }
 
         [Fact, Priority(2)]
         public void Update_Customer()
         {
-            var service = ServiceProviderHelper.GetService<CustomerService>();
+            var service = serviceProvider.GetService<CustomerService>();
 
             var customer = new Customer
             {
@@ -70,11 +73,13 @@ namespace Mvp24Hours.Application.MongoDb.Test
         [Fact, Priority(3)]
         public void Delete_Customer()
         {
-            var service = ServiceProviderHelper.GetService<CustomerService>();
+            var service = serviceProvider.GetService<CustomerService>();
 
             service.RemoveById(_oid);
 
-            Assert.True(!service.GetById(_oid).HasData());
+            var result = service.GetById(_oid);
+
+            Assert.True(!result.HasData());
         }
 
     }

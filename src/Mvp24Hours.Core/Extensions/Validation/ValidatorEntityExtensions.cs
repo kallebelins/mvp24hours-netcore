@@ -6,7 +6,6 @@
 using FluentValidation;
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.ValueObjects.Infrastructure;
-using Mvp24Hours.Helpers;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -18,8 +17,8 @@ namespace Mvp24Hours.Extensions
         public static bool Validate<TEntity>(this TEntity entity, INotificationContext _context = null, IValidator<TEntity> _validator = null)
             where TEntity : class
         {
-            var notifyCntxt = _context ?? ServiceProviderHelper.GetService<INotificationContext>();
-            var validator = _validator ?? ServiceProviderHelper.GetService<IValidator<TEntity>>();
+            var notifyCntxt = _context;
+            var validator = _validator;
             if (validator != null)
             {
                 var validationResult = validator.Validate(entity);

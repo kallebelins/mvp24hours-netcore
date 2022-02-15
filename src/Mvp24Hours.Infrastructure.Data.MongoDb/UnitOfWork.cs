@@ -3,10 +3,10 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
-using Mvp24Hours.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -21,11 +21,22 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
     {
         #region [ Ctor ]
 
-        public UnitOfWork(Mvp24HoursContext dbContext, INotificationContext notificationContext)
+        public UnitOfWork(Mvp24HoursContext dbContext, INotificationContext notificationContext, Dictionary<Type, object> _repositories)
         {
             this.DbContext = dbContext;
-            repositories = new Dictionary<Type, object>();
+            this.repositories = _repositories;
             this.NotificationContext = notificationContext;
+
+            DbContext.StartSession();
+        }
+
+        [ActivatorUtilitiesConstructor]
+        public UnitOfWork(Mvp24HoursContext _dbContext, INotificationContext _notificationContext, IServiceProvider _serviceProvider)
+        {
+            this.DbContext = _dbContext;
+            repositories = new Dictionary<Type, object>();
+            this.NotificationContext = _notificationContext;
+            this.serviceProvider = _serviceProvider;
 
             DbContext.StartSession();
         }
@@ -38,6 +49,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
 
         protected Mvp24HoursContext DbContext { get; private set; }
         protected INotificationContext NotificationContext { get; private set; }
+        private readonly IServiceProvider serviceProvider;
 
         /// <summary>
         ///  <see cref="Mvp24Hours.Core.Contract.Data.IUnitOfWork"/>
@@ -47,7 +59,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         {
             if (!this.repositories.ContainsKey(typeof(T)))
             {
-                this.repositories.Add(typeof(T), ServiceProviderHelper.GetService<IRepository<T>>());
+                this.repositories.Add(typeof(T), serviceProvider.GetService<IRepository<T>>());
             }
             return repositories[typeof(T)] as IRepository<T>;
         }

@@ -21,7 +21,7 @@ You will be able to use direct database connection, which is not recommended. Ac
 /// Package Manager Console >
 Install-Package Microsoft.Extensions.DependencyInjection -Version 6.0.0
 Install-Package Microsoft.EntityFrameworkCore.SqlServer -Version 5.0.10
-Install-Package Mvp24Hours.Infrastructure.Data.EFCore -Version 3.2.142
+Install-Package Mvp24Hours.Infrastructure.Data.EFCore -Version 3.2.151
 ```
 ### Configuration
 ```csharp
@@ -54,7 +54,7 @@ Data Source=.,1433;Initial Catalog=MyTestDb;Persist Security Info=True;User ID=s
 /// Package Manager Console >
 Install-Package Microsoft.Extensions.DependencyInjection -Version 6.0.0
 Install-Package Npgsql.EntityFrameworkCore.PostgreSQL -Version 5.0.10
-Install-Package Mvp24Hours.Infrastructure.Data.EFCore -Version 3.2.142
+Install-Package Mvp24Hours.Infrastructure.Data.EFCore -Version 3.2.151
 ```
 ### Configuration
 ```csharp
@@ -89,7 +89,7 @@ Host=localhost;Port=5432;Pooling=true;Database=MyTestDb;User Id=postgres;Passwor
 /// Package Manager Console >
 Install-Package Microsoft.Extensions.DependencyInjection -Version 6.0.0
 Install-Package MySql.EntityFrameworkCore -Version 5.0.8
-Install-Package Mvp24Hours.Infrastructure.Data.EFCore -Version 3.2.142
+Install-Package Mvp24Hours.Infrastructure.Data.EFCore -Version 3.2.151
 ```
 ### Configuration
 ```csharp
