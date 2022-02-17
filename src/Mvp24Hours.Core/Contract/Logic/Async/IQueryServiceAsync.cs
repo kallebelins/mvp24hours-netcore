@@ -37,7 +37,7 @@ namespace Mvp24Hours.Core.Contract.Logic
         /// Gets all representations of the entity typed with criteria.
         /// </summary>
         /// <returns>List of entities async</returns>
-        Task<IBusinessResult<IList<TEntity>>> ListAsync(IPagingCriteria clause, CancellationToken cancellationToken = default);
+        Task<IBusinessResult<IList<TEntity>>> ListAsync(IPagingCriteria criteria, CancellationToken cancellationToken = default);
         /// <summary>
         /// Checks whether any records returned by the GetBy() method.
         /// </summary>
@@ -71,6 +71,6 @@ namespace Mvp24Hours.Core.Contract.Logic
         /// </summary>
         /// <param name="id">Identifier of entity</param>
         /// <returns>A representation of the entity async</returns>
-        Task<IBusinessResult<TEntity>> GetByIdAsync(object id, IPagingCriteria clause, CancellationToken cancellationToken = default);
+        Task<IBusinessResult<TEntity>> GetByIdAsync(object id, IPagingCriteria criteria, CancellationToken cancellationToken = default);
     }
 }

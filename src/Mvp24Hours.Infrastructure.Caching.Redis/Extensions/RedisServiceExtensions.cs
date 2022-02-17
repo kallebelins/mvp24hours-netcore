@@ -48,7 +48,7 @@ namespace Mvp24Hours.Extensions
 
             if (!connectionString.HasValue())
             {
-                throw new ArgumentNullException("Connection strings is required.");
+                throw new ArgumentNullException(nameof(connectionString), "Connection strings is required.");
             }
 
             services.AddDistributedRedisCache(options =>

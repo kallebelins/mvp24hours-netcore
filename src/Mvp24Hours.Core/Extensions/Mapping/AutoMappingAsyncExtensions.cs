@@ -32,7 +32,7 @@ namespace Mvp24Hours.Extensions
             IMapper mapper = ServiceProviderHelper.GetService<IMapper>();
             if (mapper == null)
             {
-                throw new ArgumentNullException("Profile not registered for AutoMapper.");
+                throw new ArgumentException("Profile not registered for AutoMapper.");
             }
 
             return mapper.Map<TDestination>(source);
@@ -53,7 +53,7 @@ namespace Mvp24Hours.Extensions
             IMapper mapper = ServiceProviderHelper.GetService<IMapper>();
             if (mapper == null)
             {
-                throw new ArgumentNullException("Profile not registered for AutoMapper.");
+                throw new ArgumentException("Profile not registered for AutoMapper.");
             }
 
             if (source.Messages.AnyOrNotNull())
@@ -92,7 +92,7 @@ namespace Mvp24Hours.Extensions
             IMapper mapper = ServiceProviderHelper.GetService<IMapper>();
             if (mapper == null)
             {
-                throw new ArgumentNullException("Profile not registered for AutoMapper.");
+                throw new ArgumentException("Profile not registered for AutoMapper.");
             }
 
             if (source.Messages.AnyOrNotNull())

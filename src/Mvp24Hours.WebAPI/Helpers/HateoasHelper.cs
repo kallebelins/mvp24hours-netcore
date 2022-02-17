@@ -55,10 +55,7 @@ namespace Mvp24Hours.Helpers
 
         #region [ CreateLink ]
 
-        public static ILinkResult CreateLink(string routeName, HateoasType type)
-        {
-            return CreateLink(routeName, null, type);
-        }
+        public static ILinkResult CreateLink(string routeName, HateoasType type) => CreateLink(routeName, null, type);
 
         public static ILinkResult CreateLink(string routeName, HateoasType type, HateoasMethodType method)
         {

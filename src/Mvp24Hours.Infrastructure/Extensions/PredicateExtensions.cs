@@ -123,14 +123,14 @@ namespace Mvp24Hours.Extensions
                 return new ParameterRebinder(map).Visit(exp);
             }
 
-            protected override Expression VisitParameter(ParameterExpression p)
+            protected override Expression VisitParameter(ParameterExpression node)
             {
-                if (map.TryGetValue(p, out ParameterExpression replacement))
+                if (map.TryGetValue(node, out ParameterExpression replacement))
                 {
-                    p = replacement;
+                    node = replacement;
                 }
 
-                return base.VisitParameter(p);
+                return base.VisitParameter(node);
             }
         }
     }

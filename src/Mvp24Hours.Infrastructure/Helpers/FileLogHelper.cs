@@ -19,10 +19,7 @@ namespace Mvp24Hours.Helpers
     {
         private static readonly ILoggingService _logger;
 
-        static FileLogHelper()
-        {
-            _logger = LoggingService.GetLoggingService();
-        }
+        static FileLogHelper() => _logger = LoggingService.GetLoggingService();
 
         /// <summary>
         /// Writes log with model characteristics in the parameter

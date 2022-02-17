@@ -24,7 +24,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
     /// <summary>
     ///  <see cref="Core.Contract.Data.Async.IRepositoryAsync{T}"/>
     /// </summary>
-    public class RepositoryAsync<T> : RepositoryBase<T>, IRepositoryAsync<T>, IQueryRelationAsync<T>
+    public class RepositoryAsync<T> : RepositoryBase<T>, IRepositoryAsync<T>
         where T : class, IEntityBase
     {
         #region [ Ctor ]
@@ -370,7 +370,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                 return Task.FromResult(false);
             }
 
-            if (cancellationToken != null && cancellationToken.IsCancellationRequested)
+            if (cancellationToken.IsCancellationRequested)
             {
                 return Task.FromResult(false);
             }

@@ -63,7 +63,7 @@ namespace Mvp24Hours.WebAPI.Extensions
         {
             if (!services.Exists<IHttpContextAccessor>())
             {
-                throw new ArgumentNullException("IHttpContextAccessor context not found.");
+                throw new ArgumentException("IHttpContextAccessor context not found.");
             }
 
             if (options != null)
@@ -82,7 +82,7 @@ namespace Mvp24Hours.WebAPI.Extensions
             });
             if (!services.Exists<IActionContextAccessor>())
             {
-                throw new ArgumentNullException("IActionContextAccessor context not found.");
+                throw new ArgumentException("IActionContextAccessor context not found.");
             }
             return services;
         }

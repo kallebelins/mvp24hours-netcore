@@ -26,10 +26,7 @@ namespace Mvp24Hours.Helpers
     {
         private static readonly ILoggingService _logger;
 
-        static WebRequestHelper()
-        {
-            _logger = LoggingService.GetLoggingService();
-        }
+        static WebRequestHelper() => _logger = LoggingService.GetLoggingService();
 
         /// <summary>
         /// 
@@ -164,7 +161,9 @@ namespace Mvp24Hours.Helpers
             string result = string.Empty;
             try
             {
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11
+                    | SecurityProtocolType.Tls12
+                    | SecurityProtocolType.Tls13;
                 if (EncodingRequest == null)
                 {
                     EncodingRequest = Encoding.UTF8;

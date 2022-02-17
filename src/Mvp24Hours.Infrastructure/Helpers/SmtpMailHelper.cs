@@ -19,10 +19,7 @@ namespace Mvp24Hours.Helpers
     {
         private static readonly ILoggingService _logger;
 
-        static SmtpMailHelper()
-        {
-            _logger = LoggingService.GetLoggingService();
-        }
+        static SmtpMailHelper() => _logger = LoggingService.GetLoggingService();
 
         /// <summary>
         /// Sends email from the email message
@@ -109,7 +106,7 @@ namespace Mvp24Hours.Helpers
             smtpCli.Port = _mailPort;
             if (string.IsNullOrEmpty(_mailServer))
             {
-                throw new Exception("SmtpMail:SmtpServer has not been defined in the config.");
+                throw new ArgumentException("SmtpMail:SmtpServer has not been defined in the config.");
             }
             else
             {
@@ -119,7 +116,7 @@ namespace Mvp24Hours.Helpers
             smtpCli.EnableSsl = _mailSSL;
             if (string.IsNullOrEmpty(_mailUser) || string.IsNullOrEmpty(_mailPassword))
             {
-                throw new Exception("SmtpMail:SmtpUser or SmtpMail:SmtpPassword not defined in the config.");
+                throw new ArgumentException("SmtpMail:SmtpUser or SmtpMail:SmtpPassword not defined in the config.");
             }
             else
             {

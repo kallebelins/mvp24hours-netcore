@@ -38,7 +38,9 @@ namespace Mvp24Hours.Core.Serialization.Json
                     x.Writable = true;
                 }
                 catch (Exception)
-                { }
+                {
+                    // left empty code
+                }
             }
 
             return x;
@@ -55,7 +57,8 @@ namespace Mvp24Hours.Core.Serialization.Json
             {
                 _memberInfo = memberInfo;
                 var fieldName = string.Format("<{0}>i__Field", memberInfo.Name);
-                _fieldInfo = memberInfo.DeclaringType.GetFields(BindingFlags.NonPublic | BindingFlags.Instance).First(fi => fi.Name.Equals(fieldName, StringComparison.InvariantCultureIgnoreCase));
+                _fieldInfo = memberInfo.DeclaringType.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)
+                        .First(fi => fi.Name.Equals(fieldName, StringComparison.InvariantCultureIgnoreCase));
             }
 
             public void SetValue(object target, object value)
@@ -71,7 +74,7 @@ namespace Mvp24Hours.Core.Serialization.Json
                 }
                 catch (Exception ex)
                 {
-                    throw new JsonSerializationException(string.Format("Error setting value to '{0}' on '{1}'.", CultureInfo.InvariantCulture, _memberInfo.Name, target.GetType()), ex);
+                    throw new JsonSerializationException(message: $"Error setting value to '{CultureInfo.InvariantCulture}' on '{_memberInfo.Name}'.", innerException: ex);
                 }
             }
 
@@ -88,7 +91,7 @@ namespace Mvp24Hours.Core.Serialization.Json
                 }
                 catch (Exception ex)
                 {
-                    throw new JsonSerializationException(string.Format("Error getting value from '{0}' on '{1}'.", CultureInfo.InvariantCulture, _memberInfo.Name, target.GetType()), ex);
+                    throw new JsonSerializationException(message: $"Error getting value from '{CultureInfo.InvariantCulture}' on '{_memberInfo.Name}'.", innerException: ex);
                 }
             }
         }

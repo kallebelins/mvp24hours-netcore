@@ -63,7 +63,7 @@ namespace Mvp24Hours.Extensions.Data
             PropertyInfo pi = type.GetProperty(propertyName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
             if (pi == null)
             {
-                throw new ArgumentNullException("Property for ordering not found or key attribute does not exist in the entity.");
+                throw new ArgumentException("Property for ordering not found or key attribute does not exist in the entity.");
             }
             Expression expr = Expression.Property(arg, pi);
             type = pi.PropertyType;

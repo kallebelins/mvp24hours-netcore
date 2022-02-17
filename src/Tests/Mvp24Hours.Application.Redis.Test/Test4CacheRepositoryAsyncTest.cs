@@ -29,7 +29,7 @@ namespace Mvp24Hours.Application.Redis.Test
         }
 
         [Fact, Priority(1)]
-        public async Task Set_String_Async()
+        public async Task Add_String_Cache_Async()
         {
             var serviceProvider = startup.Initialize();
             var customer = new Customer
@@ -66,7 +66,7 @@ namespace Mvp24Hours.Application.Redis.Test
         }
 
         [Fact, Priority(4)]
-        public async Task Set_Object_Async()
+        public async Task Add_Object_Cache_Async()
         {
             var serviceProvider = startup.Initialize();
             var customer = new Customer

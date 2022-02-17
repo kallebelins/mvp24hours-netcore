@@ -63,12 +63,12 @@ namespace Mvp24Hours.Application.SQLServer.Test.Setup
                     .UseSqlServer(ConfigurationHelper.AppSettings.GetConnectionString("DataContext")
                         .Format(StringHelper.GenerateKey(10))));
 #endif
-            services.AddMvp24HoursDbContext<DataContext>(options: options =>
+            services.AddMvp24HoursDbContext<DataContext>();
+            services.AddMvp24HoursRepository(options: options =>
             {
                 options.MaxQtyByQueryPage = 100;
                 options.TransactionIsolationLevel = System.Transactions.IsolationLevel.ReadCommitted;
             });
-            services.AddMvp24HoursRepository();
 
             // register my services
             services.AddScoped<CustomerService, CustomerService>();

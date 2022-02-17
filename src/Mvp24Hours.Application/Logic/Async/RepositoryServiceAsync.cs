@@ -27,12 +27,12 @@ namespace Mvp24Hours.Application.Logic
     /// <typeparam name="TEntity">Represents an entity</typeparam>
     public class RepositoryServiceAsync<TEntity, TUoW> : IQueryServiceAsync<TEntity>, ICommandServiceAsync<TEntity>
         where TEntity : class, IEntityBase
-        where TUoW : IUnitOfWorkAsync
+        where TUoW : class, IUnitOfWorkAsync
     {
         #region [ Properties / Fields ]
 
         private readonly IRepositoryAsync<TEntity> repository = null;
-        private readonly IUnitOfWorkAsync unitOfWork = null;
+        private readonly TUoW unitOfWork = null;
         private readonly ILoggingService logging = null;
         private readonly IValidator<TEntity> validator = null;
         private readonly INotificationContext notificationContext = null;
@@ -41,7 +41,7 @@ namespace Mvp24Hours.Application.Logic
         /// Gets unit of work instance
         /// </summary>
         /// <returns>T</returns>
-        protected virtual IUnitOfWorkAsync UnitOfWork => unitOfWork;
+        protected virtual TUoW UnitOfWork => unitOfWork;
 
         /// <summary>
         /// Gets instance of log
@@ -71,7 +71,7 @@ namespace Mvp24Hours.Application.Logic
         /// <summary>
         /// 
         /// </summary>
-        public RepositoryServiceAsync(IUnitOfWorkAsync unitOfWork, ILoggingService logging)
+        public RepositoryServiceAsync(TUoW unitOfWork, ILoggingService logging)
             : this(unitOfWork, logging, null)
         {
         }
@@ -79,7 +79,7 @@ namespace Mvp24Hours.Application.Logic
         /// <summary>
         /// 
         /// </summary>
-        public RepositoryServiceAsync(IUnitOfWorkAsync unitOfWork, ILoggingService logging, INotificationContext notificationContext)
+        public RepositoryServiceAsync(TUoW unitOfWork, ILoggingService logging, INotificationContext notificationContext)
             : this(unitOfWork, logging, notificationContext, null)
         {
         }
@@ -88,7 +88,7 @@ namespace Mvp24Hours.Application.Logic
         /// 
         /// </summary>
         [ActivatorUtilitiesConstructor]
-        public RepositoryServiceAsync(IUnitOfWorkAsync unitOfWork, ILoggingService logging, INotificationContext notificationContext, IValidator<TEntity> validator)
+        public RepositoryServiceAsync(TUoW unitOfWork, ILoggingService logging, INotificationContext notificationContext, IValidator<TEntity> validator)
         {
             this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             this.repository = unitOfWork.GetRepository<TEntity>();
@@ -221,7 +221,7 @@ namespace Mvp24Hours.Application.Logic
         public virtual async Task<int> AddAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
             Logging.Trace("RepositoryServiceAsync.AddAsync(TEntity, CancellationToken)");
-            if (entity.Validate())
+            if (entity.Validate(NotificationContext, Validator))
             {
                 await this.UnitOfWork
                     .GetRepository<TEntity>()
@@ -252,7 +252,7 @@ namespace Mvp24Hours.Application.Logic
         public virtual async Task<int> ModifyAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
             Logging.Trace("RepositoryServiceAsync.ModifyAsync(TEntity, CancellationToken)");
-            if (entity.Validate())
+            if (entity.Validate(NotificationContext, Validator))
             {
                 await this.UnitOfWork.GetRepository<TEntity>().ModifyAsync(entity, cancellationToken: cancellationToken);
                 return await this.UnitOfWork.SaveChangesAsync(cancellationToken: cancellationToken);

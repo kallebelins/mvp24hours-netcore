@@ -53,7 +53,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
         /// </summary>
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            new Timer(callback, state, dueTime, period);
+            _ = new Timer(callback, state, dueTime, period);
             return Task.CompletedTask;
         }
 

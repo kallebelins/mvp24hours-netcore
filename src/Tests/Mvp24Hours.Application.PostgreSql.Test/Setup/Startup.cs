@@ -63,11 +63,11 @@ namespace Mvp24Hours.Application.PostgreSql.Test.Setup
                 options => options.SetPostgresVersion(new Version(9, 6)))
             );
 #endif
-            services.AddMvp24HoursDbContext<DataContext>(options: options =>
+            services.AddMvp24HoursDbContext<DataContext>();
+            services.AddMvp24HoursRepository(options: options =>
             {
                 options.MaxQtyByQueryPage = 100;
             });
-            services.AddMvp24HoursRepository();
 
             // register my services
             services.AddScoped<CustomerService, CustomerService>();

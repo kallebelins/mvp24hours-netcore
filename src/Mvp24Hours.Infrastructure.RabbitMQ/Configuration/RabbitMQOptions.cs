@@ -5,10 +5,12 @@
 //=====================================================================================
 using Mvp24Hours.Infrastructure.RabbitMQ.Core.Enums;
 using RabbitMQ.Client;
+using System;
 using System.Collections.Generic;
 
 namespace Mvp24Hours.Infrastructure.RabbitMQ.Configuration
 {
+    [Serializable]
     public sealed class RabbitMQOptions
     {
         public string ConnectionString { get; set; } = "amqp://guest:guest@localhost:5672";

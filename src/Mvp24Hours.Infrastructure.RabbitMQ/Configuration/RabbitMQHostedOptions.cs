@@ -8,6 +8,7 @@ using System.Threading;
 
 namespace Mvp24Hours.Infrastructure.RabbitMQ.Configuration
 {
+    [Serializable]
     public sealed class RabbitMQHostedOptions
     {
         public TimerCallback Callback { get; set; }

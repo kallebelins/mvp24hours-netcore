@@ -4,6 +4,7 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Microsoft.Extensions.Options;
+using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Helpers;
@@ -26,12 +27,12 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
         #endregion
 
         #region [ Ctors ]
-        protected MvpRabbitMQConsumerAsync(IOptions<RabbitMQOptions> options, string queueName = null, string routingKey = null)
-           : base(options?.Value, queueName, routingKey: routingKey)
+        protected MvpRabbitMQConsumerAsync(IOptions<RabbitMQOptions> options, ILoggingService logging, string queueName = null, string routingKey = null)
+           : base(options?.Value, logging, queueName, routingKey: routingKey)
         {
         }
-        protected MvpRabbitMQConsumerAsync(RabbitMQOptions options, string queueName = null, string routingKey = null)
-           : base(options, queueName, routingKey: routingKey)
+        protected MvpRabbitMQConsumerAsync(RabbitMQOptions options, ILoggingService logging, string queueName = null, string routingKey = null)
+           : base(options, logging, queueName, routingKey: routingKey)
         {
         }
         #endregion
@@ -39,27 +40,19 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
         #region [ Methods ]
         public virtual void Consume(string queueName = null, string routingKey = null)
         {
-            try
+            if (_event == null)
             {
-                if (_event == null)
-                {
-                    _event = new AsyncEventingBasicConsumer(Channel);
-                    _event.Received += EventReceivedAsync;
+                _event = new AsyncEventingBasicConsumer(Channel);
+                _event.Received += EventReceivedAsync;
 
-                    Channel.QueueBind(queue: queueName ?? Options.Queue ?? string.Empty,
-                                            exchange: Options.Exchange,
-                                            routingKey: routingKey ?? Options.RoutingKey);
-                }
+                Channel.QueueBind(queue: queueName ?? Options.Queue ?? string.Empty,
+                                        exchange: Options.Exchange,
+                                        routingKey: routingKey ?? Options.RoutingKey);
+            }
 
-                Channel.BasicConsume(queue: queueName ?? Options.Queue ?? string.Empty,
-                     autoAck: Options.AutoAck,
-                     consumer: _event);
-            }
-            catch (Exception ex)
-            {
-                Logging.Error(ex);
-                throw;
-            }
+            Channel.BasicConsume(queue: queueName ?? Options.Queue ?? string.Empty,
+                 autoAck: Options.AutoAck,
+                 consumer: _event);
         }
 
         private async Task EventReceivedAsync(object sender, BasicDeliverEventArgs e)

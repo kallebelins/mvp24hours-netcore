@@ -6,7 +6,7 @@ In our library we use NLog for ease of definition and deployment.
 ## Installation
 ```csharp
 /// Package Manager Console >
-Install-Package Mvp24Hours.Infrastructure -Version 3.2.151
+Install-Package Mvp24Hours.Infrastructure -Version 3.2.171
 ```
 
 ## Configuration

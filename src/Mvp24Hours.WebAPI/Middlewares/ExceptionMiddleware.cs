@@ -58,7 +58,7 @@ namespace Mvp24Hours.Infrastructure.Middlewares
 
             if (options.TraceMiddleware)
             {
-                message = $"Message: {(exception?.InnerException ?? exception).Message} / Trace: {exception.StackTrace}";
+                message = $"Message: {(exception?.InnerException ?? exception).Message} / Trace: {exception?.StackTrace}";
             }
             else
             {

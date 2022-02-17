@@ -18,15 +18,15 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
     /// <summary>
     ///  <see cref="IUnitOfWorkAsync"/>
     /// </summary>
-    public class UnitOfWorkAsync : IUnitOfWorkAsync, IDisposable
+    public class UnitOfWorkAsync : IUnitOfWorkAsync
     {
         #region [ Ctor ]
 
         public UnitOfWorkAsync(Mvp24HoursContext dbContext, INotificationContext notificationContext, Dictionary<Type, object> _repositories)
         {
-            this.DbContext = dbContext;
-            this.repositories = _repositories;
-            this.NotificationContext = notificationContext;
+            this.DbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+            this.NotificationContext = notificationContext ?? throw new ArgumentNullException(nameof(notificationContext));
+            this.repositories = _repositories ?? throw new ArgumentNullException(nameof(_repositories));
 
             DbContext.StartSessionAsync().Wait();
         }
@@ -34,10 +34,10 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         [ActivatorUtilitiesConstructor]
         public UnitOfWorkAsync(Mvp24HoursContext _dbContext, INotificationContext _notificationContext, IServiceProvider _serviceProvider)
         {
-            this.DbContext = _dbContext;
+            this.DbContext = _dbContext ?? throw new ArgumentNullException(nameof(_dbContext));
+            this.NotificationContext = _notificationContext ?? throw new ArgumentNullException(nameof(_notificationContext));
+            this.serviceProvider = _serviceProvider ?? throw new ArgumentNullException(nameof(_serviceProvider));
             repositories = new Dictionary<Type, object>();
-            this.NotificationContext = _notificationContext;
-            this.serviceProvider = _serviceProvider;
 
             DbContext.StartSessionAsync().Wait();
         }
@@ -48,9 +48,9 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
 
         public UnitOfWorkAsync(Mvp24HoursContext dbContext, INotificationContext notificationContext)
         {
-            this.DbContext = dbContext;
+            this.DbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             repositories = new Dictionary<Type, object>();
-            this.NotificationContext = notificationContext;
+            this.NotificationContext = notificationContext ?? throw new ArgumentNullException(nameof(notificationContext));
 
             DbContext.StartSessionAsync().Wait();
         }
@@ -96,12 +96,10 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
 
         protected virtual void Dispose(bool disposing)
         {
-            if (disposing)
+            if (disposing
+                && DbContext != null)
             {
-                if (DbContext != null)
-                {
-                    DbContext = null;
-                }
+                DbContext = null;
             }
         }
 

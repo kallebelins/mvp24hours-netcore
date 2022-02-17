@@ -21,7 +21,7 @@ You will be able to use direct database connection, which is not recommended. Ac
 /// Package Manager Console >
 Install-Package Microsoft.Extensions.DependencyInjection -Version 6.0.0
 Install-Package Microsoft.EntityFrameworkCore.SqlServer -Version 5.0.10
-Install-Package Mvp24Hours.Infrastructure.Data.EFCore -Version 3.2.151
+Install-Package Mvp24Hours.Infrastructure.Data.EFCore -Version 3.2.171
 ```
 ### Configuration
 ```csharp
@@ -30,12 +30,12 @@ Install-Package Mvp24Hours.Infrastructure.Data.EFCore -Version 3.2.151
 services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(Configuration.GetConnectionString("DataContext")));
 
-services.AddMvp24HoursDbContext<DataContext>(options: options =>
+services.AddMvp24HoursDbContext<DataContext>();
+services.AddMvp24HoursRepository(options =>
 {
     options.MaxQtyByQueryPage = 100;
     options.TransactionIsolationLevel = System.Transactions.IsolationLevel.ReadCommitted;
-});
-services.AddMvp24HoursRepository(); // async => services.AddMvp24HoursRepositoryAsync();
+});  // async => services.AddMvp24HoursRepositoryAsync();
 
 ```
 ### Using Docker
@@ -54,7 +54,7 @@ Data Source=.,1433;Initial Catalog=MyTestDb;Persist Security Info=True;User ID=s
 /// Package Manager Console >
 Install-Package Microsoft.Extensions.DependencyInjection -Version 6.0.0
 Install-Package Npgsql.EntityFrameworkCore.PostgreSQL -Version 5.0.10
-Install-Package Mvp24Hours.Infrastructure.Data.EFCore -Version 3.2.151
+Install-Package Mvp24Hours.Infrastructure.Data.EFCore -Version 3.2.171
 ```
 ### Configuration
 ```csharp
@@ -65,12 +65,12 @@ services.AddDbContext<DataContext>(
     options => options.SetPostgresVersion(new Version(9, 6)))
 );
 
-services.AddMvp24HoursDbContext<DataContext>(options: options =>
+services.AddMvp24HoursDbContext<DataContext>();
+services.AddMvp24HoursRepository(options =>
 {
     options.MaxQtyByQueryPage = 100;
     options.TransactionIsolationLevel = System.Transactions.IsolationLevel.ReadCommitted;
-});
-services.AddMvp24HoursRepository(); // async => services.AddMvp24HoursRepositoryAsync();
+});  // async => services.AddMvp24HoursRepositoryAsync();
 
 ```
 ### Using Docker
@@ -89,7 +89,7 @@ Host=localhost;Port=5432;Pooling=true;Database=MyTestDb;User Id=postgres;Passwor
 /// Package Manager Console >
 Install-Package Microsoft.Extensions.DependencyInjection -Version 6.0.0
 Install-Package MySql.EntityFrameworkCore -Version 5.0.8
-Install-Package Mvp24Hours.Infrastructure.Data.EFCore -Version 3.2.151
+Install-Package Mvp24Hours.Infrastructure.Data.EFCore -Version 3.2.171
 ```
 ### Configuration
 ```csharp
@@ -98,12 +98,12 @@ Install-Package Mvp24Hours.Infrastructure.Data.EFCore -Version 3.2.151
 services.AddDbContext<DataContext>(options =>
     options.UseMySQL(Configuration.GetConnectionString("DataContext")));
 
-services.AddMvp24HoursDbContext<DataContext>(options: options =>
+services.AddMvp24HoursDbContext<DataContext>();
+services.AddMvp24HoursRepository(options =>
 {
     options.MaxQtyByQueryPage = 100;
     options.TransactionIsolationLevel = System.Transactions.IsolationLevel.ReadCommitted;
-});
-services.AddMvp24HoursRepository(); // async => services.AddMvp24HoursRepositoryAsync();
+});  // async => services.AddMvp24HoursRepositoryAsync();
 
 ```
 ### Using Docker

@@ -412,12 +412,9 @@ namespace Mvp24Hours.Infrastructure.Pipe
             {
                 if (postCustomInterceptors.AnyOrNotNull())
                 {
-                    foreach (var ci in postCustomInterceptors)
+                    foreach (var ci in postCustomInterceptors.Where(ci => ci.Key.Invoke(input)))
                     {
-                        if (ci.Key.Invoke(input))
-                        {
-                            RunOperations(new List<IOperation> { ci.Value }, input, true);
-                        }
+                        RunOperations(new List<IOperation> { ci.Value }, input, true);
                     }
                 }
             }
@@ -425,12 +422,9 @@ namespace Mvp24Hours.Infrastructure.Pipe
             {
                 if (preCustomInterceptors.AnyOrNotNull())
                 {
-                    foreach (var ci in preCustomInterceptors)
+                    foreach (var ci in preCustomInterceptors.Where(ci => ci.Key.Invoke(input)))
                     {
-                        if (ci.Key.Invoke(input))
-                        {
-                            RunOperations(new List<IOperation> { ci.Value }, input, true);
-                        }
+                        RunOperations(new List<IOperation> { ci.Value }, input, true);
                     }
                 }
             }
@@ -452,12 +446,9 @@ namespace Mvp24Hours.Infrastructure.Pipe
             {
                 if (postEventCustomInterceptors.AnyOrNotNull())
                 {
-                    foreach (var ci in postEventCustomInterceptors)
+                    foreach (var ci in postEventCustomInterceptors.Where(ci => ci.Key.Invoke(input)))
                     {
-                        if (ci.Key.Invoke(input))
-                        {
-                            RunEvents(new List<EventHandler<IPipelineMessage, EventArgs>> { ci.Value }, input);
-                        }
+                        RunEvents(new List<EventHandler<IPipelineMessage, EventArgs>> { ci.Value }, input);
                     }
                 }
             }
@@ -465,12 +456,9 @@ namespace Mvp24Hours.Infrastructure.Pipe
             {
                 if (preEventCustomInterceptors.AnyOrNotNull())
                 {
-                    foreach (var ci in preEventCustomInterceptors)
+                    foreach (var ci in preEventCustomInterceptors.Where(ci => ci.Key.Invoke(input)))
                     {
-                        if (ci.Key.Invoke(input))
-                        {
-                            RunEvents(new List<EventHandler<IPipelineMessage, EventArgs>> { ci.Value }, input);
-                        }
+                        RunEvents(new List<EventHandler<IPipelineMessage, EventArgs>> { ci.Value }, input);
                     }
                 }
             }

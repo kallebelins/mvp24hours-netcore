@@ -28,7 +28,7 @@ namespace Mvp24Hours.Application.Redis.Test
         }
 
         [Fact, Priority(1)]
-        public void Set_String()
+        public void Set_Content_Cache()
         {
             var serviceProvider = startup.Initialize();
             var customer = new Customer
@@ -65,7 +65,7 @@ namespace Mvp24Hours.Application.Redis.Test
         }
 
         [Fact, Priority(4)]
-        public void Set_Object()
+        public void Set_Object_Content_Cache()
         {
             var serviceProvider = startup.Initialize();
             var customer = new Customer

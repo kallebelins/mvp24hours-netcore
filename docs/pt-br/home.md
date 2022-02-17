@@ -1,4 +1,4 @@
-# Mvp24Hours (v3.2.151)
+# <img  style="vertical-align:middle" width="42" height="42" src="/_media/icon.png" alt="Mvp24Hours" /> Mvp24Hours (v3.2.171)
 Este projeto foi desenvolvido para contribuir com a construção rápida de serviços. Usei a referência de soluções para construção de microserviços.
 
 ## Características

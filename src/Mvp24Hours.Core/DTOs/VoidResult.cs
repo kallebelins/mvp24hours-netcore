@@ -10,6 +10,6 @@ namespace Mvp24Hours.Core.DTOs
     /// </summary>
     public sealed class VoidResult
     {
-        private VoidResult() { }
+        public VoidResult() { }
     }
 }

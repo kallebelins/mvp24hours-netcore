@@ -22,15 +22,15 @@ namespace Mvp24Hours.Application.Logic
     /// Base service for using repository with paginated results and unit of work
     /// </summary>
     /// <typeparam name="TEntity">Represents an entity</typeparam>
-    public class RepositoryPagingService<TEntity, TUoW> : RepositoryService<TEntity, TUoW>, IQueryService<TEntity>, ICommandService<TEntity>, IQueryPagingService<TEntity>
+    public class RepositoryPagingService<TEntity, TUoW> : RepositoryService<TEntity, TUoW>, IQueryPagingService<TEntity>
         where TEntity : class, IEntityBase
-        where TUoW : IUnitOfWork
+        where TUoW : class, IUnitOfWork
     {
         #region [ Ctor ]
         /// <summary>
         /// 
         /// </summary>
-        public RepositoryPagingService(IUnitOfWork _unitOfWork, ILoggingService _logging)
+        public RepositoryPagingService(TUoW _unitOfWork, ILoggingService _logging)
             : base(_unitOfWork, _logging)
         {
         }
@@ -38,7 +38,7 @@ namespace Mvp24Hours.Application.Logic
         /// <summary>
         /// 
         /// </summary>
-        public RepositoryPagingService(IUnitOfWork _unitOfWork, ILoggingService _logging, INotificationContext notificationContext)
+        public RepositoryPagingService(TUoW _unitOfWork, ILoggingService _logging, INotificationContext notificationContext)
             : base(_unitOfWork, _logging, notificationContext)
         {
         }
@@ -47,7 +47,7 @@ namespace Mvp24Hours.Application.Logic
         /// 
         /// </summary>
         [ActivatorUtilitiesConstructor]
-        public RepositoryPagingService(IUnitOfWork _unitOfWork, ILoggingService _logging, INotificationContext notificationContext, IValidator<TEntity> validator)
+        public RepositoryPagingService(TUoW _unitOfWork, ILoggingService _logging, INotificationContext notificationContext, IValidator<TEntity> validator)
             : base(_unitOfWork, _logging, notificationContext, validator)
         {
         }

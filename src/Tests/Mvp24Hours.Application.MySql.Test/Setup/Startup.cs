@@ -62,11 +62,11 @@ namespace Mvp24Hours.Application.MySql.Test.Setup
                 options.UseMySQL(ConfigurationHelper.AppSettings.GetConnectionString("DataContext")
                     .Format(StringHelper.GenerateKey(10))));
 #endif
-            services.AddMvp24HoursDbContext<DataContext>(options: options =>
+            services.AddMvp24HoursDbContext<DataContext>();
+            services.AddMvp24HoursRepository(options: options =>
             {
                 options.MaxQtyByQueryPage = 100;
             });
-            services.AddMvp24HoursRepository();
 
             // register my services
             services.AddScoped<CustomerService, CustomerService>();

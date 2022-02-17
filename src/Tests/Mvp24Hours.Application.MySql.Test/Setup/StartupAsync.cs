@@ -15,6 +15,7 @@ using Mvp24Hours.Extensions;
 using Mvp24Hours.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Mvp24Hours.Application.MySql.Test.Setup
 {
@@ -63,11 +64,11 @@ namespace Mvp24Hours.Application.MySql.Test.Setup
                     .Format(StringHelper.GenerateKey(10))));
 #endif
 
-            services.AddMvp24HoursDbContext<DataContext>(options: options =>
+            services.AddMvp24HoursDbContext<DataContext>();
+            services.AddMvp24HoursRepositoryAsync(options: options =>
             {
                 options.MaxQtyByQueryPage = 100;
             });
-            services.AddMvp24HoursRepositoryAsync();
 
             // register my services
             services.AddScoped<CustomerServiceAsync, CustomerServiceAsync>();

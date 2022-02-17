@@ -28,10 +28,9 @@ namespace Mvp24Hours.Extensions
         /// Add database context services
         /// </summary>
         public static IServiceCollection AddMvp24HoursDbContext<DbContext>(this IServiceCollection services,
-        Action<MongoDbOptions> options = null,
-        Func<IServiceProvider, DbContext> dbFactory = null,
-        ServiceLifetime lifetime = ServiceLifetime.Scoped)
-        where DbContext : Mvp24HoursContext
+            Action<MongoDbOptions> options = null,
+            Func<IServiceProvider, DbContext> dbFactory = null,
+            ServiceLifetime lifetime = ServiceLifetime.Scoped) where DbContext : Mvp24HoursContext
         {
             services.AddMvp24HoursLogging();
             services.AddMvp24HoursNotification();
@@ -47,11 +46,11 @@ namespace Mvp24Hours.Extensions
 
             if (dbFactory != null)
             {
-                services.Add(new ServiceDescriptor(typeof(DbContext), dbFactory, lifetime));
+                services.Add(new ServiceDescriptor(typeof(Mvp24HoursContext), dbFactory, lifetime));
             }
             else
             {
-                services.Add(new ServiceDescriptor(typeof(DbContext), typeof(DbContext), lifetime));
+                services.Add(new ServiceDescriptor(typeof(Mvp24HoursContext), typeof(DbContext), lifetime));
             }
 
             return services;

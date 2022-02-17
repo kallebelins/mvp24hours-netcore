@@ -36,21 +36,15 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
         #region [ Configs ]
 
         /// <summary>
-        /// <see cref="Microsoft.EntityFrameworkCore.DbContext.OnConfiguring(DbContextOptionsBuilder)"/>
-        /// </summary>
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-        }
-        /// <summary>
         /// <see cref="Microsoft.EntityFrameworkCore.DbContext.OnModelCreating(ModelBuilder)"/>
         /// </summary>
-        protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(builder);
+            base.OnModelCreating(modelBuilder);
 
             if (CanApplyEntityLog)
             {
-                builder.ApplyGlobalFilters<IEntityDateLog>(e => e.Removed == null);
+                modelBuilder.ApplyGlobalFilters<IEntityDateLog>(e => e.Removed == null);
             }
         }
         /// <summary>

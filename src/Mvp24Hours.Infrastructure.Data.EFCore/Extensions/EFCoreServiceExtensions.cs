@@ -19,19 +19,9 @@ namespace Mvp24Hours.Extensions
         /// </summary>
         public static IServiceCollection AddMvp24HoursDbContext<TDbContext>(this IServiceCollection services,
             Func<IServiceProvider, TDbContext> dbFactory = null,
-            Action<EFCoreRepositoryOptions> options = null,
             ServiceLifetime lifetime = ServiceLifetime.Scoped) where TDbContext : DbContext
         {
             services.AddMvp24HoursLogging();
-
-            if (options != null)
-            {
-                services.Configure(options);
-            }
-            else
-            {
-                services.Configure<EFCoreRepositoryOptions>(options => { });
-            }
 
             if (dbFactory != null)
             {
@@ -49,12 +39,22 @@ namespace Mvp24Hours.Extensions
         /// Add repository
         /// </summary>
         public static IServiceCollection AddMvp24HoursRepository(this IServiceCollection services,
+            Action<EFCoreRepositoryOptions> options = null,
             Type repository = null,
             Type unitOfWork = null,
             ServiceLifetime lifetime = ServiceLifetime.Scoped)
         {
             services.AddMvp24HoursLogging();
             services.AddMvp24HoursNotification();
+
+            if (options != null)
+            {
+                services.Configure(options);
+            }
+            else
+            {
+                services.Configure<EFCoreRepositoryOptions>(options => { });
+            }
 
             if (unitOfWork != null)
             {
@@ -81,12 +81,22 @@ namespace Mvp24Hours.Extensions
         /// Add repository
         /// </summary>
         public static IServiceCollection AddMvp24HoursRepositoryAsync(this IServiceCollection services,
+            Action<EFCoreRepositoryOptions> options = null,
             Type repositoryAsync = null,
             Type unitOfWorkAsync = null,
             ServiceLifetime lifetime = ServiceLifetime.Scoped)
         {
             services.AddMvp24HoursLogging();
             services.AddMvp24HoursNotification();
+
+            if (options != null)
+            {
+                services.Configure(options);
+            }
+            else
+            {
+                services.Configure<EFCoreRepositoryOptions>(options => { });
+            }
 
             if (unitOfWorkAsync != null)
             {

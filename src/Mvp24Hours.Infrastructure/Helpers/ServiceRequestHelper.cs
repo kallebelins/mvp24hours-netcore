@@ -18,10 +18,7 @@ namespace Mvp24Hours.Helpers
     {
         private static readonly ILoggingService _logger;
 
-        static ServiceRequestHelper()
-        {
-            _logger = LoggingService.GetLoggingService();
-        }
+        static ServiceRequestHelper() => _logger = LoggingService.GetLoggingService();
 
         /// <summary>
         /// 

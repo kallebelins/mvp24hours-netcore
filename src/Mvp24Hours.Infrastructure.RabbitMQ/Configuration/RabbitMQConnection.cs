@@ -4,8 +4,11 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 
+using System;
+
 namespace Mvp24Hours.Infrastructure.RabbitMQ.Configuration
 {
+    [Serializable]
     public class RabbitMQConnection
     {
         public string HostName { get; set; }

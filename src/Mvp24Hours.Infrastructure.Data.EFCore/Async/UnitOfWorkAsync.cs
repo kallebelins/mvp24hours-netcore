@@ -17,23 +17,26 @@ using System.Threading.Tasks;
 
 namespace Mvp24Hours.Infrastructure.Data.EFCore
 {
-    public class UnitOfWorkAsync : IUnitOfWorkAsync, IDisposable
+    /// <summary>
+    ///  <see cref="Mvp24Hours.Core.Contract.Data.IUnitOfWorkAsync"/>
+    /// </summary>
+    public class UnitOfWorkAsync : IUnitOfWorkAsync
     {
         #region [ Ctor ]
         public UnitOfWorkAsync(DbContext _dbContext, INotificationContext _notificationContext, Dictionary<Type, object> _repositories)
         {
-            this.DbContext = _dbContext;
-            this.repositories = _repositories;
-            this.NotificationContext = _notificationContext;
+            this.DbContext = _dbContext ?? throw new ArgumentNullException(nameof(_dbContext));
+            this.NotificationContext = _notificationContext ?? throw new ArgumentNullException(nameof(_notificationContext));
+            this.repositories = _repositories ?? throw new ArgumentNullException(nameof(_repositories));
         }
 
         [ActivatorUtilitiesConstructor]
         public UnitOfWorkAsync(DbContext _dbContext, INotificationContext _notificationContext, IServiceProvider _serviceProvider)
         {
-            this.DbContext = _dbContext;
+            this.DbContext = _dbContext ?? throw new ArgumentNullException(nameof(_dbContext));
+            this.NotificationContext = _notificationContext ?? throw new ArgumentNullException(nameof(_notificationContext));
+            this.serviceProvider = _serviceProvider ?? throw new ArgumentNullException(nameof(_serviceProvider));
             this.repositories = new Dictionary<Type, object>();
-            this.NotificationContext = _notificationContext;
-            this.serviceProvider = _serviceProvider;
         }
 
         #endregion
@@ -73,12 +76,10 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
 
         protected virtual void Dispose(bool disposing)
         {
-            if (disposing)
+            if (disposing
+                && this.DbContext != null)
             {
-                if (this.DbContext != null)
-                {
-                    this.DbContext.Dispose();
-                }
+                this.DbContext.Dispose();
             }
         }
 

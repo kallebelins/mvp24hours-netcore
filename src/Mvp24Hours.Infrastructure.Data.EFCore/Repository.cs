@@ -22,7 +22,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
     /// <summary>
     ///  <see cref="Mvp24Hours.Core.Contract.Data.IRepository"/>
     /// </summary>
-    public class Repository<T> : RepositoryBase<T>, IRepository<T>, IQueryRelation<T>
+    public class Repository<T> : RepositoryBase<T>, IRepository<T>
         where T : class, IEntityBase
     {
         #region [ Ctor ]
@@ -63,9 +63,9 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
         /// <summary>
         ///  <see cref="Mvp24Hours.Core.Contract.Data.IQuery.List(IPagingCriteria)"/>
         /// </summary>
-        public IList<T> List(IPagingCriteria clause)
+        public IList<T> List(IPagingCriteria criteria)
         {
-            return GetQuery(clause).ToList();
+            return GetQuery(criteria).ToList();
         }
 
         /// <summary>
@@ -129,9 +129,9 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
         /// <summary>
         ///  <see cref="Mvp24Hours.Core.Contract.Data.IQuery.GetById(int, IPagingCriteria)"/>
         /// </summary>
-        public T GetById(object id, IPagingCriteria clause)
+        public T GetById(object id, IPagingCriteria criteria)
         {
-            return GetDynamicFilter(GetQuery(clause, true), GetKeyInfo(), id).SingleOrDefault();
+            return GetDynamicFilter(GetQuery(criteria, true), GetKeyInfo(), id).SingleOrDefault();
         }
 
         /// <summary>

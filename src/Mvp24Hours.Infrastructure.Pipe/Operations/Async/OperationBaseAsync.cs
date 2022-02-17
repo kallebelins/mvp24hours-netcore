@@ -26,7 +26,7 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations
         [ActivatorUtilitiesConstructor]
         protected OperationBaseAsync(INotificationContext _notificationContext)
         {
-            notificationContext = _notificationContext ?? throw new ArgumentNullException(nameof(_notificationContext), "Notification context is mandatory."); ;
+            notificationContext = _notificationContext ?? throw new ArgumentNullException(nameof(_notificationContext), "Notification context is mandatory.");
         }
         #endregion
 

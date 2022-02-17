@@ -39,7 +39,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         {
             if (options == null)
             {
-                throw new ArgumentNullException("Options is required.");
+                throw new ArgumentNullException(nameof(options), "Options is required.");
             }
 
             DatabaseName = options.Value.DatabaseName;
@@ -54,12 +54,12 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         {
             if (!databaseName.HasValue())
             {
-                throw new ArgumentNullException("Database name is required.");
+                throw new ArgumentNullException(nameof(databaseName), "Database name is required.");
             }
 
             if (!connectionString.HasValue())
             {
-                throw new ArgumentNullException("ConnectionString is required.");
+                throw new ArgumentNullException(nameof(connectionString), "ConnectionString is required.");
             }
 
             DatabaseName = databaseName;
@@ -72,21 +72,13 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
 
         private void Configure()
         {
-            try
+            MongoClientSettings settings = MongoClientSettings.FromConnectionString(ConnectionString);
+            if (EnableTls)
             {
-                MongoClientSettings settings = MongoClientSettings.FromConnectionString(ConnectionString);
-                if (EnableTls)
-                {
-                    settings.SslSettings = new SslSettings { EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls12 };
-                }
-                MongoClient = new MongoClient(settings);
-                Database = MongoClient.GetDatabase(DatabaseName);
+                settings.SslSettings = new SslSettings { EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls12 };
             }
-            catch (Exception ex)
-            {
-                throw new Exception("Unable to connect to server.", ex);
-            }
-
+            MongoClient = new MongoClient(settings);
+            Database = MongoClient.GetDatabase(DatabaseName);
         }
         #endregion
 
@@ -103,10 +95,6 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
 
         public void StartSession(CancellationToken cancellationToken = default)
         {
-            if (Session != null)
-            {
-                throw new ArgumentException("Session has already started.");
-            }
             Session = MongoClient.StartSession(cancellationToken: cancellationToken);
             if (EnableTransaction)
             {
@@ -132,10 +120,6 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
 
         public async Task StartSessionAsync(CancellationToken cancellationToken = default)
         {
-            if (Session != null)
-            {
-                throw new ArgumentException("Session has already started.");
-            }
             Session = await MongoClient.StartSessionAsync(cancellationToken: cancellationToken);
             if (EnableTransaction)
             {
@@ -160,7 +144,17 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
             }
         }
 
+        #endregion
+
+        #region [ IDisposable ]
+
         public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
         {
             while (Session != null && Session.IsInTransaction)
             {
@@ -182,9 +176,9 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
                 }
                 Session.Dispose();
             }
-
-            GC.SuppressFinalize(this);
         }
+
         #endregion
+
     }
 }

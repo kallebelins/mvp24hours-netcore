@@ -24,12 +24,12 @@ namespace Mvp24Hours.Application.Logic
     /// <typeparam name="TEntity">Represents an entity</typeparam>
     public class RepositoryService<TEntity, TUoW> : IQueryService<TEntity>, ICommandService<TEntity>
         where TEntity : class, IEntityBase
-        where TUoW : IUnitOfWork
+        where TUoW : class, IUnitOfWork
     {
         #region [ Properties / Fields ]
 
         private readonly IRepository<TEntity> repository = null;
-        private readonly IUnitOfWork unitOfWork = null;
+        private readonly TUoW unitOfWork = null;
         private readonly ILoggingService logging = null;
         private readonly IValidator<TEntity> validator = null;
         private readonly INotificationContext notificationContext = null;
@@ -38,7 +38,7 @@ namespace Mvp24Hours.Application.Logic
         /// Gets unit of work instance
         /// </summary>
         /// <returns>T</returns>
-        protected virtual IUnitOfWork UnitOfWork => unitOfWork;
+        protected virtual TUoW UnitOfWork => unitOfWork;
 
         /// <summary>
         /// Gets instance of log
@@ -68,7 +68,7 @@ namespace Mvp24Hours.Application.Logic
         /// <summary>
         /// 
         /// </summary>
-        public RepositoryService(IUnitOfWork unitOfWork, ILoggingService logging)
+        public RepositoryService(TUoW unitOfWork, ILoggingService logging)
             : this(unitOfWork, logging, null)
         {
         }
@@ -76,7 +76,7 @@ namespace Mvp24Hours.Application.Logic
         /// <summary>
         /// 
         /// </summary>
-        public RepositoryService(IUnitOfWork unitOfWork, ILoggingService logging, INotificationContext notificationContext)
+        public RepositoryService(TUoW unitOfWork, ILoggingService logging, INotificationContext notificationContext)
             : this(unitOfWork, logging, notificationContext, null)
         {
         }
@@ -85,7 +85,7 @@ namespace Mvp24Hours.Application.Logic
         /// 
         /// </summary>
         [ActivatorUtilitiesConstructor]
-        public RepositoryService(IUnitOfWork unitOfWork, ILoggingService logging, INotificationContext notificationContext, IValidator<TEntity> validator)
+        public RepositoryService(TUoW unitOfWork, ILoggingService logging, INotificationContext notificationContext, IValidator<TEntity> validator)
         {
             this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             this.repository = unitOfWork.GetRepository<TEntity>();

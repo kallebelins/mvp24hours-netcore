@@ -33,6 +33,14 @@ namespace Mvp24Hours.Helpers
         /// <summary>
         /// 
         /// </summary>
+        public static bool IsReady()
+        {
+            return _actionProvider != null || _serviceProvider != null;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public static T GetService<T>()
         {
             return (T)GetService(typeof(T));

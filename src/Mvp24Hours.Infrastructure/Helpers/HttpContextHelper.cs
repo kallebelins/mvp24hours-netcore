@@ -44,7 +44,8 @@ namespace Mvp24Hours.Helpers
 
             if (context != null)
             {
-                string ip = context.Connection?.RemoteIpAddress?.ToString() ?? context.Connection?.LocalIpAddress?.ToString();
+                string ip = context.Connection?.RemoteIpAddress?.ToString() ?? context.Connection?.LocalIpAddress?.ToString() ?? "127.0.0.1";
+
                 if (ip.Contains(":"))
                 {
                     ip = ip.Split(':').First().Trim();
@@ -55,14 +56,7 @@ namespace Mvp24Hours.Helpers
                     ip = ip.Split(',').First().Trim();
                 }
 
-                if (!string.IsNullOrEmpty(ip))
-                {
-                    return ip;
-                }
-                else
-                {
-                    return "127.0.0.1";
-                }
+                return ip;
             }
             return "0.0.0.0";
         }

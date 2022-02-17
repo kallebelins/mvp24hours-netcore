@@ -4,13 +4,13 @@ namespace Mvp24Hours.Application.RabbitMQ.Test.Support.Dto
 {
     public abstract class MessageBusEvent
     {
-        public MessageBusEvent()
+        protected MessageBusEvent()
         {
             Token = Guid.NewGuid();
             Created = DateTime.UtcNow;
         }
 
-        public MessageBusEvent(Guid token, DateTime createDate)
+        protected MessageBusEvent(Guid token, DateTime createDate)
         {
             Token = token;
             Created = createDate;

@@ -16,7 +16,7 @@ namespace Mvp24Hours.Infrastructure.Caching.Base
 
         public RepositoryCacheBase(IDistributedCache cache)
         {
-            _cache = cache ?? throw new System.ArgumentNullException("An instance of IDistributedCache is required for this key and value repository.");
+            _cache = cache ?? throw new System.ArgumentNullException(nameof(cache), "An instance of IDistributedCache is required for this key and value repository.");
         }
 
         protected virtual IDistributedCache Cache => _cache;

@@ -3,6 +3,7 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using System;
 using System.Collections.Generic;
 using System.Net.Mail;
 
@@ -11,6 +12,7 @@ namespace Mvp24Hours.Core.ValueObjects.Infrastructure
     /// <summary>
     /// Represents email message
     /// </summary>
+    [Serializable]
     public class MailMessage : BaseVO
     {
         #region [ Ctor ]

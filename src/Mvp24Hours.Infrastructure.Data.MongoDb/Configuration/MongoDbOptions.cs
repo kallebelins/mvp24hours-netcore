@@ -3,8 +3,11 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using System;
+
 namespace Mvp24Hours.Infrastructure.Data.MongoDb.Configuration
 {
+    [Serializable]
     public sealed class MongoDbOptions
     {
         public string DatabaseName { get; set; }

@@ -17,15 +17,15 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
     /// <summary>
     ///  <see cref="Mvp24Hours.Core.Contract.Data.IUnitOfWork"/>
     /// </summary>
-    public class UnitOfWork : IUnitOfWork, IDisposable
+    public class UnitOfWork : IUnitOfWork
     {
         #region [ Ctor ]
 
         public UnitOfWork(Mvp24HoursContext dbContext, INotificationContext notificationContext, Dictionary<Type, object> _repositories)
         {
-            this.DbContext = dbContext;
-            this.repositories = _repositories;
-            this.NotificationContext = notificationContext;
+            this.DbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+            this.NotificationContext = notificationContext ?? throw new ArgumentNullException(nameof(notificationContext));
+            this.repositories = _repositories ?? throw new ArgumentNullException(nameof(_repositories));
 
             DbContext.StartSession();
         }
@@ -33,10 +33,10 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         [ActivatorUtilitiesConstructor]
         public UnitOfWork(Mvp24HoursContext _dbContext, INotificationContext _notificationContext, IServiceProvider _serviceProvider)
         {
-            this.DbContext = _dbContext;
-            repositories = new Dictionary<Type, object>();
-            this.NotificationContext = _notificationContext;
-            this.serviceProvider = _serviceProvider;
+            this.DbContext = _dbContext ?? throw new ArgumentNullException(nameof(_dbContext));
+            this.NotificationContext = _notificationContext ?? throw new ArgumentNullException(nameof(_notificationContext));
+            this.serviceProvider = _serviceProvider ?? throw new ArgumentNullException(nameof(_serviceProvider));
+            this.repositories = new Dictionary<Type, object>();
 
             DbContext.StartSession();
         }
@@ -82,12 +82,10 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
 
         protected virtual void Dispose(bool disposing)
         {
-            if (disposing)
+            if (disposing
+                && this.DbContext != null)
             {
-                if (this.DbContext != null)
-                {
-                    this.DbContext = null;
-                }
+                this.DbContext = null;
             }
         }
 
