@@ -137,17 +137,17 @@ namespace Mvp24Hours.Helpers
         /// <summary>
         /// 
         /// </summary>
-        public static async Task<string> DeleteAsync(string url, Hashtable header = null, ICredentials credentials = null)
+        public static async Task<string> DeleteAsync(string url, string data = null, Hashtable header = null, ICredentials credentials = null)
         {
-            return await SendAsync(url, header, credentials, "DELETE", null);
+            return await SendAsync(url, header, credentials, "DELETE", data);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public static async Task<T> DeleteAsync<T>(string url, Hashtable header = null, ICredentials credentials = null, JsonSerializerSettings jsonSerializerSettings = null)
+        public static async Task<T> DeleteAsync<T>(string url, string data = null, Hashtable header = null, ICredentials credentials = null, JsonSerializerSettings jsonSerializerSettings = null)
         {
-            var result = await SendAsync(url, header, credentials, "DELETE", null);
+            var result = await SendAsync(url, header, credentials, "DELETE", data);
             if (!result.HasValue())
             {
                 return default;
@@ -192,7 +192,7 @@ namespace Mvp24Hours.Helpers
                     }
                 }
                 requisicao.Timeout = 300000;
-                bool hasData = (method == "POST" || method == "PUT");
+                bool hasData = (method == "POST" || method == "PUT" || method == "DELETE");
                 byte[] bytes = null;
                 if (hasData)
                 {
