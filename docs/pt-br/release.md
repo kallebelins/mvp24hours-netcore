@@ -8,7 +8,10 @@
 * Criação de projeto básico de WebStatus com HealthCheckUI;
 * Substituição de depências de logging para injeção de trace através de actions;
 * Trace/Verbose em todas as bibliotecas e camadas principais;
+* Configuração de nível de isolamento de transação para consultas com EF;
 * Refatoração da biblioteca do RabbitMQ para injeção de consumers e configuração fluída para "DeadLetterQueue";
+* Conexão persistente e resiliência com Polly para RabbitMQ;
+* Implementação de consumidor assíncrono para RabbitMQ;
 * Ajuste de pipeline para permitir adicionar mensagens no pacote (info, error, warning, success) - substituição do padrão de notificação;
 * Alteração de validação (FluentValidation ou DataAnnotations) para retornar lista de mensagens - substituição do padrão de notificação;
 * Alteração de documentação e adição de configuração para WebAPI;
