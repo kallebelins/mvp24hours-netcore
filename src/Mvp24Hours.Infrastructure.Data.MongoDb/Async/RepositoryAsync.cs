@@ -9,6 +9,7 @@ using MongoDB.Driver.Linq;
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
+using Mvp24Hours.Core.Enums.Infrastructure;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Helpers;
 using Mvp24Hours.Infrastructure.Data.MongoDb.Base;
@@ -36,258 +37,111 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
 
         #region [ IQueryAsync ]
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync.ListAnyAsync(CancellationToken)"/>
-        /// </summary>
         public async Task<bool> ListAnyAsync(CancellationToken cancellationToken = default)
         {
-            return await GetQuery(null, true)
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-listanyasync-start");
+            try
+            {
+                return await GetQuery(null, true)
                 .AnyAsync(cancellationToken: cancellationToken);
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-listanyasync-end"); }
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync.ListCountAsync(CancellationToken)"/>
-        /// </summary>
         public async Task<int> ListCountAsync(CancellationToken cancellationToken = default)
         {
-            return await GetQuery(null, true)
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-listcountasync-start");
+            try
+            {
+                return await GetQuery(null, true)
                 .CountAsync(cancellationToken: cancellationToken);
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-listcountasync-end"); }
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync.ListAsync(CancellationToken)"/>
-        /// </summary>
         public async Task<IList<T>> ListAsync(CancellationToken cancellationToken = default)
         {
             return await ListAsync(null, cancellationToken: cancellationToken);
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync.ListAsync(IPagingCriteria, CancellationToken)"/>
-        /// </summary>
-        public async Task<IList<T>> ListAsync(IPagingCriteria clause, CancellationToken cancellationToken = default)
+        public async Task<IList<T>> ListAsync(IPagingCriteria criteria, CancellationToken cancellationToken = default)
         {
-            return await GetQuery(clause)
-                .ToListAsync(cancellationToken: cancellationToken);
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-listasync-start");
+            try
+            {
+                return await GetQuery(criteria)
+                                .ToListAsync(cancellationToken: cancellationToken);
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-listasync-end"); }
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync.GetByAnyAsync(Expression{Func{T, bool}}, CancellationToken)"/>
-        /// </summary>
         public async Task<bool> GetByAnyAsync(Expression<Func<T, bool>> clause, CancellationToken cancellationToken = default)
         {
-            var query = dbEntities.AsQueryable();
-            if (clause != null)
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-getbyanyasync-start");
+            try
             {
-                query = query.Where(clause);
+                var query = dbEntities.AsQueryable();
+                if (clause != null)
+                {
+                    query = query.Where(clause);
+                }
+                return await GetQuery(query, null, true)
+                    .AnyAsync(cancellationToken: cancellationToken);
             }
-            return await GetQuery(query, null, true)
-                .AnyAsync(cancellationToken: cancellationToken);
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-getbyanyasync-end"); }
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync.GetByCountAsync(Expression{Func{T, bool}}, CancellationToken)"/>
-        /// </summary>
         public async Task<int> GetByCountAsync(Expression<Func<T, bool>> clause, CancellationToken cancellationToken = default)
         {
-            var query = dbEntities.AsQueryable();
-            if (clause != null)
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-getbycountasync-start");
+            try
             {
-                query = query.Where(clause);
+                var query = dbEntities.AsQueryable();
+                if (clause != null)
+                {
+                    query = query.Where(clause);
+                }
+                return await GetQuery(query, null, true)
+                    .CountAsync(cancellationToken: cancellationToken);
             }
-            return await GetQuery(query, null, true)
-                .CountAsync(cancellationToken: cancellationToken);
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-getbycountasync-end"); }
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync.GetByAsync(Expression{Func{T, bool}}, CancellationToken)"/>
-        /// </summary>
         public async Task<IList<T>> GetByAsync(Expression<Func<T, bool>> clause, CancellationToken cancellationToken = default)
         {
             return await GetByAsync(clause, null, cancellationToken: cancellationToken);
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync.GetByAsync(Expression{Func{T, bool}}, IPagingCriteria, CancellationToken)"/>
-        /// </summary>
         public async Task<IList<T>> GetByAsync(Expression<Func<T, bool>> clause, IPagingCriteria criteria, CancellationToken cancellationToken = default)
         {
-            var query = dbEntities.AsQueryable();
-            if (clause != null)
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-getbyasync-start");
+            try
             {
-                query = query.Where(clause);
+                var query = dbEntities.AsQueryable();
+                if (clause != null)
+                {
+                    query = query.Where(clause);
+                }
+                return await GetQuery(query, criteria)
+                    .ToListAsync(cancellationToken: cancellationToken);
             }
-            return await GetQuery(query, criteria)
-                .ToListAsync(cancellationToken: cancellationToken);
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-getbyasync-end"); }
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync.GetByIdAsync(object, CancellationToken)"/>
-        /// </summary>
         public async Task<T> GetByIdAsync(object id, CancellationToken cancellationToken = default)
         {
             return await GetByIdAsync(id, null, cancellationToken: cancellationToken);
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync.GetByIdAsync(object, IPagingCriteria, CancellationToken)"/>
-        /// </summary>
-        public async Task<T> GetByIdAsync(object id, IPagingCriteria clause, CancellationToken cancellationToken = default)
+        public async Task<T> GetByIdAsync(object id, IPagingCriteria criteria, CancellationToken cancellationToken = default)
         {
-            return await GetDynamicFilter(GetQuery(clause, true), GetKeyInfo(), id)
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-getbyidasync-start");
+            try
+            {
+                return await GetDynamicFilter(GetQuery(criteria, true), GetKeyInfo(), id)
                 .SingleOrDefaultAsync(cancellationToken: cancellationToken);
-        }
-
-        #endregion
-
-        #region [ ICommandAsync ]
-
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync.AddAsync(T)"/>
-        /// </summary>
-        public async Task AddAsync(T entity, CancellationToken cancellationToken = default)
-        {
-            if (entity == null)
-            {
-                return;
             }
-            await dbEntities.InsertOneAsync(entity, cancellationToken: cancellationToken);
-        }
-
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.ICommandAsync.AddAsync(IList{T})"/>
-        /// </summary>
-        public async Task AddAsync(IList<T> entities, CancellationToken cancellationToken = default)
-        {
-            if (entities.AnyOrNotNull())
-            {
-                foreach (var entity in entities)
-                {
-                    await AddAsync(entity, cancellationToken: cancellationToken);
-                }
-            }
-        }
-
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.ICommandAsync.ModifyAsync(T)"/>
-        /// </summary>
-        public async Task ModifyAsync(T entity, CancellationToken cancellationToken = default)
-        {
-            if (entity == null)
-            {
-                return;
-            }
-
-            var entityDb = (await dbContext.Set<T>().FindAsync(GetKeyFilter(entity), cancellationToken: cancellationToken)).FirstOrDefault();
-
-            if (entityDb == null)
-            {
-                throw new InvalidOperationException("Key value not found.");
-            }
-
-            // properties that can not be changed
-
-            if (entity.GetType() == typeof(IEntityLog<>))
-            {
-                var entityLog = entity as IEntityLog<object>;
-                var entityDbLog = entityDb as IEntityLog<object>;
-                entityLog.Created = entityDbLog.Created;
-                entityLog.CreatedBy = entityDbLog.CreatedBy;
-                entityLog.Modified = entityDbLog.Modified;
-                entityLog.ModifiedBy = entityDbLog.ModifiedBy;
-            }
-
-            await dbEntities.ReplaceOneAsync(GetKeyFilter(entity), entity, cancellationToken: cancellationToken);
-        }
-
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.ICommandAsync.ModifyAsync(List)"/>
-        /// </summary>
-        public async Task ModifyAsync(IList<T> entities, CancellationToken cancellationToken = default)
-        {
-            if (entities.AnyOrNotNull())
-            {
-                foreach (var entity in entities)
-                {
-                    await ModifyAsync(entity, cancellationToken: cancellationToken);
-                }
-            }
-        }
-
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.ICommandAsync.RemoveAsync(T)"/>
-        /// </summary>
-        public async Task RemoveAsync(T entity, CancellationToken cancellationToken = default)
-        {
-            if (entity == null)
-            {
-                return;
-            }
-
-            if (entity.GetType() == typeof(IEntityLog<>))
-            {
-                var entityLog = entity as IEntityLog<object>;
-                entityLog.Removed = TimeZoneHelper.GetTimeZoneNow();
-                entityLog.RemovedBy = EntityLogBy;
-                await ModifyAsync(entity, cancellationToken: cancellationToken);
-            }
-            else
-            {
-                await ForceRemoveAsync(entity, cancellationToken: cancellationToken);
-            }
-        }
-
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.ICommandAsync.RemoveAsync(List)"/>
-        /// </summary>
-        public async Task RemoveAsync(IList<T> entities, CancellationToken cancellationToken = default)
-        {
-            if (entities.AnyOrNotNull())
-            {
-                foreach (var entity in entities)
-                {
-                    await RemoveAsync(entity, cancellationToken: cancellationToken);
-                }
-            }
-        }
-
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.ICommandAsync.RemoveAsync(int)"/>
-        /// </summary>
-        public async Task RemoveByIdAsync(object id, CancellationToken cancellationToken = default)
-        {
-            var entity = await GetByIdAsync(id, cancellationToken: cancellationToken);
-            if (entity == null)
-            {
-                return;
-            }
-            await RemoveAsync(entity, cancellationToken: cancellationToken);
-        }
-
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.ICommandAsync.RemoveAsync(IList{TEntity})"/>
-        /// </summary>
-        public async Task RemoveByIdAsync(IList<object> ids, CancellationToken cancellationToken = default)
-        {
-            if (ids.AnyOrNotNull())
-            {
-                foreach (var id in ids)
-                {
-                    await RemoveByIdAsync(id, cancellationToken: cancellationToken);
-                }
-            }
-        }
-
-        /// <summary>
-        ///  If entity is not log
-        /// </summary>
-        private async Task ForceRemoveAsync(T entity, CancellationToken cancellationToken = default)
-        {
-            if (entity == null)
-            {
-                return;
-            }
-            await dbEntities.DeleteOneAsync(GetKeyFilter(entity), cancellationToken: cancellationToken);
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-getbyidasync-end"); }
         }
 
         #endregion
@@ -313,6 +167,178 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         {
             throw new NotSupportedException();
         }
+        #endregion
+
+        #region [ ICommandAsync ]
+
+        public async Task AddAsync(T entity, CancellationToken cancellationToken = default)
+        {
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-addasync-start");
+            try
+            {
+                if (entity == null)
+                {
+                    return;
+                }
+                await dbEntities.InsertOneAsync(entity, cancellationToken: cancellationToken);
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-addasync-end"); }
+        }
+
+        public async Task AddAsync(IList<T> entities, CancellationToken cancellationToken = default)
+        {
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-addlistasync-start");
+            try
+            {
+                if (entities.AnySafe())
+                {
+                    foreach (var entity in entities)
+                    {
+                        await AddAsync(entity, cancellationToken: cancellationToken);
+                    }
+                }
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-addlistasync-end"); }
+        }
+
+        public async Task ModifyAsync(T entity, CancellationToken cancellationToken = default)
+        {
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-modifyasync-start");
+            try
+            {
+                if (entity == null)
+                {
+                    return;
+                }
+
+                var entityDb = (await dbContext.Set<T>().FindAsync(GetKeyFilter(entity), cancellationToken: cancellationToken)).FirstOrDefault();
+
+                if (entityDb == null)
+                {
+                    throw new InvalidOperationException("Key value not found.");
+                }
+
+                // properties that can not be changed
+
+                if (entity.GetType() == typeof(IEntityLog<>))
+                {
+                    TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-modifyasync-log");
+                    var entityLog = entity as IEntityLog<object>;
+                    var entityDbLog = entityDb as IEntityLog<object>;
+                    entityLog.Created = entityDbLog.Created;
+                    entityLog.CreatedBy = entityDbLog.CreatedBy;
+                    entityLog.Modified = entityDbLog.Modified;
+                    entityLog.ModifiedBy = entityDbLog.ModifiedBy;
+                }
+
+                await dbEntities.ReplaceOneAsync(GetKeyFilter(entity), entity, cancellationToken: cancellationToken);
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-modifyasync-end"); }
+        }
+
+        public async Task ModifyAsync(IList<T> entities, CancellationToken cancellationToken = default)
+        {
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-modifylistasync-start");
+            try
+            {
+                if (entities.AnySafe())
+                {
+                    foreach (var entity in entities)
+                    {
+                        await ModifyAsync(entity, cancellationToken: cancellationToken);
+                    }
+                }
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-modifylistasync-end"); }
+        }
+
+        public async Task RemoveAsync(T entity, CancellationToken cancellationToken = default)
+        {
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-removeasync-start");
+            try
+            {
+                if (entity == null)
+                {
+                    return;
+                }
+
+                if (entity.GetType() == typeof(IEntityLog<>))
+                {
+                    TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-removeasync-log");
+                    var entityLog = entity as IEntityLog<object>;
+                    entityLog.Removed = TimeZoneHelper.GetTimeZoneNow();
+                    entityLog.RemovedBy = EntityLogBy;
+                    await ModifyAsync(entity, cancellationToken: cancellationToken);
+                }
+                else
+                {
+                    await ForceRemoveAsync(entity, cancellationToken: cancellationToken);
+                }
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-removeasync-end"); }
+        }
+
+        public async Task RemoveAsync(IList<T> entities, CancellationToken cancellationToken = default)
+        {
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-removelistasync-start");
+            try
+            {
+                if (entities.AnySafe())
+                {
+                    foreach (var entity in entities)
+                    {
+                        await RemoveAsync(entity, cancellationToken: cancellationToken);
+                    }
+                }
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-removelistasync-end"); }
+        }
+
+        public async Task RemoveByIdAsync(object id, CancellationToken cancellationToken = default)
+        {
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-removebyidasync-start");
+            try
+            {
+                var entity = await GetByIdAsync(id, cancellationToken: cancellationToken);
+                if (entity == null)
+                {
+                    return;
+                }
+                await RemoveAsync(entity, cancellationToken: cancellationToken);
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-removebyidasync-end"); }
+        }
+
+        public async Task RemoveByIdAsync(IList<object> ids, CancellationToken cancellationToken = default)
+        {
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-removebyidlistasync-start");
+            try
+            {
+                if (ids.AnySafe())
+                {
+                    foreach (var id in ids)
+                    {
+                        await RemoveByIdAsync(id, cancellationToken: cancellationToken);
+                    }
+                }
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-removebyidlistasync-end"); }
+        }
+
+        private async Task ForceRemoveAsync(T entity, CancellationToken cancellationToken = default)
+        {
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-forceremoveasync-start");
+            try
+            {
+                if (entity == null)
+                {
+                    return;
+                }
+                await dbEntities.DeleteOneAsync(GetKeyFilter(entity), cancellationToken: cancellationToken);
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-forceremoveasync-end"); }
+        }
+
         #endregion
 
         #region [ Properties ]

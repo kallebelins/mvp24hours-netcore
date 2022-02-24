@@ -5,7 +5,6 @@
 //=====================================================================================
 using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Application.Pipe.Test.Setup;
-using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Core.Enums.Infrastructure;
 using Mvp24Hours.Extensions;
@@ -303,8 +302,7 @@ namespace Mvp24Hours.Application.Pipe.Test
             // add operations
             pipeline.Add(input =>
             {
-                var notfCtxIn = serviceProvider.GetService<INotificationContext>();
-                notfCtxIn.AddIfTrue(!input.HasContent<string>(), "Content not found", Core.Enums.MessageType.Error);
+                input.Messages.AddMessage("Content not found", Core.Enums.MessageType.Error);
             });
             pipeline.Add(input =>
             {
@@ -319,17 +317,15 @@ namespace Mvp24Hours.Application.Pipe.Test
 
             pipeline.Execute();
 
-            var notfCtxOut = serviceProvider.GetService<INotificationContext>();
-            if (notfCtxOut.HasErrorNotifications)
+            var message = pipeline.GetMessage();
+
+            foreach (var item in message.Messages)
             {
-                foreach (var item in notfCtxOut.Notifications)
-                {
-                    Trace.WriteLine(item.Message);
-                }
+                Trace.WriteLine(item.Message);
             }
 
             // assert
-            Assert.True(notfCtxOut.HasErrorNotifications);
+            Assert.True(message.IsFaulty);
         }
 
         [Fact, Priority(8)]

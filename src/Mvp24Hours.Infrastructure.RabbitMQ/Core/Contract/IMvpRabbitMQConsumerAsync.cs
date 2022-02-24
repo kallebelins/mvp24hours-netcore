@@ -3,18 +3,16 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+
+using System;
 using System.Threading.Tasks;
 
 namespace Mvp24Hours.Infrastructure.RabbitMQ.Core.Contract
 {
-    public interface IMvpRabbitMQConsumerAsync
+    public interface IMvpRabbitMQConsumerAsync : IMvpRabbitMQConsumer
     {
-        void Consume(string queueName = null, string routingKey = null);
-        Task ReceivedAsync(object message);
-    }
-
-    public interface IMvpRabbitMQConsumerAsync<T> : IMvpRabbitMQConsumerAsync
-        where T : class
-    {
+        Task ReceivedAsync(object message, string token);
+        Task FailureAsync(Exception exception, string token);
+        Task RejectedAsync(object message, string token);
     }
 }

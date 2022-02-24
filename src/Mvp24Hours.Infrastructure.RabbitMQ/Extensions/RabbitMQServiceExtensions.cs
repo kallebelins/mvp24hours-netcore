@@ -6,7 +6,10 @@
 using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Infrastructure.RabbitMQ;
 using Mvp24Hours.Infrastructure.RabbitMQ.Configuration;
+using Mvp24Hours.Infrastructure.RabbitMQ.Core.Contract;
 using System;
+using System.Linq;
+using System.Reflection;
 
 namespace Mvp24Hours.Extensions
 {
@@ -16,18 +19,45 @@ namespace Mvp24Hours.Extensions
         /// Add rabbitmq
         /// </summary>
         public static IServiceCollection AddMvp24HoursRabbitMQ(this IServiceCollection services,
-            Action<RabbitMQOptions> options = null)
+            Assembly assemblyConsumers,
+            Action<RabbitMQConnectionOptions> connectionOptions = null,
+            Action<RabbitMQClientOptions> clientOptions = null)
         {
-            services.AddMvp24HoursLogging();
-
-            if (options != null)
+            if (assemblyConsumers == null)
             {
-                services.Configure(options);
+                throw new ArgumentNullException(nameof(assemblyConsumers));
+            }
+
+            var types = assemblyConsumers.GetExportedTypes()
+                .Where(t => t.InheritsOrImplements(typeof(IMvpRabbitMQConsumer)))
+                .ToList();
+
+            foreach (var type in types)
+            {
+                MvpRabbitMQClient.Register(type);
+            }
+
+            if (connectionOptions != null)
+            {
+                services.Configure(connectionOptions);
             }
             else
             {
-                services.Configure<RabbitMQOptions>(options => { });
+                services.Configure<RabbitMQConnectionOptions>(connectionOptions => { });
             }
+
+            services.AddSingleton<IMvpRabbitMQConnection, MvpRabbitMQConnection>();
+
+            if (clientOptions != null)
+            {
+                services.Configure(clientOptions);
+            }
+            else
+            {
+                services.Configure<RabbitMQClientOptions>(options => { });
+            }
+
+            services.AddSingleton<MvpRabbitMQClient, MvpRabbitMQClient>();
 
             return services;
         }

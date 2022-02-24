@@ -7,7 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
-using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
+using Mvp24Hours.Core.Enums.Infrastructure;
+using Mvp24Hours.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -23,18 +24,16 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
     public class UnitOfWorkAsync : IUnitOfWorkAsync
     {
         #region [ Ctor ]
-        public UnitOfWorkAsync(DbContext _dbContext, INotificationContext _notificationContext, Dictionary<Type, object> _repositories)
+        public UnitOfWorkAsync(DbContext _dbContext, Dictionary<Type, object> _repositories)
         {
             this.DbContext = _dbContext ?? throw new ArgumentNullException(nameof(_dbContext));
-            this.NotificationContext = _notificationContext ?? throw new ArgumentNullException(nameof(_notificationContext));
             this.repositories = _repositories ?? throw new ArgumentNullException(nameof(_repositories));
         }
 
         [ActivatorUtilitiesConstructor]
-        public UnitOfWorkAsync(DbContext _dbContext, INotificationContext _notificationContext, IServiceProvider _serviceProvider)
+        public UnitOfWorkAsync(DbContext _dbContext, IServiceProvider _serviceProvider)
         {
             this.DbContext = _dbContext ?? throw new ArgumentNullException(nameof(_dbContext));
-            this.NotificationContext = _notificationContext ?? throw new ArgumentNullException(nameof(_notificationContext));
             this.serviceProvider = _serviceProvider ?? throw new ArgumentNullException(nameof(_serviceProvider));
             this.repositories = new Dictionary<Type, object>();
         }
@@ -44,8 +43,6 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
         #region [ Properties ]
 
         protected DbContext DbContext { get; private set; }
-        protected INotificationContext NotificationContext { get; private set; }
-
         private readonly Dictionary<Type, object> repositories;
         private readonly IServiceProvider serviceProvider;
 
@@ -89,35 +86,45 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
 
         public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            if (NotificationContext == null || !NotificationContext.HasErrorNotifications || !cancellationToken.IsCancellationRequested)
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-unitofwork-savechangesasync-start");
+            try
             {
-                return await this.DbContext.SaveChangesAsync(cancellationToken);
+                if (!cancellationToken.IsCancellationRequested)
+                {
+                    return await this.DbContext.SaveChangesAsync(cancellationToken);
+                }
+                await RollbackAsync();
+                return await Task.FromResult(0);
             }
-            await RollbackAsync();
-            return default;
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-unitofwork-savechangesasync-end"); }
         }
-        public Task RollbackAsync()
+        public async Task RollbackAsync()
         {
-            var changedEntries = this.DbContext.ChangeTracker.Entries()
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-unitofwork-rollbackasync-start");
+            try
+            {
+                var changedEntries = this.DbContext.ChangeTracker.Entries()
                 .Where(x => x.State != EntityState.Unchanged).ToList();
 
-            foreach (var entry in changedEntries)
-            {
-                switch (entry.State)
+                foreach (var entry in changedEntries)
                 {
-                    case EntityState.Modified:
-                        entry.CurrentValues.SetValues(entry.OriginalValues);
-                        entry.State = EntityState.Unchanged;
-                        break;
-                    case EntityState.Added:
-                        entry.State = EntityState.Detached;
-                        break;
-                    case EntityState.Deleted:
-                        entry.State = EntityState.Unchanged;
-                        break;
+                    switch (entry.State)
+                    {
+                        case EntityState.Modified:
+                            entry.CurrentValues.SetValues(entry.OriginalValues);
+                            entry.State = EntityState.Unchanged;
+                            break;
+                        case EntityState.Added:
+                            entry.State = EntityState.Detached;
+                            break;
+                        case EntityState.Deleted:
+                            entry.State = EntityState.Unchanged;
+                            break;
+                    }
                 }
+                await Task.CompletedTask;
             }
-            return default;
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-unitofwork-rollbackasync-end"); }
         }
 
         #endregion

@@ -11,19 +11,17 @@ using System.Collections.Generic;
 namespace Mvp24Hours.Infrastructure.RabbitMQ.Configuration
 {
     [Serializable]
-    public sealed class RabbitMQOptions
+    public class RabbitMQOptions
     {
-        public string ConnectionString { get; set; } = "amqp://guest:guest@localhost:5672";
-        public RabbitMQConnection ConnectionConfiguration { get; set; }
         public string Exchange { get; set; } = "amq.direct";
         public MvpRabbitMQExchangeType ExchangeType { get; set; } = MvpRabbitMQExchangeType.direct;
         public string RoutingKey { get; set; }
-        public string Queue { get; set; }
+        public string QueueName { get; set; }
         public bool Durable { get; set; } = true;
         public bool Exclusive { get; set; }
         public bool AutoDelete { get; set; }
-        public bool AutoAck { get; set; }
-        public Dictionary<string, object> Arguments { get; set; }
+        public Dictionary<string, object> ExchangeArguments { get; set; }
+        public Dictionary<string, object> QueueArguments { get; set; }
         public IBasicProperties BasicProperties { get; set; }
     }
 }

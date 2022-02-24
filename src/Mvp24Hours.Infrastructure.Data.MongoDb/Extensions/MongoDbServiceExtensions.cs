@@ -32,9 +32,6 @@ namespace Mvp24Hours.Extensions
             Func<IServiceProvider, DbContext> dbFactory = null,
             ServiceLifetime lifetime = ServiceLifetime.Scoped) where DbContext : Mvp24HoursContext
         {
-            services.AddMvp24HoursLogging();
-            services.AddMvp24HoursNotification();
-
             if (options != null)
             {
                 services.Configure(options);
@@ -65,9 +62,6 @@ namespace Mvp24Hours.Extensions
             Type unitOfWork = null,
             ServiceLifetime lifetime = ServiceLifetime.Scoped)
         {
-            services.AddMvp24HoursLogging();
-            services.AddMvp24HoursNotification();
-
             if (repositoryOptions != null)
             {
                 services.Configure(repositoryOptions);
@@ -107,9 +101,6 @@ namespace Mvp24Hours.Extensions
             Type unitOfWorkAsync = null,
             ServiceLifetime lifetime = ServiceLifetime.Scoped)
         {
-            services.AddMvp24HoursLogging();
-            services.AddMvp24HoursNotification();
-
             if (repositoryOptions != null)
             {
                 services.Configure(repositoryOptions);

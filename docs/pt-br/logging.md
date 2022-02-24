@@ -1,35 +1,15 @@
 # Logging
-> O Log de uma aplicação não pode ser como a narração de um jogo de futebol onde cada lance é registrado. Ele deve conter informações relevantes que podem ser disponibilizadas em diferentes níveis de detalhe determinados pela necessidade da investigação de algum evento ocorrido na aplicação. [DevMedia](https://www.devmedia.com.br/aprenda-a-utilizar-o-log-revista-easy-java-magazine-21/25479)
+> Em construção.
 
-Em nossa biblioteca usamos NLog pela facilidade de definição e implantação.
+## Serilog
+Serilog é uma biblioteca de log de diagnóstico para aplicativos .NET. Acesse e descubra:
+[Serilog](https://serilog.net/)
 
-## Instalação
-```csharp
-/// Package Manager Console >
-Install-Package Mvp24Hours.Infrastructure -Version 3.2.171
-```
+## NLog
+NLog é uma biblioteca fácil de configurar. Acesse e descubra:
+[NLog Asp.NET Core 3](https://github.com/NLog/NLog/wiki/Getting-started-with-ASP.NET-Core-3)
 
-## Configuração
-```csharp
-/// Startup.cs
-services.AddMvp24HoursLogging();
-```
-
-## Exemplo de Uso
-```csharp
-private static readonly ILoggingService _logger = serviceProvider.GetService<ILoggingService>();
-// ...
-try
-{
-    throw new NotImplementedException();
-}
-catch (Exception ex)
-{
-    _logger.Error(ex);
-}
-```
-
-Basta criar um arquivo "NLog.config" no diretório da aplicação. O conteúdo do arquivo é no formato XML. Veja abaixo.
+Siga os modelos de arquivo xml para configuração do NLog.
 
 ### Log Console
 ```xml
@@ -40,10 +20,10 @@ Basta criar um arquivo "NLog.config" no diretório da aplicação. O conteúdo d
 	<targets>
 		<target name="console"
 				xsi:type="ColoredConsole"
-				layout="Server-Date: ${longdate}; UTC-Date: ${utc_date}; Level: ${level}; Log-Message: ${message}; Error-Source: ${event-context:item=error-source}; Error-Class: ${event-context:item=error-class}; Error-Method: ${event-context:item=error-method}; Error-Message: ${event-context:item=error-message}; Inner-Error-Message: ${event-context:item=inner-error-message}" />
+				layout="Server-Date: ${longdate}; Level: ${level}; Message: ${message}" />
 		<target name="debug"
 				xsi:type="Debugger"
-				layout="Server-Date: ${longdate}; UTC-Date: ${utc_date}; Level: ${level}; Log-Message: ${message}; Error-Source: ${event-context:item=error-source}; Error-Class: ${event-context:item=error-class}; Error-Method: ${event-context:item=error-method}; Error-Message: ${event-context:item=error-message}; Inner-Error-Message: ${event-context:item=inner-error-message}" />
+				layout="Server-Date: ${longdate}; Level: ${level}; Message: ${message}" />
 	</targets>
 	<rules>
 		<logger name="*" minlevel="Trace" writeTo="console,debug" />
@@ -60,7 +40,7 @@ Basta criar um arquivo "NLog.config" no diretório da aplicação. O conteúdo d
 	<targets>
 		<target name="logfile"
 				xsi:type="File"
-				layout="Server-Date: ${longdate}; UTC-Date: ${utc_date}; Level: ${level}; Log-Message: ${message}; Error-Source: ${event-context:item=error-source}; Error-Class: ${event-context:item=error-class}; Error-Method: ${event-context:item=error-method}; Error-Message: ${event-context:item=error-message}; Inner-Error-Message: ${event-context:item=inner-error-message}"
+				layout="Server-Date: ${longdate}; Level: ${level}; Message: ${message}"
 				fileName="${basedir}/logs/${date:format=yyyy-MM-dd}-webapi.log" />
 	</targets>
 	<rules>
@@ -119,18 +99,18 @@ Basta criar um arquivo "NLog.config" no diretório da aplicação. O conteúdo d
 	<targets>
 		<target name="console"
 				xsi:type="ColoredConsole"
-				layout="Server-Date: ${longdate}; UTC-Date: ${utc_date}; Level: ${level}; Log-Message: ${message}; Error-Source: ${event-context:item=error-source}; Error-Class: ${event-context:item=error-class}; Error-Method: ${event-context:item=error-method}; Error-Message: ${event-context:item=error-message}; Inner-Error-Message: ${event-context:item=inner-error-message}" />
+				layout="Server-Date: ${longdate}; Level: ${level}; Message: ${message}" />
 		<target name="debug"
 				xsi:type="Debugger"
-				layout="Server-Date: ${longdate}; UTC-Date: ${utc_date}; Level: ${level}; Log-Message: ${message}; Error-Source: ${event-context:item=error-source}; Error-Class: ${event-context:item=error-class}; Error-Method: ${event-context:item=error-method}; Error-Message: ${event-context:item=error-message}; Inner-Error-Message: ${event-context:item=inner-error-message}" />
+				layout="Server-Date: ${longdate}; Level: ${level}; Message: ${message}" />
 		<target name="logfile"
 				xsi:type="File"
-				layout="Server-Date: ${longdate}; UTC-Date: ${utc_date}; Level: ${level}; Log-Message: ${message}; Error-Source: ${event-context:item=error-source}; Error-Class: ${event-context:item=error-class}; Error-Method: ${event-context:item=error-method}; Error-Message: ${event-context:item=error-message}; Inner-Error-Message: ${event-context:item=inner-error-message}"
+				layout="Server-Date: ${longdate}; Level: ${level}; Message: ${message}"
 				fileName="${basedir}/logs/${date:format=yyyy-MM-dd}-webapi.log" />
 		<target name="Mail"
 			 xsi:type="Mail" html="true"
-			 subject="Server-Date: ${longdate}; UTC-Date: ${utc_date}; Level: ${level}"
-			 body="Server-Date: ${longdate}; UTC-Date: ${utc_date}; Level: ${level}; Log-Message: ${message}; Error-Source: ${event-context:item=error-source}; Error-Class: ${event-context:item=error-class}; Error-Method: ${event-context:item=error-method}; Error-Message: ${event-context:item=error-message}; Inner-Error-Message: ${event-context:item=inner-error-message}"
+			 subject="Server-Date: ${longdate}; Level: ${level}"
+			 body="Server-Date: ${longdate}; Level: ${level}; Message: ${message}"
 			 to="recipient@sample.com"
 			 from="webmaster@sample.com"
 			 Encoding="UTF-8"
@@ -172,14 +152,14 @@ CREATE TABLE [dbo].[logs](
 	<targets>
 		<target name="logfile"
 				xsi:type="File"
-				layout="Server-Date: ${longdate}; UTC-Date: ${utc_date}; Level: ${level}; Log-Message: ${message}; Error-Source: ${event-context:item=error-source}; Error-Class: ${event-context:item=error-class}; Error-Method: ${event-context:item=error-method}; Error-Message: ${event-context:item=error-message}; Inner-Error-Message: ${event-context:item=inner-error-message}"
+				layout="Server-Date: ${longdate}; Level: ${level}; Message: ${message}"
 				fileName="${basedir}/logs/${date:format=yyyy-MM-dd}-webapi.log" />
 		<target xsi:type="Database"
 				name="database"
 				dbProvider="System.Data.SqlClient"
 				connectionString="data source=.;Initial Catalog=nlog;Integrated Security=True;"
 				commandText="INSERT INTO [logs](datetime,message,lvl) VALUES (getutcdate(),@msg,@level)">
-			<parameter name="@msg" layout="Server-Date: ${longdate}; UTC-Date: ${utc_date}; Level: ${level}; Log-Message: ${message}; Error-Source: ${event-context:item=error-source}; Error-Class: ${event-context:item=error-class}; Error-Method: ${event-context:item=error-method}; Error-Message: ${event-context:item=error-message}; Inner-Error-Message: ${event-context:item=inner-error-message}" />
+			<parameter name="@msg" layout="Server-Date: ${longdate}; Level: ${level}; Message: ${message}" />
 			<parameter name="@level" layout="${level}" />
 		</target>
 	</targets>
@@ -209,7 +189,7 @@ Install-Package NLog.Targets.ElasticSearch
 				requireAuth="true"
 				username="myUserName"
 				password="coolpassword"
-				layout="Server-Date: ${longdate}; UTC-Date: ${utc_date}; Level: ${level}; Log-Message: ${message}; Error-Source: ${event-context:item=error-source}; Error-Class: ${event-context:item=error-class}; Error-Method: ${event-context:item=error-method}; Error-Message: ${event-context:item=error-message}; Inner-Error-Message: ${event-context:item=inner-error-message}"
+				layout="Server-Date: ${longdate}; Level: ${level}; Message: ${message}"
 				uri="http://localhost:9200" />
 		</target>
 	</targets>
@@ -218,19 +198,5 @@ Install-Package NLog.Targets.ElasticSearch
 	</rules>
 </nlog>
 ```
-
-### Propriedades
-* error-source
-* error-class
-* error-method
-* error-message
-* inner-error-message
-* error-stack-trace
-
-#### Propriedades Activity
-* ActivityId
-* TraceId
-* SpanId
-* ParentId
 
 Veja outras opções em [NLog-Project](https://nlog-project.org/config/?tab=layout-renderers).

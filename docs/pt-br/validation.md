@@ -57,26 +57,16 @@ public class Customer : EntityBase<Customer, int>, IEntityBase
 
 ```
 
-## Contexto de Notificação
-Você poderá capturar as mensagens de validação a partir do contexto de notificação. As validações são realizadas no momento em que tentamos adicionar ou alterar uma entidade a partir do repositório. Caso não tenha um IValidator (FluentValidation) registrado (IoC), assumimos validações baseadas em anotações (DataAnnotations).
+## Exemplo Uso
 
 ```csharp
-
-// tenta criar um cliente, onde nome é obrigatório
-var service = serviceProvider.GetService<CustomerService>();
-var customer = new Customer
+// aplicar validação de dados ao modelo/entidade com FluentValidation ou DataAnnotation
+var errors = entity.TryValidate(Validator);
+if (errors.AnySafe())
 {
-    Active = true
-};
-service.Add(customer); // tenta adicionar entidade
-
-// notification pattern
-var notfCtxOut = serviceProvider.GetService<INotificationContext>();
-if (notfCtxOut.HasErrorNotifications)
-{
-    foreach (var item in notfCtxOut.Notifications)
-    {
-        // Trace.WriteLine(item.Message);
-    }
+    return errors.ToBusiness<int>();
 }
+
+// executar a ação de criação no banco de dados
+
 ```

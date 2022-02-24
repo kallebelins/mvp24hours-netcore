@@ -6,62 +6,110 @@
 ### Instalação
 ```csharp
 /// Package Manager Console >
-Install-Package Mvp24Hours.Infrastructure.RabbitMQ -Version 3.2.171
+Install-Package Mvp24Hours.Infrastructure.RabbitMQ -Version 3.2.241
 ```
 
-### Configuração
+### Configuração Básica
 ```csharp
 /// Startup.cs
 
-services.AddMvp24HoursRabbitMQ(options =>
-{
-    options.ConnectionString = Configuration.GetConnectionString("RabbitMQContext"); // amqp://guest:guest@localhost:5672
-});
+services.AddMvp24HoursRabbitMQ(
+    typeof(MyClassConsumer).Assembly,
+    connectionOptions =>
+    {
+        connectionOptions.ConnectionString = configuration.GetConnectionString("RabbitMQContext");
+        connectionOptions.DispatchConsumersAsync = true;
+        connectionOptions.RetryCount = 3;
+    }
+);
 
-services.AddScoped<CustomerProducer, CustomerProducer>();
-services.AddScoped<CustomerConsumer, CustomerConsumer>();
+```
+
+### Configuração Avançada
+Exemplo de configuração de Dead Letter Queue:
+
+```csharp
+/// Startup.cs
+
+services.AddMvp24HoursRabbitMQ(
+    typeof(MyClassConsumer).Assembly,
+    connectionOptions =>
+    {
+        connectionOptions.ConnectionString = configuration.GetConnectionString("RabbitMQContext");
+        connectionOptions.DispatchConsumersAsync = true;
+        connectionOptions.RetryCount = 3;
+    },
+    clientOptions =>
+    {
+        clientOptions.Exchange = "customer.direct";
+        clientOptions.MaxRedeliveredCount = 1;
+        clientOptions.QueueArguments = new System.Collections.Generic.Dictionary<string, object>
+        {
+            { "x-queue-mode", "lazy" },
+            { "x-dead-letter-exchange", "dead-letter-customer.direct" }
+        };
+
+        // dead letter exchanges enabled
+        clientOptions.DeadLetter = new RabbitMQOptions()
+        {
+            Exchange = "dead-letter-customer.direct",
+            QueueArguments = new System.Collections.Generic.Dictionary<string, object>
+            {
+                { "x-queue-mode", "lazy" }
+            }
+        };
+    }
+);
 
 ```
 
 ### Implementação de Producer/Consumer
 
 ```csharp
-/// CustomerProducer.cs
-public class CustomerProducer : MvpRabbitMQProducer<CustomerDto>
-{
-    public CustomerProducer(IOptions<RabbitMQOptions> options)
-        : base(options)
-    {
-    }
-}
 
 /// CustomerService.cs // Save Method
-producer.Publish(new CustomerDto
+var client = serviceProvider.GetService<MvpRabbitMQClient>();
+client.Publish(new CustomerDto
 {
     Id = 99,
     Name = "Test 1",
     Active = true
-});
+}, typeof(CustomerDto).Name);
 
 /// CustomerConsumer.cs
-public class CustomerConsumer : MvpRabbitMQConsumer<CustomerDto>
+public class CustomerConsumer : IMvpRabbitMQConsumerAsync
 {
-    public CustomerConsumer(IOptions<RabbitMQOptions> options)
-        : base(options)
+    public string RoutingKey => typeof(CustomerDto).Name;
+
+    public string QueueName => typeof(CustomerDto).Name;
+
+    public async Task ReceivedAsync(object message, string token)
     {
+        // tome uma atitude
+        await Task.CompletedTask;
     }
-    public override void Received(object message)
+
+    public async Task FailureAsync(Exception exception, string token)
     {
-        Trace.WriteLine($"Received customer {(message as CustomerDto)?.Name}");
+        // execute o tratamento de falhas de integração no RabbitMQ
+        // escrever em uma tabela temporária, enviar e-mail, criar log especializado, etc.
+        await Task.CompletedTask;
     }
-} 
+
+    public async Task RejectedAsync(object message, string token)
+    {
+        // tentamos consumir o recurso por 3 vezes, neste caso como não tratamos, vamos desconsiderar
+        // escrever em uma tabela temporária, enviar e-mail, criar log especializado, etc.
+        await Task.CompletedTask;
+    }
+}
 
 /// HostService.cs
 var source = new CancellationTokenSource(TimeSpan.FromSeconds(5));
 while (!source.IsCancellationRequested)
 {
-    var consumer = serviceProvider.GetService<CustomerConsumer>();
-    consumer.Consume();
+    var client = serviceProvider.GetService<MvpRabbitMQClient>();
+    client.Consume();
 }
 
 ```

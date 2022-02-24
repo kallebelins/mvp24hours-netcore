@@ -3,7 +3,6 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Helpers;
@@ -25,17 +24,11 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations.Custom.Files
             this.filePath = _filePath;
         }
 
-        public FileLogWriteOperationAsync(INotificationContext _notificationContext, string _filePath)
-            : base(_notificationContext)
-        {
-            this.filePath = _filePath;
-        }
-
         public override async Task ExecuteAsync(IPipelineMessage input)
         {
             if (FilePath.HasValue())
             {
-                FileLogHelper.WriteLog(input.GetContentAll(), "message", $"Token: {input.Token} / IsSuccess: {input.IsFaulty} / Warnings: {string.Join('/', input.Messages)}", FilePath);
+                FileLogHelper.WriteLog(input.GetContentAll(), FilePath, "message", $"Token: {input.Token} / IsSuccess: {input.IsFaulty} / Warnings: {string.Join('/', input.Messages)}");
             }
             await Task.CompletedTask;
         }

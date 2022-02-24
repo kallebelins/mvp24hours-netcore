@@ -3,6 +3,7 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Mvp24Hours.Core.Contract.Data
@@ -19,22 +20,22 @@ namespace Mvp24Hours.Core.Contract.Data
         /// <summary>
         /// Get model by key
         /// </summary>
-        Task<T> GetAsync(string key);
+        Task<T> GetAsync(string key, CancellationToken cancellationToken = default);
         /// <summary>
         /// Get string by key
         /// </summary>
-        Task<string> GetStringAsync(string key);
+        Task<string> GetStringAsync(string key, CancellationToken cancellationToken = default);
         /// <summary>
         /// Register model by key
         /// </summary>
-        Task SetAsync(string key, T model);
+        Task SetAsync(string key, T model, CancellationToken cancellationToken = default);
         /// <summary>
         /// Register string by key
         /// </summary>
-        Task SetStringAsync(string key, string value);
+        Task SetStringAsync(string key, string value, CancellationToken cancellationToken = default);
         /// <summary>
         /// Remove model/string by key
         /// </summary>
-        Task RemoveAsync(string key);
+        Task RemoveAsync(string key, CancellationToken cancellationToken = default);
     }
 }

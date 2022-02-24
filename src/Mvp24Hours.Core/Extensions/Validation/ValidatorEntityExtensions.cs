@@ -4,8 +4,8 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using FluentValidation;
-using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
-using Mvp24Hours.Core.ValueObjects.Infrastructure;
+using Mvp24Hours.Core.Contract.ValueObjects.Logic;
+using Mvp24Hours.Core.ValueObjects.Logic;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -14,25 +14,18 @@ namespace Mvp24Hours.Extensions
 {
     public static class ValidatorEntityExtensions
     {
-        public static bool Validate<TEntity>(this TEntity entity, INotificationContext _context = null, IValidator<TEntity> _validator = null)
+        public static IList<IMessageResult> TryValidate<TEntity>(this TEntity entity, IValidator<TEntity> _validator = null)
             where TEntity : class
         {
-            var notifyCntxt = _context;
             var validator = _validator;
             if (validator != null)
             {
                 var validationResult = validator.Validate(entity);
                 if (!validationResult.IsValid)
                 {
-                    if (notifyCntxt != null)
-                    {
-                        var notifications = validationResult.Errors
-                            .Select(x => new Notification(x.ErrorCode, x.ErrorMessage, Core.Enums.MessageType.Error))
-                            .ToList();
-
-                        notifyCntxt.Add(notifications);
-                    }
-                    return false;
+                    return validationResult.Errors
+                        .Select(x => (IMessageResult)new MessageResult(x.ErrorCode, x.ErrorMessage, Core.Enums.MessageType.Error))
+                        .ToList();
                 }
             }
             else
@@ -41,17 +34,12 @@ namespace Mvp24Hours.Extensions
                 var validationCntxt = new ValidationContext(entity, null, null);
                 if (!Validator.TryValidateObject(entity, validationCntxt, validationRslts, true))
                 {
-                    if (notifyCntxt != null)
-                    {
-                        foreach (var item in validationRslts)
-                        {
-                            notifyCntxt.Add(string.Join("|", item.MemberNames), item.ErrorMessage, Core.Enums.MessageType.Error);
-                        }
-                    }
-                    return false;
+                    return validationRslts
+                        .Select(item => (IMessageResult)new MessageResult(string.Join("|", item.MemberNames), item.ErrorMessage, Core.Enums.MessageType.Error))
+                        .ToList();
                 }
             }
-            return true;
+            return new List<IMessageResult>();
         }
     }
 }

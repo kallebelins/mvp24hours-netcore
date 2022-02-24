@@ -10,7 +10,7 @@ using Mvp24Hours.WebAPI.Configuration;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Mvp24Hours.Infrastructure.Middlewares
+namespace Mvp24Hours.WebAPI.Middlewares
 {
     /// <summary>
     /// See: https://stackoverflow.com/a/45844400

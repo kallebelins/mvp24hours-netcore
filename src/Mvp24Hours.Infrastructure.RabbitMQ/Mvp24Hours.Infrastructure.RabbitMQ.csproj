@@ -10,13 +10,19 @@
     <Company>Kallebe Lins</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>3.2.171</Version>
-    <AssemblyVersion>3.2.17.1</AssemblyVersion>
-    <FileVersion>3.2.17.1</FileVersion>
+    <Version>3.2.241</Version>
+    <AssemblyVersion>3.2.24.1</AssemblyVersion>
+    <FileVersion>3.2.24.1</FileVersion>
     <RepositoryUrl>https://github.com/kallebelins/mvp24hours-netcore</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Core\Contract\IMvpRabbitMQEventHook.cs" />
+    <Compile Remove="Core\Contract\IMvpRabbitMQEventHookAsync.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Polly" Version="7.2.3" />
     <PackageReference Include="RabbitMQ.Client" Version="6.2.2" />
   </ItemGroup>
 

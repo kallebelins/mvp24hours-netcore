@@ -179,6 +179,5 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         }
 
         #endregion
-
     }
 }

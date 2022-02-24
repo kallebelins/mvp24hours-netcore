@@ -56,7 +56,7 @@ namespace Mvp24Hours.Extensions
                 throw new ArgumentException("Profile not registered for AutoMapper.");
             }
 
-            if (source.Messages.AnyOrNotNull())
+            if (source.Messages.AnySafe())
             {
                 return source.Data
                     .MapTo<TDestination>()
@@ -95,7 +95,7 @@ namespace Mvp24Hours.Extensions
                 throw new ArgumentException("Profile not registered for AutoMapper.");
             }
 
-            if (source.Messages.AnyOrNotNull())
+            if (source.Messages.AnySafe())
             {
                 return source.Data
                     .MapTo<TDestination>()

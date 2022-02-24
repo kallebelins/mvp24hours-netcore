@@ -10,53 +10,11 @@
     <Company>Kallebe Lins</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>3.2.171</Version>
-    <AssemblyVersion>3.2.17.1</AssemblyVersion>
-    <FileVersion>3.2.17.1</FileVersion>
+    <Version>3.2.241</Version>
+    <AssemblyVersion>3.2.24.1</AssemblyVersion>
+    <FileVersion>3.2.24.1</FileVersion>
     <RepositoryUrl>https://github.com/kallebelins/mvp24hours-netcore</RepositoryUrl>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="Validations\**" />
-    <EmbeddedResource Remove="Validations\**" />
-    <None Remove="Validations\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="infra-appsettings.json" />
-    <None Remove="Logging\NLogConsole.config" />
-    <None Remove="Logging\NLogElasticSearch.config" />
-    <None Remove="Logging\NLogEmail.config" />
-    <None Remove="Logging\NLogFileCsv.config" />
-    <None Remove="Logging\NLogFileLog.config" />
-    <None Remove="Logging\NLogSqlServer.config" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Logging\NLogElasticSearch.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Logging\NLogSqlServer.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Logging\NLogFileLog.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Logging\NLogEmail.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Logging\NLogFileCsv.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Logging\NLogConsole.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="infra-appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
@@ -71,7 +29,6 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="NLog" Version="4.7.13" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
     <PackageReference Include="System.ServiceModel.Http" Version="4.9.0" />
   </ItemGroup>

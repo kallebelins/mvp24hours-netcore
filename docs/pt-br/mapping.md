@@ -6,7 +6,7 @@
 ### Instalação
 ```csharp
 /// Package Manager Console >
-Install-Package Mvp24Hours.Infrastructure -Version 3.2.171
+Install-Package Mvp24Hours.Infrastructure -Version 3.2.241
 ```
 
 ### Configuração

@@ -4,6 +4,7 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 
+using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using System.Collections.Generic;
 
 namespace Mvp24Hours.Core.Contract.Logic
@@ -18,41 +19,41 @@ namespace Mvp24Hours.Core.Contract.Logic
         /// Adds an entity.
         /// </summary>
         /// <param name="entity">Entity instance</param>
-        int Add(T entity);
+        IBusinessResult<int> Add(T entity);
         /// <summary>
         /// Adds list of entities.
         /// </summary>
         /// <param name="entities">List of entities</param>
-        int Add(IList<T> entities);
+        IBusinessResult<int> Add(IList<T> entities);
         /// <summary>
         /// Updates an entity.
         /// </summary>
         /// <param name="entity">Entity instance</param>
-        int Modify(T entity);
+        IBusinessResult<int> Modify(T entity);
         /// <summary>
         /// Updates list of entities.
         /// </summary>
         /// <param name="entities">List of entities</param>
-        int Modify(IList<T> entities);
+        IBusinessResult<int> Modify(IList<T> entities);
         /// <summary>
         /// Removes an entity (logical exclusion).
         /// </summary>
         /// <param name="entity">Entity instance</param>
-        int Remove(T entity);
+        IBusinessResult<int> Remove(T entity);
         /// <summary>
         /// Removes list of entities (logical exclusion).
         /// </summary>
         /// <param name="entities">List of entities</param>
-        int Remove(IList<T> entities);
+        IBusinessResult<int> Remove(IList<T> entities);
         /// <summary>
         /// Removes an entity by the code identifier (logical exclusion).
         /// </summary>
         /// <param name="id">Identifier of entity</param>
-        int RemoveById(object id);
+        IBusinessResult<int> RemoveById(object id);
         /// <summary>
         /// Removes an entity by the code identifier (logical exclusion).
         /// </summary>
         /// <param name="ids">List of identifiers</param>
-        int RemoveById(IList<object> ids);
+        IBusinessResult<int> RemoveById(IList<object> ids);
     }
 }

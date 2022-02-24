@@ -7,11 +7,11 @@ using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
-using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
-using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Core.Contract.Logic;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
+using Mvp24Hours.Core.Enums.Infrastructure;
 using Mvp24Hours.Extensions;
+using Mvp24Hours.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -30,16 +30,8 @@ namespace Mvp24Hours.Application.Logic
         /// <summary>
         /// 
         /// </summary>
-        public RepositoryPagingService(TUoW _unitOfWork, ILoggingService _logging)
-            : base(_unitOfWork, _logging)
-        {
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public RepositoryPagingService(TUoW _unitOfWork, ILoggingService _logging, INotificationContext notificationContext)
-            : base(_unitOfWork, _logging, notificationContext)
+        public RepositoryPagingService(TUoW _unitOfWork)
+            : base(_unitOfWork)
         {
         }
 
@@ -47,30 +39,24 @@ namespace Mvp24Hours.Application.Logic
         /// 
         /// </summary>
         [ActivatorUtilitiesConstructor]
-        public RepositoryPagingService(TUoW _unitOfWork, ILoggingService _logging, INotificationContext notificationContext, IValidator<TEntity> validator)
-            : base(_unitOfWork, _logging, notificationContext, validator)
+        public RepositoryPagingService(TUoW _unitOfWork, IValidator<TEntity> validator)
+            : base(_unitOfWork, validator)
         {
         }
         #endregion
 
         #region [ Implements IQueryPagingService ]
 
-        /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.GetBy(Expression{Func{T, bool}}, IPagingCriteria)"/>
-        /// </summary>
         public virtual IPagingResult<IList<TEntity>> GetByWithPagination(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria = null)
         {
-            Logging.Trace("RepositoryPagingService.GetBy(Expression{Func{T, bool}}, IPagingCriteria)");
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "application-repositorypagingservice-getbywithpagination");
             var repo = UnitOfWork.GetRepository<TEntity>();
             return repo.ToBusinessPaging(clause, criteria);
         }
 
-        /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Logic.IQueryService{T}.List(IPagingCriteria)"/>
-        /// </summary>
         public virtual IPagingResult<IList<TEntity>> ListWithPagination(IPagingCriteria criteria = null)
         {
-            Logging.Trace("RepositoryPagingService.List(IPagingCriteria)");
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "application-repositorypagingservice-listwithpagination");
             var repo = UnitOfWork.GetRepository<TEntity>();
             return repo.ToBusinessPaging(criteria);
         }

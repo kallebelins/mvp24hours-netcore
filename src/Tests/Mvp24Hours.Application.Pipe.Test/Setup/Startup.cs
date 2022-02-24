@@ -4,7 +4,6 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Microsoft.Extensions.DependencyInjection;
-using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Helpers;
 using Mvp24Hours.Infrastructure.Pipe;
@@ -32,9 +31,9 @@ namespace Mvp24Hours.Application.Pipe.Test.Setup
             var services = new ServiceCollection()
                            .AddSingleton(ConfigurationHelper.AppSettings);
 
-            services.AddMvp24HoursPipeline(factory: (x) =>
+            services.AddMvp24HoursPipeline(factory: (_) =>
             {
-                var pipeline = new Pipeline(x.GetRequiredService<INotificationContext>());
+                var pipeline = new Pipeline();
                 pipeline.AddInterceptors(input =>
                 {
                     input.AddContent<int>("factory", 1);

@@ -9,6 +9,7 @@ using MongoDB.Driver.Linq;
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
+using Mvp24Hours.Core.Enums.Infrastructure;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Helpers;
 using Mvp24Hours.Infrastructure.Data.MongoDb.Base;
@@ -34,255 +35,104 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
 
         #region [ IQuery ]
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQuery.ListAny()"/>
-        /// </summary>
         public bool ListAny()
         {
-            return GetQuery(null, true).Any();
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-listany-start");
+            try
+            {
+                return GetQuery(null, true).Any();
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-listany-end"); }
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQuery.ListCount()"/>
-        /// </summary>
         public int ListCount()
         {
-            return GetQuery(null, true).Count();
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-listcount-start");
+            try
+            {
+                return GetQuery(null, true).Count();
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-listcount-end"); }
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQuery.List()"/>
-        /// </summary>
         public IList<T> List()
         {
             return List(null);
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQuery.List(IPagingCriteria)"/>
-        /// </summary>
-        public IList<T> List(IPagingCriteria clause)
+        public IList<T> List(IPagingCriteria criteria)
         {
-            return GetQuery(clause).ToList();
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-list-start");
+            try
+            {
+                return GetQuery(criteria).ToList();
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-list-end"); }
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQuery.GetByAny(Expression{Func{T, bool}})"/>
-        /// </summary>
         public bool GetByAny(Expression<Func<T, bool>> clause)
         {
-            var query = this.dbEntities.AsQueryable();
-            if (clause != null)
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-getbyany-start");
+            try
             {
-                query = query.Where(clause);
+                var query = this.dbEntities.AsQueryable();
+                if (clause != null)
+                {
+                    query = query.Where(clause);
+                }
+                return GetQuery(query, null, true).Any();
             }
-
-            return GetQuery(query, null, true).Any();
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-getbyany-end"); }
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQuery.GetByCount(Expression{Func{T, bool}})"/>
-        /// </summary>
         public int GetByCount(Expression<Func<T, bool>> clause)
         {
-            var query = this.dbEntities.AsQueryable();
-            if (clause != null)
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-getbycount-start");
+            try
             {
-                query = query.Where(clause);
+                var query = this.dbEntities.AsQueryable();
+                if (clause != null)
+                {
+                    query = query.Where(clause);
+                }
+                return GetQuery(query, null, true).Count();
             }
-
-            return GetQuery(query, null, true).Count();
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-getbycount-end"); }
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQuery.GetBy(Expression{Func{T, bool}})"/>
-        /// </summary>
         public IList<T> GetBy(Expression<Func<T, bool>> clause)
         {
             return GetBy(clause, null);
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQuery.GetBy(Expression{Func{T, bool}}, IPagingCriteria)"/>
-        /// </summary>
         public IList<T> GetBy(Expression<Func<T, bool>> clause, IPagingCriteria criteria)
         {
-            var query = this.dbEntities.AsQueryable();
-            if (clause != null)
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-getby-start");
+            try
             {
-                query = query.Where(clause);
+                var query = this.dbEntities.AsQueryable();
+                if (clause != null)
+                {
+                    query = query.Where(clause);
+                }
+                return GetQuery(query, criteria).ToList();
             }
-
-            return GetQuery(query, criteria).ToList();
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-getby-end"); }
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQuery.GetById(int)"/>
-        /// </summary>
         public T GetById(object id)
         {
             return GetById(id, null);
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQuery.GetById(int, IPagingCriteria)"/>
-        /// </summary>
-        public T GetById(object id, IPagingCriteria clause)
+        public T GetById(object id, IPagingCriteria criteria)
         {
-            return GetDynamicFilter(GetQuery(clause, true), GetKeyInfo(), id).SingleOrDefault();
-        }
-
-        #endregion
-
-        #region [ ICommand ]
-
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQuery.Add(T)"/>
-        /// </summary>
-        public void Add(T entity)
-        {
-            if (entity == null)
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-getbyid-start");
+            try
             {
-                return;
+                return GetDynamicFilter(GetQuery(criteria, true), GetKeyInfo(), id).SingleOrDefault();
             }
-            dbEntities.InsertOne(entity);
-        }
-
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQuery.Add(IList{T})"/>
-        /// </summary>
-        public void Add(IList<T> entities)
-        {
-            if (entities.AnyOrNotNull())
-            {
-                foreach (var entity in entities)
-                {
-                    this.Add(entity);
-                }
-            }
-        }
-
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.ICommand.Modify(T)"/>
-        /// </summary>
-        public void Modify(T entity)
-        {
-            if (entity == null)
-            {
-                return;
-            }
-
-            var entityDb = dbContext.Set<T>().Find(GetKeyFilter(entity)).FirstOrDefault();
-
-            if (entityDb == null)
-            {
-                throw new InvalidOperationException("Key value not found.");
-            }
-
-            // properties that can not be changed
-
-            if (entity.GetType() == typeof(IEntityLog<>))
-            {
-                var entityLog = entity as IEntityLog<object>;
-                var entityDbLog = entityDb as IEntityLog<object>;
-                entityLog.Created = entityDbLog.Created;
-                entityLog.CreatedBy = entityDbLog.CreatedBy;
-                entityLog.Modified = entityDbLog.Modified;
-                entityLog.ModifiedBy = entityDbLog.ModifiedBy;
-            }
-
-            this.dbEntities.ReplaceOne(GetKeyFilter(entity), entity);
-        }
-
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.ICommand.Modify(List)"/>
-        /// </summary>
-        public void Modify(IList<T> entities)
-        {
-            if (entities.AnyOrNotNull())
-            {
-                foreach (var entity in entities)
-                {
-                    this.Modify(entity);
-                }
-            }
-        }
-
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.ICommand.Remove(T)"/>
-        /// </summary>
-        public void Remove(T entity)
-        {
-            if (entity == null)
-            {
-                return;
-            }
-
-            if (entity.GetType() == typeof(IEntityLog<>))
-            {
-                var entityLog = entity as IEntityLog<object>;
-                entityLog.Removed = TimeZoneHelper.GetTimeZoneNow();
-                entityLog.RemovedBy = EntityLogBy;
-                this.Modify(entity);
-            }
-            else
-            {
-                this.ForceRemove(entity);
-            }
-        }
-
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.ICommand.Remove(List)"/>
-        /// </summary>
-        public void Remove(IList<T> entities)
-        {
-            if (entities.AnyOrNotNull())
-            {
-                foreach (var entity in entities)
-                {
-                    this.Remove(entity);
-                }
-            }
-        }
-
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.ICommand.Remove(int)"/>
-        /// </summary>
-        public void RemoveById(object id)
-        {
-            var entity = this.GetById(id);
-            if (entity == null)
-            {
-                return;
-            }
-
-            this.Remove(entity);
-        }
-
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.ICommand.Remove(IList{TEntity})"/>
-        /// </summary>
-        public void RemoveById(IList<object> ids)
-        {
-            if (ids.AnyOrNotNull())
-            {
-                foreach (var id in ids)
-                {
-                    RemoveById(id);
-                }
-            }
-        }
-
-        /// <summary>
-        ///  If entity is not log
-        /// </summary>
-        private void ForceRemove(T entity)
-        {
-            if (entity == null)
-            {
-                return;
-            }
-            this.dbEntities.DeleteOne(GetKeyFilter(entity));
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-getbyid-end"); }
         }
 
         #endregion
@@ -304,6 +154,181 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         {
             throw new NotSupportedException();
         }
+        #endregion
+
+        #region [ ICommand ]
+
+        public void Add(T entity)
+        {
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-add-start");
+            try
+            {
+                if (entity == null)
+                {
+                    return;
+                }
+                dbEntities.InsertOne(entity);
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-add-end"); }
+        }
+
+        public void Add(IList<T> entities)
+        {
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-addlist-start");
+            try
+            {
+                if (entities.AnySafe())
+                {
+                    foreach (var entity in entities)
+                    {
+                        this.Add(entity);
+                    }
+                }
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-addlist-end"); }
+        }
+
+        public void Modify(T entity)
+        {
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-modify-start");
+            try
+            {
+                if (entity == null)
+                {
+                    return;
+                }
+
+                var entityDb = dbContext.Set<T>().Find(GetKeyFilter(entity)).FirstOrDefault();
+
+                if (entityDb == null)
+                {
+                    throw new InvalidOperationException("Key value not found.");
+                }
+
+                // properties that can not be changed
+
+                if (entity.GetType() == typeof(IEntityLog<>))
+                {
+                    TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-modify-log");
+                    var entityLog = entity as IEntityLog<object>;
+                    var entityDbLog = entityDb as IEntityLog<object>;
+                    entityLog.Created = entityDbLog.Created;
+                    entityLog.CreatedBy = entityDbLog.CreatedBy;
+                    entityLog.Modified = entityDbLog.Modified;
+                    entityLog.ModifiedBy = entityDbLog.ModifiedBy;
+                }
+
+                this.dbEntities.ReplaceOne(GetKeyFilter(entity), entity);
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-modify-end"); }
+        }
+
+        public void Modify(IList<T> entities)
+        {
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-modifylist-start");
+            try
+            {
+                if (entities.AnySafe())
+                {
+                    foreach (var entity in entities)
+                    {
+                        this.Modify(entity);
+                    }
+                }
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-modifylist-end"); }
+        }
+
+        public void Remove(T entity)
+        {
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-remove-start");
+            try
+            {
+                if (entity == null)
+                {
+                    return;
+                }
+
+                if (entity.GetType() == typeof(IEntityLog<>))
+                {
+                    TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-remove-log");
+                    var entityLog = entity as IEntityLog<object>;
+                    entityLog.Removed = TimeZoneHelper.GetTimeZoneNow();
+                    entityLog.RemovedBy = EntityLogBy;
+                    this.Modify(entity);
+                }
+                else
+                {
+                    this.ForceRemove(entity);
+                }
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-remove-end"); }
+        }
+
+        public void Remove(IList<T> entities)
+        {
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-removelist-start");
+            try
+            {
+                if (entities.AnySafe())
+                {
+                    foreach (var entity in entities)
+                    {
+                        this.Remove(entity);
+                    }
+                }
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-removelist-end"); }
+        }
+
+        public void RemoveById(object id)
+        {
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-removebyid-start");
+            try
+            {
+                var entity = this.GetById(id);
+                if (entity == null)
+                {
+                    return;
+                }
+                this.Remove(entity);
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-removebyid-end"); }
+        }
+
+        public void RemoveById(IList<object> ids)
+        {
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-removebyidlist-start");
+            try
+            {
+                if (ids.AnySafe())
+                {
+                    foreach (var id in ids)
+                    {
+                        RemoveById(id);
+                    }
+                }
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-removebyidlist-end"); }
+        }
+
+        /// <summary>
+        ///  If entity is not log
+        /// </summary>
+        private void ForceRemove(T entity)
+        {
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-forceremove-start");
+            try
+            {
+                if (entity == null)
+                {
+                    return;
+                }
+                this.dbEntities.DeleteOne(GetKeyFilter(entity));
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-forceremove-end"); }
+        }
+
         #endregion
 
         #region [ Properties ]

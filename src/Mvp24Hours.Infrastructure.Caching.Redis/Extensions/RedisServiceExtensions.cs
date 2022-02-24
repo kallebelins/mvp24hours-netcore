@@ -19,9 +19,6 @@ namespace Mvp24Hours.Extensions
             ConfigurationOptions configurationOptions,
             string instanceName = null)
         {
-            services.AddMvp24HoursLogging();
-            services.AddMvp24HoursNotification();
-
             if (configurationOptions == null)
             {
                 throw new ArgumentNullException(nameof(configurationOptions), "Configuration options is required.");
@@ -43,9 +40,6 @@ namespace Mvp24Hours.Extensions
             string connectionString,
             string instanceName = null)
         {
-            services.AddMvp24HoursLogging();
-            services.AddMvp24HoursNotification();
-
             if (!connectionString.HasValue())
             {
                 throw new ArgumentNullException(nameof(connectionString), "Connection strings is required.");

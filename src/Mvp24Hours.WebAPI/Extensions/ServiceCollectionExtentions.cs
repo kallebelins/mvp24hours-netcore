@@ -9,15 +9,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Helpers;
-using Mvp24Hours.Infrastructure.Contexts;
 using Mvp24Hours.WebAPI.Configuration;
-using Mvp24Hours.WebAPI.Filters;
 using Mvp24Hours.WebAPI.Filters.Swagger;
 using Mvp24Hours.WebAPI.Models;
 using Newtonsoft.Json;
@@ -39,10 +35,9 @@ namespace Mvp24Hours.WebAPI.Extensions
         /// <summary>
         /// Adds IHttpContextAccessor and IActionContextAccessor
         /// </summary>
-        public static IServiceCollection AddMvp24HoursWebEssential(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddMvp24HoursWebEssential(this IServiceCollection services)
         {
-            services.AddMvp24HoursEssential(configuration);
-
+            services.AddSingleton(services);
             if (!services.Exists<IHttpContextAccessor>())
             {
                 services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -53,60 +48,6 @@ namespace Mvp24Hours.WebAPI.Extensions
                     .AddScoped<IUrlHelper>(x => x.GetRequiredService<IUrlHelperFactory>()
                     .GetUrlHelper(x.GetRequiredService<IActionContextAccessor>().ActionContext));
             }
-            return services;
-        }
-
-        /// <summary>
-        /// Adds web filters HATEOAS.
-        /// </summary>
-        public static IServiceCollection AddMvp24HoursWebHATEOAS(this IServiceCollection services, Action<HateoasFilterOptions> options = null)
-        {
-            if (!services.Exists<IHttpContextAccessor>())
-            {
-                throw new ArgumentException("IHttpContextAccessor context not found.");
-            }
-
-            if (options != null)
-            {
-                services.Configure(options);
-            }
-            else
-            {
-                services.Configure<HateoasFilterOptions>(options => { });
-            }
-
-            services.AddScoped<IHateoasContext, HateoasContext>();
-            services.AddMvc(options =>
-            {
-                options.Filters.Add<HateoasFilter>();
-            });
-            if (!services.Exists<IActionContextAccessor>())
-            {
-                throw new ArgumentException("IActionContextAccessor context not found.");
-            }
-            return services;
-        }
-
-        /// <summary>
-        /// Adds web filters notification. Only use if not using ActionResult.
-        /// </summary>
-        public static IServiceCollection AddMvp24HoursWebNotification(this IServiceCollection services, Action<NotificationFilterOptions> options = null)
-        {
-            services.AddMvp24HoursNotification();
-
-            if (options != null)
-            {
-                services.Configure(options);
-            }
-            else
-            {
-                services.Configure<NotificationFilterOptions>(options => { });
-            }
-
-            services.AddMvc(options =>
-            {
-                options.Filters.Add<NotificationFilter>();
-            });
             return services;
         }
 

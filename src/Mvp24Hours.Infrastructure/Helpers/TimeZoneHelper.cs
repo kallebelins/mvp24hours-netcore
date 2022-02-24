@@ -14,6 +14,13 @@ namespace Mvp24Hours.Helpers
     /// </summary>
     public static class TimeZoneHelper
     {
+        public static List<string> TimeZoneIds { get; set; } = new()
+        {
+            { "E. South America Standard Time" },
+            { "Brazil/East" },
+            { "America/Sao_Paulo" }
+        };
+
         /// <summary>
         /// Get current date and time based on South America time zone
         /// </summary>
@@ -45,30 +52,14 @@ namespace Mvp24Hours.Helpers
                 return _timeZoneInfo;
             }
 
-            string timeZoneIds = ConfigurationHelper.GetSettings("Mvp24Hours:General:TimeZoneIds");
-            var timeZoneIdsList = new List<string>();
-
-            if (!string.IsNullOrEmpty(timeZoneIds))
-            {
-                timeZoneIdsList.AddRange(timeZoneIds.Split(","));
-            }
-            else
-            {
-                timeZoneIdsList.Add("E. South America Standard Time");
-                timeZoneIdsList.Add("Brazil/East");
-                timeZoneIdsList.Add("America/Sao_Paulo");
-            }
+            _timeZoneInfo = TimeZoneInfo.GetSystemTimeZones()
+                .FirstOrDefault(x => TimeZoneIds.Contains(x.Id));
 
             if (_timeZoneInfo == null)
             {
-                _timeZoneInfo = TimeZoneInfo.GetSystemTimeZones()
-                    .FirstOrDefault(x => timeZoneIdsList.Contains(x.Id));
-
-                if (_timeZoneInfo == null)
-                {
-                    _timeZoneInfo = TimeZoneInfo.Local;
-                }
+                _timeZoneInfo = TimeZoneInfo.Local;
             }
+
 
             return _timeZoneInfo;
         }

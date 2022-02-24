@@ -6,14 +6,13 @@
 using Mvp24Hours.Application.Logic;
 using Mvp24Hours.Application.PostgreSql.Test.Support.Entities;
 using Mvp24Hours.Core.Contract.Data;
-using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 
 namespace Mvp24Hours.Application.PostgreSql.Test.Support.Services
 {
     public class CustomerPagingService : RepositoryPagingService<Customer, IUnitOfWork>
     {
-        public CustomerPagingService(IUnitOfWork unitOfWork, ILoggingService logging)
-            : base(unitOfWork, logging) { }
+        public CustomerPagingService(IUnitOfWork unitOfWork)
+            : base(unitOfWork) { }
 
         // custom methods
     }

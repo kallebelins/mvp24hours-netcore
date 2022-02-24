@@ -6,7 +6,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
-using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
+using Mvp24Hours.Core.Enums.Infrastructure;
+using Mvp24Hours.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -21,20 +22,18 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
     {
         #region [ Ctor ]
 
-        public UnitOfWork(Mvp24HoursContext dbContext, INotificationContext notificationContext, Dictionary<Type, object> _repositories)
+        public UnitOfWork(Mvp24HoursContext dbContext, Dictionary<Type, object> _repositories)
         {
             this.DbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-            this.NotificationContext = notificationContext ?? throw new ArgumentNullException(nameof(notificationContext));
             this.repositories = _repositories ?? throw new ArgumentNullException(nameof(_repositories));
 
             DbContext.StartSession();
         }
 
         [ActivatorUtilitiesConstructor]
-        public UnitOfWork(Mvp24HoursContext _dbContext, INotificationContext _notificationContext, IServiceProvider _serviceProvider)
+        public UnitOfWork(Mvp24HoursContext _dbContext, IServiceProvider _serviceProvider)
         {
             this.DbContext = _dbContext ?? throw new ArgumentNullException(nameof(_dbContext));
-            this.NotificationContext = _notificationContext ?? throw new ArgumentNullException(nameof(_notificationContext));
             this.serviceProvider = _serviceProvider ?? throw new ArgumentNullException(nameof(_serviceProvider));
             this.repositories = new Dictionary<Type, object>();
 
@@ -48,7 +47,6 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         private readonly Dictionary<Type, object> repositories;
 
         protected Mvp24HoursContext DbContext { get; private set; }
-        protected INotificationContext NotificationContext { get; private set; }
         private readonly IServiceProvider serviceProvider;
 
         /// <summary>
@@ -98,13 +96,21 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         /// </summary>
         public int SaveChanges(CancellationToken cancellationToken = default)
         {
-            if (NotificationContext == null || !NotificationContext.HasErrorNotifications)
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-unitofwork-savechanges-start");
+            try
             {
                 DbContext.SaveChanges(cancellationToken);
                 return 1;
             }
-            Rollback();
-            return 0;
+            catch (Exception)
+            {
+                Rollback();
+                return 0;
+            }
+            finally
+            {
+                TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-unitofwork-savechanges-end");
+            }
         }
 
         /// <summary>
@@ -112,7 +118,12 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         /// </summary>
         public void Rollback()
         {
-            DbContext.Rollback();
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-unitofwork-rollback-start");
+            try
+            {
+                DbContext.Rollback();
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-unitofwork-rollback-end"); }
         }
 
         #endregion

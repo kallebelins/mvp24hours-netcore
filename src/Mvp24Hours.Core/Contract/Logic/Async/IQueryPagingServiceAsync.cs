@@ -18,11 +18,11 @@ namespace Mvp24Hours.Core.Contract.Logic
     public interface IQueryPagingServiceAsync<TEntity> where TEntity : class
     {
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync{TEntity}.ListAsync(IPagingCriteria, CancellationToken)"/>
+        /// Gets all representations of the entity typed with criteria.
         /// </summary>
         Task<IPagingResult<IList<TEntity>>> ListWithPaginationAsync(IPagingCriteria criteria = null, CancellationToken cancellationToken = default);
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.Data.IQueryAsync{TEntity}.GetByAsync(Expression{Func{TEntity, bool}}, IPagingCriteria, CancellationToken)"/>
+        /// Gets the filter-based representations of the entity typed with criteria.
         /// </summary>
         Task<IPagingResult<IList<TEntity>>> GetByWithPaginationAsync(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria = null, CancellationToken cancellationToken = default);
     }

@@ -86,7 +86,7 @@ namespace Mvp24Hours.Extensions
                         // else ignore update
                     }
                     var newdstValue = props.targetProperty.GetValue(destination, null);
-                    if (newdstValue == null && dstValue != null || !newdstValue.Equals(dstValue))
+                    if (newdstValue != null && dstValue != null && !newdstValue.Equals(dstValue))
                         PropertyChanged = true;
                 }
             }

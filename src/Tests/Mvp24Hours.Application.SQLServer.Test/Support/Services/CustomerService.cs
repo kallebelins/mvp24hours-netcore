@@ -6,7 +6,6 @@
 using Mvp24Hours.Application.Logic;
 using Mvp24Hours.Application.SQLServer.Test.Support.Entities;
 using Mvp24Hours.Core.Contract.Data;
-using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +14,8 @@ namespace Mvp24Hours.Application.SQLServer.Test.Support.Services
 {
     public class CustomerService : RepositoryService<Customer, IUnitOfWork>
     {
-        public CustomerService(IUnitOfWork unitOfWork, ILoggingService logging)
-            : base(unitOfWork, logging) { }
+        public CustomerService(IUnitOfWork unitOfWork)
+            : base(unitOfWork) { }
 
         // custom methods here
 

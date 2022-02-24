@@ -19,7 +19,7 @@ namespace Mvp24Hours.Extensions
     {
         private static readonly Func<MemoryCache, object> GetEntriesCollection = Delegate.CreateDelegate(
             typeof(Func<MemoryCache, object>),
-            typeof(MemoryCache).GetProperty("EntriesCollection", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true),
+            typeof(MemoryCache).GetProperty("EntriesCollection", BindingFlags.Public | BindingFlags.Instance).GetGetMethod(true),
             throwOnBindFailure: true) as Func<MemoryCache, object>;
 
         /// <summary>

@@ -36,7 +36,7 @@ namespace Mvp24Hours.WebAPI.Filters.Swagger
         /// </summary>
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
-            if (!AuthTypes.AnyOrNotNull())
+            if (!AuthTypes.AnySafe())
             {
                 return;
             }
@@ -44,12 +44,12 @@ namespace Mvp24Hours.WebAPI.Filters.Swagger
             var hasAuthAttributes = context.MethodInfo.DeclaringType.GetCustomAttributes(true)
                 .Union(context.MethodInfo.GetCustomAttributes(true))
                 .Where(x => AuthTypes.Contains(x.GetType()) && !x.GetType().Equals(typeof(AllowAnonymousAttribute)))
-                .AnyOrNotNull();
+                .AnySafe();
 
             var hasAllowAnonymousAttributes = context.MethodInfo.DeclaringType.GetCustomAttributes(true)
                 .Union(context.MethodInfo.GetCustomAttributes(true))
                 .Where(x => x.GetType().Equals(typeof(AllowAnonymousAttribute)))
-                .AnyOrNotNull();
+                .AnySafe();
 
             if (hasAuthAttributes && !hasAllowAnonymousAttributes)
             {

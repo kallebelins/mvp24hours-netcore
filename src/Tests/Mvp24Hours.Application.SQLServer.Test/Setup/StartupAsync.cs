@@ -15,7 +15,6 @@ using Mvp24Hours.Extensions;
 using Mvp24Hours.Helpers;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Mvp24Hours.Application.SQLServer.Test.Setup
 {

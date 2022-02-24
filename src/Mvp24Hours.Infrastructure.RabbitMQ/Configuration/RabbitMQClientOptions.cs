@@ -3,26 +3,14 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-namespace Mvp24Hours.Core.Enums.Infrastructure
+using System;
+
+namespace Mvp24Hours.Infrastructure.RabbitMQ.Configuration
 {
-    /// <summary>
-    /// Defines the type of business action
-    /// </summary>
-    public enum HateoasType
+    [Serializable]
+    public class RabbitMQClientOptions : RabbitMQOptions
     {
-        Self,
-        Start,
-        Item,
-        Collection,
-        Previous,
-        Next,
-        First,
-        Last,
-        Create,
-        Edit,
-        Delete,
-        Related,
-        //Search,
-        //Service,
+        public int MaxRedeliveredCount { get; set; } = 3;
+        public RabbitMQOptions DeadLetter { get; set; }
     }
 }

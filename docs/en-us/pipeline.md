@@ -4,7 +4,7 @@ It is a design pattern that represents a tube with several operations (filters),
 ## Installation
 ```csharp
 /// Package Manager Console >
-Install-Package Mvp24Hours.Infrastructure.Pipe -Version 3.2.171
+Install-Package Mvp24Hours.Infrastructure.Pipe -Version 3.2.241
 ```
 
 ## Configuration
@@ -18,9 +18,9 @@ services.AddMvp24HoursPipeline(options => // async => AddMvp24HoursPipelineAsync
 });
 
 // with factory
-services.AddMvp24HoursPipeline(factory: (x) => // async => AddMvp24HoursPipelineAsync
+services.AddMvp24HoursPipeline(factory: (_) => // async => AddMvp24HoursPipelineAsync
 {
-    var pipeline = new Pipeline(x.GetRequiredService<INotificationContext>()); // async => PipelineAsync
+    var pipeline = new Pipeline(); // async => PipelineAsync
     pipeline.AddInterceptors(input =>
     {
         input.AddContent<int>("factory", 1);

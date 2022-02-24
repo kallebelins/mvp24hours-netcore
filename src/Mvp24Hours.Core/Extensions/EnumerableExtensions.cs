@@ -56,6 +56,21 @@ namespace Mvp24Hours.Extensions
         /// </summary>
         public static bool AnyOrNotNull<T>(this IEnumerable<T> source)
         {
+            if (source == null || !source.Any())
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static bool AnySafe<T>(this IEnumerable<T> source)
+        {
             if (source != null && source.Any())
             {
                 return true;

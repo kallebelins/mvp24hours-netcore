@@ -1,7 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Application.RabbitMQ.Test.Setup;
-using Mvp24Hours.Application.RabbitMQ.Test.Support.Consumers;
 using Mvp24Hours.Application.RabbitMQ.Test.Support.Dto;
+using Mvp24Hours.Extensions;
+using Mvp24Hours.Infrastructure.RabbitMQ;
 using System;
 using System.Threading;
 using Xunit;
@@ -26,33 +27,33 @@ namespace Mvp24Hours.Application.RabbitMQ.Test
         public void Create_Producer()
         {
             // arrange
-            var serviceProvider = startup.InitializeProducer();
-            var producer = serviceProvider.GetService<CustomerProducer>();
+            var serviceProvider = startup.Initialize();
+            var client = serviceProvider.GetService<MvpRabbitMQClient>();
 
             // act
-            producer.Publish(new CustomerEvent
+            string result = client.Publish(new CustomerEvent
             {
                 Id = 99,
                 Name = "Test 1",
                 Active = true
-            });
+            }, typeof(CustomerEvent).Name);
 
             // assert
-            Assert.True(true);
+            Assert.True(result.HasValue());
         }
 
         [Fact, Priority(2)]
         public void Create_Consumer()
         {
             // arrange
-            var serviceProvider = startup.InitializeConsumer();
+            var serviceProvider = startup.Initialize();
 
             // act
             var source = new CancellationTokenSource(TimeSpan.FromSeconds(5));
             while (!source.IsCancellationRequested)
             {
-                var consumer = serviceProvider.GetService<CustomerConsumer>();
-                consumer.Consume();
+                var client = serviceProvider.GetService<MvpRabbitMQClient>();
+                client.Consume();
             }
 
             // assert

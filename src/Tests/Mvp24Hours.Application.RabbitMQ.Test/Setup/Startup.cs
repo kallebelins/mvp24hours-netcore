@@ -5,45 +5,36 @@
 //=====================================================================================
 using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Application.RabbitMQ.Test.Support.Consumers;
-using Mvp24Hours.Application.RabbitMQ.Test.Support.Dto;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Helpers;
-using Mvp24Hours.Infrastructure.RabbitMQ;
 using System;
 
 namespace Mvp24Hours.Application.RabbitMQ.Test.Setup
 {
     public class Startup
     {
-        public IServiceProvider InitializeProducer()
+        public IServiceProvider Initialize()
         {
             var services = new ServiceCollection()
                             .AddSingleton(ConfigurationHelper.AppSettings);
 
-            services.AddMvp24HoursRabbitMQ(options =>
-            {
-                options.ConnectionString = ConfigurationHelper.GetSettings("ConnectionStrings:HostBus");
-            });
+            services.AddMvp24HoursRabbitMQ(
+                typeof(CustomerConsumer).Assembly,
+                connectionOptions =>
+                {
+                    connectionOptions.ConnectionString = ConfigurationHelper.GetSettings("ConnectionStrings:HostBus");
+                    connectionOptions.DispatchConsumersAsync = true;
+                    connectionOptions.RetryCount = 3;
+                },
+                clientOptions =>
+                {
+                    clientOptions.MaxRedeliveredCount = 1;
+                }
+            );
 
-            services.AddScoped<MvpRabbitMQProducer<CustomerEvent>, CustomerProducer>();
-
-            return services.BuildServiceProvider();
-        }
-
-        public IServiceProvider InitializeConsumer()
-        {
-            var services = new ServiceCollection()
-                            .AddSingleton(ConfigurationHelper.AppSettings);
-
-            services.AddMvp24HoursRabbitMQ(options =>
-            {
-                options.ConnectionString = ConfigurationHelper.GetSettings("ConnectionStrings:HostBus");
-            });
-
-            services.AddScoped<MvpRabbitMQConsumer<CustomerEvent>, CustomerConsumer>();
+            services.AddScoped<CustomerConsumer, CustomerConsumer>();
 
             return services.BuildServiceProvider();
         }
-
     }
 }

@@ -11,8 +11,10 @@ using MongoDB.Driver.Linq;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Core.Entities;
+using Mvp24Hours.Core.Enums.Infrastructure;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Extensions.Data;
+using Mvp24Hours.Helpers;
 using Mvp24Hours.Infrastructure.Data.MongoDb.Configuration;
 using System;
 using System.Linq;
@@ -63,17 +65,18 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
         /// <summary>
         /// Gets database query with clause and aggregation of relationships
         /// </summary>
-        protected IQueryable<T> GetQuery(IPagingCriteria clause, bool onlyNavigation = false)
+        protected IQueryable<T> GetQuery(IPagingCriteria criteria, bool onlyNavigation = false)
         {
             // cria query
             var query = dbEntities.AsQueryable();
-            return GetQuery(query, clause, onlyNavigation);
+            return GetQuery(query, criteria, onlyNavigation);
         }
         /// <summary>
         /// Gets database query with clause and aggregation of relationships
         /// </summary>
-        protected IQueryable<T> GetQuery(IQueryable<T> query, IPagingCriteria clause, bool onlyNavigation = false)
+        protected IQueryable<T> GetQuery(IQueryable<T> query, IPagingCriteria criteria, bool onlyNavigation = false)
         {
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repositorybase-querycriteria-object", criteria);
             var ordered = false;
 
             if (!onlyNavigation)
@@ -81,14 +84,14 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
                 int offset = 0;
                 int limit = Options.MaxQtyByQueryPage;
 
-                if (clause != null)
+                if (criteria != null)
                 {
                     // ordination
-                    if (clause is IPagingCriteriaExpression<T>)
+                    if (criteria is IPagingCriteriaExpression<T>)
                     {
-                        var clauseExpr = clause as IPagingCriteriaExpression<T>;
+                        var clauseExpr = criteria as IPagingCriteriaExpression<T>;
                         // ordination by ascending expression
-                        if (clauseExpr.OrderByAscendingExpr.AnyOrNotNull())
+                        if (clauseExpr.OrderByAscendingExpr.AnySafe())
                         {
                             IOrderedQueryable<T> queryOrdered = null;
                             foreach (var ord in clauseExpr.OrderByAscendingExpr)
@@ -107,7 +110,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
                         }
 
                         // ordination by descending expression
-                        if (clauseExpr.OrderByDescendingExpr.AnyOrNotNull())
+                        if (clauseExpr.OrderByDescendingExpr.AnySafe())
                         {
                             IOrderedQueryable<T> queryOrdered = null;
                             foreach (var ord in clauseExpr.OrderByDescendingExpr)
@@ -127,10 +130,10 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
                     }
 
                     // ordination by string
-                    if (clause.OrderBy.AnyOrNotNull())
+                    if (criteria.OrderBy.AnySafe())
                     {
                         IOrderedQueryable<T> queryOrdered = null;
-                        foreach (var ord in clause.OrderBy)
+                        foreach (var ord in criteria.OrderBy)
                         {
                             if (queryOrdered == null)
                             {
@@ -146,8 +149,8 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
                     }
 
                     // Paging
-                    offset = clause.Offset;
-                    limit = clause.Limit > 0 ? clause.Limit : limit;
+                    offset = criteria.Offset;
+                    limit = criteria.Limit > 0 ? criteria.Limit : limit;
                 }
 
                 if (!ordered)
@@ -162,21 +165,21 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
                 query = query.Take(limit);
             }
 
-            if (clause != null)
+            if (criteria != null)
             {
                 // navigation
-                if (clause is IPagingCriteriaExpression<T>)
+                if (criteria is IPagingCriteriaExpression<T>)
                 {
-                    var clauseExpr = clause as IPagingCriteriaExpression<T>;
+                    var clauseExpr = criteria as IPagingCriteriaExpression<T>;
                     // navigation by expression
-                    if (clauseExpr.NavigationExpr.AnyOrNotNull())
+                    if (clauseExpr.NavigationExpr.AnySafe())
                     {
                         throw new NotSupportedException("Relationship loading via navigation not available for mongodb. Do data structure analysis or implement your custom repository.");
                     }
                 }
 
                 // navigation by string
-                if (clause.Navigation.AnyOrNotNull())
+                if (criteria.Navigation.AnySafe())
                 {
                     throw new NotSupportedException("Relationship loading via navigation not available for mongodb. Do data structure analysis or implement your custom repository.");
                 }
@@ -204,7 +207,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
             if (_keyInfo == null)
             {
                 _keyInfo = typeof(T).GetTypeInfo()
-                    .GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                    .GetProperties(BindingFlags.Instance | BindingFlags.Public)
                     .FirstOrDefault(x => x.GetCustomAttribute<BsonIdAttribute>() != null);
 
                 if (_keyInfo == null)
@@ -213,14 +216,14 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
                         || typeof(T).InheritsOrImplements(typeof(EntityBaseLog<,,>)))
                     {
                         _keyInfo = typeof(T).GetTypeInfo()
-                            .GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                            .GetProperties(BindingFlags.Instance | BindingFlags.Public)
                             .FirstOrDefault(x => x.Name == "Id");
                     }
 
                     if (_keyInfo == null)
                     {
                         _keyInfo = typeof(T).GetTypeInfo()
-                            .GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                            .GetProperties(BindingFlags.Instance | BindingFlags.Public)
                             .FirstOrDefault(x => x.Name == BsonClassMap.LookupClassMap(typeof(T)).IdMemberMap.MemberName);
                     }
 

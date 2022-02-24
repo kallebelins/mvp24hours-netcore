@@ -89,7 +89,6 @@ namespace Mvp24Hours.Helpers
             settings.Converters.Add(new ValueObjectConverter<IPagingResult<T>, PagingResult<T>>());
             settings.Converters.Add(new ValueObjectConverter<IPageResult, PageResult>());
             settings.Converters.Add(new ValueObjectConverter<ISummaryResult, SummaryResult>());
-            settings.Converters.Add(new ValueObjectConverter<ILinkResult, LinkResult>());
             settings.Converters.Add(new ValueObjectConverter<IMessageResult, MessageResult>());
             return settings;
         }
@@ -102,7 +101,6 @@ namespace Mvp24Hours.Helpers
             var settings = jsonSerializerSettings ?? JsonDefaultSettings;
             settings.Converters.Add(new ValueObjectConverter<IBusinessResult<T>, BusinessResult<T>>());
             settings.Converters.Add(new ValueObjectConverter<ISummaryResult, SummaryResult>());
-            settings.Converters.Add(new ValueObjectConverter<ILinkResult, LinkResult>());
             settings.Converters.Add(new ValueObjectConverter<IMessageResult, MessageResult>());
             return settings;
         }

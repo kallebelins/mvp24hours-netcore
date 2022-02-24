@@ -9,6 +9,7 @@ using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Core.Entities;
+using Mvp24Hours.Core.Enums.Infrastructure;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Helpers;
 using Mvp24Hours.Infrastructure.Data.EFCore.Configuration;
@@ -36,137 +37,153 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
 
         #region [ IQuery ]
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQuery.ListAny()"/>
-        /// </summary>
         public bool ListAny()
         {
-            return GetQuery(null, true).Any();
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-listany-start");
+            try
+            {
+                using var scope = CreateTransactionScope(true);
+                var result = GetQuery(null, true).Any();
+                if (scope != null)
+                {
+                    scope.Complete();
+                    TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-listany-transactionscope-complete");
+                }
+                return result;
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-listany-end"); }
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQuery.ListCount()"/>
-        /// </summary>
         public int ListCount()
         {
-            return GetQuery(null, true).Count();
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-listcount-start");
+            try
+            {
+                using var scope = CreateTransactionScope(true);
+                var result = GetQuery(null, true).Count();
+                if (scope != null)
+                {
+                    scope.Complete();
+                    TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-listcount-transactionscope-complete");
+                }
+                return result;
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-listcount-end"); }
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQuery.List()"/>
-        /// </summary>
         public IList<T> List()
         {
             return List(null);
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQuery.List(IPagingCriteria)"/>
-        /// </summary>
         public IList<T> List(IPagingCriteria criteria)
         {
-            return GetQuery(criteria).ToList();
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-list-start");
+            try
+            {
+                using var scope = CreateTransactionScope();
+                var result = GetQuery(criteria).ToList();
+                if (scope != null)
+                {
+                    scope.Complete();
+                    TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-list-transactionscope-complete");
+                }
+                return result;
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-list-end"); }
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQuery.GetByAny(Expression{Func{T, bool}})"/>
-        /// </summary>
         public bool GetByAny(Expression<Func<T, bool>> clause)
         {
-            var query = this.dbEntities.AsQueryable();
-            if (clause != null)
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-getbyany-start");
+            try
             {
-                query = query.Where(clause);
+                using var scope = CreateTransactionScope(true);
+                var query = this.dbEntities.AsQueryable();
+                if (clause != null)
+                {
+                    query = query.Where(clause);
+                }
+                var result = GetQuery(query, null, true).Any();
+                if (scope != null)
+                {
+                    scope.Complete();
+                    TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-getbyany-transactionscope-complete");
+                }
+                return result;
             }
-
-            return GetQuery(query, null, true).Any();
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-getbyany-end"); }
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQuery.GetByCount(Expression{Func{T, bool}})"/>
-        /// </summary>
         public int GetByCount(Expression<Func<T, bool>> clause)
         {
-            var query = this.dbEntities.AsQueryable();
-            if (clause != null)
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-getbycount-start");
+            try
             {
-                query = query.Where(clause);
+                using var scope = CreateTransactionScope(true);
+                var query = this.dbEntities.AsQueryable();
+                if (clause != null)
+                {
+                    query = query.Where(clause);
+                }
+                var result = GetQuery(query, null, true).Count();
+                if (scope != null)
+                {
+                    scope.Complete();
+                    TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-getbycount-transactionscope-complete");
+                }
+                return result;
             }
-
-            return GetQuery(query, null, true).Count();
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-getbycount-end"); }
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQuery.GetBy(Expression{Func{T, bool}})"/>
-        /// </summary>
         public IList<T> GetBy(Expression<Func<T, bool>> clause)
         {
             return GetBy(clause, null);
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQuery.GetBy(Expression{Func{T, bool}}, IPagingCriteria)"/>
-        /// </summary>
         public IList<T> GetBy(Expression<Func<T, bool>> clause, IPagingCriteria criteria)
         {
-            var query = this.dbEntities.AsQueryable();
-            if (clause != null)
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-getby-start");
+            try
             {
-                query = query.Where(clause);
+                using var scope = CreateTransactionScope();
+                var query = this.dbEntities.AsQueryable();
+                if (clause != null)
+                {
+                    query = query.Where(clause);
+                }
+                var result = GetQuery(query, criteria).ToList();
+                if (scope != null)
+                {
+                    scope.Complete();
+                    TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-getby-transactionscope-complete");
+                }
+                return result;
             }
-
-            return GetQuery(query, criteria).ToList();
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-getby-end"); }
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQuery.GetById(int)"/>
-        /// </summary>
         public T GetById(object id)
         {
             return GetById(id, null);
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQuery.GetById(int, IPagingCriteria)"/>
-        /// </summary>
         public T GetById(object id, IPagingCriteria criteria)
         {
-            return GetDynamicFilter(GetQuery(criteria, true), GetKeyInfo(), id).SingleOrDefault();
-        }
-
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQuery.Add(T)"/>
-        /// </summary>
-        public void Add(T entity)
-        {
-            if (entity == null)
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-getbyid-start");
+            try
             {
-                return;
-            }
-
-            var entry = this.dbContext.Entry(entity);
-            if (entry.State != EntityState.Detached)
-            {
-                entry.State = EntityState.Added;
-            }
-            else
-            {
-                this.dbEntities.Add(entity);
-            }
-        }
-
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.IQuery.Add(IList{T})"/>
-        /// </summary>
-        public void Add(IList<T> entities)
-        {
-            if (entities.AnyOrNotNull())
-            {
-                foreach (var entity in entities)
+                using var scope = CreateTransactionScope();
+                var result = GetDynamicFilter(GetQuery(criteria, true), GetKeyInfo(), id).SingleOrDefault();
+                if (scope != null)
                 {
-                    this.Add(entity);
+                    scope.Complete();
+                    TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-getbyid-transactionscope-complete");
                 }
+                return result;
             }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-getbyid-end"); }
         }
 
         #endregion
@@ -176,7 +193,12 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
         public void LoadRelation<TProperty>(T entity, Expression<Func<T, TProperty>> propertyExpression)
             where TProperty : class
         {
-            this.dbContext.Entry(entity).Reference(propertyExpression).Load();
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-loadrelation-start");
+            try
+            {
+                this.dbContext.Entry(entity).Reference(propertyExpression).Load();
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-loadrelation-end"); }
         }
 
         public void LoadRelation<TProperty>(T entity,
@@ -184,178 +206,246 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
             int limit = 0)
             where TProperty : class
         {
-            var query = this.dbContext.Entry(entity).Collection(propertyExpression).Query();
-
-            if (clause != null)
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-loadrelation-start");
+            try
             {
-                query = query.Where(clause);
-            }
+                var query = this.dbContext.Entry(entity).Collection(propertyExpression).Query();
 
-            if (limit > 0)
-            {
-                query = query.Take(limit);
-            }
+                if (clause != null)
+                {
+                    query = query.Where(clause);
+                }
 
-            query.ToList();
+                if (limit > 0)
+                {
+                    query = query.Take(limit);
+                }
+
+                _ = query.ToList();
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-loadrelation-end"); }
         }
 
         public void LoadRelationSortByAscending<TProperty, TKey>(T entity, Expression<Func<T, IEnumerable<TProperty>>> propertyExpression, Expression<Func<TProperty, TKey>> orderKey, Expression<Func<TProperty, bool>> clause = null, int limit = 0) where TProperty : class
         {
-            var query = this.dbContext.Entry(entity).Collection(propertyExpression).Query();
-
-            if (clause != null)
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-loadrelationsortbyascending-start");
+            try
             {
-                query = query.Where(clause);
-            }
+                var query = this.dbContext.Entry(entity).Collection(propertyExpression).Query();
 
-            if (orderKey != null)
-            {
-                query = query.OrderBy(orderKey);
-            }
+                if (clause != null)
+                {
+                    query = query.Where(clause);
+                }
 
-            if (limit > 0)
-            {
-                query = query.Take(limit);
-            }
+                if (orderKey != null)
+                {
+                    query = query.OrderBy(orderKey);
+                }
 
-            query.ToList();
+                if (limit > 0)
+                {
+                    query = query.Take(limit);
+                }
+
+                _ = query.ToList();
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-loadrelationsortbyascending-end"); }
         }
 
         public void LoadRelationSortByDescending<TProperty, TKey>(T entity, Expression<Func<T, IEnumerable<TProperty>>> propertyExpression, Expression<Func<TProperty, TKey>> orderKey, Expression<Func<TProperty, bool>> clause = null, int limit = 0) where TProperty : class
         {
-            var query = this.dbContext.Entry(entity).Collection(propertyExpression).Query();
-
-            if (clause != null)
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-loadrelationsortbydescending-start");
+            try
             {
-                query = query.Where(clause);
-            }
+                var query = this.dbContext.Entry(entity).Collection(propertyExpression).Query();
 
-            if (orderKey != null)
-            {
-                query = query.OrderByDescending(orderKey);
-            }
+                if (clause != null)
+                {
+                    query = query.Where(clause);
+                }
 
-            if (limit > 0)
-            {
-                query = query.Take(limit);
-            }
+                if (orderKey != null)
+                {
+                    query = query.OrderByDescending(orderKey);
+                }
 
-            query.ToList();
+                if (limit > 0)
+                {
+                    query = query.Take(limit);
+                }
+
+                _ = query.ToList();
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-loadrelationsortbydescending-end"); }
         }
 
         #endregion
 
         #region [ ICommand ]
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.ICommand.Modify(T)"/>
-        /// </summary>
+        public void Add(T entity)
+        {
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-add-start");
+            try
+            {
+                if (entity == null)
+                {
+                    return;
+                }
+
+                var entry = this.dbContext.Entry(entity);
+                if (entry.State != EntityState.Detached)
+                {
+                    entry.State = EntityState.Added;
+                }
+                else
+                {
+                    this.dbEntities.Add(entity);
+                }
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-add-end"); }
+        }
+
+        public void Add(IList<T> entities)
+        {
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-addlist-start");
+            try
+            {
+                if (entities.AnySafe())
+                {
+                    foreach (var entity in entities)
+                    {
+                        this.Add(entity);
+                    }
+                }
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-addlist-end"); }
+        }
+
         public void Modify(T entity)
         {
-            if (entity == null)
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-modify-start");
+            try
             {
-                return;
+                if (entity == null)
+                {
+                    return;
+                }
+
+                var entityDb = this.dbContext.Set<T>().Find(new object[] { entity.EntityKey });
+
+                if (entityDb == null)
+                {
+                    throw new InvalidOperationException("Key value not found.");
+                }
+
+                // properties that can not be changed
+
+                if (entity.GetType().InheritsOrImplements(typeof(IEntityLog<>)) || entity.GetType().InheritsOrImplements(typeof(EntityBaseLog<,,>)))
+                {
+                    TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-modify-log");
+                    var entityLog = (dynamic)entity;
+                    var entityDbLog = (dynamic)entityDb;
+                    entityLog.Created = entityDbLog.Created;
+                    entityLog.CreatedBy = entityDbLog.CreatedBy;
+                    entityLog.Modified = entityDbLog.Modified;
+                    entityLog.ModifiedBy = entityDbLog.ModifiedBy;
+                }
+
+                this.dbContext.Entry(entityDb).CurrentValues.SetValues(entity);
             }
-
-            var entityDb = this.dbContext.Set<T>().Find(new object[] { entity.EntityKey });
-
-            if (entityDb == null)
-            {
-                throw new InvalidOperationException("Key value not found.");
-            }
-
-            // properties that can not be changed
-
-            if (entity.GetType().InheritsOrImplements(typeof(IEntityLog<>)) || entity.GetType().InheritsOrImplements(typeof(EntityBaseLog<,,>)))
-            {
-                var entityLog = (dynamic)entity;
-                var entityDbLog = (dynamic)entityDb;
-                entityLog.Created = entityDbLog.Created;
-                entityLog.CreatedBy = entityDbLog.CreatedBy;
-                entityLog.Modified = entityDbLog.Modified;
-                entityLog.ModifiedBy = entityDbLog.ModifiedBy;
-            }
-
-            this.dbContext.Entry(entityDb).CurrentValues.SetValues(entity);
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-modify-end"); }
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.ICommand.Modify(List)"/>
-        /// </summary>
         public void Modify(IList<T> entities)
         {
-            if (entities.AnyOrNotNull())
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-modifylist-start");
+            try
             {
-                foreach (var entity in entities)
+                if (entities.AnySafe())
                 {
-                    this.Modify(entity);
+                    foreach (var entity in entities)
+                    {
+                        this.Modify(entity);
+                    }
                 }
             }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-modifylist-end"); }
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.ICommand.Remove(T)"/>
-        /// </summary>
         public void Remove(T entity)
         {
-            if (entity == null)
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-remove-start");
+            try
             {
-                return;
-            }
+                if (entity == null)
+                {
+                    return;
+                }
 
-            if (entity.GetType().InheritsOrImplements(typeof(IEntityLog<>)) || entity.GetType().InheritsOrImplements(typeof(EntityBaseLog<,,>)))
-            {
-                var entityLog = (dynamic)entity;
-                entityLog.Removed = TimeZoneHelper.GetTimeZoneNow();
-                entityLog.RemovedBy = (dynamic)EntityLogBy;
-                this.Modify(entity);
+                if (entity.GetType().InheritsOrImplements(typeof(IEntityLog<>)) || entity.GetType().InheritsOrImplements(typeof(EntityBaseLog<,,>)))
+                {
+                    TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-remove-log");
+                    var entityLog = (dynamic)entity;
+                    entityLog.Removed = TimeZoneHelper.GetTimeZoneNow();
+                    entityLog.RemovedBy = (dynamic)EntityLogBy;
+                    this.Modify(entity);
+                }
+                else
+                {
+                    this.ForceRemove(entity);
+                }
             }
-            else
-            {
-                this.ForceRemove(entity);
-            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-remove-end"); }
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.ICommand.Remove(List)"/>
-        /// </summary>
         public void Remove(IList<T> entities)
         {
-            if (entities.AnyOrNotNull())
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-removelist-start");
+            try
             {
-                foreach (var entity in entities)
+                if (entities.AnySafe())
                 {
-                    this.Remove(entity);
+                    foreach (var entity in entities)
+                    {
+                        this.Remove(entity);
+                    }
                 }
             }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-removelist-end"); }
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.ICommand.Remove(int)"/>
-        /// </summary>
         public void RemoveById(object id)
         {
-            var entity = this.GetById(id);
-            if (entity == null)
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-removebyid-start");
+            try
             {
-                return;
-            }
+                var entity = this.GetById(id);
+                if (entity == null)
+                {
+                    return;
+                }
 
-            this.Remove(entity);
+                this.Remove(entity);
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-removebyid-end"); }
         }
 
-        /// <summary>
-        ///  <see cref="Mvp24Hours.Core.Contract.Data.ICommand.Remove(int)"/>
-        /// </summary>
         public void RemoveById(IList<object> ids)
         {
-            if (ids.AnyOrNotNull())
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-removebyidlist-start");
+            try
             {
-                foreach (var id in ids)
+                if (ids.AnySafe())
                 {
-                    RemoveById(id);
+                    foreach (var id in ids)
+                    {
+                        RemoveById(id);
+                    }
                 }
             }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-removebyidlist-end"); }
         }
 
         /// <summary>
@@ -363,21 +453,26 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
         /// </summary>
         private void ForceRemove(T entity)
         {
-            if (entity == null)
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-forceremove-start");
+            try
             {
-                return;
-            }
+                if (entity == null)
+                {
+                    return;
+                }
 
-            var entry = this.dbContext.Entry(entity);
-            if (entry.State != EntityState.Deleted)
-            {
-                entry.State = EntityState.Deleted;
+                var entry = this.dbContext.Entry(entity);
+                if (entry.State != EntityState.Deleted)
+                {
+                    entry.State = EntityState.Deleted;
+                }
+                else
+                {
+                    this.dbEntities.Attach(entity);
+                    this.dbEntities.Remove(entity);
+                }
             }
-            else
-            {
-                this.dbEntities.Attach(entity);
-                this.dbEntities.Remove(entity);
-            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repository-forceremove-end"); }
         }
 
         #endregion

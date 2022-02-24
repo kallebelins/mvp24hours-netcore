@@ -3,10 +3,8 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
-using Mvp24Hours.Core.ValueObjects.Infrastructure;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -36,17 +34,38 @@ namespace Mvp24Hours.Extensions
         }
 
         /// <summary>
-        /// Encapsulates notifications for business
+        /// Encapsulates object for business
         /// </summary>
-        public static IBusinessResult<T> ToBusiness<T>(this IReadOnlyCollection<Notification> notifications, IMessageResult defaultMessage = null, string tokenDefault = null)
+        public static IBusinessResult<T> ToBusiness<T>(this IMessageResult messageResult, IMessageResult defaultMessage = null, string tokenDefault = null)
+        {
+            if (messageResult != null || defaultMessage != null)
+            {
+                return ToBusiness<T>(default, new List<IMessageResult> { messageResult }, defaultMessage, tokenDefault);
+            }
+            return new BusinessResult<T>(token: tokenDefault);
+        }
+
+        /// <summary>
+        /// Encapsulates object for business
+        /// </summary>
+        public static IBusinessResult<T> ToBusiness<T>(this IList<IMessageResult> messageResult, IMessageResult defaultMessage = null, string tokenDefault = null)
+        {
+            if (messageResult != null || defaultMessage != null)
+            {
+                return ToBusiness<T>(default, messageResult, defaultMessage, tokenDefault);
+            }
+            return new BusinessResult<T>(token: tokenDefault);
+        }
+
+        /// <summary>
+        /// Encapsulates object for business
+        /// </summary>
+        public static IBusinessResult<T> ToBusiness<T>(this T value, IMessageResult messageResult, IMessageResult defaultMessage = null, string tokenDefault = null)
         {
             var messages = new List<IMessageResult>();
-            if (notifications.AnyOrNotNull())
+            if (messageResult != null)
             {
-                foreach (var item in notifications)
-                {
-                    messages.Add(new MessageResult(item.Key, item.Message, item.Type));
-                }
+                messages.Add(messageResult);
             }
             else if (defaultMessage != null)
             {
@@ -55,80 +74,30 @@ namespace Mvp24Hours.Extensions
 
             return new BusinessResult<T>(
                 token: tokenDefault,
-                data: default,
+                data: value,
                 messages: new ReadOnlyCollection<IMessageResult>(messages)
             );
         }
 
         /// <summary>
-        /// Encapsulates notifications for business
+        /// Encapsulates object for business
         /// </summary>
-        public static IBusinessResult<T> ToBusiness<T>(this INotificationContext notificationContext, IMessageResult defaultMessage = null, string tokenDefault = null)
+        public static IBusinessResult<T> ToBusiness<T>(this T value, IList<IMessageResult> messageResult = null, IMessageResult defaultMessage = null, string tokenDefault = null)
         {
             var messages = new List<IMessageResult>();
-            if (notificationContext != null && notificationContext.HasNotifications)
+            if (messageResult.AnySafe())
             {
-                foreach (var item in notificationContext.Notifications)
-                {
-                    messages.Add(new MessageResult(item.Key, item.Message, item.Type));
-                }
+                messages.AddRange(messageResult);
             }
             else if (defaultMessage != null)
             {
                 messages.Add(defaultMessage);
             }
+
             return new BusinessResult<T>(
                 token: tokenDefault,
-                data: default,
+                data: value,
                 messages: new ReadOnlyCollection<IMessageResult>(messages)
-            );
-        }
-
-        /// <summary>
-        /// Encapsulates object for business
-        /// </summary>
-        public static IBusinessResult<T> ToBusiness<T>(this IMessageResult messageResult, string tokenDefault = null)
-        {
-            if (messageResult != null)
-            {
-                return ToBusiness<T>(default, new List<IMessageResult> { messageResult }, tokenDefault);
-            }
-            return new BusinessResult<T>(token: tokenDefault);
-        }
-
-        /// <summary>
-        /// Encapsulates object for business
-        /// </summary>
-        public static IBusinessResult<T> ToBusiness<T>(this IList<IMessageResult> messageResult, string tokenDefault = null)
-        {
-            if (messageResult != null)
-            {
-                return ToBusiness<T>(default, messageResult, tokenDefault);
-            }
-            return new BusinessResult<T>(token: tokenDefault);
-        }
-
-        /// <summary>
-        /// Encapsulates object for business
-        /// </summary>
-        public static IBusinessResult<T> ToBusiness<T>(this T value, IMessageResult messageResult, string tokenDefault = null)
-        {
-            return new BusinessResult<T>(
-                token: tokenDefault,
-                data: value,
-                messages: new ReadOnlyCollection<IMessageResult>(new List<IMessageResult>() { messageResult })
-            );
-        }
-
-        /// <summary>
-        /// Encapsulates object for business
-        /// </summary>
-        public static IBusinessResult<T> ToBusiness<T>(this T value, IList<IMessageResult> messageResult = null, string tokenDefault = null)
-        {
-            return new BusinessResult<T>(
-                token: tokenDefault,
-                data: value,
-                messages: new ReadOnlyCollection<IMessageResult>(messageResult?.ToList() ?? new List<IMessageResult>())
             );
         }
 
@@ -141,7 +110,7 @@ namespace Mvp24Hours.Extensions
 
             if (value.Data.IsList())
             {
-                return (value.Data as IEnumerable<object>).AnyOrNotNull();
+                return (value.Data as IEnumerable<object>).AnySafe();
             }
 
             return true;
@@ -184,12 +153,9 @@ namespace Mvp24Hours.Extensions
 
         public static bool HasDataCount<T>(this IBusinessResult<T> value, int count)
         {
-            if (value.HasData())
+            if (value.HasData() && value.Data.IsList())
             {
-                if (value.Data.IsList())
-                {
-                    return (value.Data as IEnumerable<object>).Count() == count;
-                }
+                return (value.Data as IEnumerable<object>).Count() == count;
             }
             return false;
         }

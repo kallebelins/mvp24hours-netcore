@@ -21,8 +21,6 @@ namespace Mvp24Hours.Extensions
             Func<IServiceProvider, TDbContext> dbFactory = null,
             ServiceLifetime lifetime = ServiceLifetime.Scoped) where TDbContext : DbContext
         {
-            services.AddMvp24HoursLogging();
-
             if (dbFactory != null)
             {
                 services.Add(new ServiceDescriptor(typeof(DbContext), dbFactory, lifetime));
@@ -44,9 +42,6 @@ namespace Mvp24Hours.Extensions
             Type unitOfWork = null,
             ServiceLifetime lifetime = ServiceLifetime.Scoped)
         {
-            services.AddMvp24HoursLogging();
-            services.AddMvp24HoursNotification();
-
             if (options != null)
             {
                 services.Configure(options);
@@ -86,9 +81,6 @@ namespace Mvp24Hours.Extensions
             Type unitOfWorkAsync = null,
             ServiceLifetime lifetime = ServiceLifetime.Scoped)
         {
-            services.AddMvp24HoursLogging();
-            services.AddMvp24HoursNotification();
-
             if (options != null)
             {
                 services.Configure(options);

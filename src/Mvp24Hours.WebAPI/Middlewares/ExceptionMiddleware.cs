@@ -5,7 +5,6 @@
 //=====================================================================================
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
-using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Core.DTOs;
 using Mvp24Hours.Core.Enums;
 using Mvp24Hours.Extensions;
@@ -15,19 +14,17 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Mvp24Hours.Infrastructure.Middlewares
+namespace Mvp24Hours.WebAPI.Middlewares
 {
     public class ExceptionMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly ILoggingService _logger;
         private readonly ExceptionOptions options;
 
-        public ExceptionMiddleware(RequestDelegate next, ILoggingService logger, IOptions<ExceptionOptions> options)
+        public ExceptionMiddleware(RequestDelegate next, IOptions<ExceptionOptions> options)
         {
             _next = next;
-            _logger = logger;
-            this.options = options?.Value ?? throw new System.ArgumentNullException(nameof(options), "[ExceptionMiddleware] Options is required. Check: services.AddMvp24HoursWebExceptions().");
+            this.options = options?.Value ?? throw new ArgumentNullException(nameof(options), "[ExceptionMiddleware] Options is required. Check: services.AddMvp24HoursWebExceptions().");
         }
 
         public async Task InvokeAsync(HttpContext httpContext)
@@ -41,7 +38,6 @@ namespace Mvp24Hours.Infrastructure.Middlewares
             }
             catch (Exception ex)
             {
-                _logger.Error(ex);
                 if (!httpContext.Response.HasStarted)
                 {
                     await HandleExceptionAsync(httpContext, ex);

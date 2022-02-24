@@ -4,6 +4,8 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Microsoft.Extensions.Caching.Distributed;
+using Mvp24Hours.Core.Enums.Infrastructure;
+using Mvp24Hours.Helpers;
 using Mvp24Hours.Infrastructure.Caching.Helpers;
 using System;
 
@@ -13,20 +15,30 @@ namespace Mvp24Hours.Extensions
     {
         public static void SetString(this IDistributedCache cache, string key, string value, int minutes)
         {
-            if (cache == null || !key.HasValue() || !value.HasValue())
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-cacheextensions-setstring-start");
+            try
             {
-                return;
+                if (cache == null || !key.HasValue() || !value.HasValue())
+                {
+                    return;
+                }
+                cache.SetString(key, value, DateTimeOffset.Now.AddMinutes(minutes));
             }
-            cache.SetString(key, value, DateTimeOffset.Now.AddMinutes(minutes));
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-cacheextensions-setstring-end"); }
         }
 
         public static void SetString(this IDistributedCache cache, string key, string value, DateTimeOffset time)
         {
-            if (cache == null || !key.HasValue() || !value.HasValue())
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-cacheextensions-setstring-start");
+            try
             {
-                return;
+                if (cache == null || !key.HasValue() || !value.HasValue())
+                {
+                    return;
+                }
+                cache.SetString(key, value, CacheConfigHelper.GetCacheOptions(time));
             }
-            cache.SetString(key, value, CacheConfigHelper.GetCacheOptions(time));
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-cacheextensions-setstring-start"); }
         }
     }
 }

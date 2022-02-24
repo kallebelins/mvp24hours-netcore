@@ -5,6 +5,8 @@
 //=====================================================================================
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
+using Mvp24Hours.Core.Enums;
+using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Helpers;
 using Mvp24Hours.Infrastructure.Pipe;
 using System.Collections.Generic;
@@ -27,22 +29,17 @@ namespace Mvp24Hours.Extensions
         /// <summary>
         /// Encapsulates object for pipeline message
         /// </summary>
-        public static IPipelineMessage ToMessageWithToken<T>(this T value, string tokenDefault)
-        {
-            IPipelineMessage message = new PipelineMessage(tokenDefault);
-            if (value != null)
-            {
-                message.AddContent(value);
-            }
-            return message;
-        }
-
-        /// <summary>
-        /// Encapsulates object for pipeline message
-        /// </summary>
         public static IPipelineMessage ToMessage<T>(this T value, string keyContent)
         {
             return ToMessageWithToken<T>(value, keyContent, null);
+        }
+
+        /// <summary>
+        /// Transform business object to pipeline message
+        /// </summary>
+        public static IPipelineMessage ToMessage<T>(IBusinessResult<T> bo)
+        {
+            return ToMessageWithToken<T>(bo, null);
         }
 
         /// <summary>
@@ -59,11 +56,16 @@ namespace Mvp24Hours.Extensions
         }
 
         /// <summary>
-        /// Transform business object to pipeline message
+        /// Encapsulates object for pipeline message
         /// </summary>
-        public static IPipelineMessage ToMessage<T>(IBusinessResult<T> bo)
+        public static IPipelineMessage ToMessageWithToken<T>(this T value, string tokenDefault)
         {
-            return ToMessageWithToken<T>(bo, null);
+            IPipelineMessage message = new PipelineMessage(tokenDefault);
+            if (value != null)
+            {
+                message.AddContent(value);
+            }
+            return message;
         }
 
         /// <summary>
@@ -72,21 +74,18 @@ namespace Mvp24Hours.Extensions
         public static IPipelineMessage ToMessageWithToken<T>(IBusinessResult<T> bo, string tokenDefault)
         {
             IPipelineMessage message = new PipelineMessage(bo?.Token ?? tokenDefault);
-            if (bo != null)
+            if (bo != null && bo.Data != null)
             {
-                if (bo.Data != null)
+                if (bo.Data.IsList())
                 {
-                    if (bo.Data.IsList())
+                    foreach (var item in bo.Data as IEnumerable<object>)
                     {
-                        foreach (var item in bo.Data as IEnumerable<object>)
-                        {
-                            message.AddContent(item);
-                        }
+                        message.AddContent(item);
                     }
-                    else
-                    {
-                        message.AddContent(bo.Data);
-                    }
+                }
+                else
+                {
+                    message.AddContent(bo.Data);
                 }
             }
             return message;
@@ -106,24 +105,48 @@ namespace Mvp24Hours.Extensions
         public static IPipelineMessage ToMessageCloneWithToken<T>(IBusinessResult<T> bo, string tokenDefault)
         {
             IPipelineMessage message = new PipelineMessage(bo?.Token ?? tokenDefault);
-            if (bo != null)
+            if (bo != null && bo.Data != null)
             {
-                if (bo.Data != null)
+                if (bo.Data.IsList())
                 {
-                    if (bo.Data.IsList())
+                    foreach (var item in bo.Data as IEnumerable<object>)
                     {
-                        foreach (var item in bo.Data as IEnumerable<object>)
-                        {
-                            message.AddContent(ObjectHelper.Clone(item));
-                        }
+                        message.AddContent(ObjectHelper.Clone(item));
                     }
-                    else
-                    {
-                        message.AddContent(ObjectHelper.Clone(bo.Data));
-                    }
+                }
+                else
+                {
+                    message.AddContent(ObjectHelper.Clone(bo.Data));
                 }
             }
             return message;
         }
+
+        /// <summary>
+        /// Add message to a message list
+        /// </summary>
+        public static IList<IMessageResult> AddMessage(this IList<IMessageResult> messages, string key, string message, MessageType messageType)
+        {
+            return messages.AddMessage(new MessageResult(key, message, messageType));
+        }
+
+        /// <summary>
+        /// Add message to a message list
+        /// </summary>
+        public static IList<IMessageResult> AddMessage(this IList<IMessageResult> messages, string message, MessageType messageType)
+        {
+            return messages.AddMessage(new MessageResult(message, messageType));
+        }
+
+        /// <summary>
+        /// Add message to a message list
+        /// </summary>
+        public static IList<IMessageResult> AddMessage(this IList<IMessageResult> messages, IMessageResult message)
+        {
+            if (messages == null || message == null) return messages;
+            messages.Add(message);
+            return messages;
+        }
+
     }
 }

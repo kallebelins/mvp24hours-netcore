@@ -1,13 +1,13 @@
-﻿//=====================================================================================
+//=====================================================================================
 // Developed by Kallebe Lins (https://github.com/kallebelins)
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 
-namespace Mvp24Hours.WebAPI.Configuration
+namespace Mvp24Hours.Core.Contract.Infrastructure.Logging
 {
-    public class HateoasFilterOptions
+    public interface ITelemetryService
     {
-        public bool Enabled { get; set; }
+        void Execute(string eventName, params object[] args);
     }
 }

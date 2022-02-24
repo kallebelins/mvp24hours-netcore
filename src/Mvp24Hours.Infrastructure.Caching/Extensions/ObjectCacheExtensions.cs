@@ -4,6 +4,8 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Microsoft.Extensions.Caching.Distributed;
+using Mvp24Hours.Core.Enums.Infrastructure;
+using Mvp24Hours.Helpers;
 using Newtonsoft.Json;
 using System;
 
@@ -14,48 +16,68 @@ namespace Mvp24Hours.Extensions
         public static T GetObject<T>(this IDistributedCache cache, string key, JsonSerializerSettings jsonSerializerSettings = null)
             where T : class
         {
-            if (cache == null || !key.HasValue())
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-objectcacheextensions-getobject-start");
+            try
             {
-                return default;
+                if (cache == null || !key.HasValue())
+                {
+                    return default;
+                }
+                string value = cache.GetString(key);
+                if (!value.HasValue())
+                {
+                    return default;
+                }
+                return value.ToDeserialize<T>(jsonSerializerSettings);
             }
-            string value = cache.GetString(key);
-            if (!value.HasValue())
-            {
-                return default;
-            }
-            return value.ToDeserialize<T>(jsonSerializerSettings);
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-objectcacheextensions-getobject-end"); }
         }
 
         public static void SetObject<T>(this IDistributedCache cache, string key, T value, JsonSerializerSettings jsonSerializerSettings = null)
             where T : class
         {
-            if (cache == null || !key.HasValue() || value == null)
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-objectcacheextensions-setobject-start");
+            try
             {
-                return;
+                if (cache == null || !key.HasValue() || value == null)
+                {
+                    return;
+                }
+                string result = value.ToSerialize(jsonSerializerSettings);
+                cache.SetString(key, result);
             }
-            string result = value.ToSerialize(jsonSerializerSettings);
-            cache.SetString(key, result);
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-objectcacheextensions-setobject-end"); }
         }
 
         public static void SetObject<T>(this IDistributedCache cache, string key, T value, int minutes, JsonSerializerSettings jsonSerializerSettings = null)
             where T : class
         {
-            if (cache == null || !key.HasValue() || value == null)
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-objectcacheextensions-setobject-start");
+            try
             {
-                return;
+                if (cache == null || !key.HasValue() || value == null)
+                {
+                    return;
+                }
+                string result = value.ToSerialize(jsonSerializerSettings);
+                cache.SetString(key, result, minutes);
             }
-            string result = value.ToSerialize(jsonSerializerSettings);
-            cache.SetString(key, result, minutes);
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-objectcacheextensions-setobject-end"); }
         }
 
         public static void SetObject(this IDistributedCache cache, string key, object value, DateTimeOffset time, JsonSerializerSettings jsonSerializerSettings = null)
         {
-            if (cache == null || !key.HasValue() || value == null)
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-objectcacheextensions-setobject-start");
+            try
             {
-                return;
+                if (cache == null || !key.HasValue() || value == null)
+                {
+                    return;
+                }
+                string result = value.ToSerialize(jsonSerializerSettings);
+                cache.SetString(key, result, time);
             }
-            string result = value.ToSerialize(jsonSerializerSettings);
-            cache.SetString(key, result, time);
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-objectcacheextensions-setobject-end"); }
         }
     }
 }

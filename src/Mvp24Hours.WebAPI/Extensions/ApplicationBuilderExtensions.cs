@@ -6,9 +6,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Mvp24Hours.Helpers;
-using Mvp24Hours.Infrastructure.Middlewares;
 using Mvp24Hours.WebAPI.Middlewares;
 using System;
 
@@ -69,9 +67,6 @@ namespace Mvp24Hours.WebAPI.Extensions
         {
             IServiceProvider service = app.ApplicationServices;
 
-            service.GetService<IHostEnvironment>()
-                .AddEnvironment();
-
             service.GetService<IHttpContextAccessor>()
                 .AddContext();
 
@@ -88,12 +83,6 @@ namespace Mvp24Hours.WebAPI.Extensions
         {
             HttpContextHelper.SetContext(accessor);
             return accessor;
-        }
-
-        private static IHostEnvironment AddEnvironment(this IHostEnvironment env)
-        {
-            ConfigurationHelper.SetEnvironment(env);
-            return env;
         }
     }
 }

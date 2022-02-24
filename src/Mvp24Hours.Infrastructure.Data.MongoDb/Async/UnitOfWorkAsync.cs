@@ -6,7 +6,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Contract.Domain.Entity;
-using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
+using Mvp24Hours.Core.Enums.Infrastructure;
+using Mvp24Hours.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -22,20 +23,18 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
     {
         #region [ Ctor ]
 
-        public UnitOfWorkAsync(Mvp24HoursContext dbContext, INotificationContext notificationContext, Dictionary<Type, object> _repositories)
+        public UnitOfWorkAsync(Mvp24HoursContext dbContext, Dictionary<Type, object> _repositories)
         {
             this.DbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-            this.NotificationContext = notificationContext ?? throw new ArgumentNullException(nameof(notificationContext));
             this.repositories = _repositories ?? throw new ArgumentNullException(nameof(_repositories));
 
             DbContext.StartSessionAsync().Wait();
         }
 
         [ActivatorUtilitiesConstructor]
-        public UnitOfWorkAsync(Mvp24HoursContext _dbContext, INotificationContext _notificationContext, IServiceProvider _serviceProvider)
+        public UnitOfWorkAsync(Mvp24HoursContext _dbContext, IServiceProvider _serviceProvider)
         {
             this.DbContext = _dbContext ?? throw new ArgumentNullException(nameof(_dbContext));
-            this.NotificationContext = _notificationContext ?? throw new ArgumentNullException(nameof(_notificationContext));
             this.serviceProvider = _serviceProvider ?? throw new ArgumentNullException(nameof(_serviceProvider));
             repositories = new Dictionary<Type, object>();
 
@@ -46,11 +45,10 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
 
         #region [ Ctor ]
 
-        public UnitOfWorkAsync(Mvp24HoursContext dbContext, INotificationContext notificationContext)
+        public UnitOfWorkAsync(Mvp24HoursContext dbContext)
         {
             this.DbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             repositories = new Dictionary<Type, object>();
-            this.NotificationContext = notificationContext ?? throw new ArgumentNullException(nameof(notificationContext));
 
             DbContext.StartSessionAsync().Wait();
         }
@@ -62,7 +60,6 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         private readonly Dictionary<Type, object> repositories;
 
         protected Mvp24HoursContext DbContext { get; private set; }
-        protected INotificationContext NotificationContext { get; private set; }
         private readonly IServiceProvider serviceProvider;
 
         /// <summary>
@@ -112,13 +109,21 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         /// </summary>
         public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            if (NotificationContext == null || !NotificationContext.HasErrorNotifications)
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-unitofwork-savechangesasync-start");
+            try
             {
                 await DbContext.SaveChangesAsync(cancellationToken);
                 return 1;
             }
-            await RollbackAsync();
-            return 0;
+            catch (Exception)
+            {
+                await RollbackAsync();
+                return 0;
+            }
+            finally
+            {
+                TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-unitofwork-savechangesasync-end");
+            }
         }
 
         /// <summary>
@@ -126,7 +131,12 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         /// </summary>
         public async Task RollbackAsync()
         {
-            await DbContext.RollbackAsync();
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-unitofwork-rollbackasync-start");
+            try
+            {
+                await DbContext.RollbackAsync();
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-unitofwork-rollbackasync-end"); }
         }
 
         #endregion

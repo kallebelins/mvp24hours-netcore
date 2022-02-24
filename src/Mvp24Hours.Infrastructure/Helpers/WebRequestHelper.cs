@@ -3,11 +3,8 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 using Mvp24Hours.Extensions;
-using Mvp24Hours.Infrastructure.Logging;
 using Newtonsoft.Json;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -24,10 +21,6 @@ namespace Mvp24Hours.Helpers
     /// </summary>
     public static class WebRequestHelper
     {
-        private static readonly ILoggingService _logger;
-
-        static WebRequestHelper() => _logger = LoggingService.GetLoggingService();
-
         /// <summary>
         /// 
         /// </summary>
@@ -159,93 +152,82 @@ namespace Mvp24Hours.Helpers
         private static async Task<string> SendAsync(string url, Hashtable header, ICredentials credentials, string method, string data)
         {
             string result = string.Empty;
-            try
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+                | SecurityProtocolType.Tls13;
+            if (EncodingRequest == null)
             {
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11
-                    | SecurityProtocolType.Tls12
-                    | SecurityProtocolType.Tls13;
-                if (EncodingRequest == null)
-                {
-                    EncodingRequest = Encoding.UTF8;
-                }
+                EncodingRequest = Encoding.UTF8;
+            }
 
-                HttpWebRequest requisicao = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(url);
-                requisicao.Method = method;
-                requisicao.ContentType = "application/json; charset=utf-8";
-                requisicao.Headers.Add("Accept-Encoding", "gzip,deflate");
-                if (credentials != null)
-                {
-                    requisicao.Credentials = credentials;
-                }
+            HttpWebRequest requisicao = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(url);
+            requisicao.Method = method;
+            requisicao.ContentType = "application/json; charset=utf-8";
+            requisicao.Headers.Add("Accept-Encoding", "gzip,deflate");
+            if (credentials != null)
+            {
+                requisicao.Credentials = credentials;
+            }
 
-                requisicao.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
-                if (header != null)
+            requisicao.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
+            if (header != null)
+            {
+                foreach (DictionaryEntry hash in header)
                 {
-                    foreach (DictionaryEntry hash in header)
+                    if (hash.Key.ToString() == "ContentType")
                     {
-                        if (hash.Key.ToString() == "ContentType")
-                        {
-                            requisicao.ContentType = hash.Value.ToString();
-                            continue;
-                        }
-                        requisicao.Headers.Add(hash.Key.ToString(), hash.Value.ToString());
+                        requisicao.ContentType = hash.Value.ToString();
+                        continue;
                     }
-                }
-                requisicao.Timeout = 300000;
-                bool hasData = (method == "POST" || method == "PUT");
-                byte[] bytes = null;
-                if (hasData)
-                {
-                    if (data == null)
-                    {
-                        data = "";
-                    }
-
-                    string postData = data;
-                    bytes = EncodingRequest.GetBytes(postData);
-                    requisicao.ContentLength = bytes.Length;
-                }
-
-                try
-                {
-                    if (!hasData)
-                    {
-                        using var response = requisicao.GetResponse();
-                        using var content = response.GetResponseStream();
-                        using var reader = new StreamReader(content, EncodingRequest);
-                        result = await reader.ReadToEndAsync();
-                    }
-                    else
-                    {
-                        using var reqstream = requisicao.GetRequestStream();
-                        reqstream.Write(bytes, 0, bytes.Length);
-                        var httpResponse = (HttpWebResponse)requisicao.GetResponse();
-                        using var streamReader = new StreamReader(httpResponse.GetResponseStream(), EncodingRequest);
-                        result = await streamReader.ReadToEndAsync();
-                    }
-                }
-                catch (WebException we)
-                {
-                    _logger.Error(we);
-                    if (we.Response != null)
-                    {
-                        using var stream = we.Response.GetResponseStream();
-                        using var reader = new StreamReader(stream);
-                        return reader.ReadToEnd();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    requisicao.Headers.Add(hash.Key.ToString(), hash.Value.ToString());
                 }
             }
-            catch (Exception ex)
+            requisicao.Timeout = 300000;
+            bool hasData = (method == "POST" || method == "PUT");
+            byte[] bytes = null;
+            if (hasData)
             {
-                _logger.Error(ex);
-                throw;
+                if (data == null)
+                {
+                    data = "";
+                }
+
+                string postData = data;
+                bytes = EncodingRequest.GetBytes(postData);
+                requisicao.ContentLength = bytes.Length;
+            }
+
+            try
+            {
+                if (!hasData)
+                {
+                    using var response = requisicao.GetResponse();
+                    using var content = response.GetResponseStream();
+                    using var reader = new StreamReader(content, EncodingRequest);
+                    result = await reader.ReadToEndAsync();
+                }
+                else
+                {
+                    using var reqstream = requisicao.GetRequestStream();
+                    reqstream.Write(bytes, 0, bytes.Length);
+                    var httpResponse = (HttpWebResponse)requisicao.GetResponse();
+                    using var streamReader = new StreamReader(httpResponse.GetResponseStream(), EncodingRequest);
+                    result = await streamReader.ReadToEndAsync();
+                }
+            }
+            catch (WebException we)
+            {
+                if (we.Response != null)
+                {
+                    using var stream = we.Response.GetResponseStream();
+                    using var reader = new StreamReader(stream);
+                    return reader.ReadToEnd();
+                }
+                else
+                {
+                    throw;
+                }
             }
             return result;
         }
-
     }
 }

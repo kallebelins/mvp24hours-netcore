@@ -10,9 +10,9 @@
     <Company>Kallebe Lins</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>3.2.171</Version>
-    <AssemblyVersion>3.2.17.1</AssemblyVersion>
-    <FileVersion>3.2.17.1</FileVersion>
+    <Version>3.2.241</Version>
+    <AssemblyVersion>3.2.24.1</AssemblyVersion>
+    <FileVersion>3.2.24.1</FileVersion>
     <RepositoryUrl>https://github.com/kallebelins/mvp24hours-netcore</RepositoryUrl>
   </PropertyGroup>
 
@@ -25,10 +25,10 @@
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="7.0.2" />
+	  <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="5.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mvp24Hours.Application\Mvp24Hours.Application.csproj" />
     <ProjectReference Include="..\Mvp24Hours.Core\Mvp24Hours.Core.csproj" />
     <ProjectReference Include="..\Mvp24Hours.Infrastructure\Mvp24Hours.Infrastructure.csproj" />
   </ItemGroup>

@@ -6,14 +6,13 @@
 using Mvp24Hours.Application.Logic;
 using Mvp24Hours.Application.MySql.Test.Support.Entities;
 using Mvp24Hours.Core.Contract.Data;
-using Mvp24Hours.Core.Contract.Infrastructure.Logging;
 
 namespace Mvp24Hours.Application.MySql.Test.Support.Services
 {
     public class CustomerService : RepositoryService<Customer, IUnitOfWork>
     {
-        public CustomerService(IUnitOfWork unitOfWork, ILoggingService logging)
-            : base(unitOfWork, logging) { }
+        public CustomerService(IUnitOfWork unitOfWork)
+            : base(unitOfWork) { }
 
         // custom methods here
     }

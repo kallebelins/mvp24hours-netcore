@@ -4,6 +4,8 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Microsoft.Extensions.Caching.Distributed;
+using Mvp24Hours.Core.Enums.Infrastructure;
+using Mvp24Hours.Helpers;
 using Mvp24Hours.Infrastructure.Caching.Helpers;
 using System;
 using System.Threading;
@@ -15,20 +17,30 @@ namespace Mvp24Hours.Extensions
     {
         public static async Task SetStringAsync(this IDistributedCache cache, string key, string value, int minutes, CancellationToken token = default)
         {
-            if (cache == null || !key.HasValue() || !value.HasValue())
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-cacheasyncextensions-setstringasync-start");
+            try
             {
-                return;
+                if (cache == null || !key.HasValue() || !value.HasValue())
+                {
+                    return;
+                }
+                await cache.SetStringAsync(key, value, DateTimeOffset.Now.AddMinutes(minutes), token);
             }
-            await cache.SetStringAsync(key, value, DateTimeOffset.Now.AddMinutes(minutes), token);
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-cacheasyncextensions-setstringasync-end"); }
         }
 
         public static async Task SetStringAsync(this IDistributedCache cache, string key, string value, DateTimeOffset time, CancellationToken token = default)
         {
-            if (cache == null || !key.HasValue() || !value.HasValue())
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-cacheasyncextensions-setstringasync-start");
+            try
             {
-                return;
+                if (cache == null || !key.HasValue() || !value.HasValue())
+                {
+                    return;
+                }
+                await cache.SetStringAsync(key, value, CacheConfigHelper.GetCacheOptions(time), token);
             }
-            await cache.SetStringAsync(key, value, CacheConfigHelper.GetCacheOptions(time), token);
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-cacheasyncextensions-setstringasync-end"); }
         }
     }
 }

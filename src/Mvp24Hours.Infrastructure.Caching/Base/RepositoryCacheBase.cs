@@ -21,5 +21,4 @@ namespace Mvp24Hours.Infrastructure.Caching.Base
 
         protected virtual IDistributedCache Cache => _cache;
     }
-
 }

@@ -6,7 +6,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Mvp24Hours.Core.Contract.Application.Pipe.Async;
-using Mvp24Hours.Core.Contract.Infrastructure.Contexts;
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Core.Enums;
 using Mvp24Hours.Core.Enums.Infrastructure;
@@ -28,57 +27,36 @@ namespace Mvp24Hours.Infrastructure.Pipe
     public class PipelineAsync : PipelineBase, IPipelineAsync
     {
         #region [ Ctor ]
-        public PipelineAsync(INotificationContext notificationContext)
-            : this(notificationContext, false) { }
+        public PipelineAsync()
+            : this(false) { }
 
-        public PipelineAsync(INotificationContext notificationContext, bool isBreakOnFail)
-            : base(notificationContext, isBreakOnFail)
+        public PipelineAsync(bool isBreakOnFail)
+            : base(isBreakOnFail)
         {
-            Init(
-                out operations,
-                out dictionaryInterceptors,
-                out preCustomInterceptors,
-                out postCustomInterceptors,
-                out dictionaryEventInterceptors,
-                out preEventCustomInterceptors,
-                out postEventCustomInterceptors
-            );
+            operations = new List<IOperationAsync>();
+
+            preCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, IOperationAsync>>();
+            postCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, IOperationAsync>>();
+            dictionaryInterceptors = new Dictionary<PipelineInterceptorType, IList<IOperationAsync>>();
+
+            dictionaryEventInterceptors = new Dictionary<PipelineInterceptorType, IList<EventHandler<IPipelineMessage, EventArgs>>>();
+            preEventCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>>();
+            postEventCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>>();
         }
 
         [ActivatorUtilitiesConstructor]
-        public PipelineAsync(INotificationContext notificationContext, IOptions<PipelineAsyncOptions> options)
-            : base(notificationContext, options?.Value?.IsBreakOnFail ?? false)
+        public PipelineAsync(IOptions<PipelineAsyncOptions> options)
+            : base(options?.Value?.IsBreakOnFail ?? false)
         {
-            Init(
-                out operations,
-                out dictionaryInterceptors,
-                out preCustomInterceptors,
-                out postCustomInterceptors,
-                out dictionaryEventInterceptors,
-                out preEventCustomInterceptors,
-                out postEventCustomInterceptors
-            );
-        }
+            operations = new List<IOperationAsync>();
 
-        protected virtual void Init(
-            out IList<IOperationAsync> _operations,
-            out IDictionary<PipelineInterceptorType, IList<IOperationAsync>> _dictionaryInterceptors,
-            out IList<KeyValuePair<Func<IPipelineMessage, bool>, IOperationAsync>> _preCustomInterceptors,
-            out IList<KeyValuePair<Func<IPipelineMessage, bool>, IOperationAsync>> _postCustomInterceptors,
-            out IDictionary<PipelineInterceptorType, IList<EventHandler<IPipelineMessage, EventArgs>>> _dictionaryEventInterceptors,
-            out IList<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>> _preEventCustomInterceptors,
-            out IList<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>> _postEventCustomInterceptors
-        )
-        {
-            _operations = new List<IOperationAsync>();
+            preCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, IOperationAsync>>();
+            postCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, IOperationAsync>>();
+            dictionaryInterceptors = new Dictionary<PipelineInterceptorType, IList<IOperationAsync>>();
 
-            _preCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, IOperationAsync>>();
-            _postCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, IOperationAsync>>();
-            _dictionaryInterceptors = new Dictionary<PipelineInterceptorType, IList<IOperationAsync>>();
-
-            _dictionaryEventInterceptors = new Dictionary<PipelineInterceptorType, IList<EventHandler<IPipelineMessage, EventArgs>>>();
-            _preEventCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>>();
-            _postEventCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>>();
+            dictionaryEventInterceptors = new Dictionary<PipelineInterceptorType, IList<EventHandler<IPipelineMessage, EventArgs>>>();
+            preEventCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>>();
+            postEventCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>>();
         }
 
         #endregion
@@ -303,12 +281,17 @@ namespace Mvp24Hours.Infrastructure.Pipe
 
         public async Task ExecuteAsync(IPipelineMessage input = null)
         {
-            Message = input ?? Message;
-            Message = await RunOperationsAsync(this.operations, Message);
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "pipe-pipelineasync-executeasync-start");
+            try
+            {
+                Message = input ?? Message;
+                Message = await RunOperationsAsync(this.operations, Message);
+            }
+            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "pipe-pipelineasync-executeasync-end"); }
         }
         internal virtual async Task<IPipelineMessage> RunOperationsAsync(IList<IOperationAsync> _operations, IPipelineMessage input, bool onlyOperationDefault = false)
         {
-            if (!_operations.AnyOrNotNull())
+            if (!_operations.AnySafe())
             {
                 return input;
             }
@@ -330,7 +313,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
 
                 if (!onlyOperationDefault)
                 {
-                    if ((current.IsFaulty || !IsValidContext) && this.IsBreakOnFail)
+                    if ((current.IsFaulty) && this.IsBreakOnFail)
                     {
                         return current;
                     }
@@ -355,8 +338,13 @@ namespace Mvp24Hours.Infrastructure.Pipe
                         await RunOperationInterceptorsAsync(input, PipelineInterceptorType.PreOperation);
                     }
 
-                    // operation
-                    await operation.ExecuteAsync(current);
+                    // operation                    
+                    TelemetryHelper.Execute(TelemetryLevel.Verbose, "pipe-pipeline-execute-operation-start", $"operation:{operation.GetType().Name}");
+                    try
+                    {
+                        await operation.ExecuteAsync(current);
+                    }
+                    finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "pipe-pipeline-execute-operation-end", $"operation:{operation.GetType().Name}"); }
 
                     // post-operation
                     if (!onlyOperationDefault)
@@ -375,7 +363,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
                             await RunOperationInterceptorsAsync(current, PipelineInterceptorType.Locked, true);
                         }
 
-                        if (current.IsFaulty || !IsValidContext)
+                        if (current.IsFaulty)
                         {
                             await RunEventInterceptorsAsync(input, PipelineInterceptorType.Faulty, true);
                             await RunOperationInterceptorsAsync(current, PipelineInterceptorType.Faulty, true);
@@ -386,13 +374,14 @@ namespace Mvp24Hours.Infrastructure.Pipe
                 }
                 catch (Exception ex)
                 {
+                    TelemetryHelper.Execute(TelemetryLevel.Error, "pipe-pipeline-execute-failure", ex);
                     current.Messages.Add(new MessageResult((ex?.InnerException ?? ex).Message, MessageType.Error));
                     input.AddContent(ex);
                 }
                 return current;
             });
 
-            if (!onlyOperationDefault && (!input.IsFaulty || IsValidContext))
+            if (!onlyOperationDefault && (!input.IsFaulty))
             {
                 await RunEventInterceptorsAsync(input, PipelineInterceptorType.LastOperation);
                 await RunOperationInterceptorsAsync(input, PipelineInterceptorType.LastOperation);
@@ -416,27 +405,21 @@ namespace Mvp24Hours.Infrastructure.Pipe
         {
             if (postOperation)
             {
-                if (postCustomInterceptors.AnyOrNotNull())
+                if (postCustomInterceptors.AnySafe())
                 {
-                    foreach (var ci in postCustomInterceptors)
+                    foreach (var ci in postCustomInterceptors.Where(ci => ci.Key.Invoke(input)))
                     {
-                        if (ci.Key.Invoke(input))
-                        {
-                            await RunOperationsAsync(new List<IOperationAsync> { ci.Value }, input, true);
-                        }
+                        await RunOperationsAsync(new List<IOperationAsync> { ci.Value }, input, true);
                     }
                 }
             }
             else
             {
-                if (preCustomInterceptors.AnyOrNotNull())
+                if (preCustomInterceptors.AnySafe())
                 {
-                    foreach (var ci in preCustomInterceptors)
+                    foreach (var ci in preCustomInterceptors.Where(ci => ci.Key.Invoke(input)))
                     {
-                        if (ci.Key.Invoke(input))
-                        {
-                            await RunOperationsAsync(new List<IOperationAsync> { ci.Value }, input, true);
-                        }
+                        await RunOperationsAsync(new List<IOperationAsync> { ci.Value }, input, true);
                     }
                 }
             }
@@ -456,34 +439,28 @@ namespace Mvp24Hours.Infrastructure.Pipe
         {
             if (postOperation)
             {
-                if (postEventCustomInterceptors.AnyOrNotNull())
+                if (postEventCustomInterceptors.AnySafe())
                 {
-                    foreach (var ci in postEventCustomInterceptors)
+                    foreach (var ci in postEventCustomInterceptors.Where(ci => ci.Key.Invoke(input)))
                     {
-                        if (ci.Key.Invoke(input))
-                        {
-                            await RunEventsAsync(new List<EventHandler<IPipelineMessage, EventArgs>> { ci.Value }, input);
-                        }
+                        await RunEventsAsync(new List<EventHandler<IPipelineMessage, EventArgs>> { ci.Value }, input);
                     }
                 }
             }
             else
             {
-                if (preEventCustomInterceptors.AnyOrNotNull())
+                if (preEventCustomInterceptors.AnySafe())
                 {
-                    foreach (var ci in preEventCustomInterceptors)
+                    foreach (var ci in preEventCustomInterceptors.Where(ci => ci.Key.Invoke(input)))
                     {
-                        if (ci.Key.Invoke(input))
-                        {
-                            await RunEventsAsync(new List<EventHandler<IPipelineMessage, EventArgs>> { ci.Value }, input);
-                        }
+                        await RunEventsAsync(new List<EventHandler<IPipelineMessage, EventArgs>> { ci.Value }, input);
                     }
                 }
             }
         }
         protected virtual async Task RunEventsAsync(IList<EventHandler<IPipelineMessage, EventArgs>> _handlers, IPipelineMessage input)
         {
-            if (_handlers.AnyOrNotNull())
+            if (_handlers.AnySafe())
             {
                 foreach (var handler in _handlers)
                 {
@@ -492,7 +469,12 @@ namespace Mvp24Hours.Infrastructure.Pipe
                         continue;
                     }
 
-                    await Task.Factory.StartNew(() => handler(input, EventArgs.Empty));
+                    TelemetryHelper.Execute(TelemetryLevel.Verbose, "pipe-pipelineasync-executeasync-eventasync-start", $"operation:{handler.GetType().Name}");
+                    try
+                    {
+                        await Task.Factory.StartNew(() => handler(input, EventArgs.Empty));
+                    }
+                    finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "pipe-pipelineasync-executeasync-eventasync-end", $"operation:{handler.GetType().Name}"); }
                 }
             }
         }

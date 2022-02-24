@@ -21,9 +21,6 @@ namespace Mvp24Hours.Extensions
             Func<IServiceProvider, IPipeline> factory = null,
             ServiceLifetime lifetime = ServiceLifetime.Scoped)
         {
-            services.AddMvp24HoursLogging();
-            services.AddMvp24HoursNotification();
-
             if (options != null)
             {
                 services.Configure(options);
@@ -56,9 +53,6 @@ namespace Mvp24Hours.Extensions
             Func<IServiceProvider, IPipelineAsync> factory = null,
             ServiceLifetime lifetime = ServiceLifetime.Scoped)
         {
-            services.AddMvp24HoursLogging();
-            services.AddMvp24HoursNotification();
-
             if (options != null)
             {
                 services.Configure(options);

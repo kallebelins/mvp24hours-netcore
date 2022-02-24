@@ -7,11 +7,11 @@
 * [Documentação](pt-br/documentation.md)
 * [Mapeamento](pt-br/mapping.md)
 * [Logging](pt-br/logging.md)
+* [Telemetry](pt-br/telemetry.md)
 * Padrões
 * * [Unidade de Trabalho](pt-br/database/use-unitofwork.md)
 * * [Repositório](pt-br/database/use-repository.md)
 * * [Serviço de Repositório](pt-br/database/use-service.md)
 * * [Validação de Dados](pt-br/validation.md)
-* * [Notificação](pt-br/notification.md)
 * * [Especificação](pt-br/specification.md)
 * [ASP.NET Web API](pt-br/webapi.md)
