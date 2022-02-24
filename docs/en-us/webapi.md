@@ -6,7 +6,7 @@ In this topic you will find some resources to speed up the construction of web s
 // Startup.cs => ConfigureServices(IServiceCollection)
 
 /// essential
-services.AddMvp24HoursWebEssential(Configuration);
+services.AddMvp24HoursWebEssential();
 
 /// automapper
 services.AddMvp24HoursMapService(assemblyMap: Assembly.GetExecutingAssembly());
@@ -19,18 +19,6 @@ services.AddMvp24HoursWebSwagger("MyAPI");
 
 /// compreension
 services.AddMvp24HoursWebGzip();
-
-/* 
-Filter: HATEOAS Filter
-Description: Used to overwrite the response with metadata referring to resources related to the current one (crud), when resources return objects (without IActionResult).
-*/
-services.AddMvp24HoursWebHATEOAS(options => { });
-
-/* 
-Filter: Notification Filter
-Description: Used to overwrite the response with notification messages when resources return objects (without IActionResult).
-*/
-services.AddMvp24HoursWebNotification(options => { });
 
 /// exception middleware
 services.AddMvp24HoursWebExceptions(options => { });

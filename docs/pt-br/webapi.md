@@ -6,7 +6,7 @@ Neste tópico você encontrará alguns recursos para acelerar a construção de 
 // Startup.cs => ConfigureServices(IServiceCollection)
 
 /// essencial
-services.AddMvp24HoursWebEssential(Configuration);
+services.AddMvp24HoursWebEssential();
 
 /// automapper
 services.AddMvp24HoursMapService(assemblyMap: Assembly.GetExecutingAssembly());
@@ -19,18 +19,6 @@ services.AddMvp24HoursWebSwagger("MyAPI");
 
 /// compreension
 services.AddMvp24HoursWebGzip();
-
-/* 
-Filtro: HATEOAS Filter
-Descrição: Usado para sobre-escrever a resposta com metadados referentes aos recursos relacionados com o atual (crud), quando resources retornam objetos (sem IActionResult).
-*/
-services.AddMvp24HoursWebHATEOAS(options => { });
-
-/* 
-Filtro: Notification Filter
-Descrição: Usado para sobre-escrever a resposta com mensagens de notificação quando resources retornam objetos (sem IActionResult).
-*/
-services.AddMvp24HoursWebNotification(options => { });
 
 /// exception middleware
 services.AddMvp24HoursWebExceptions(options => { });

@@ -9,7 +9,7 @@ Este projeto foi desenvolvido para contribuir com a construção rápida de serv
 * Documentação (Swagger)
 * Mapeamento (AutoMapper)
 * Logging
-* Padrões para validação de dados (FluentValidation e Data Annotations), notificação (Notification pattern) e especificações (Specification pattern), unidade de trabalho, repositório, entre outros.
+* Padrões para validação de dados (FluentValidation e Data Annotations), especificações (Specification pattern), unidade de trabalho, repositório, entre outros.
 
 ## Exemplos
 Você poderá estudar diversas soluções com a biblioteca Mvp24Hours. Além disso, criar projetos rápidos usando templates para o Visual Studio 2019 e 2022.

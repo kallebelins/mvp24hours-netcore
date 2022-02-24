@@ -11,7 +11,7 @@ This project was developed to contribute to the rapid construction of services. 
 * Documentation (Swagger)
 * Mapping (AutoMapper)
 * Logging
-* Standards for data validation (FluentValidation and Data Annotations), notification (Notification pattern) and specifications (Specification pattern), unit of work, repository, among others.
+* Standards for data validation (FluentValidation and Data Annotations), specifications (Specification pattern), unit of work, repository, among others.
 
 ## Samples
 You can study different solutions with the Mvp24Hours library. Also, create quick projects using templates for Visual Studio 2019 and 2022.

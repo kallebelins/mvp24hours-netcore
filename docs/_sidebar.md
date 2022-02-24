@@ -15,3 +15,4 @@
 * * [Data Validation](en-us/validation.md)
 * * [Specification](en-us/specification.md)
 * [ASP.NET Web API](en-us/webapi.md)
+* [Release](en-us/release.md)
