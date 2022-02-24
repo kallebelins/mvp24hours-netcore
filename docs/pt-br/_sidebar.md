@@ -15,4 +15,4 @@
 * * [Validação de Dados](pt-br/validation.md)
 * * [Especificação](pt-br/specification.md)
 * [ASP.NET Web API](pt-br/webapi.md)
-* [Release](en-us/release.md)
+* [Release](pt-br/release.md)
