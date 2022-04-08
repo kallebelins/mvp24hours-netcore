@@ -46,7 +46,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
 
         #region [ List ]
         [Fact, Priority(2)]
-        public async Task Get_Filter_Customer_List()
+        public async Task GetFilterCustomerList()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingServiceAsync>();
@@ -56,7 +56,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(pagingResult.Paging != null);
         }
         [Fact, Priority(5)]
-        public async Task Get_Filter_Customer_List_Paging()
+        public async Task GetFilterCustomerListPaging()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingServiceAsync>();
@@ -67,7 +67,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(pagingResult.Paging != null);
         }
         [Fact, Priority(5)]
-        public async Task Get_Filter_Customer_List_Navigation()
+        public async Task GetFilterCustomerListNavigation()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingServiceAsync>();
@@ -78,7 +78,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(pagingResult.Paging != null);
         }
         [Fact, Priority(6)]
-        public async Task Get_Filter_Customer_List_Order_Asc()
+        public async Task GetFilterCustomerListOrderAsc()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingServiceAsync>();
@@ -89,7 +89,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(pagingResult.Paging != null);
         }
         [Fact, Priority(6)]
-        public async Task Get_Filter_Customer_List_Order_Desc()
+        public async Task GetFilterCustomerListOrderDesc()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingServiceAsync>();
@@ -100,7 +100,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(pagingResult.Paging != null);
         }
         [Fact, Priority(7)]
-        public async Task Get_Filter_Customer_List_Order_Asc_Expression()
+        public async Task GetFilterCustomerListOrderAscExpression()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingServiceAsync>();
@@ -112,7 +112,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(pagingResult.Paging != null);
         }
         [Fact, Priority(8)]
-        public async Task Get_Filter_Customer_List_Order_Desc_Expression()
+        public async Task GetFilterCustomerListOrderDescExpression()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingServiceAsync>();
@@ -124,7 +124,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(pagingResult.Paging != null);
         }
         [Fact, Priority(9)]
-        public async Task Get_Filter_Customer_List_Paging_Expression()
+        public async Task GetFilterCustomerListPagingExpression()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingServiceAsync>();
@@ -135,7 +135,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(pagingResult.Paging != null);
         }
         [Fact, Priority(9)]
-        public async Task Get_Filter_Customer_List_Navigation_Expression()
+        public async Task GetFilterCustomerListNavigationExpression()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingServiceAsync>();
@@ -150,7 +150,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
 
         #region [ GetBy ]
         [Fact, Priority(2)]
-        public async Task Get_Filter_Customer_GetBy()
+        public async Task GetFilterCustomerGetBy()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingServiceAsync>();
@@ -160,7 +160,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(pagingResult.Paging != null);
         }
         [Fact, Priority(5)]
-        public async Task Get_Filter_Customer_GetBy_Paging()
+        public async Task GetFilterCustomerGetByPaging()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingServiceAsync>();
@@ -171,7 +171,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(pagingResult.Paging != null);
         }
         [Fact, Priority(5)]
-        public async Task Get_Filter_Customer_GetBy_Navigation()
+        public async Task GetFilterCustomerGetByNavigation()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingServiceAsync>();
@@ -182,7 +182,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(pagingResult.Paging != null);
         }
         [Fact, Priority(6)]
-        public async Task Get_Filter_Customer_GetBy_Order_Asc()
+        public async Task GetFilterCustomerGetByOrderAsc()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingServiceAsync>();
@@ -193,7 +193,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(pagingResult.Paging != null);
         }
         [Fact, Priority(6)]
-        public async Task Get_Filter_Customer_GetBy_Order_Desc()
+        public async Task GetFilterCustomerGetByOrderDesc()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingServiceAsync>();
@@ -204,7 +204,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(pagingResult.Paging != null);
         }
         [Fact, Priority(7)]
-        public async Task Get_Filter_Customer_GetBy_Order_Asc_Expression()
+        public async Task GetFilterCustomerGetByOrderAscExpression()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingServiceAsync>();
@@ -216,7 +216,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(pagingResult.Paging != null);
         }
         [Fact, Priority(8)]
-        public async Task Get_Filter_Customer_GetBy_Order_Desc_Expression()
+        public async Task GetFilterCustomerGetByOrderDescExpression()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingServiceAsync>();
@@ -228,7 +228,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(pagingResult.Paging != null);
         }
         [Fact, Priority(9)]
-        public async Task Get_Filter_Customer_GetBy_Paging_Expression()
+        public async Task GetFilterCustomerGetByPagingExpression()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingServiceAsync>();
@@ -239,7 +239,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(pagingResult.Paging != null);
         }
         [Fact, Priority(9)]
-        public async Task Get_Filter_Customer_GetBy_Navigation_Expression()
+        public async Task GetFilterCustomerGetByNavigationExpression()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingServiceAsync>();

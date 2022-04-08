@@ -46,6 +46,11 @@ namespace Mvp24Hours.Extensions
             return Task.FromResult(obj);
         }
 
+        public static async Task TaskComplete()
+        {
+            await Task.Yield();
+        }
+
         public static async Task<bool> IsGreaterThanZeroAsync(this Task<int> value)
         {
             return (await value) > 0;
@@ -58,7 +63,7 @@ namespace Mvp24Hours.Extensions
 
         public static async Task<bool> IsLessThanZeroAsync(this Task<int> value)
         {
-            return (await value) > 0;
+            return (await value) < 0;
         }
 
         public static async Task<bool> IsTrueAsync(this Task<bool> value)
@@ -83,6 +88,5 @@ namespace Mvp24Hours.Extensions
             var value = await valueAsync;
             return value.ElementAtOrDefault(index);
         }
-
     }
 }

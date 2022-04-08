@@ -18,8 +18,8 @@ namespace Mvp24Hours.Application.Redis.Test
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Name)]
     public class Test3CacheRepositoryTest
     {
-        private readonly string _keyString = $"string_test-{StringHelper.GenerateKey(5)}";
-        private readonly string _keyObject = $"object_test-{StringHelper.GenerateKey(5)}";
+        private readonly string keyString = $"stringtest-{StringHelper.GenerateKey(5)}";
+        private readonly string keyObject = $"objecttest-{StringHelper.GenerateKey(5)}";
         private readonly Startup startup;
 
         public Test3CacheRepositoryTest()
@@ -28,7 +28,7 @@ namespace Mvp24Hours.Application.Redis.Test
         }
 
         [Fact, Priority(1)]
-        public void Set_Content_Cache()
+        public void SetContentCache()
         {
             var serviceProvider = startup.Initialize();
             var customer = new Customer
@@ -41,31 +41,31 @@ namespace Mvp24Hours.Application.Redis.Test
             string content = customer.ToSerialize();
 
             var repo = serviceProvider.GetService<IRepositoryCache<Customer>>();
-            repo.SetString(_keyString, content);
+            repo.SetString(keyString, content);
         }
 
         [Fact, Priority(2)]
-        public void Get_String()
+        public void GetString()
         {
             var serviceProvider = startup.Initialize();
             var repo = serviceProvider.GetService<IRepositoryCache<Customer>>();
-            repo.SetString(_keyString, "Test");
-            string content = repo.GetString(_keyString);
+            repo.SetString(keyString, "Test");
+            string content = repo.GetString(keyString);
             Assert.True(content.HasValue());
         }
 
         [Fact, Priority(3)]
-        public void Remove_String()
+        public void RemoveString()
         {
             var serviceProvider = startup.Initialize();
             var repo = serviceProvider.GetService<IRepositoryCache<Customer>>();
-            repo.Remove(_keyString);
-            string content = repo.GetString(_keyString);
+            repo.Remove(keyString);
+            string content = repo.GetString(keyString);
             Assert.True(string.IsNullOrEmpty(content));
         }
 
         [Fact, Priority(4)]
-        public void Set_Object_Content_Cache()
+        public void SetObjectContentCache()
         {
             var serviceProvider = startup.Initialize();
             var customer = new Customer
@@ -76,26 +76,26 @@ namespace Mvp24Hours.Application.Redis.Test
                 Active = true
             };
             var repo = serviceProvider.GetService<IRepositoryCache<Customer>>();
-            repo.Set(_keyObject, customer);
+            repo.Set(keyObject, customer);
         }
 
         [Fact, Priority(5)]
-        public void Get_Object()
+        public void GetObject()
         {
             var serviceProvider = startup.Initialize();
             var repo = serviceProvider.GetService<IRepositoryCache<Customer>>();
-            repo.Set(_keyObject, new Customer { });
-            var customer = repo.Get(_keyObject);
+            repo.Set(keyObject, new Customer { });
+            var customer = repo.Get(keyObject);
             Assert.True(customer != null);
         }
 
         [Fact, Priority(6)]
-        public void Remove_Object()
+        public void RemoveObject()
         {
             var serviceProvider = startup.Initialize();
             var repo = serviceProvider.GetService<IRepositoryCache<Customer>>();
-            repo.Remove(_keyObject);
-            var customer = repo.Get(_keyObject);
+            repo.Remove(keyObject);
+            var customer = repo.Get(keyObject);
             Assert.True(customer == null);
         }
     }

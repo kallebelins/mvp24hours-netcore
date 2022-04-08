@@ -110,4 +110,11 @@ foreach (var entity in entities)
 {
 	rpEntity.LoadRelation(entity, x => x.PropertyList, clause: c => c.Active, limit: 1);
 }
+
+// create new criterion from an existing one
+var pagingNew = paging.NewCriteria(navigation: new List<string> { "PropertyList" });
+
+// create new expression criteria from an existing one
+var pagingExpr = paging.NewCriteriaExpression<Entity>();
+pagingExpr.NavigationExpr.Add(x => x.PropertyList);
 ```

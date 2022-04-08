@@ -69,9 +69,54 @@ namespace Mvp24Hours.Extensions
         /// <summary>
         /// 
         /// </summary>
+        public static bool AnyOrNotNull<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+        {
+            if (source == null || !source.Any(predicate))
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public static bool AnySafe<T>(this IEnumerable<T> source)
         {
             if (source != null && source.Any())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static bool AnySafe<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+        {
+            if (source != null && source.Any(predicate))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static bool ContainsKeySafe<TKey, TValue>(this IDictionary<TKey, TValue> source, TKey key)
+        {
+            if (source != null && source.ContainsKey(key))
             {
                 return true;
             }

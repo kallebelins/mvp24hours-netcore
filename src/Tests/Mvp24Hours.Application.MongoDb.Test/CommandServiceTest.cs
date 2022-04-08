@@ -22,7 +22,7 @@ namespace Mvp24Hours.Application.MongoDb.Test
     public class CommandServiceTest
     {
         private readonly IServiceProvider serviceProvider;
-        private readonly ObjectId _oid = ObjectId.GenerateNewId();
+        private readonly ObjectId oid = ObjectId.GenerateNewId();
 
         public CommandServiceTest()
         {
@@ -30,31 +30,31 @@ namespace Mvp24Hours.Application.MongoDb.Test
         }
 
         [Fact, Priority(1)]
-        public void Create_Customer()
+        public void CreateCustomer()
         {
             var service = serviceProvider.GetService<CustomerService>();
 
             service.Add(new Customer
             {
-                Oid = _oid,
+                Oid = oid,
                 Created = DateTime.Now,
                 Name = "Test 1",
                 Active = true
             });
 
-            var result = service.GetById(_oid);
+            var result = service.GetById(oid);
 
             Assert.True(result.HasData());
         }
 
         [Fact, Priority(2)]
-        public void Update_Customer()
+        public void UpdateCustomer()
         {
             var service = serviceProvider.GetService<CustomerService>();
 
             var customer = new Customer
             {
-                Oid = _oid,
+                Oid = oid,
                 Created = DateTime.Now,
                 Name = "Test 1",
                 Active = true
@@ -65,19 +65,19 @@ namespace Mvp24Hours.Application.MongoDb.Test
 
             service.Modify(customer);
 
-            var boCustomer = service.GetById(_oid);
+            var boCustomer = service.GetById(oid);
 
             Assert.True(boCustomer != null && boCustomer?.Data?.Name == "Test Updated");
         }
 
         [Fact, Priority(3)]
-        public void Delete_Customer()
+        public void DeleteCustomer()
         {
             var service = serviceProvider.GetService<CustomerService>();
 
-            service.RemoveById(_oid);
+            service.RemoveById(oid);
 
-            var result = service.GetById(_oid);
+            var result = service.GetById(oid);
 
             Assert.True(!result.HasData());
         }

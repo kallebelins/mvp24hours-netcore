@@ -31,7 +31,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         }
 
         [Fact, Priority(1)]
-        public void Pipeline_Started()
+        public void PipelineStarted()
         {
             // arrange
             var serviceProvider = startup.Initialize();
@@ -39,17 +39,17 @@ namespace Mvp24Hours.Application.Pipe.Test
 
             // act
             pipeline.Add(_ =>
-            {
-                Trace.WriteLine("Test 1");
-            });
+           {
+               Trace.WriteLine("Test 1");
+           });
             pipeline.Add(_ =>
-            {
-                Trace.WriteLine("Test 2");
-            });
+           {
+               Trace.WriteLine("Test 2");
+           });
             pipeline.Add(_ =>
-            {
-                Trace.WriteLine("Test 3");
-            });
+           {
+               Trace.WriteLine("Test 3");
+           });
             pipeline.Execute();
 
             // assert
@@ -57,7 +57,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         }
 
         [Fact, Priority(2)]
-        public void Pipeline_Message_Content_Get()
+        public void PipelineMessageContentGet()
         {
             // arrange
             var serviceProvider = startup.Initialize();
@@ -92,7 +92,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         }
 
         [Fact, Priority(3)]
-        public void Pipeline_Message_Content_Add()
+        public void PipelineMessageContentAdd()
         {
             // arrange
             var serviceProvider = startup.Initialize();
@@ -136,7 +136,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         }
 
         [Fact, Priority(4)]
-        public void Pipeline_Message_Content_Validate()
+        public void PipelineMessageContentValidate()
         {
             // arrange
             var serviceProvider = startup.Initialize();
@@ -167,7 +167,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         }
 
         [Fact, Priority(5)]
-        public void Pipeline_Operation_Lock()
+        public void PipelineOperationLock()
         {
             // arrange
             var serviceProvider = startup.Initialize();
@@ -201,7 +201,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         }
 
         [Fact, Priority(5)]
-        public void Pipeline_Operation_Lock_Execute_Force()
+        public void PipelineOperationLockExecuteForce()
         {
             // arrange
             var serviceProvider = startup.Initialize();
@@ -251,7 +251,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         }
 
         [Fact, Priority(6)]
-        public void Pipeline_Operation_Failure()
+        public void PipelineOperationFailure()
         {
             // arrange
             var serviceProvider = startup.Initialize();
@@ -291,7 +291,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         }
 
         [Fact, Priority(7)]
-        public void Pipeline_Operation_Lock_With_Notification()
+        public void PipelineOperationLockWithNotification()
         {
             // arrange
             var serviceProvider = startup.Initialize();
@@ -329,7 +329,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         }
 
         [Fact, Priority(8)]
-        public void Pipeline_Interceptors()
+        public void PipelineInterceptors()
         {
             // arrange
             var serviceProvider = startup.Initialize();
@@ -339,9 +339,9 @@ namespace Mvp24Hours.Application.Pipe.Test
 
             // operations
             pipeline.Add(_ =>
-            {
-                Trace.WriteLine("Test 1");
-            });
+           {
+               Trace.WriteLine("Test 1");
+           });
             pipeline.Add(input =>
             {
                 Trace.WriteLine("Test 2");
@@ -349,9 +349,9 @@ namespace Mvp24Hours.Application.Pipe.Test
                 input.AddContent(1);
             });
             pipeline.Add(_ =>
-            {
-                Trace.WriteLine("Test 3");
-            });
+           {
+               Trace.WriteLine("Test 3");
+           });
 
             // interceptors -> first-operation
             pipeline.AddInterceptors(_ =>
@@ -406,7 +406,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         }
 
         [Fact, Priority(9)]
-        public void Pipeline_Event_Interceptors()
+        public void PipelineEventInterceptors()
         {
             // arrange
             var serviceProvider = startup.Initialize();
@@ -416,9 +416,9 @@ namespace Mvp24Hours.Application.Pipe.Test
 
             // operations
             pipeline.Add(_ =>
-            {
-                Trace.WriteLine("Test 1");
-            });
+           {
+               Trace.WriteLine("Test 1");
+           });
             pipeline.Add(input =>
             {
                 Trace.WriteLine("Test 2");
@@ -426,9 +426,9 @@ namespace Mvp24Hours.Application.Pipe.Test
                 input.AddContent(1);
             });
             pipeline.Add(_ =>
-            {
-                Trace.WriteLine("Test 3");
-            });
+           {
+               Trace.WriteLine("Test 3");
+           });
 
             // event interceptors -> first-operation
             pipeline.AddInterceptors((input, e) =>
@@ -483,7 +483,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         }
 
         [Fact, Priority(10)]
-        public void Pipeline_Event_Interceptors_With_Lock()
+        public void PipelineEventInterceptorsWithLock()
         {
             // arrange
             var serviceProvider = startup.Initialize();
@@ -493,9 +493,9 @@ namespace Mvp24Hours.Application.Pipe.Test
 
             // operations
             pipeline.Add(_ =>
-            {
-                Trace.WriteLine("Test 1");
-            });
+           {
+               Trace.WriteLine("Test 1");
+           });
             pipeline.Add(input =>
             {
                 Trace.WriteLine("Test 2");
@@ -562,7 +562,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         }
 
         [Fact, Priority(11)]
-        public void Pipeline_Factory()
+        public void PipelineFactory()
         {
             // arrange
             var serviceProvider = startup.InitializeWithFactory();
@@ -570,13 +570,13 @@ namespace Mvp24Hours.Application.Pipe.Test
 
             // act
             pipeline.Add(_ =>
-            {
-                Trace.WriteLine("Test 1");
-            });
+           {
+               Trace.WriteLine("Test 1");
+           });
             pipeline.Add(_ =>
-            {
-                Trace.WriteLine("Test 2");
-            });
+           {
+               Trace.WriteLine("Test 2");
+           });
             pipeline.Execute();
 
             // assert

@@ -24,7 +24,7 @@ namespace Mvp24Hours.Application.RabbitMQ.Test
         }
 
         [Fact, Priority(1)]
-        public void Create_Producer()
+        public void CreateProducer()
         {
             // arrange
             var serviceProvider = startup.Initialize();
@@ -43,7 +43,7 @@ namespace Mvp24Hours.Application.RabbitMQ.Test
         }
 
         [Fact, Priority(2)]
-        public void Create_Consumer()
+        public void CreateConsumer()
         {
             // arrange
             var serviceProvider = startup.Initialize();

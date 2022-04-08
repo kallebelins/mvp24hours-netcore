@@ -47,7 +47,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
 
         #region [ List ]
         [Fact, Priority(1)]
-        public async Task Get_Filter_Customer_List()
+        public async Task GetFilterCustomerList()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerServiceAsync>();
@@ -57,7 +57,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(result.HasData());
         }
         [Fact, Priority(2)]
-        public async Task Get_Filter_Customer_List_Any()
+        public async Task GetFilterCustomerListAny()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerServiceAsync>();
@@ -67,7 +67,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(result.GetDataValue());
         }
         [Fact, Priority(3)]
-        public async Task Get_Filter_Customer_List_Count()
+        public async Task GetFilterCustomerListCount()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerServiceAsync>();
@@ -77,7 +77,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(result.GetDataValue() > 0);
         }
         [Fact, Priority(4)]
-        public async Task Get_Filter_Customer_List_Paging()
+        public async Task GetFilterCustomerListPaging()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerServiceAsync>();
@@ -88,7 +88,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(result.HasDataCount(3));
         }
         [Fact, Priority(5)]
-        public async Task Get_Filter_Customer_List_Navigation()
+        public async Task GetFilterCustomerListNavigation()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerServiceAsync>();
@@ -99,7 +99,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(result.HasDataCount(3));
         }
         [Fact, Priority(6)]
-        public async Task Get_Filter_Customer_List_Order_Asc()
+        public async Task GetFilterCustomerListOrderAsc()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerServiceAsync>();
@@ -110,7 +110,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(result.HasDataCount(3));
         }
         [Fact, Priority(7)]
-        public async Task Get_Filter_Customer_List_Order_Desc()
+        public async Task GetFilterCustomerListOrderDesc()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerServiceAsync>();
@@ -121,7 +121,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(result.HasDataCount(3));
         }
         [Fact, Priority(8)]
-        public async Task Get_Filter_Customer_List_Order_Asc_Expression()
+        public async Task GetFilterCustomerListOrderAscExpression()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerServiceAsync>();
@@ -133,7 +133,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(result.HasDataCount(3));
         }
         [Fact, Priority(9)]
-        public async Task Get_Filter_Customer_List_Order_Desc_Expression()
+        public async Task GetFilterCustomerListOrderDescExpression()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerServiceAsync>();
@@ -145,7 +145,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(result.HasDataCount(3));
         }
         [Fact, Priority(10)]
-        public async Task Get_Filter_Customer_List_Paging_Expression()
+        public async Task GetFilterCustomerListPagingExpression()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerServiceAsync>();
@@ -156,7 +156,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(result.HasDataCount(3));
         }
         [Fact, Priority(11)]
-        public async Task Get_Filter_Customer_List_Navigation_Expression()
+        public async Task GetFilterCustomerListNavigationExpression()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerServiceAsync>();
@@ -171,7 +171,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
 
         #region [ GetBy ]
         [Fact, Priority(12)]
-        public async Task Get_Filter_Customer_GetById()
+        public async Task GetFilterCustomerGetById()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerServiceAsync>();
@@ -181,7 +181,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(result.GetDataFirstOrDefault() != null);
         }
         [Fact, Priority(13)]
-        public async Task Get_Filter_Customer_GetById_Navigation()
+        public async Task GetFilterCustomerGetByIdNavigation()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerServiceAsync>();
@@ -192,7 +192,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(result.GetDataFirstOrDefault().Contacts.AnyOrNotNull());
         }
         [Fact, Priority(14)]
-        public async Task Get_Filter_Customer_GetBy()
+        public async Task GetFilterCustomerGetBy()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerServiceAsync>();
@@ -202,7 +202,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(result.HasData());
         }
         [Fact, Priority(15)]
-        public async Task Get_Filter_Customer_GetBy_Any()
+        public async Task GetFilterCustomerGetByAny()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerServiceAsync>();
@@ -212,7 +212,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(result.GetDataValue());
         }
         [Fact, Priority(16)]
-        public async Task Get_Filter_Customer_GetBy_Count()
+        public async Task GetFilterCustomerGetByCount()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerServiceAsync>();
@@ -222,7 +222,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(result.GetDataValue() > 0);
         }
         [Fact, Priority(17)]
-        public async Task Get_Filter_Customer_GetBy_Paging()
+        public async Task GetFilterCustomerGetByPaging()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerServiceAsync>();
@@ -233,7 +233,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(result.HasDataCount(3));
         }
         [Fact, Priority(18)]
-        public async Task Get_Filter_Customer_GetBy_Navigation()
+        public async Task GetFilterCustomerGetByNavigation()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerServiceAsync>();
@@ -244,7 +244,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(result.HasDataCount(3));
         }
         [Fact, Priority(19)]
-        public async Task Get_Filter_Customer_GetBy_Order_Asc()
+        public async Task GetFilterCustomerGetByOrderAsc()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerServiceAsync>();
@@ -255,7 +255,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(result.HasDataCount(3));
         }
         [Fact, Priority(20)]
-        public async Task Get_Filter_Customer_GetBy_Order_Desc()
+        public async Task GetFilterCustomerGetByOrderDesc()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerServiceAsync>();
@@ -266,7 +266,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(result.HasDataCount(3));
         }
         [Fact, Priority(21)]
-        public async Task Get_Filter_Customer_GetBy_Order_Asc_Expression()
+        public async Task GetFilterCustomerGetByOrderAscExpression()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerServiceAsync>();
@@ -278,7 +278,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(result.HasDataCount(3));
         }
         [Fact, Priority(22)]
-        public async Task Get_Filter_Customer_GetBy_Order_Desc_Expression()
+        public async Task GetFilterCustomerGetByOrderDescExpression()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerServiceAsync>();
@@ -290,7 +290,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(result.HasDataCount(3));
         }
         [Fact, Priority(23)]
-        public async Task Get_Filter_Customer_GetBy_Paging_Expression()
+        public async Task GetFilterCustomerGetByPagingExpression()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerServiceAsync>();
@@ -301,7 +301,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             Assert.True(result.HasDataCount(3));
         }
         [Fact, Priority(24)]
-        public async Task Get_Filter_Customer_GetBy_Navigation_Expression()
+        public async Task GetFilterCustomerGetByNavigationExpression()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerServiceAsync>();

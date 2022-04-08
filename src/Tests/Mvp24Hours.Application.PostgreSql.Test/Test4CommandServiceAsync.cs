@@ -37,7 +37,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
 
         #region [ Actions ]
         [Fact, Priority(1)]
-        public async Task Create_Customer()
+        public async Task CreateCustomer()
         {
             // arrange
             var serviceProvider = startup.Initialize(false);
@@ -55,7 +55,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             startup.Cleanup(serviceProvider);
         }
         [Fact, Priority(2)]
-        public async Task Create_Many_Customers()
+        public async Task CreateManyCustomers()
         {
             // arrange
             var serviceProvider = startup.Initialize(false);
@@ -77,7 +77,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             startup.Cleanup(serviceProvider);
         }
         [Fact, Priority(3)]
-        public async Task Update_Customer()
+        public async Task UpdateCustomer()
         {
             // arrange
             var serviceProvider = startup.Initialize();
@@ -93,7 +93,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             startup.Cleanup(serviceProvider);
         }
         [Fact, Priority(4)]
-        public async Task Update_Many_Customers()
+        public async Task UpdateManyCustomers()
         {
             // arrange
             var serviceProvider = startup.Initialize();
@@ -111,7 +111,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             startup.Cleanup(serviceProvider);
         }
         [Fact, Priority(5)]
-        public async Task Delete_Customer()
+        public async Task DeleteCustomer()
         {
             // arrange
             var serviceProvider = startup.Initialize();
@@ -126,7 +126,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             startup.Cleanup(serviceProvider);
         }
         [Fact, Priority(6)]
-        public async Task Delete_Many_Customers()
+        public async Task DeleteManyCustomers()
         {
             // arrange
             var serviceProvider = startup.Initialize();

@@ -111,3 +111,49 @@ if (!env.IsProduction()) {
 /// essential
 app.UseMvp24Hours();
 ```
+
+## Resilient HTTP Requests
+Use IHttpClientFactory to implement resilient HTTP requests.
+
+```csharp
+// Startup.cs  => ConfigureServices(IServiceCollection)
+
+/// inject HttpClient using custom name
+services.AddHttpClient("my-api-url", client =>
+{
+    client.BaseAddress = new Uri("https://myexampleapi.com");
+});
+
+/// inject HttpClient using Class name
+services.AddHttpClient<MyClassClient>(client =>
+{
+    client.BaseAddress = new Uri("https://myexampleapi.com");
+});
+
+// MyClassClient.cs
+
+/// through the constructor, if you have registered the client class "AddHttpClient<MyClassClient>"
+private readonly HttpClient _httpClient;
+public MyClassClient(HttpClient httpClient)
+{
+    _httpClient = httpClient;
+}
+/// return string => "_httpClient.HttpGetAsync()"
+public async Task<string> GetResults() {
+    return await _httpClient.HttpGetAsync("api/myService");
+}
+/// return object => "_httpClient.HttpGetAsync<MyResult>()"
+public async Task<MyResult> GetResults() {
+    return await _httpClient.HttpGetAsync<MyResult>("api/myService");
+}
+
+/// service provider using custom name
+var factory = serviceProvider.GetService<IHttpClientFactory>();
+var client = factory.CreateClient("my-api-url");
+var result = await client.HttpGetAsync("api/myService");
+
+/// service provider using reference class
+var factory = serviceProvider.GetService<IHttpClientFactory>();
+var client = factory.CreateClient(typeof(MyClassClient).Name);
+var result = await client.HttpGetAsync("api/myService");
+```

@@ -3,6 +3,7 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Mvp24Hours.Core.Enums.Infrastructure;
 using Mvp24Hours.Extensions;
 using Newtonsoft.Json;
 using System.Collections;
@@ -57,24 +58,23 @@ namespace Mvp24Hours.Helpers
                     }
                 }
             }
-
             return string.Join("&", result.ToArray());
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public static async Task<string> PostAsync(string urlService, string data = "", Hashtable header = null, ICredentials credentials = null)
+        public static async Task<string> PostAsync(string urlService, string data = "", IDictionary<string, string> headers = null, ICredentials credentials = null)
         {
-            return await SendAsync(urlService, header, credentials, "POST", data);
+            return await SendAsync(urlService, headers, credentials, "POST", data);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public static async Task<T> PostAsync<T>(string urlService, string data = "", Hashtable header = null, ICredentials credentials = null, JsonSerializerSettings jsonSerializerSettings = null)
+        public static async Task<T> PostAsync<T>(string urlService, string data = "", IDictionary<string, string> headers = null, ICredentials credentials = null, JsonSerializerSettings jsonSerializerSettings = null)
         {
-            var result = await SendAsync(urlService, header, credentials, "POST", data);
+            var result = await SendAsync(urlService, headers, credentials, "POST", data);
             if (!result.HasValue())
             {
                 return default;
@@ -86,148 +86,164 @@ namespace Mvp24Hours.Helpers
         /// <summary>
         /// 
         /// </summary>
-        public static async Task<string> GetAsync(string url, Hashtable header = null, ICredentials credentials = null)
+        public static async Task<string> GetAsync(string url, IDictionary<string, string> headers = null, ICredentials credentials = null)
         {
-            return await SendAsync(url, header, credentials, "GET", null);
+            return await SendAsync(url, headers, credentials, "GET", null);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public static async Task<T> GetAsync<T>(string url, Hashtable header = null, ICredentials credentials = null, JsonSerializerSettings jsonSerializerSettings = null)
+        public static async Task<T> GetAsync<T>(string url, IDictionary<string, string> headers = null, ICredentials credentials = null, JsonSerializerSettings jsonSerializerSettings = null)
         {
-            var result = await SendAsync(url, header, credentials, "GET", null);
+            var result = await SendAsync(url, headers, credentials, "GET", null);
             if (!result.HasValue())
             {
                 return default;
             }
-
             return result.ToDeserialize<T>(jsonSerializerSettings);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public static async Task<string> PutAsync(string urlService, string data = "", Hashtable header = null, ICredentials credentials = null)
+        public static async Task<string> PutAsync(string urlService, string data = "", IDictionary<string, string> headers = null, ICredentials credentials = null)
         {
-            return await SendAsync(urlService, header, credentials, "PUT", data);
+            return await SendAsync(urlService, headers, credentials, "PUT", data);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public static async Task<T> PutAsync<T>(string urlService, string data = "", Hashtable header = null, ICredentials credentials = null, JsonSerializerSettings jsonSerializerSettings = null)
+        public static async Task<T> PutAsync<T>(string urlService, string data = "", IDictionary<string, string> headers = null, ICredentials credentials = null, JsonSerializerSettings jsonSerializerSettings = null)
         {
-            var result = await SendAsync(urlService, header, credentials, "PUT", data);
+            var result = await SendAsync(urlService, headers, credentials, "PUT", data);
             if (!result.HasValue())
             {
                 return default;
             }
-
             return result.ToDeserialize<T>(jsonSerializerSettings);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public static async Task<string> DeleteAsync(string url, Hashtable header = null, ICredentials credentials = null)
+        public static async Task<string> PatchAsync(string urlService, string data = "", IDictionary<string, string> headers = null, ICredentials credentials = null)
         {
-            return await SendAsync(url, header, credentials, "DELETE", null);
+            return await SendAsync(urlService, headers, credentials, "PATCH", data);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public static async Task<T> DeleteAsync<T>(string url, Hashtable header = null, ICredentials credentials = null, JsonSerializerSettings jsonSerializerSettings = null)
+        public static async Task<T> PatchAsync<T>(string urlService, string data = "", IDictionary<string, string> headers = null, ICredentials credentials = null, JsonSerializerSettings jsonSerializerSettings = null)
         {
-            var result = await SendAsync(url, header, credentials, "DELETE", null);
+            var result = await SendAsync(urlService, headers, credentials, "PATCH", data);
             if (!result.HasValue())
             {
                 return default;
             }
-
             return result.ToDeserialize<T>(jsonSerializerSettings);
         }
 
-        private static async Task<string> SendAsync(string url, Hashtable header, ICredentials credentials, string method, string data)
+        /// <summary>
+        /// 
+        /// </summary>
+        public static async Task<string> DeleteAsync(string url, IDictionary<string, string> headers = null, ICredentials credentials = null)
         {
-            string result = string.Empty;
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
-                | SecurityProtocolType.Tls13;
-            if (EncodingRequest == null)
-            {
-                EncodingRequest = Encoding.UTF8;
-            }
+            return await SendAsync(url, headers, credentials, "DELETE", null);
+        }
 
-            HttpWebRequest requisicao = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(url);
-            requisicao.Method = method;
-            requisicao.ContentType = "application/json; charset=utf-8";
-            requisicao.Headers.Add("Accept-Encoding", "gzip,deflate");
-            if (credentials != null)
+        /// <summary>
+        /// 
+        /// </summary>
+        public static async Task<T> DeleteAsync<T>(string url, IDictionary<string, string> headers = null, ICredentials credentials = null, JsonSerializerSettings jsonSerializerSettings = null)
+        {
+            var result = await SendAsync(url, headers, credentials, "DELETE", null);
+            if (!result.HasValue())
             {
-                requisicao.Credentials = credentials;
+                return default;
             }
+            return result.ToDeserialize<T>(jsonSerializerSettings);
+        }
 
-            requisicao.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
-            if (header != null)
-            {
-                foreach (DictionaryEntry hash in header)
-                {
-                    if (hash.Key.ToString() == "ContentType")
-                    {
-                        requisicao.ContentType = hash.Value.ToString();
-                        continue;
-                    }
-                    requisicao.Headers.Add(hash.Key.ToString(), hash.Value.ToString());
-                }
-            }
-            requisicao.Timeout = 300000;
-            bool hasData = (method == "POST" || method == "PUT");
-            byte[] bytes = null;
-            if (hasData)
-            {
-                if (data == null)
-                {
-                    data = "";
-                }
-
-                string postData = data;
-                bytes = EncodingRequest.GetBytes(postData);
-                requisicao.ContentLength = bytes.Length;
-            }
-
+        private static async Task<string> SendAsync(string url, IDictionary<string, string> headers, ICredentials credentials, string method, string data)
+        {
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "infra-webrequesthelper-start");
             try
             {
-                if (!hasData)
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
+
+                if (EncodingRequest == null)
+                    EncodingRequest = Encoding.UTF8;
+
+                var client = (HttpWebRequest)System.Net.WebRequest.Create(url);
+                client.Method = method;
+                client.Timeout = 300000;
+
+                if (credentials != null)
+                    client.Credentials = credentials;
+
+                if (headers.AnyOrNotNull())
                 {
-                    using var response = requisicao.GetResponse();
-                    using var content = response.GetResponseStream();
-                    using var reader = new StreamReader(content, EncodingRequest);
-                    result = await reader.ReadToEndAsync();
+                    foreach (var keyValue in headers)
+                    {
+                        client.Headers.Add(keyValue.Key.ToString(), keyValue.Value.ToString());
+                    }
                 }
-                else
+
+                if (!headers.ContainsKeySafe("Content-Type"))
+                    client.ContentType = $"application/json; charset={EncodingRequest.BodyName.ToLower()}";
+
+                if (!headers.ContainsKeySafe("Accept-Encoding"))
                 {
-                    using var reqstream = requisicao.GetRequestStream();
-                    reqstream.Write(bytes, 0, bytes.Length);
-                    var httpResponse = (HttpWebResponse)requisicao.GetResponse();
-                    using var streamReader = new StreamReader(httpResponse.GetResponseStream(), EncodingRequest);
-                    result = await streamReader.ReadToEndAsync();
+                    client.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
+                    client.Headers.Add("Accept-Encoding", "gzip,deflate");
                 }
-            }
-            catch (WebException we)
-            {
-                if (we.Response != null)
+
+                byte[] bytes = null;
+                if (method == "POST" || method == "PUT" || method == "PATCH")
                 {
-                    using var stream = we.Response.GetResponseStream();
-                    using var reader = new StreamReader(stream);
-                    return reader.ReadToEnd();
+                    bytes = EncodingRequest.GetBytes(data ?? string.Empty);
+                    client.ContentLength = bytes.Length;
                 }
-                else
+
+                try
                 {
+                    TelemetryHelper.Execute(TelemetryLevel.Verbose, "infra-webrequesthelper-sendasync", $"url:{url}|method:{method}");
+
+                    if (bytes == null)
+                    {
+                        using var response = client.GetResponse();
+                        using var content = response.GetResponseStream();
+                        using var reader = new StreamReader(content, EncodingRequest);
+                        return await reader.ReadToEndAsync();
+                    }
+                    else
+                    {
+                        using var reqstream = client.GetRequestStream();
+                        reqstream.Write(bytes, 0, bytes.Length);
+                        var httpResponse = (HttpWebResponse)client.GetResponse();
+                        using var streamReader = new StreamReader(httpResponse.GetResponseStream(), EncodingRequest);
+                        return await streamReader.ReadToEndAsync();
+                    }
+                }
+                catch (WebException we)
+                {
+                    TelemetryHelper.Execute(TelemetryLevel.Error, "infra-webrequesthelper-failure", we);
+                    if (we.Response != null)
+                    {
+                        using var stream = we.Response.GetResponseStream();
+                        using var reader = new StreamReader(stream);
+                        return reader.ReadToEnd();
+                    }
                     throw;
                 }
             }
-            return result;
+            finally
+            {
+                TelemetryHelper.Execute(TelemetryLevel.Verbose, "infra-webrequesthelper-end");
+            }
         }
     }
 }

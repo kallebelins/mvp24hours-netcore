@@ -31,7 +31,7 @@ namespace Mvp24Hours.Application.MongoDb.Test
         }
 
         [Fact, Priority(1)]
-        public void Create_Many_Customers()
+        public void CreateManyCustomers()
         {
             var service = serviceProvider.GetService<CustomerService>();
             for (int i = 0; i < 10; i++)
@@ -49,7 +49,7 @@ namespace Mvp24Hours.Application.MongoDb.Test
         }
 
         [Fact, Priority(2)]
-        public void Get_Filter_Customer_List()
+        public void GetFilterCustomerList()
         {
             var service = serviceProvider.GetService<CustomerService>();
             var result = service.List();
@@ -57,7 +57,7 @@ namespace Mvp24Hours.Application.MongoDb.Test
         }
 
         [Fact, Priority(3)]
-        public void Get_Filter_Customer_List_Any()
+        public void GetFilterCustomerListAny()
         {
             var service = serviceProvider.GetService<CustomerService>();
             var result = service.ListAny();
@@ -65,7 +65,7 @@ namespace Mvp24Hours.Application.MongoDb.Test
         }
 
         [Fact, Priority(4)]
-        public void Get_Filter_Customer_List_Count()
+        public void GetFilterCustomerListCount()
         {
             var service = serviceProvider.GetService<CustomerService>();
             var result = service.ListCount();
@@ -73,7 +73,7 @@ namespace Mvp24Hours.Application.MongoDb.Test
         }
 
         [Fact, Priority(5)]
-        public void Get_Filter_Customer_List_Paging()
+        public void GetFilterCustomerListPaging()
         {
             var service = serviceProvider.GetService<CustomerService>();
             var paging = new PagingCriteria(3, 0);
@@ -82,7 +82,7 @@ namespace Mvp24Hours.Application.MongoDb.Test
         }
 
         [Fact, Priority(6)]
-        public void Get_Filter_Customer_List_Order()
+        public void GetFilterCustomerListOrder()
         {
             var service = serviceProvider.GetService<CustomerService>();
             var paging = new PagingCriteria(3, 0, new List<string> { "Name desc" });
@@ -91,7 +91,7 @@ namespace Mvp24Hours.Application.MongoDb.Test
         }
 
         [Fact, Priority(7)]
-        public void Get_Filter_Customer_List_Order_Expression()
+        public void GetFilterCustomerListOrderExpression()
         {
             var service = serviceProvider.GetService<CustomerService>();
             var paging = new PagingCriteriaExpression<Customer>(3, 0);
@@ -101,7 +101,7 @@ namespace Mvp24Hours.Application.MongoDb.Test
         }
 
         [Fact, Priority(8)]
-        public void Get_Filter_Customer_List_Paging_Expression()
+        public void GetFilterCustomerListPagingExpression()
         {
             var service = serviceProvider.GetService<CustomerService>();
             var paging = new PagingCriteriaExpression<Customer>(3, 0);
@@ -110,7 +110,7 @@ namespace Mvp24Hours.Application.MongoDb.Test
         }
 
         [Fact, Priority(9)]
-        public void Get_Filter_Customer_By_Name()
+        public void GetFilterCustomerByName()
         {
             var service = serviceProvider.GetService<CustomerService>();
             var result = service.GetBy(x => x.Name == "Test 2");

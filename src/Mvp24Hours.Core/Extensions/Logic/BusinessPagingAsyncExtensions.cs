@@ -12,6 +12,7 @@ using Mvp24Hours.Core.ValueObjects.Logic;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -22,14 +23,59 @@ namespace Mvp24Hours.Extensions
     /// </summary>
     public static class BusinessPagingAsyncExtensions
     {
-        public static async Task<IPagingCriteria> ToPagingCriteriaAsync(this Task<PagingCriteriaRequest> requestAsync)
+        /// <summary>
+        /// 
+        /// </summary>
+        public static async Task<IPagingCriteria> ToPagingCriteriaAsync(this Task<PagingCriteriaRequest> requestAsync, int? limit = null, int? offset = null, IList<string> orderBy = null, IList<string> navigation = null)
         {
             var request = await requestAsync;
             return new PagingCriteria(
-                request.Limit,
-                request.Offset,
-                new ReadOnlyCollection<string>(request.OrderBy ?? new List<string>()),
-                new ReadOnlyCollection<string>(request.Navigation ?? new List<string>())
+                limit ?? request?.Limit ?? 0,
+                offset ?? request?.Offset ?? 0,
+                new ReadOnlyCollection<string>(orderBy ?? request?.OrderBy ?? new List<string>()),
+                new ReadOnlyCollection<string>(navigation ?? request?.Navigation ?? new List<string>())
+            );
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static async Task<IPagingCriteriaExpression<T>> ToPagingCriteriaExpressionAsync<T>(this Task<PagingCriteriaRequest> requestAsync, int? limit = null, int? offset = null)
+        {
+            var request = await requestAsync;
+            return new PagingCriteriaExpression<T>(
+                limit ?? request?.Limit ?? 0,
+                offset ?? request?.Offset ?? 0,
+                new ReadOnlyCollection<string>(request?.OrderBy ?? new List<string>()),
+                new ReadOnlyCollection<string>(request?.Navigation ?? new List<string>())
+            );
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static async Task<IPagingCriteria> NewCriteriaAsync(this Task<IPagingCriteria> criteriaAsync, int? limit = null, int? offset = null, IList<string> orderBy = null, IList<string> navigation = null)
+        {
+            var criteria = await criteriaAsync;
+            return new PagingCriteria(
+                limit ?? criteria?.Limit ?? 0,
+                offset ?? criteria?.Offset ?? 0,
+                new ReadOnlyCollection<string>(orderBy ?? criteria?.OrderBy?.ToList() ?? new List<string>()),
+                new ReadOnlyCollection<string>(navigation ?? criteria?.Navigation?.ToList() ?? new List<string>())
+            );
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static async Task<IPagingCriteriaExpression<T>> NewCriteriaExpressionAsync<T>(this Task<IPagingCriteria> criteriaAsync, int? limit = null, int? offset = null)
+        {
+            var criteria = await criteriaAsync;
+            return new PagingCriteriaExpression<T>(
+                limit ?? criteria?.Limit ?? 0,
+                offset ?? criteria?.Offset ?? 0,
+                new ReadOnlyCollection<string>(criteria?.OrderBy?.ToList() ?? new List<string>()),
+                new ReadOnlyCollection<string>(criteria?.Navigation?.ToList() ?? new List<string>())
             );
         }
 

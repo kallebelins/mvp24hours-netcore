@@ -12,6 +12,7 @@ using Mvp24Hours.Core.ValueObjects.Logic;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace Mvp24Hours.Extensions
@@ -21,13 +22,43 @@ namespace Mvp24Hours.Extensions
     /// </summary>
     public static class BusinessPagingExtensions
     {
-        public static IPagingCriteria ToPagingCriteria(this PagingCriteriaRequest request)
+        public static IPagingCriteria ToPagingCriteria(this PagingCriteriaRequest request, int? limit = null, int? offset = null, IList<string> orderBy = null, IList<string> navigation = null)
         {
             return new PagingCriteria(
-                request.Limit,
-                request.Offset,
-                new ReadOnlyCollection<string>(request.OrderBy ?? new List<string>()),
-                new ReadOnlyCollection<string>(request.Navigation ?? new List<string>())
+                limit ?? request?.Limit ?? 0,
+                offset ?? request?.Offset ?? 0,
+                new ReadOnlyCollection<string>(orderBy ?? request?.OrderBy ?? new List<string>()),
+                new ReadOnlyCollection<string>(navigation ?? request?.Navigation ?? new List<string>())
+            );
+        }
+
+        public static IPagingCriteriaExpression<T> ToPagingCriteriaExpression<T>(this PagingCriteriaRequest request, int? limit = null, int? offset = null)
+        {
+            return new PagingCriteriaExpression<T>(
+                limit ?? request?.Limit ?? 0,
+                offset ?? request?.Offset ?? 0,
+                new ReadOnlyCollection<string>(request?.OrderBy ?? new List<string>()),
+                new ReadOnlyCollection<string>(request?.Navigation ?? new List<string>())
+            );
+        }
+
+        public static IPagingCriteria NewCriteria(this IPagingCriteria criteria, int? limit = null, int? offset = null, IList<string> orderBy = null, IList<string> navigation = null)
+        {
+            return new PagingCriteria(
+                limit ?? criteria?.Limit ?? 0,
+                offset ?? criteria?.Offset ?? 0,
+                new ReadOnlyCollection<string>(orderBy ?? criteria?.OrderBy?.ToList() ?? new List<string>()),
+                new ReadOnlyCollection<string>(navigation ?? criteria?.Navigation?.ToList() ?? new List<string>())
+            );
+        }
+
+        public static IPagingCriteriaExpression<T> NewCriteriaExpression<T>(this IPagingCriteria criteria, int? limit = null, int? offset = null)
+        {
+            return new PagingCriteriaExpression<T>(
+                limit ?? criteria?.Limit ?? 0,
+                offset ?? criteria?.Offset ?? 0,
+                new ReadOnlyCollection<string>(criteria?.OrderBy?.ToList() ?? new List<string>()),
+                new ReadOnlyCollection<string>(criteria?.Navigation?.ToList() ?? new List<string>())
             );
         }
 

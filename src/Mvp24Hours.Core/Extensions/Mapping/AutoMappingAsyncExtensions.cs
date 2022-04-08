@@ -20,7 +20,7 @@ namespace Mvp24Hours.Extensions
         /// <summary>
         /// Convert instance to mapped object
         /// </summary>
-        public static async Task<TDestination> MapToAsync<TDestination>(this Task<object> sourceAsync)
+        public static async Task<TDestination> MapToAsync<TSource, TDestination>(this Task<TSource> sourceAsync)
         {
             var source = await sourceAsync;
 

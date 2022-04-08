@@ -45,7 +45,7 @@ namespace Mvp24Hours.Application.MySql.Test
 
         #region [ List ]
         [Fact, Priority(2)]
-        public void Get_Filter_Customer_List()
+        public void GetFilterCustomerList()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingService>();
@@ -55,7 +55,7 @@ namespace Mvp24Hours.Application.MySql.Test
             Assert.True(pagingResult.Paging != null);
         }
         [Fact, Priority(5)]
-        public void Get_Filter_Customer_List_Paging()
+        public void GetFilterCustomerListPaging()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingService>();
@@ -66,7 +66,7 @@ namespace Mvp24Hours.Application.MySql.Test
             Assert.True(pagingResult.Paging != null);
         }
         [Fact, Priority(5)]
-        public void Get_Filter_Customer_List_Navigation()
+        public void GetFilterCustomerListNavigation()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingService>();
@@ -77,7 +77,7 @@ namespace Mvp24Hours.Application.MySql.Test
             Assert.True(pagingResult.Paging != null);
         }
         [Fact, Priority(6)]
-        public void Get_Filter_Customer_List_Order_Asc()
+        public void GetFilterCustomerListOrderAsc()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingService>();
@@ -88,7 +88,7 @@ namespace Mvp24Hours.Application.MySql.Test
             Assert.True(pagingResult.Paging != null);
         }
         [Fact, Priority(6)]
-        public void Get_Filter_Customer_List_Order_Desc()
+        public void GetFilterCustomerListOrderDesc()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingService>();
@@ -99,7 +99,7 @@ namespace Mvp24Hours.Application.MySql.Test
             Assert.True(pagingResult.Paging != null);
         }
         [Fact, Priority(7)]
-        public void Get_Filter_Customer_List_Order_Asc_Expression()
+        public void GetFilterCustomerListOrderAscExpression()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingService>();
@@ -111,7 +111,7 @@ namespace Mvp24Hours.Application.MySql.Test
             Assert.True(pagingResult.Paging != null);
         }
         [Fact, Priority(8)]
-        public void Get_Filter_Customer_List_Order_Desc_Expression()
+        public void GetFilterCustomerListOrderDescExpression()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingService>();
@@ -123,7 +123,7 @@ namespace Mvp24Hours.Application.MySql.Test
             Assert.True(pagingResult.Paging != null);
         }
         [Fact, Priority(9)]
-        public void Get_Filter_Customer_List_Paging_Expression()
+        public void GetFilterCustomerListPagingExpression()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingService>();
@@ -134,7 +134,7 @@ namespace Mvp24Hours.Application.MySql.Test
             Assert.True(pagingResult.Paging != null);
         }
         [Fact, Priority(9)]
-        public void Get_Filter_Customer_List_Navigation_Expression()
+        public void GetFilterCustomerListNavigationExpression()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingService>();
@@ -149,7 +149,7 @@ namespace Mvp24Hours.Application.MySql.Test
 
         #region [ GetBy ]
         [Fact, Priority(2)]
-        public void Get_Filter_Customer_GetBy()
+        public void GetFilterCustomerGetBy()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingService>();
@@ -159,7 +159,7 @@ namespace Mvp24Hours.Application.MySql.Test
             Assert.True(pagingResult.Paging != null);
         }
         [Fact, Priority(5)]
-        public void Get_Filter_Customer_GetBy_Paging()
+        public void GetFilterCustomerGetByPaging()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingService>();
@@ -170,7 +170,7 @@ namespace Mvp24Hours.Application.MySql.Test
             Assert.True(pagingResult.Paging != null);
         }
         [Fact, Priority(5)]
-        public void Get_Filter_Customer_GetBy_Navigation()
+        public void GetFilterCustomerGetByNavigation()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingService>();
@@ -181,7 +181,7 @@ namespace Mvp24Hours.Application.MySql.Test
             Assert.True(pagingResult.Paging != null);
         }
         [Fact, Priority(6)]
-        public void Get_Filter_Customer_GetBy_Order_Asc()
+        public void GetFilterCustomerGetByOrderAsc()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingService>();
@@ -192,7 +192,7 @@ namespace Mvp24Hours.Application.MySql.Test
             Assert.True(pagingResult.Paging != null);
         }
         [Fact, Priority(6)]
-        public void Get_Filter_Customer_GetBy_Order_Desc()
+        public void GetFilterCustomerGetByOrderDesc()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingService>();
@@ -203,7 +203,7 @@ namespace Mvp24Hours.Application.MySql.Test
             Assert.True(pagingResult.Paging != null);
         }
         [Fact, Priority(7)]
-        public void Get_Filter_Customer_GetBy_Order_Asc_Expression()
+        public void GetFilterCustomerGetByOrderAscExpression()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingService>();
@@ -215,7 +215,7 @@ namespace Mvp24Hours.Application.MySql.Test
             Assert.True(pagingResult.Paging != null);
         }
         [Fact, Priority(8)]
-        public void Get_Filter_Customer_GetBy_Order_Desc_Expression()
+        public void GetFilterCustomerGetByOrderDescExpression()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingService>();
@@ -227,7 +227,7 @@ namespace Mvp24Hours.Application.MySql.Test
             Assert.True(pagingResult.Paging != null);
         }
         [Fact, Priority(9)]
-        public void Get_Filter_Customer_GetBy_Paging_Expression()
+        public void GetFilterCustomerGetByPagingExpression()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingService>();
@@ -238,7 +238,7 @@ namespace Mvp24Hours.Application.MySql.Test
             Assert.True(pagingResult.Paging != null);
         }
         [Fact, Priority(9)]
-        public void Get_Filter_Customer_GetBy_Navigation_Expression()
+        public void GetFilterCustomerGetByNavigationExpression()
         {
             // arrange
             var service = serviceProvider.GetService<CustomerPagingService>();

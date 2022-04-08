@@ -19,8 +19,8 @@ namespace Mvp24Hours.Application.Redis.Test
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Name)]
     public class Test4CacheRepositoryAsyncTest
     {
-        private readonly string _keyString = $"string_test-{StringHelper.GenerateKey(5)}";
-        private readonly string _keyObject = $"object_test-{StringHelper.GenerateKey(5)}";
+        private readonly string keyString = $"stringtest-{StringHelper.GenerateKey(5)}";
+        private readonly string keyObject = $"objecttest-{StringHelper.GenerateKey(5)}";
         private readonly Startup startup;
 
         public Test4CacheRepositoryAsyncTest()
@@ -29,7 +29,7 @@ namespace Mvp24Hours.Application.Redis.Test
         }
 
         [Fact, Priority(1)]
-        public async Task Add_String_Cache_Async()
+        public async Task AddStringCacheAsync()
         {
             var serviceProvider = startup.Initialize();
             var customer = new Customer
@@ -42,31 +42,31 @@ namespace Mvp24Hours.Application.Redis.Test
             string content = customer.ToSerialize();
 
             var repo = serviceProvider.GetService<IRepositoryCacheAsync<Customer>>();
-            await repo.SetStringAsync(_keyString, content);
+            await repo.SetStringAsync(keyString, content);
         }
 
         [Fact, Priority(2)]
-        public async Task Get_String_Async()
+        public async Task GetStringAsync()
         {
             var serviceProvider = startup.Initialize();
             var repo = serviceProvider.GetService<IRepositoryCacheAsync<Customer>>();
-            await repo.SetStringAsync(_keyString, "Test");
-            string content = await repo.GetStringAsync(_keyString);
+            await repo.SetStringAsync(keyString, "Test");
+            string content = await repo.GetStringAsync(keyString);
             Assert.True(!string.IsNullOrEmpty(content));
         }
 
         [Fact, Priority(3)]
-        public async Task Remove_String_Async()
+        public async Task RemoveStringAsync()
         {
             var serviceProvider = startup.Initialize();
             var repo = serviceProvider.GetService<IRepositoryCacheAsync<Customer>>();
-            await repo.RemoveAsync(_keyString);
-            string content = await repo.GetStringAsync(_keyString);
+            await repo.RemoveAsync(keyString);
+            string content = await repo.GetStringAsync(keyString);
             Assert.True(string.IsNullOrEmpty(content));
         }
 
         [Fact, Priority(4)]
-        public async Task Add_Object_Cache_Async()
+        public async Task AddObjectCacheAsync()
         {
             var serviceProvider = startup.Initialize();
             var customer = new Customer
@@ -77,26 +77,26 @@ namespace Mvp24Hours.Application.Redis.Test
                 Active = true
             };
             var repo = serviceProvider.GetService<IRepositoryCacheAsync<Customer>>();
-            await repo.SetAsync(_keyObject, customer);
+            await repo.SetAsync(keyObject, customer);
         }
 
         [Fact, Priority(5)]
-        public async Task Get_Object_Async()
+        public async Task GetObjectAsync()
         {
             var serviceProvider = startup.Initialize();
             var repo = serviceProvider.GetService<IRepositoryCacheAsync<Customer>>();
-            await repo.SetAsync(_keyObject, new Customer { });
-            var customer = await repo.GetAsync(_keyObject);
+            await repo.SetAsync(keyObject, new Customer { });
+            var customer = await repo.GetAsync(keyObject);
             Assert.True(customer != null);
         }
 
         [Fact, Priority(6)]
-        public async Task Remove_Object_Async()
+        public async Task RemoveObjectAsync()
         {
             var serviceProvider = startup.Initialize();
             var repo = serviceProvider.GetService<IRepositoryCacheAsync<Customer>>();
-            await repo.RemoveAsync(_keyObject);
-            var customer = await repo.GetAsync(_keyObject);
+            await repo.RemoveAsync(keyObject);
+            var customer = await repo.GetAsync(keyObject);
             Assert.True(customer == null);
         }
     }

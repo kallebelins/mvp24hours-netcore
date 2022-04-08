@@ -18,8 +18,8 @@ namespace Mvp24Hours.Application.Redis.Test
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Name)]
     public class Test1CacheTest
     {
-        private readonly string _keyString = $"string_test-{StringHelper.GenerateKey(5)}";
-        private readonly string _keyObject = $"object_test-{StringHelper.GenerateKey(5)}";
+        private readonly string keyString = $"stringtest-{StringHelper.GenerateKey(5)}";
+        private readonly string keyObject = $"objecttest-{StringHelper.GenerateKey(5)}";
         private readonly Startup startup;
 
         public Test1CacheTest()
@@ -28,7 +28,7 @@ namespace Mvp24Hours.Application.Redis.Test
         }
 
         [Fact, Priority(1)]
-        public void Set_String()
+        public void SetString()
         {
             // arrange
             var serviceProvider = startup.Initialize();
@@ -43,44 +43,44 @@ namespace Mvp24Hours.Application.Redis.Test
             string content = customer.ToSerialize();
 
             // act
-            cache.SetString(_keyString, content);
+            cache.SetString(keyString, content);
 
             // assert
-            Assert.True(cache.GetString(_keyString).HasValue());
+            Assert.True(cache.GetString(keyString).HasValue());
         }
 
         [Fact, Priority(2)]
-        public void Get_String()
+        public void GetString()
         {
             // arrange
             var serviceProvider = startup.Initialize();
             var cache = serviceProvider.GetService<IDistributedCache>();
 
             // act
-            cache.SetString(_keyString, "Test");
-            string content = cache.GetString(_keyString);
+            cache.SetString(keyString, "Test");
+            string content = cache.GetString(keyString);
 
             // assert
             Assert.True(content.HasValue());
         }
 
         [Fact, Priority(3)]
-        public void Remove_String()
+        public void RemoveString()
         {
             // arrange
             var serviceProvider = startup.Initialize();
             var cache = serviceProvider.GetService<IDistributedCache>();
 
             //  act
-            cache.Remove(_keyString);
+            cache.Remove(keyString);
 
             // assert
-            string content = cache.GetString(_keyString);
+            string content = cache.GetString(keyString);
             Assert.True(!content.HasValue());
         }
 
         [Fact, Priority(4)]
-        public void Set_Object()
+        public void SetObject()
         {
             // arrange
             var serviceProvider = startup.Initialize();
@@ -94,15 +94,15 @@ namespace Mvp24Hours.Application.Redis.Test
             };
 
             //  act
-            cache.SetObject(_keyObject, customer);
+            cache.SetObject(keyObject, customer);
 
             // assert
-            var result = cache.GetObject<Customer>(_keyObject);
+            var result = cache.GetObject<Customer>(keyObject);
             Assert.True(result != null);
         }
 
         [Fact, Priority(5)]
-        public void Get_Object()
+        public void GetObject()
         {
             // arrange
             var serviceProvider = startup.Initialize();
@@ -114,17 +114,17 @@ namespace Mvp24Hours.Application.Redis.Test
                 Name = "Test 1",
                 Active = true
             };
-            cache.SetObject(_keyObject, customer);
+            cache.SetObject(keyObject, customer);
 
             //  act
-            customer = cache.GetObject<Customer>(_keyObject);
+            customer = cache.GetObject<Customer>(keyObject);
 
             // assert
             Assert.True(customer != null);
         }
 
         [Fact, Priority(6)]
-        public void Remove_Object()
+        public void RemoveObject()
         {
             // arrange
             var serviceProvider = startup.Initialize();
@@ -136,13 +136,13 @@ namespace Mvp24Hours.Application.Redis.Test
                 Name = "Test 1",
                 Active = true
             };
-            cache.SetObject(_keyObject, customer);
+            cache.SetObject(keyObject, customer);
 
             //  act
-            cache.Remove(_keyObject);
+            cache.Remove(keyObject);
 
             // assert
-            customer = cache.GetObject<Customer>(_keyObject);
+            customer = cache.GetObject<Customer>(keyObject);
             Assert.True(customer == null);
         }
     }
