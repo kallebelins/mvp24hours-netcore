@@ -5,6 +5,7 @@
 //=====================================================================================
 using Mvp24Hours.Core.Enums.Infrastructure;
 using Mvp24Hours.Helpers;
+using Mvp24Hours.Infrastructure.Exceptions;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -228,6 +229,10 @@ namespace Mvp24Hours.Extensions
                 TelemetryHelper.Execute(TelemetryLevel.Verbose, "infra-httpclient-sendasync", $"url:{url}|method:{method}");
 
                 var response = await client.SendAsync(request);
+                if(response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    throw new HttpNotFoundException();
+                }
 
                 response.EnsureSuccessStatusCode();
 
