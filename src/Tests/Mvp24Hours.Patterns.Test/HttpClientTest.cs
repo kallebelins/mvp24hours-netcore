@@ -4,6 +4,7 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Microsoft.Extensions.DependencyInjection;
+using Mvp24Hours.Core.Exceptions;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Patterns.Test.Setup;
 using System.Net.Http;
@@ -51,6 +52,18 @@ namespace Mvp24Hours.Patterns.Test
             var result = await client.HttpGetAsync("users");
             // assert
             Assert.True(result != null);
+        }
+
+        [Fact, Priority(1)]
+        public async Task GetPostsWithNotFoundAsync()
+        {
+            await Assert.ThrowsAsync<HttpStatusCodeException>(async () => {
+                // arrange
+                var serviceProvider = startup.InitializeHttp();
+                var factory = serviceProvider.GetService<IHttpClientFactory>();
+                var client = factory.CreateClient("jsonUrl");
+                var result = await client.HttpGetAsync("notFound");
+            });
         }
 
         [Fact, Priority(2)]

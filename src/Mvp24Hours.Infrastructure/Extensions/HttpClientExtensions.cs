@@ -4,6 +4,7 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Mvp24Hours.Core.Enums.Infrastructure;
+using Mvp24Hours.Core.Exceptions;
 using Mvp24Hours.Helpers;
 using Newtonsoft.Json;
 using System;
@@ -228,6 +229,11 @@ namespace Mvp24Hours.Extensions
                 TelemetryHelper.Execute(TelemetryLevel.Verbose, "infra-httpclient-sendasync", $"url:{url}|method:{method}");
 
                 var response = await client.SendAsync(request);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpStatusCodeException(response.ReasonPhrase, response.StatusCode, request.Method, request.RequestUri);
+                }
 
                 response.EnsureSuccessStatusCode();
 
