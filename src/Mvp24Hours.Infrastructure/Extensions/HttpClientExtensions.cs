@@ -229,15 +229,16 @@ namespace Mvp24Hours.Extensions
                 TelemetryHelper.Execute(TelemetryLevel.Verbose, "infra-httpclient-sendasync", $"url:{url}|method:{method}");
 
                 var response = await client.SendAsync(request);
-
+                var responseContent = await response.Content.ReadAsStringAsync();
+                
                 if (!response.IsSuccessStatusCode)
                 {
-                    throw new HttpStatusCodeException(response.ReasonPhrase, response.StatusCode, request.Method, request.RequestUri);
+                    throw new HttpStatusCodeException(response.ReasonPhrase, response.StatusCode, request.Method, request.RequestUri, responseContent);
                 }
 
                 response.EnsureSuccessStatusCode();
 
-                return await response.Content.ReadAsStringAsync();
+                return responseContent;
             }
             catch (Exception ex)
             {

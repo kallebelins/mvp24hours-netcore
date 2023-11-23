@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 
 namespace Mvp24Hours.Core.Exceptions
 {
@@ -14,16 +12,18 @@ namespace Mvp24Hours.Core.Exceptions
         {
         }
 
-        public HttpStatusCodeException(string message, HttpStatusCode statusCode, HttpMethod method = null, Uri requestUri = null)
+        public HttpStatusCodeException(string message, HttpStatusCode statusCode, HttpMethod method = null, Uri requestUri = null, string responseBody = null)
             : base(message ?? $"Non-success HTTP status code: {(int)statusCode} {statusCode}.")
         {
             StatusCode = statusCode;
             Method = method;
             RequestUri = requestUri;
+            ResponseBody = responseBody;
         }
 
         public HttpStatusCode StatusCode { get; private set; }
         public HttpMethod Method { get; private set; }
         public Uri RequestUri { get; private set; }
+        public string ResponseBody { get; set; }
     }
 }
