@@ -57,7 +57,8 @@ namespace Mvp24Hours.Patterns.Test
         [Fact, Priority(1)]
         public async Task GetPostsWithNotFoundAsync()
         {
-            await Assert.ThrowsAsync<HttpStatusCodeException>(async () => {
+            await Assert.ThrowsAsync<HttpStatusCodeException>(async () =>
+            {
                 // arrange
                 var serviceProvider = startup.InitializeHttp();
                 var factory = serviceProvider.GetService<IHttpClientFactory>();

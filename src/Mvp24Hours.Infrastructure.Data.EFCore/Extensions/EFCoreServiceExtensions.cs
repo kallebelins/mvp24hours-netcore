@@ -6,6 +6,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Core.Contract.Data;
+using Mvp24Hours.Core.Enums.Infrastructure;
+using Mvp24Hours.Helpers;
 using Mvp24Hours.Infrastructure.Data.EFCore;
 using Mvp24Hours.Infrastructure.Data.EFCore.Configuration;
 using System;
@@ -21,6 +23,8 @@ namespace Mvp24Hours.Extensions
             Func<IServiceProvider, TDbContext> dbFactory = null,
             ServiceLifetime lifetime = ServiceLifetime.Scoped) where TDbContext : DbContext
         {
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcoreserviceextensions-addmvp24hoursdbcontext-execute");
+
             if (dbFactory != null)
             {
                 services.Add(new ServiceDescriptor(typeof(DbContext), dbFactory, lifetime));
@@ -42,6 +46,8 @@ namespace Mvp24Hours.Extensions
             Type unitOfWork = null,
             ServiceLifetime lifetime = ServiceLifetime.Scoped)
         {
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcoreserviceextensions-addmvp24hoursrepository-execute");
+
             if (options != null)
             {
                 services.Configure(options);
@@ -81,6 +87,8 @@ namespace Mvp24Hours.Extensions
             Type unitOfWorkAsync = null,
             ServiceLifetime lifetime = ServiceLifetime.Scoped)
         {
+            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcoreserviceextensions-addmvp24hoursrepositoryasync-execute");
+
             if (options != null)
             {
                 services.Configure(options);

@@ -7,11 +7,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Mvp24Hours.Core.DTOs;
 using Mvp24Hours.Core.Enums;
+using Mvp24Hours.Core.Enums.Infrastructure;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Helpers;
 using Mvp24Hours.WebAPI.Configuration;
 using System;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace Mvp24Hours.WebAPI.Middlewares
@@ -33,13 +33,16 @@ namespace Mvp24Hours.WebAPI.Middlewares
             {
                 if (!httpContext.Response.HasStarted)
                 {
+                    TelemetryHelper.Execute(TelemetryLevel.Verbose, "my-exception-middleware-start", $"http-request-path:{httpContext.Request.Path}");
                     await _next(httpContext);
+                    TelemetryHelper.Execute(TelemetryLevel.Verbose, "my-exception-middleware-end", $"http-request-path:{httpContext.Request.Path}");
                 }
             }
             catch (Exception ex)
             {
                 if (!httpContext.Response.HasStarted)
                 {
+                    TelemetryHelper.Execute(TelemetryLevel.Error, "my-exception-middleware-failure", ex);
                     await HandleExceptionAsync(httpContext, ex);
                 }
             }
@@ -48,7 +51,7 @@ namespace Mvp24Hours.WebAPI.Middlewares
         private Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            context.Response.StatusCode = options.StatusCodeHandle(exception);
 
             string message;
 
