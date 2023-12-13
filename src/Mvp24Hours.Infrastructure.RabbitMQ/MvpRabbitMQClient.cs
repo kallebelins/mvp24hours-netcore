@@ -319,7 +319,9 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
                 try
                 {
                     TelemetryHelper.Execute(TelemetryLevel.Error, "rabbitmq-consumer-received-failure", ex);
-                    consumerSync.Failure(ex, token);
+
+                    if (consumerSync is IMvpRabbitMQConsumerRecoverySync)
+                        (consumerSync as IMvpRabbitMQConsumerRecoverySync).Failure(ex, token);
 
                     if (redeliveredCount < Options.MaxRedeliveredCount)
                     {
@@ -331,7 +333,8 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
                     else
                     {
                         TelemetryHelper.Execute(TelemetryLevel.Error, "rabbitmq-consumer-received-reject", $"redelivered-count:{redeliveredCount}");
-                        consumerSync.Rejected(data, token);
+                        if (consumerSync is IMvpRabbitMQConsumerRecoverySync)
+                            (consumerSync as IMvpRabbitMQConsumerRecoverySync).Rejected(data, token);
                         BasicNack(e, channel);
                     }
                 }
@@ -381,7 +384,8 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
                 try
                 {
                     TelemetryHelper.Execute(TelemetryLevel.Error, "rabbitmq-consumer-received-failure", ex);
-                    await consumerAsync.FailureAsync(ex, token);
+                    if (consumerAsync is IMvpRabbitMQConsumerRecoveryAsync)
+                        await (consumerAsync as IMvpRabbitMQConsumerRecoveryAsync).FailureAsync(ex, token);
 
                     if (redeliveredCount < Options.MaxRedeliveredCount)
                     {
@@ -394,7 +398,8 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
                     else
                     {
                         TelemetryHelper.Execute(TelemetryLevel.Error, "rabbitmq-consumer-received-reject", $"redelivered-count:{redeliveredCount}");
-                        await consumerAsync.RejectedAsync(data, token);
+                        if (consumerAsync is IMvpRabbitMQConsumerRecoveryAsync)
+                            await (consumerAsync as IMvpRabbitMQConsumerRecoveryAsync).RejectedAsync(data, token);
                         BasicNack(e, channel);
                     }
                 }

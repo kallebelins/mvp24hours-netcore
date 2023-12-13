@@ -5,12 +5,12 @@
 //=====================================================================================
 
 using System;
-using System.Threading.Tasks;
 
 namespace Mvp24Hours.Infrastructure.RabbitMQ.Core.Contract
 {
-    public interface IMvpRabbitMQConsumerAsync : IMvpRabbitMQConsumer
+    public interface IMvpRabbitMQConsumerRecoverySync : IMvpRabbitMQConsumerSync
     {
-        Task ReceivedAsync(object message, string token);
+        void Failure(Exception exception, string token);
+        void Rejected(object message, string token);
     }
 }

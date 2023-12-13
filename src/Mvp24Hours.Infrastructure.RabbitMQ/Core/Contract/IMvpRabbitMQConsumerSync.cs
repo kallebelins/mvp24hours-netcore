@@ -11,7 +11,5 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ.Core.Contract
     public interface IMvpRabbitMQConsumerSync : IMvpRabbitMQConsumer
     {
         void Received(object message, string token);
-        void Failure(Exception exception, string token);
-        void Rejected(object message, string token);
     }
 }

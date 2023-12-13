@@ -9,8 +9,9 @@ using System.Threading.Tasks;
 
 namespace Mvp24Hours.Infrastructure.RabbitMQ.Core.Contract
 {
-    public interface IMvpRabbitMQConsumerAsync : IMvpRabbitMQConsumer
+    public interface IMvpRabbitMQConsumerRecoveryAsync : IMvpRabbitMQConsumerAsync
     {
-        Task ReceivedAsync(object message, string token);
+        Task FailureAsync(Exception exception, string token);
+        Task RejectedAsync(object message, string token);
     }
 }
