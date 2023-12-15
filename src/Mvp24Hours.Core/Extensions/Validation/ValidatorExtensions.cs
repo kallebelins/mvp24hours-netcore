@@ -186,7 +186,7 @@ namespace Mvp24Hours.Extensions
                 return false;
             }
 
-            tempCpf = cpf.Substring(0, 9);
+            tempCpf = cpf[..9];
             soma = 0;
 
             for (int i = 0; i < 9; i++)
@@ -246,7 +246,7 @@ namespace Mvp24Hours.Extensions
                 return false;
             }
 
-            tempCnpj = cnpj.Substring(0, 12);
+            tempCnpj = cnpj[..12];
             soma = 0;
             for (int i = 0; i < 12; i++)
             {
@@ -316,7 +316,7 @@ namespace Mvp24Hours.Extensions
             var year = int.Parse(dateParts[1]);
             var month = int.Parse(dateParts[0]);
             var lastDateOfExpiryMonth = DateTime.DaysInMonth(year, month); //get actual expiry date
-            var cardExpiry = new DateTime(year, month, lastDateOfExpiryMonth, 23, 59, 59);
+            DateTime cardExpiry = new (year, month, lastDateOfExpiryMonth, 23, 59, 59);
 
             //check expiry greater than today & within next 6 years <7, 8>>
             return (cardExpiry > DateTime.Now && cardExpiry < DateTime.Now.AddYears(6));

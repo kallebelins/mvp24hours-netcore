@@ -21,7 +21,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
         private readonly RabbitMQConnectionOptions _options;
         private IConnection _connection;
         private bool _disposed;
-        private object sync_root = new();
+        private readonly object sync_root = new();
 
         public MvpRabbitMQConnection(IOptions<RabbitMQConnectionOptions> options)
         {
@@ -75,7 +75,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
 
         public bool TryConnect()
         {
-            TelemetryHelper.Execute(TelemetryLevel.Information, "rabbitmq-connection-tryconnect", "RabbitMQ Client is trying to connect");
+            TelemetryHelper.Execute(TelemetryLevels.Information, "rabbitmq-connection-tryconnect", "RabbitMQ Client is trying to connect");
 
             lock (sync_root)
             {
@@ -83,7 +83,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
                     .Or<BrokerUnreachableException>()
                     .WaitAndRetry(_options.RetryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (ex, time) =>
                     {
-                        TelemetryHelper.Execute(TelemetryLevel.Warning, "rabbitmq-connection-tryconnect-waitandretry", $"RabbitMQ Client could not connect after {time.TotalSeconds:n1}s ({ex.Message})");
+                        TelemetryHelper.Execute(TelemetryLevels.Warning, "rabbitmq-connection-tryconnect-waitandretry", $"RabbitMQ Client could not connect after {time.TotalSeconds:n1}s ({ex.Message})");
                     }
                 );
 
@@ -99,12 +99,12 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
                     _connection.CallbackException += OnCallbackException;
                     _connection.ConnectionBlocked += OnConnectionBlocked;
 
-                    TelemetryHelper.Execute(TelemetryLevel.Information, "rabbitmq-connection-subscribe", $"RabbitMQ Client acquired a persistent connection to '{_connection.Endpoint.HostName}' and is subscribed to failure events");
+                    TelemetryHelper.Execute(TelemetryLevels.Information, "rabbitmq-connection-subscribe", $"RabbitMQ Client acquired a persistent connection to '{_connection.Endpoint.HostName}' and is subscribed to failure events");
                     return true;
                 }
                 else
                 {
-                    TelemetryHelper.Execute(TelemetryLevel.Critical, "rabbitmq-connection-tryconnect-error", "FATAL ERROR: RabbitMQ connections could not be created and opened");
+                    TelemetryHelper.Execute(TelemetryLevels.Critical, "rabbitmq-connection-tryconnect-error", "FATAL ERROR: RabbitMQ connections could not be created and opened");
                     return false;
                 }
             }
@@ -116,7 +116,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
         {
             if (_disposed) return;
 
-            TelemetryHelper.Execute(TelemetryLevel.Warning, "rabbitmq-connection-tryconnect-subscribe-blocked", "A RabbitMQ connection is shutdown. Trying to re-connect...");
+            TelemetryHelper.Execute(TelemetryLevels.Warning, "rabbitmq-connection-tryconnect-subscribe-blocked", "A RabbitMQ connection is shutdown. Trying to re-connect...");
 
             TryConnect();
         }
@@ -125,7 +125,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
         {
             if (_disposed) return;
 
-            TelemetryHelper.Execute(TelemetryLevel.Warning, "rabbitmq-connection-tryconnect-subscribe-callback", "A RabbitMQ connection throw exception. Trying to re-connect...");
+            TelemetryHelper.Execute(TelemetryLevels.Warning, "rabbitmq-connection-tryconnect-subscribe-callback", "A RabbitMQ connection throw exception. Trying to re-connect...");
 
             TryConnect();
         }
@@ -134,7 +134,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
         {
             if (_disposed) return;
 
-            TelemetryHelper.Execute(TelemetryLevel.Warning, "rabbitmq-connection-tryconnect-subscribe-shutdown", "A RabbitMQ connection is on shutdown. Trying to re-connect...");
+            TelemetryHelper.Execute(TelemetryLevels.Warning, "rabbitmq-connection-tryconnect-subscribe-shutdown", "A RabbitMQ connection is on shutdown. Trying to re-connect...");
 
             TryConnect();
         }
@@ -163,7 +163,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
                 }
                 catch (IOException ex)
                 {
-                    TelemetryHelper.Execute(TelemetryLevel.Critical, "rabbitmq-connection-dispose-failure", ex);
+                    TelemetryHelper.Execute(TelemetryLevels.Critical, "rabbitmq-connection-dispose-failure", ex);
                 }
             }
         }

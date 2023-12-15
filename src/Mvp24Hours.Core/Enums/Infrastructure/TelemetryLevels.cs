@@ -9,7 +9,7 @@ namespace Mvp24Hours.Core.Enums.Infrastructure
     /// Defines the level telemetry
     /// </summary>
     [System.Flags]
-    public enum TelemetryLevel : short
+    public enum TelemetryLevels : short
     {
         None = 1 << 0,
         Verbose = 1 << 1,

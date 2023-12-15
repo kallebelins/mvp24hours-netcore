@@ -74,7 +74,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
         /// </summary>
         protected IQueryable<T> GetQuery(IQueryable<T> query, IPagingCriteria criteria, bool onlyNavigation = false)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositorybase-querycriteria-object", criteria);
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositorybase-querycriteria-object", criteria);
 
             var ordered = false;
 
@@ -199,7 +199,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
         {
             if (isAggregate || Options.TransactionIsolationLevel != null)
             {
-                TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositorybase-transactionscope", $"isolation:{Options.TransactionIsolationLevel ?? IsolationLevel.ReadUncommitted}|timeout:{TransactionManager.MaximumTimeout}|asyncflow:enabled");
+                TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositorybase-transactionscope", $"isolation:{Options.TransactionIsolationLevel ?? IsolationLevel.ReadUncommitted}|timeout:{TransactionManager.MaximumTimeout}|asyncflow:enabled");
                 return new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
                 {
                     IsolationLevel = Options.TransactionIsolationLevel ?? IsolationLevel.ReadUncommitted,
@@ -229,7 +229,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                 {
                     throw new InvalidOperationException("Key property not found.");
                 }
-                TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositorybase-getkeyinfo", $"key:{_keyInfo.Name}");
+                TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositorybase-getkeyinfo", $"key:{_keyInfo.Name}");
             }
 
             return _keyInfo;

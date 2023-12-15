@@ -64,6 +64,8 @@ namespace Mvp24Hours.Patterns.Test
                 var factory = serviceProvider.GetService<IHttpClientFactory>();
                 var client = factory.CreateClient("jsonUrl");
                 var result = await client.HttpGetAsync("notFound");
+                // assert
+                Assert.True(result != null);
             });
         }
 

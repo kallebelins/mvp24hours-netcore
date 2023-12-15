@@ -109,7 +109,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         /// </summary>
         public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-unitofwork-savechangesasync-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-unitofwork-savechangesasync-start");
             try
             {
                 await DbContext.SaveChangesAsync(cancellationToken);
@@ -122,7 +122,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
             }
             finally
             {
-                TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-unitofwork-savechangesasync-end");
+                TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-unitofwork-savechangesasync-end");
             }
         }
 
@@ -131,12 +131,12 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         /// </summary>
         public async Task RollbackAsync()
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-unitofwork-rollbackasync-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-unitofwork-rollbackasync-start");
             try
             {
                 await DbContext.RollbackAsync();
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-unitofwork-rollbackasync-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-unitofwork-rollbackasync-end"); }
         }
 
         #endregion

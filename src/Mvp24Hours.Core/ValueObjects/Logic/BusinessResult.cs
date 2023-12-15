@@ -50,7 +50,7 @@ namespace Mvp24Hours.Core.ValueObjects.Logic
         /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IBusinessResult{T}.HasErrors"/>
         /// </summary>
         [DataMember]
-        public bool HasErrors => Messages?.Where(x => x.Type == Enums.MessageType.Error)?.Any() ?? false;
+        public bool HasErrors => Messages != null && Messages.Any(x => x.Type == Enums.MessageType.Error);
 
         /// <summary>
         /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IBusinessResult{T}.Token"/>

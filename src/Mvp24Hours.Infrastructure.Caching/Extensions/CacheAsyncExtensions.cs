@@ -17,7 +17,7 @@ namespace Mvp24Hours.Extensions
     {
         public static async Task SetStringAsync(this IDistributedCache cache, string key, string value, int minutes, CancellationToken token = default)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-cacheasyncextensions-setstringasync-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "caching-cacheasyncextensions-setstringasync-start");
             try
             {
                 if (cache == null || !key.HasValue() || !value.HasValue())
@@ -26,12 +26,12 @@ namespace Mvp24Hours.Extensions
                 }
                 await cache.SetStringAsync(key, value, DateTimeOffset.Now.AddMinutes(minutes), token);
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-cacheasyncextensions-setstringasync-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "caching-cacheasyncextensions-setstringasync-end"); }
         }
 
         public static async Task SetStringAsync(this IDistributedCache cache, string key, string value, DateTimeOffset time, CancellationToken token = default)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-cacheasyncextensions-setstringasync-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "caching-cacheasyncextensions-setstringasync-start");
             try
             {
                 if (cache == null || !key.HasValue() || !value.HasValue())
@@ -40,7 +40,7 @@ namespace Mvp24Hours.Extensions
                 }
                 await cache.SetStringAsync(key, value, CacheConfigHelper.GetCacheOptions(time), token);
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-cacheasyncextensions-setstringasync-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "caching-cacheasyncextensions-setstringasync-end"); }
         }
     }
 }

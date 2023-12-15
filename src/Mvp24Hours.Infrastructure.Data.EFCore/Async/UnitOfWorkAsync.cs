@@ -86,7 +86,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
 
         public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-unitofwork-savechangesasync-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-unitofwork-savechangesasync-start");
             try
             {
                 if (!cancellationToken.IsCancellationRequested)
@@ -96,11 +96,11 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                 await RollbackAsync();
                 return await Task.FromResult(0);
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-unitofwork-savechangesasync-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-unitofwork-savechangesasync-end"); }
         }
         public async Task RollbackAsync()
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-unitofwork-rollbackasync-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-unitofwork-rollbackasync-start");
             try
             {
                 var changedEntries = this.DbContext.ChangeTracker.Entries()
@@ -124,7 +124,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                 }
                 await Task.CompletedTask;
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-unitofwork-rollbackasync-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-unitofwork-rollbackasync-end"); }
         }
 
         #endregion

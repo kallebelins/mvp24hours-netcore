@@ -55,18 +55,18 @@ namespace Mvp24Hours.Identity.Keycloak.WebAPI.Extensions
                     {
                         OnMessageReceived = (context) =>
                         {
-                            TelemetryHelper.Execute(TelemetryLevel.Verbose, "jwt-onmessagereceived", $"token:{context.Token}");
+                            TelemetryHelper.Execute(TelemetryLevels.Verbose, "jwt-onmessagereceived", $"token:{context.Token}");
                             return Task.CompletedTask;
                         },
                         OnChallenge = (context) =>
                         {
                             if (context.AuthenticateFailure != null)
-                                TelemetryHelper.Execute(TelemetryLevel.Error, "jwt-onchallenge-failure", context.AuthenticateFailure);
+                                TelemetryHelper.Execute(TelemetryLevels.Error, "jwt-onchallenge-failure", context.AuthenticateFailure);
                             return Task.CompletedTask;
                         },
                         OnAuthenticationFailed = (context) =>
                         {
-                            TelemetryHelper.Execute(TelemetryLevel.Error, "jwt-onauthenticationfailed-failure", context.Exception);
+                            TelemetryHelper.Execute(TelemetryLevels.Error, "jwt-onauthenticationfailed-failure", context.Exception);
                             if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
                             {
                                 context.Response.Headers.Add("Token-Expired", "true");
@@ -78,24 +78,24 @@ namespace Mvp24Hours.Identity.Keycloak.WebAPI.Extensions
                             var localUserSvc = context.HttpContext.RequestServices.GetService<IUserKeycloakService>();
                             if (localUserSvc != null)
                             {
-                                TelemetryHelper.Execute(TelemetryLevel.Verbose, "jwt-ontokenvalidated-get-integration-start");
+                                TelemetryHelper.Execute(TelemetryLevels.Verbose, "jwt-ontokenvalidated-get-integration-start");
                                 var user = context.HttpContext.RequestServices.GetUserToken();
                                 var anyUserBo = await localUserSvc.GetAnyLocalUserById((Guid)user.Id);
                                 if (!anyUserBo.GetDataValue() || anyUserBo.HasErrors)
                                 {
-                                    TelemetryHelper.Execute(TelemetryLevel.Verbose, "jwt-ontokenvalidated-get-integration-create-user-start");
+                                    TelemetryHelper.Execute(TelemetryLevels.Verbose, "jwt-ontokenvalidated-get-integration-create-user-start");
                                     var localUserBo = await localUserSvc.CreateOrUpdateLocalUser(user);
                                     if (localUserBo.HasErrors)
                                     {
-                                        TelemetryHelper.Execute(TelemetryLevel.Error, "jwt-ontokenvalidated-get-integration-create-user-failure", localUserBo.Messages.FirstOrDefault());
+                                        TelemetryHelper.Execute(TelemetryLevels.Error, "jwt-ontokenvalidated-get-integration-create-user-failure", localUserBo.Messages.FirstOrDefault());
                                     }
                                     else
                                     {
-                                        TelemetryHelper.Execute(TelemetryLevel.Verbose, "jwt-ontokenvalidated-get-integration-user", $"data: {localUserBo.GetDataValue()}");
+                                        TelemetryHelper.Execute(TelemetryLevels.Verbose, "jwt-ontokenvalidated-get-integration-user", $"data: {localUserBo.GetDataValue()}");
                                     }
-                                    TelemetryHelper.Execute(TelemetryLevel.Verbose, "jwt-ontokenvalidated-get-integration-create-user-end");
+                                    TelemetryHelper.Execute(TelemetryLevels.Verbose, "jwt-ontokenvalidated-get-integration-create-user-end");
                                 }
-                                TelemetryHelper.Execute(TelemetryLevel.Verbose, "jwt-ontokenvalidated-get-integration-end");
+                                TelemetryHelper.Execute(TelemetryLevels.Verbose, "jwt-ontokenvalidated-get-integration-end");
                             }
 
                             var sbClaims = new StringBuilder();
@@ -104,7 +104,7 @@ namespace Mvp24Hours.Identity.Keycloak.WebAPI.Extensions
                                 if (!string.IsNullOrEmpty(c.Value))
                                     sbClaims.Append($"{c.Type}; ");
                             }
-                            TelemetryHelper.Execute(TelemetryLevel.Verbose, "jwt-ontokenvalidated", $"claims:{sbClaims}");
+                            TelemetryHelper.Execute(TelemetryLevels.Verbose, "jwt-ontokenvalidated", $"claims:{sbClaims}");
                         }
                     };
                 });
@@ -183,7 +183,7 @@ namespace Mvp24Hours.Identity.Keycloak.WebAPI.Extensions
                         {
                             options.AddPolicy(key, builder => builder.RequireAssertion(async context =>
                             {
-                                if (!(context.Resource is HttpContext httpContext))
+                                if (context.Resource is not HttpContext httpContext)
                                 {
                                     return false;
                                 }

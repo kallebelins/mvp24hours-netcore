@@ -135,7 +135,7 @@ namespace Mvp24Hours.Extensions
         private static bool HasAnyInterfaces(Type parent, Type child)
         {
             return child.GetInterfaces()
-                .Any(childInterface =>
+                .AnySafe(childInterface =>
                 {
                     var currentInterface = childInterface.IsGenericType
                         ? childInterface.GetGenericTypeDefinition()

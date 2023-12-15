@@ -14,7 +14,7 @@ namespace Mvp24Hours.Helpers
     /// </summary>
     public static class TimeZoneHelper
     {
-        public static List<string> TimeZoneIds { get; set; } = new()
+        public static List<string> TimeZoneIds { get; set; } = new List<string>()
         {
             { "E. South America Standard Time" },
             { "Brazil/East" },
@@ -55,11 +55,7 @@ namespace Mvp24Hours.Helpers
             _timeZoneInfo = TimeZoneInfo.GetSystemTimeZones()
                 .FirstOrDefault(x => TimeZoneIds.Contains(x.Id));
 
-            if (_timeZoneInfo == null)
-            {
-                _timeZoneInfo = TimeZoneInfo.Local;
-            }
-
+            _timeZoneInfo ??= TimeZoneInfo.Local;
 
             return _timeZoneInfo;
         }

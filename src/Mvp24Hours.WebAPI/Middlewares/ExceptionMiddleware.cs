@@ -33,16 +33,16 @@ namespace Mvp24Hours.WebAPI.Middlewares
             {
                 if (!httpContext.Response.HasStarted)
                 {
-                    TelemetryHelper.Execute(TelemetryLevel.Verbose, "my-exception-middleware-start", $"http-request-path:{httpContext.Request.Path}");
+                    TelemetryHelper.Execute(TelemetryLevels.Verbose, "my-exception-middleware-start", $"http-request-path:{httpContext.Request.Path}");
                     await _next(httpContext);
-                    TelemetryHelper.Execute(TelemetryLevel.Verbose, "my-exception-middleware-end", $"http-request-path:{httpContext.Request.Path}");
+                    TelemetryHelper.Execute(TelemetryLevels.Verbose, "my-exception-middleware-end", $"http-request-path:{httpContext.Request.Path}");
                 }
             }
             catch (Exception ex)
             {
                 if (!httpContext.Response.HasStarted)
                 {
-                    TelemetryHelper.Execute(TelemetryLevel.Error, "my-exception-middleware-failure", ex);
+                    TelemetryHelper.Execute(TelemetryLevels.Error, "my-exception-middleware-failure", ex);
                     await HandleExceptionAsync(httpContext, ex);
                 }
             }
@@ -57,11 +57,11 @@ namespace Mvp24Hours.WebAPI.Middlewares
 
             if (options.TraceMiddleware)
             {
-                message = $"Message: {(exception?.InnerException ?? exception).Message} / Trace: {exception?.StackTrace}";
+                message = $"Message: {(exception.InnerException ?? exception).Message} / Trace: {exception.StackTrace}";
             }
             else
             {
-                message = $"Message: {(exception?.InnerException ?? exception).Message}";
+                message = $"Message: {(exception.InnerException ?? exception).Message}";
             }
 
             var boResult = message

@@ -79,7 +79,7 @@ namespace Mvp24Hours.Application.Logic
         /// </summary>
         public virtual IBusinessResult<bool> ListAny()
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "application-repositoryservice-listany");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "application-repositoryservice-listany");
             return this.UnitOfWork
                 .GetRepository<TEntity>()
                 .ListAny()
@@ -91,7 +91,7 @@ namespace Mvp24Hours.Application.Logic
         /// </summary>
         public virtual IBusinessResult<int> ListCount()
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "application-repositoryservice-listcount");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "application-repositoryservice-listcount");
             return this.UnitOfWork
                 .GetRepository<TEntity>()
                 .ListCount()
@@ -111,7 +111,7 @@ namespace Mvp24Hours.Application.Logic
         /// </summary>
         public virtual IBusinessResult<IList<TEntity>> List(IPagingCriteria criteria)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "application-repositoryservice-list");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "application-repositoryservice-list");
             return this.UnitOfWork
                 .GetRepository<TEntity>()
                 .List(criteria)
@@ -123,7 +123,7 @@ namespace Mvp24Hours.Application.Logic
         /// </summary>
         public virtual IBusinessResult<bool> GetByAny(Expression<Func<TEntity, bool>> clause)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "application-repositoryservice-getbyany");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "application-repositoryservice-getbyany");
             return this.UnitOfWork
                 .GetRepository<TEntity>()
                 .GetByAny(clause)
@@ -135,7 +135,7 @@ namespace Mvp24Hours.Application.Logic
         /// </summary>
         public virtual IBusinessResult<int> GetByCount(Expression<Func<TEntity, bool>> clause)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "application-repositoryservice-getbycount");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "application-repositoryservice-getbycount");
             return this.UnitOfWork
                 .GetRepository<TEntity>()
                 .GetByCount(clause)
@@ -155,7 +155,7 @@ namespace Mvp24Hours.Application.Logic
         /// </summary>
         public virtual IBusinessResult<IList<TEntity>> GetBy(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "application-repositoryservice-getby");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "application-repositoryservice-getby");
             return UnitOfWork
                 .GetRepository<TEntity>()
                 .GetBy(clause, criteria)
@@ -175,7 +175,7 @@ namespace Mvp24Hours.Application.Logic
         /// </summary>
         public virtual IBusinessResult<TEntity> GetById(object id, IPagingCriteria criteria)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "application-repositoryservice-getbyid");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "application-repositoryservice-getbyid");
             return this.UnitOfWork
                 .GetRepository<TEntity>()
                 .GetById(id, criteria)
@@ -188,7 +188,7 @@ namespace Mvp24Hours.Application.Logic
 
         public virtual IBusinessResult<int> Add(TEntity entity)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "application-repositoryservice-add");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "application-repositoryservice-add");
             var errors = entity.TryValidate(Validator);
             if (!errors.AnySafe())
             {
@@ -203,7 +203,7 @@ namespace Mvp24Hours.Application.Logic
 
         public virtual IBusinessResult<int> Add(IList<TEntity> entities)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "application-repositoryservice-addlist");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "application-repositoryservice-addlist");
             if (!entities.AnySafe())
             {
                 return 0.ToBusiness();
@@ -229,7 +229,7 @@ namespace Mvp24Hours.Application.Logic
 
         public virtual IBusinessResult<int> Modify(TEntity entity)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "application-repositoryservice-modify");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "application-repositoryservice-modify");
             var errors = entity.TryValidate(Validator);
             if (!errors.AnySafe())
             {
@@ -244,7 +244,7 @@ namespace Mvp24Hours.Application.Logic
 
         public virtual IBusinessResult<int> Modify(IList<TEntity> entities)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "application-repositoryservice-modifylist");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "application-repositoryservice-modifylist");
             if (!entities.AnySafe())
             {
                 return 0.ToBusiness();
@@ -261,7 +261,7 @@ namespace Mvp24Hours.Application.Logic
 
         public virtual IBusinessResult<int> Remove(TEntity entity)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "application-repositoryservice-remove");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "application-repositoryservice-remove");
             this.UnitOfWork.GetRepository<TEntity>().Remove(entity);
             return this.UnitOfWork.SaveChanges()
                 .ToBusiness();
@@ -269,7 +269,7 @@ namespace Mvp24Hours.Application.Logic
 
         public virtual IBusinessResult<int> Remove(IList<TEntity> entities)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "application-repositoryservice-removelist");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "application-repositoryservice-removelist");
             if (!entities.AnySafe())
             {
                 return 0.ToBusiness();
@@ -286,7 +286,7 @@ namespace Mvp24Hours.Application.Logic
 
         public virtual IBusinessResult<int> RemoveById(object id)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "application-repositoryservice-removebyid");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "application-repositoryservice-removebyid");
             this.UnitOfWork.GetRepository<TEntity>().RemoveById(id);
             return this.UnitOfWork.SaveChanges()
                 .ToBusiness();
@@ -294,7 +294,7 @@ namespace Mvp24Hours.Application.Logic
 
         public virtual IBusinessResult<int> RemoveById(IList<object> ids)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "application-repositoryservice-removebyidlist");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "application-repositoryservice-removebyidlist");
             if (!ids.AnySafe())
             {
                 return 0.ToBusiness();

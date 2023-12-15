@@ -16,7 +16,7 @@ namespace Mvp24Hours.Extensions
         public static T GetObject<T>(this IDistributedCache cache, string key, JsonSerializerSettings jsonSerializerSettings = null)
             where T : class
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-objectcacheextensions-getobject-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "caching-objectcacheextensions-getobject-start");
             try
             {
                 if (cache == null || !key.HasValue())
@@ -30,13 +30,13 @@ namespace Mvp24Hours.Extensions
                 }
                 return value.ToDeserialize<T>(jsonSerializerSettings);
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-objectcacheextensions-getobject-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "caching-objectcacheextensions-getobject-end"); }
         }
 
         public static void SetObject<T>(this IDistributedCache cache, string key, T value, JsonSerializerSettings jsonSerializerSettings = null)
             where T : class
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-objectcacheextensions-setobject-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "caching-objectcacheextensions-setobject-start");
             try
             {
                 if (cache == null || !key.HasValue() || value == null)
@@ -46,13 +46,13 @@ namespace Mvp24Hours.Extensions
                 string result = value.ToSerialize(jsonSerializerSettings);
                 cache.SetString(key, result);
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-objectcacheextensions-setobject-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "caching-objectcacheextensions-setobject-end"); }
         }
 
         public static void SetObject<T>(this IDistributedCache cache, string key, T value, int minutes, JsonSerializerSettings jsonSerializerSettings = null)
             where T : class
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-objectcacheextensions-setobject-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "caching-objectcacheextensions-setobject-start");
             try
             {
                 if (cache == null || !key.HasValue() || value == null)
@@ -62,12 +62,12 @@ namespace Mvp24Hours.Extensions
                 string result = value.ToSerialize(jsonSerializerSettings);
                 cache.SetString(key, result, minutes);
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-objectcacheextensions-setobject-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "caching-objectcacheextensions-setobject-end"); }
         }
 
         public static void SetObject(this IDistributedCache cache, string key, object value, DateTimeOffset time, JsonSerializerSettings jsonSerializerSettings = null)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-objectcacheextensions-setobject-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "caching-objectcacheextensions-setobject-start");
             try
             {
                 if (cache == null || !key.HasValue() || value == null)
@@ -77,7 +77,7 @@ namespace Mvp24Hours.Extensions
                 string result = value.ToSerialize(jsonSerializerSettings);
                 cache.SetString(key, result, time);
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-objectcacheextensions-setobject-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "caching-objectcacheextensions-setobject-end"); }
         }
     }
 }

@@ -41,7 +41,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
 
         public async Task<bool> ListAnyAsync(CancellationToken cancellationToken = default)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-listanyasync-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-listanyasync-start");
             try
             {
                 using var scope = CreateTransactionScope(true);
@@ -49,16 +49,16 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                 if (scope != null)
                 {
                     scope.Complete();
-                    TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-listanyasync-transactionscope-complete");
+                    TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-listanyasync-transactionscope-complete");
                 }
                 return result;
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-listanyasync-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-listanyasync-end"); }
         }
 
         public async Task<int> ListCountAsync(CancellationToken cancellationToken = default)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-listcountasync-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-listcountasync-start");
             try
             {
                 using var scope = CreateTransactionScope(true);
@@ -66,11 +66,11 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                 if (scope != null)
                 {
                     scope.Complete();
-                    TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-listcountasync-transactionscope-complete");
+                    TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-listcountasync-transactionscope-complete");
                 }
                 return result;
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-listcountasync-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-listcountasync-end"); }
         }
 
         public Task<IList<T>> ListAsync(CancellationToken cancellationToken = default)
@@ -80,7 +80,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
 
         public async Task<IList<T>> ListAsync(IPagingCriteria criteria, CancellationToken cancellationToken = default)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-listasync-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-listasync-start");
             try
             {
                 using var scope = CreateTransactionScope();
@@ -88,16 +88,16 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                 if (scope != null)
                 {
                     scope.Complete();
-                    TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-listasync-transactionscope-complete");
+                    TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-listasync-transactionscope-complete");
                 }
                 return result;
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-listasync-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-listasync-end"); }
         }
 
         public async Task<bool> GetByAnyAsync(Expression<Func<T, bool>> clause, CancellationToken cancellationToken = default)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-getbyanyasync-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-getbyanyasync-start");
             try
             {
                 using var scope = CreateTransactionScope(true);
@@ -110,16 +110,16 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                 if (scope != null)
                 {
                     scope.Complete();
-                    TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-getbyanyasync-transactionscope-complete");
+                    TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-getbyanyasync-transactionscope-complete");
                 }
                 return result;
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-getbyanyasync-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-getbyanyasync-end"); }
         }
 
         public async Task<int> GetByCountAsync(Expression<Func<T, bool>> clause, CancellationToken cancellationToken = default)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-getbycountasync-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-getbycountasync-start");
             try
             {
                 using var scope = CreateTransactionScope(true);
@@ -132,11 +132,11 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                 if (scope != null)
                 {
                     scope.Complete();
-                    TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-getbycountasync-transactionscope-complete");
+                    TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-getbycountasync-transactionscope-complete");
                 }
                 return result;
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-getbycountasync-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-getbycountasync-end"); }
         }
 
         public Task<IList<T>> GetByAsync(Expression<Func<T, bool>> clause, CancellationToken cancellationToken = default)
@@ -146,7 +146,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
 
         public async Task<IList<T>> GetByAsync(Expression<Func<T, bool>> clause, IPagingCriteria criteria, CancellationToken cancellationToken = default)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-getbyasync-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-getbyasync-start");
             try
             {
                 using var scope = CreateTransactionScope();
@@ -159,11 +159,11 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                 if (scope != null)
                 {
                     scope.Complete();
-                    TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-getbyasync-transactionscope-complete");
+                    TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-getbyasync-transactionscope-complete");
                 }
                 return result;
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-getbyasync-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-getbyasync-end"); }
         }
 
         public Task<T> GetByIdAsync(object id, CancellationToken cancellationToken = default)
@@ -173,7 +173,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
 
         public async Task<T> GetByIdAsync(object id, IPagingCriteria criteria, CancellationToken cancellationToken = default)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-getbyidasync-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-getbyidasync-start");
             try
             {
                 using var scope = CreateTransactionScope();
@@ -181,11 +181,11 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                 if (scope != null)
                 {
                     scope.Complete();
-                    TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-getbyidasync-transactionscope-complete");
+                    TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-getbyidasync-transactionscope-complete");
                 }
                 return result;
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-getbyidasync-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-getbyidasync-end"); }
         }
 
         #endregion
@@ -195,12 +195,12 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
         public Task LoadRelationAsync<TProperty>(T entity, Expression<Func<T, TProperty>> propertyExpression, CancellationToken cancellationToken = default)
             where TProperty : class
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-loadrelationasync-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-loadrelationasync-start");
             try
             {
                 return this.dbContext.Entry(entity).Reference(propertyExpression).LoadAsync(cancellationToken);
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-loadrelationasync-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-loadrelationasync-end"); }
         }
 
         public Task LoadRelationAsync<TProperty>(T entity,
@@ -209,7 +209,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
             CancellationToken cancellationToken = default)
             where TProperty : class
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-loadrelationasync-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-loadrelationasync-start");
             try
             {
                 var query = this.dbContext.Entry(entity).Collection(propertyExpression).Query();
@@ -226,7 +226,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
 
                 return query.ToListAsync(cancellationToken);
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-loadrelationasync-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-loadrelationasync-end"); }
         }
 
         public Task LoadRelationSortByAscendingAsync<TProperty, TKey>(T entity,
@@ -236,7 +236,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
             int limit = 0,
             CancellationToken cancellationToken = default) where TProperty : class
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-loadrelationsortbyascendingasync-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-loadrelationsortbyascendingasync-start");
             try
             {
                 var query = this.dbContext.Entry(entity).Collection(propertyExpression).Query();
@@ -258,7 +258,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
 
                 return query.ToListAsync(cancellationToken);
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-loadrelationsortbyascendingasync-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-loadrelationsortbyascendingasync-end"); }
         }
 
         public Task LoadRelationSortByDescendingAsync<TProperty, TKey>(T entity,
@@ -268,7 +268,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
             int limit = 0,
             CancellationToken cancellationToken = default) where TProperty : class
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-loadrelationsortbydescendingasync-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-loadrelationsortbydescendingasync-start");
             try
             {
                 var query = this.dbContext.Entry(entity).Collection(propertyExpression).Query();
@@ -290,7 +290,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
 
                 return query.ToListAsync(cancellationToken);
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-loadrelationsortbydescendingasync-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-loadrelationsortbydescendingasync-end"); }
         }
 
         #endregion
@@ -299,7 +299,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
 
         public async Task AddAsync(T entity, CancellationToken cancellationToken = default)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-addasync-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-addasync-start");
             try
             {
                 if (entity == null)
@@ -317,12 +317,12 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                     await dbEntities.AddAsync(entity, cancellationToken);
                 }
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-addasync-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-addasync-end"); }
         }
 
         public Task AddAsync(IList<T> entities, CancellationToken cancellationToken = default)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-addlistasync-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-addlistasync-start");
             try
             {
                 if (!entities.AnySafe())
@@ -332,12 +332,12 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
 
                 return Task.WhenAll(entities?.Select(x => AddAsync(x, cancellationToken)));
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-addlistasync-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-addlistasync-end"); }
         }
 
         public async Task ModifyAsync(T entity, CancellationToken cancellationToken = default)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-modifyasync-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-modifyasync-start");
             try
             {
                 if (entity == null)
@@ -366,12 +366,12 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
 
                 dbContext.Entry(entityDb).CurrentValues.SetValues(entity);
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-modifyasync-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-modifyasync-end"); }
         }
 
         public Task ModifyAsync(IList<T> entities, CancellationToken cancellationToken = default)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-modifylistasync-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-modifylistasync-start");
             try
             {
                 if (!entities.AnySafe())
@@ -381,12 +381,12 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
 
                 return Task.WhenAll(entities?.Select(x => ModifyAsync(x, cancellationToken)));
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-modifylistasync-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-modifylistasync-end"); }
         }
 
         public async Task RemoveAsync(T entity, CancellationToken cancellationToken = default)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-removeasync-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-removeasync-start");
             try
             {
                 if (entity == null)
@@ -408,12 +408,12 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                     await ForceRemoveAsync(entity, cancellationToken);
                 }
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-removeasync-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-removeasync-end"); }
         }
 
         public Task RemoveAsync(IList<T> entities, CancellationToken cancellationToken = default)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-removelistasync-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-removelistasync-start");
             try
             {
                 if (!entities.AnySafe())
@@ -423,12 +423,12 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
 
                 return Task.WhenAll(entities?.Select(x => RemoveAsync(x, cancellationToken)));
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-removelistasync-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-removelistasync-end"); }
         }
 
         public async Task RemoveByIdAsync(object id, CancellationToken cancellationToken = default)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-removebyidasync-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-removebyidasync-start");
             try
             {
                 var entity = await GetByIdAsync(id, cancellationToken);
@@ -438,12 +438,12 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                 }
                 await RemoveAsync(entity, cancellationToken);
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-removebyidasync-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-removebyidasync-end"); }
         }
 
         public Task RemoveByIdAsync(IList<object> ids, CancellationToken cancellationToken = default)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-removebyidlistasync-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-removebyidlistasync-start");
             try
             {
                 if (!ids.AnySafe())
@@ -453,12 +453,12 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
 
                 return Task.WhenAll(ids?.Select(x => RemoveByIdAsync(x, cancellationToken)));
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-removebyidlistasync-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-removebyidlistasync-end"); }
         }
 
         public Task ForceRemoveAsync(T entity, CancellationToken cancellationToken = default)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-forceremoveasync-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-forceremoveasync-start");
             try
             {
                 if (entity == null)
@@ -483,7 +483,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                 }
                 return Task.FromResult(true);
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-repositoryasync-forceremoveasync-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repositoryasync-forceremoveasync-end"); }
         }
 
         #endregion

@@ -10,7 +10,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Mvp24Hours.Application.SQLServer.Test.Support.Entities
 {
-    public class Customer : EntityBase<Customer, int>, IEntityBase
+    public class Customer : EntityBase<Customer, int>
     {
         public Customer()
         {

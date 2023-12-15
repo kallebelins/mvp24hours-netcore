@@ -37,22 +37,22 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
 
         public bool ListAny()
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-listany-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repository-listany-start");
             try
             {
                 return GetQuery(null, true).Any();
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-listany-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repository-listany-end"); }
         }
 
         public int ListCount()
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-listcount-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repository-listcount-start");
             try
             {
                 return GetQuery(null, true).Count();
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-listcount-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repository-listcount-end"); }
         }
 
         public IList<T> List()
@@ -62,17 +62,17 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
 
         public IList<T> List(IPagingCriteria criteria)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-list-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repository-list-start");
             try
             {
                 return GetQuery(criteria).ToList();
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-list-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repository-list-end"); }
         }
 
         public bool GetByAny(Expression<Func<T, bool>> clause)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-getbyany-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repository-getbyany-start");
             try
             {
                 var query = this.dbEntities.AsQueryable();
@@ -82,12 +82,12 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
                 }
                 return GetQuery(query, null, true).Any();
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-getbyany-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repository-getbyany-end"); }
         }
 
         public int GetByCount(Expression<Func<T, bool>> clause)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-getbycount-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repository-getbycount-start");
             try
             {
                 var query = this.dbEntities.AsQueryable();
@@ -97,7 +97,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
                 }
                 return GetQuery(query, null, true).Count();
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-getbycount-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repository-getbycount-end"); }
         }
 
         public IList<T> GetBy(Expression<Func<T, bool>> clause)
@@ -107,7 +107,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
 
         public IList<T> GetBy(Expression<Func<T, bool>> clause, IPagingCriteria criteria)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-getby-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repository-getby-start");
             try
             {
                 var query = this.dbEntities.AsQueryable();
@@ -117,7 +117,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
                 }
                 return GetQuery(query, criteria).ToList();
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-getby-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repository-getby-end"); }
         }
 
         public T GetById(object id)
@@ -127,12 +127,12 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
 
         public T GetById(object id, IPagingCriteria criteria)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-getbyid-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repository-getbyid-start");
             try
             {
                 return GetDynamicFilter(GetQuery(criteria, true), GetKeyInfo(), id).SingleOrDefault();
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-getbyid-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repository-getbyid-end"); }
         }
 
         #endregion
@@ -160,7 +160,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
 
         public void Add(T entity)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-add-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repository-add-start");
             try
             {
                 if (entity == null)
@@ -169,12 +169,12 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
                 }
                 dbEntities.InsertOne(entity);
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-add-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repository-add-end"); }
         }
 
         public void Add(IList<T> entities)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-addlist-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repository-addlist-start");
             try
             {
                 if (entities.AnySafe())
@@ -185,12 +185,12 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
                     }
                 }
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-addlist-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repository-addlist-end"); }
         }
 
         public void Modify(T entity)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-modify-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repository-modify-start");
             try
             {
                 if (entity == null)
@@ -198,18 +198,14 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
                     return;
                 }
 
-                var entityDb = dbContext.Set<T>().Find(GetKeyFilter(entity)).FirstOrDefault();
-
-                if (entityDb == null)
-                {
-                    throw new InvalidOperationException("Key value not found.");
-                }
+                var entityDb = dbContext.Set<T>().Find(GetKeyFilter(entity)).FirstOrDefault()
+                    ?? throw new InvalidOperationException("Key value not found.");
 
                 // properties that can not be changed
 
                 if (entity.GetType() == typeof(IEntityLog<>))
                 {
-                    TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-modify-log");
+                    TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repository-modify-log");
                     var entityLog = entity as IEntityLog<object>;
                     var entityDbLog = entityDb as IEntityLog<object>;
                     entityLog.Created = entityDbLog.Created;
@@ -220,12 +216,12 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
 
                 this.dbEntities.ReplaceOne(GetKeyFilter(entity), entity);
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-modify-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repository-modify-end"); }
         }
 
         public void Modify(IList<T> entities)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-modifylist-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repository-modifylist-start");
             try
             {
                 if (entities.AnySafe())
@@ -236,12 +232,12 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
                     }
                 }
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-modifylist-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repository-modifylist-end"); }
         }
 
         public void Remove(T entity)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-remove-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repository-remove-start");
             try
             {
                 if (entity == null)
@@ -251,7 +247,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
 
                 if (entity.GetType() == typeof(IEntityLog<>))
                 {
-                    TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-remove-log");
+                    TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repository-remove-log");
                     var entityLog = entity as IEntityLog<object>;
                     entityLog.Removed = TimeZoneHelper.GetTimeZoneNow();
                     entityLog.RemovedBy = EntityLogBy;
@@ -262,12 +258,12 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
                     this.ForceRemove(entity);
                 }
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-remove-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repository-remove-end"); }
         }
 
         public void Remove(IList<T> entities)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-removelist-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repository-removelist-start");
             try
             {
                 if (entities.AnySafe())
@@ -278,12 +274,12 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
                     }
                 }
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-removelist-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repository-removelist-end"); }
         }
 
         public void RemoveById(object id)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-removebyid-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repository-removebyid-start");
             try
             {
                 var entity = this.GetById(id);
@@ -293,12 +289,12 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
                 }
                 this.Remove(entity);
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-removebyid-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repository-removebyid-end"); }
         }
 
         public void RemoveById(IList<object> ids)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-removebyidlist-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repository-removebyidlist-start");
             try
             {
                 if (ids.AnySafe())
@@ -309,7 +305,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
                     }
                 }
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-removebyidlist-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repository-removebyidlist-end"); }
         }
 
         /// <summary>
@@ -317,7 +313,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         /// </summary>
         private void ForceRemove(T entity)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-forceremove-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repository-forceremove-start");
             try
             {
                 if (entity == null)
@@ -326,7 +322,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
                 }
                 this.dbEntities.DeleteOne(GetKeyFilter(entity));
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repository-forceremove-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repository-forceremove-end"); }
         }
 
         #endregion

@@ -49,14 +49,14 @@ namespace Mvp24Hours.Application.Logic
 
         public virtual IPagingResult<IList<TEntity>> GetByWithPagination(Expression<Func<TEntity, bool>> clause, IPagingCriteria criteria = null)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "application-repositorypagingservice-getbywithpagination");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "application-repositorypagingservice-getbywithpagination");
             var repo = UnitOfWork.GetRepository<TEntity>();
             return repo.ToBusinessPaging(clause, criteria);
         }
 
         public virtual IPagingResult<IList<TEntity>> ListWithPagination(IPagingCriteria criteria = null)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "application-repositorypagingservice-listwithpagination");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "application-repositorypagingservice-listwithpagination");
             var repo = UnitOfWork.GetRepository<TEntity>();
             return repo.ToBusinessPaging(criteria);
         }

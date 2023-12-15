@@ -17,17 +17,17 @@ namespace Mvp24Hours.Infrastructure.Logging
         {
             try
             {
-                TelemetryHelper.Execute(TelemetryLevel.Verbose, "logging-delegating-handler-sendasync-start", $"Sending request to {request.RequestUri}");
+                TelemetryHelper.Execute(TelemetryLevels.Verbose, "logging-delegating-handler-sendasync-start", $"Sending request to {request.RequestUri}");
 
                 var response = await base.SendAsync(request, cancellationToken);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    TelemetryHelper.Execute(TelemetryLevel.Information, "logging-delegating-handler-sendasync-receive", $"Received a success response from {response.RequestMessage.RequestUri}");
+                    TelemetryHelper.Execute(TelemetryLevels.Information, "logging-delegating-handler-sendasync-receive", $"Received a success response from {response.RequestMessage.RequestUri}");
                 }
                 else
                 {
-                    TelemetryHelper.Execute(TelemetryLevel.Information, "logging-delegating-handler-sendasync-receive", $"Received a non-success status code {(int)response.StatusCode} from {response.RequestMessage.RequestUri}");
+                    TelemetryHelper.Execute(TelemetryLevels.Information, "logging-delegating-handler-sendasync-receive", $"Received a non-success status code {(int)response.StatusCode} from {response.RequestMessage.RequestUri}");
                 }
 
                 return response;
@@ -39,11 +39,11 @@ namespace Mvp24Hours.Infrastructure.Logging
                     ? request.RequestUri.DnsSafeHost
                     : $"{request.RequestUri.DnsSafeHost}:{request.RequestUri.Port}";
 
-                TelemetryHelper.Execute(TelemetryLevel.Error, "logging-delegating-handler-sendasync-failure", $"Unable to connect to {hostWithPort}. Please check the configuration to ensure the correct URL for the service has been configured.");
+                TelemetryHelper.Execute(TelemetryLevels.Error, "logging-delegating-handler-sendasync-failure", $"Unable to connect to {hostWithPort}. Please check the configuration to ensure the correct URL for the service has been configured.");
             }
             finally
             {
-                TelemetryHelper.Execute(TelemetryLevel.Verbose, "logging-delegating-handler-sendasync-end");
+                TelemetryHelper.Execute(TelemetryLevels.Verbose, "logging-delegating-handler-sendasync-end");
             }
 
             return new HttpResponseMessage(HttpStatusCode.BadGateway)

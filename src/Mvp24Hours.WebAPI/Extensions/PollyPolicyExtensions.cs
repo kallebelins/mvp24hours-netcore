@@ -18,7 +18,7 @@ namespace Mvp24Hours.WebAPI.Extensions
                     sleepDurationProvider: retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
                     onRetry: (exception, retryCount, context) =>
                     {
-                        TelemetryHelper.Execute(TelemetryLevel.Error, "webapi-polly-getretrypolicy", $"Retry {retryCount} of {context.PolicyKey} at {context.OperationKey}, due to: {exception}.");
+                        TelemetryHelper.Execute(TelemetryLevels.Error, "webapi-polly-getretrypolicy", $"Retry {retryCount} of {context.PolicyKey} at {context.OperationKey}, due to: {exception}.");
                     });
         }
 

@@ -12,6 +12,7 @@ namespace Mvp24Hours.Core.Contract.Data
     /// <summary>
     /// Contract for projection / query commands and data manipulation.
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Minor Code Smell", "S101:Types should be named in PascalCase")]
     public interface ISQLAsync
     {
         /// <summary>

@@ -15,7 +15,7 @@ namespace Mvp24Hours.Extensions
     {
         public static void SetString(this IDistributedCache cache, string key, string value, int minutes)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-cacheextensions-setstring-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "caching-cacheextensions-setstring-start");
             try
             {
                 if (cache == null || !key.HasValue() || !value.HasValue())
@@ -24,12 +24,12 @@ namespace Mvp24Hours.Extensions
                 }
                 cache.SetString(key, value, DateTimeOffset.Now.AddMinutes(minutes));
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-cacheextensions-setstring-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "caching-cacheextensions-setstring-end"); }
         }
 
         public static void SetString(this IDistributedCache cache, string key, string value, DateTimeOffset time)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-cacheextensions-setstring-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "caching-cacheextensions-setstring-start");
             try
             {
                 if (cache == null || !key.HasValue() || !value.HasValue())
@@ -38,7 +38,7 @@ namespace Mvp24Hours.Extensions
                 }
                 cache.SetString(key, value, CacheConfigHelper.GetCacheOptions(time));
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-cacheextensions-setstring-start"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "caching-cacheextensions-setstring-start"); }
         }
     }
 }

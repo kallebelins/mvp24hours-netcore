@@ -169,13 +169,12 @@ namespace Mvp24Hours.Helpers
 
         private static async Task<string> SendAsync(string url, IDictionary<string, string> headers, ICredentials credentials, string method, string data)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "infra-webrequesthelper-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "infra-webrequesthelper-start");
             try
             {
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
 
-                if (EncodingRequest == null)
-                    EncodingRequest = Encoding.UTF8;
+                EncodingRequest ??= Encoding.UTF8;
 
                 var client = (HttpWebRequest)System.Net.WebRequest.Create(url);
                 client.Method = method;
@@ -210,7 +209,7 @@ namespace Mvp24Hours.Helpers
 
                 try
                 {
-                    TelemetryHelper.Execute(TelemetryLevel.Verbose, "infra-webrequesthelper-sendasync", $"url:{url}|method:{method}");
+                    TelemetryHelper.Execute(TelemetryLevels.Verbose, "infra-webrequesthelper-sendasync", $"url:{url}|method:{method}");
 
                     if (bytes == null)
                     {
@@ -230,7 +229,7 @@ namespace Mvp24Hours.Helpers
                 }
                 catch (WebException we)
                 {
-                    TelemetryHelper.Execute(TelemetryLevel.Error, "infra-webrequesthelper-failure", we);
+                    TelemetryHelper.Execute(TelemetryLevels.Error, "infra-webrequesthelper-failure", we);
                     if (we.Response != null)
                     {
                         using var stream = we.Response.GetResponseStream();
@@ -242,7 +241,7 @@ namespace Mvp24Hours.Helpers
             }
             finally
             {
-                TelemetryHelper.Execute(TelemetryLevel.Verbose, "infra-webrequesthelper-end");
+                TelemetryHelper.Execute(TelemetryLevels.Verbose, "infra-webrequesthelper-end");
             }
         }
     }

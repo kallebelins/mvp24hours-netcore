@@ -43,7 +43,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
             {
                 throw new ArgumentNullException(nameof(options), "Options is required.");
             }
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "rabbitmq");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "rabbitmq");
             this.callback = options.Callback;
             this.state = options.State;
             this.dueTime = options.DueTime;

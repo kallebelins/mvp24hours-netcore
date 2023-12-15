@@ -65,7 +65,7 @@ namespace Mvp24Hours.Extensions
         )
         {
             var typesFromAssemblies = assemblies.SelectMany(a =>
-                a.DefinedTypes.Where(x => x.GetInterfaces().Any(i => i == typeof(T))));
+                a.DefinedTypes.Where(x => x.GetInterfaces().AnySafe(i => i == typeof(T))));
             foreach (var type in typesFromAssemblies)
             {
                 services.Add(new ServiceDescriptor(typeof(T), type, lifetime));
@@ -89,7 +89,7 @@ namespace Mvp24Hours.Extensions
         {
             var genericType = t;
             var typesFromAssemblies = assemblies.SelectMany(a => a.DefinedTypes.Where(x => x.GetInterfaces()
-                .Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == genericType)));
+                .AnySafe(i => i.IsGenericType && i.GetGenericTypeDefinition() == genericType)));
 
             foreach (var type in typesFromAssemblies)
             {

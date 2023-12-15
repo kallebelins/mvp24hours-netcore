@@ -281,13 +281,13 @@ namespace Mvp24Hours.Infrastructure.Pipe
 
         public async Task ExecuteAsync(IPipelineMessage input = null)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "pipe-pipelineasync-executeasync-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "pipe-pipelineasync-executeasync-start");
             try
             {
                 Message = input ?? Message;
                 Message = await RunOperationsAsync(this.operations, Message);
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "pipe-pipelineasync-executeasync-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "pipe-pipelineasync-executeasync-end"); }
         }
         internal virtual async Task<IPipelineMessage> RunOperationsAsync(IList<IOperationAsync> _operations, IPipelineMessage input, bool onlyOperationDefault = false)
         {
@@ -296,10 +296,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
                 return input;
             }
 
-            if (input == null)
-            {
-                input = new PipelineMessage();
-            }
+            input ??= new PipelineMessage();
 
             if (!onlyOperationDefault)
             {
@@ -339,12 +336,12 @@ namespace Mvp24Hours.Infrastructure.Pipe
                     }
 
                     // operation                    
-                    TelemetryHelper.Execute(TelemetryLevel.Verbose, "pipe-pipeline-execute-operation-start", $"operation:{operation.GetType().Name}");
+                    TelemetryHelper.Execute(TelemetryLevels.Verbose, "pipe-pipeline-execute-operation-start", $"operation:{operation.GetType().Name}");
                     try
                     {
                         await operation.ExecuteAsync(current);
                     }
-                    finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "pipe-pipeline-execute-operation-end", $"operation:{operation.GetType().Name}"); }
+                    finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "pipe-pipeline-execute-operation-end", $"operation:{operation.GetType().Name}"); }
 
                     // post-operation
                     if (!onlyOperationDefault)
@@ -374,7 +371,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
                 }
                 catch (Exception ex)
                 {
-                    TelemetryHelper.Execute(TelemetryLevel.Error, "pipe-pipeline-execute-failure", ex);
+                    TelemetryHelper.Execute(TelemetryLevels.Error, "pipe-pipeline-execute-failure", ex);
                     current.Messages.Add(new MessageResult((ex?.InnerException ?? ex).Message, MessageType.Error));
                     input.AddContent(ex);
                 }
@@ -469,12 +466,12 @@ namespace Mvp24Hours.Infrastructure.Pipe
                         continue;
                     }
 
-                    TelemetryHelper.Execute(TelemetryLevel.Verbose, "pipe-pipelineasync-executeasync-eventasync-start", $"operation:{handler.GetType().Name}");
+                    TelemetryHelper.Execute(TelemetryLevels.Verbose, "pipe-pipelineasync-executeasync-eventasync-start", $"operation:{handler.GetType().Name}");
                     try
                     {
                         await Task.Factory.StartNew(() => handler(input, EventArgs.Empty));
                     }
-                    finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "pipe-pipelineasync-executeasync-eventasync-end", $"operation:{handler.GetType().Name}"); }
+                    finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "pipe-pipelineasync-executeasync-eventasync-end", $"operation:{handler.GetType().Name}"); }
                 }
             }
         }

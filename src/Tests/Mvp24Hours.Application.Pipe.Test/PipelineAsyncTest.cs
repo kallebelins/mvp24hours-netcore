@@ -435,49 +435,42 @@ namespace Mvp24Hours.Application.Pipe.Test
             // event interceptors -> first-operation
             pipeline.AddInterceptors((input, e) =>
             {
-                Thread.Sleep(1000);
                 Trace.WriteLine("First-Operation, event.");
             }, PipelineInterceptorType.FirstOperation);
 
             // event interceptors -> pre-operation
             pipeline.AddInterceptors((input, e) =>
             {
-                Thread.Sleep(1000);
                 Trace.WriteLine("Pre-Operation, event.");
             }, PipelineInterceptorType.PreOperation);
 
             // event interceptors -> post-operation
             pipeline.AddInterceptors((input, e) =>
             {
-                Thread.Sleep(1000);
                 Trace.WriteLine("Post-Operation, event.");
             }, PipelineInterceptorType.PostOperation);
 
             // event interceptors -> last-operation
             pipeline.AddInterceptors((input, e) =>
             {
-                Thread.Sleep(1000);
                 Trace.WriteLine("Last-Operation, event.");
             }, PipelineInterceptorType.LastOperation);
 
             // event interceptors -> locked-operation
             pipeline.AddInterceptors((input, e) =>
             {
-                Thread.Sleep(1000);
                 Trace.WriteLine("Locked-Operation, event.");
             }, PipelineInterceptorType.Locked);
 
             // event interceptors -> faulty-operation
             pipeline.AddInterceptors((input, e) =>
             {
-                Thread.Sleep(1000);
                 Trace.WriteLine("Faulty-Operation, event.");
             }, PipelineInterceptorType.Faulty);
 
             // event interceptors -> conditional
             pipeline.AddInterceptors((input, e) =>
             {
-                Thread.Sleep(1000);
                 Trace.WriteLine("Conditional-Operation, event.");
             },
             input =>
@@ -521,49 +514,42 @@ namespace Mvp24Hours.Application.Pipe.Test
             // event interceptors -> first-operation
             pipeline.AddInterceptors((input, e) =>
             {
-                Thread.Sleep(1000);
                 Trace.WriteLine("First-Operation, event.");
             }, PipelineInterceptorType.FirstOperation);
 
             // event interceptors -> pre-operation
             pipeline.AddInterceptors((input, e) =>
             {
-                Thread.Sleep(1000);
                 Trace.WriteLine("Pre-Operation, event.");
             }, PipelineInterceptorType.PreOperation);
 
             // event interceptors -> post-operation
             pipeline.AddInterceptors((input, e) =>
             {
-                Thread.Sleep(1000);
                 Trace.WriteLine("Post-Operation, event.");
             }, PipelineInterceptorType.PostOperation);
 
             // event interceptors -> last-operation
             pipeline.AddInterceptors((input, e) =>
             {
-                Thread.Sleep(1000);
                 Trace.WriteLine("Last-Operation, event.");
             }, PipelineInterceptorType.LastOperation);
 
             // event interceptors -> locked-operation
             pipeline.AddInterceptors((input, e) =>
             {
-                Thread.Sleep(1000);
                 Trace.WriteLine("Locked-Operation, event.");
             }, PipelineInterceptorType.Locked);
 
             // event interceptors -> faulty-operation
             pipeline.AddInterceptors((input, e) =>
             {
-                Thread.Sleep(1000);
                 Trace.WriteLine("Faulty-Operation, event.");
             }, PipelineInterceptorType.Faulty);
 
             // event interceptors -> conditional
             pipeline.AddInterceptors((input, e) =>
             {
-                Thread.Sleep(1000);
                 Trace.WriteLine("Conditional-Operation, event.");
             },
             input =>

@@ -18,9 +18,9 @@ namespace Mvp24Hours.Helpers
     public static class TelemetryHelper
     {
         #region [ Properties / Fields ]
-        private static readonly Dictionary<TelemetryLevel, List<ITelemetryService>> services = new();
-        private static readonly Dictionary<TelemetryLevel, List<Action<string>>> servicesAction1 = new();
-        private static readonly Dictionary<TelemetryLevel, List<Action<string, object[]>>> servicesAction2 = new();
+        private static readonly Dictionary<TelemetryLevels, List<ITelemetryService>> services = new();
+        private static readonly Dictionary<TelemetryLevels, List<Action<string>>> servicesAction1 = new();
+        private static readonly Dictionary<TelemetryLevels, List<Action<string, object[]>>> servicesAction2 = new();
 
         private static readonly Dictionary<string, List<ITelemetryService>> serviceFilters = new();
         private static readonly Dictionary<string, List<Action<string>>> serviceActionFilters1 = new();
@@ -47,7 +47,7 @@ namespace Mvp24Hours.Helpers
 
         public static void RemoveIgnoreService(string serviceName)
         {
-            if (serviceName.HasValue() && ignoreNames.Any(x => x == serviceName))
+            if (serviceName.HasValue() && ignoreNames.AnySafe(x => x == serviceName))
             {
                 ignoreNames.Remove(serviceName);
             }
@@ -55,7 +55,7 @@ namespace Mvp24Hours.Helpers
         #endregion
 
         #region [ Add Services ]
-        public static void Add(TelemetryLevel level, params Action<string>[] actions)
+        public static void Add(TelemetryLevels level, params Action<string>[] actions)
         {
             if (!actions.AnySafe())
             {
@@ -69,7 +69,7 @@ namespace Mvp24Hours.Helpers
             servicesAction1Started = true;
         }
 
-        public static void Add(TelemetryLevel level, params Action<string, object[]>[] actions)
+        public static void Add(TelemetryLevels level, params Action<string, object[]>[] actions)
         {
             if (!actions.AnySafe())
             {
@@ -83,7 +83,7 @@ namespace Mvp24Hours.Helpers
             servicesAction2Started = true;
         }
 
-        public static void Add(TelemetryLevel level, params ITelemetryService[] telemetryServices)
+        public static void Add(TelemetryLevels level, params ITelemetryService[] telemetryServices)
         {
             if (!telemetryServices.AnySafe())
             {
@@ -153,21 +153,21 @@ namespace Mvp24Hours.Helpers
         #endregion
 
         #region [ Get Services ]
-        public static IList<ITelemetryService> GetServices(TelemetryLevel level)
+        public static IList<ITelemetryService> GetServices(TelemetryLevels level)
         {
             if (services.ContainsKey(level))
                 return services[level];
             return default;
         }
 
-        public static IList<Action<string>> GetActions1(TelemetryLevel level)
+        public static IList<Action<string>> GetActions1(TelemetryLevels level)
         {
             if (servicesAction1.ContainsKey(level))
                 return servicesAction1[level];
             return default;
         }
 
-        public static IList<Action<string, object[]>> GetActions2(TelemetryLevel level)
+        public static IList<Action<string, object[]>> GetActions2(TelemetryLevels level)
         {
             if (servicesAction2.ContainsKey(level))
                 return servicesAction2[level];
@@ -197,7 +197,7 @@ namespace Mvp24Hours.Helpers
         #endregion
 
         #region [ Remove Services ]
-        public static void Remove(TelemetryLevel level)
+        public static void Remove(TelemetryLevels level)
         {
             if (servicesAction1.ContainsKey(level))
             {
@@ -241,14 +241,14 @@ namespace Mvp24Hours.Helpers
         #endregion
 
         #region [ Execute Services ]
-        public static void Execute(TelemetryLevel level, params object[] args)
+        public static void Execute(TelemetryLevels level, params object[] args)
         {
             Execute(level, "unknown", args);
         }
 
-        public static void Execute(TelemetryLevel level, string eventName, params object[] args)
+        public static void Execute(TelemetryLevels level, string eventName, params object[] args)
         {
-            if (ignoreNames.Any(x => x == eventName)) return;
+            if (ignoreNames.AnySafe(x => x == eventName)) return;
 
             // filtered
             if (serviceFiltersStarted && serviceFilters.ContainsKey(eventName))

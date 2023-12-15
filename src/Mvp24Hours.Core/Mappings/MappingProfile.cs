@@ -5,6 +5,7 @@
 //=====================================================================================
 using AutoMapper;
 using Mvp24Hours.Core.Contract.Mappings;
+using Mvp24Hours.Extensions;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -30,8 +31,8 @@ namespace Mvp24Hours.Core.Mappings
         private void ApplyMappingsFromAssembly(Assembly assembly)
         {
             var types = assembly.GetExportedTypes()
-                .Where(t => t.GetInterfaces().Any(i =>
-                    i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IMapFrom<>)))
+                .Where(t => t.GetInterfaces().AnySafe(i =>
+                    i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IMapFrom)))
                 .ToList();
 
             foreach (var type in types)

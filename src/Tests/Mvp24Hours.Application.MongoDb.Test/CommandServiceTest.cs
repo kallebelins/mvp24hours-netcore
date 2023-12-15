@@ -67,7 +67,7 @@ namespace Mvp24Hours.Application.MongoDb.Test
 
             var boCustomer = service.GetById(oid);
 
-            Assert.True(boCustomer != null && boCustomer?.Data?.Name == "Test Updated");
+            Assert.True(boCustomer != null && boCustomer.Data?.Name == "Test Updated");
         }
 
         [Fact, Priority(3)]

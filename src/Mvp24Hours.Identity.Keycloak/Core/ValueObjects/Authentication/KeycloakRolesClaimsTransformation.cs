@@ -52,7 +52,7 @@ namespace Mvp24Hours.Identity.Keycloak.Core.ValueObjects.Authentication
         public Task<ClaimsPrincipal> TransformAsync(ClaimsPrincipal principal)
         {
             var result = principal.Clone();
-            if (!(result.Identity is ClaimsIdentity identity))
+            if (result.Identity is not ClaimsIdentity identity)
             {
                 return Task.FromResult(result);
             }

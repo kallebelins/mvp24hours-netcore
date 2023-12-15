@@ -5,7 +5,6 @@
 //=====================================================================================
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Core.Enums;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -19,29 +18,32 @@ namespace Mvp24Hours.Core.ValueObjects.Logic
     public class MessageResult : BaseVO, IMessageResult
     {
         #region [ Ctor ]
-        public MessageResult(string message, int typeCode)
-            : this(null, message, typeCode)
-        {
-        }
-
         public MessageResult(string message, MessageType type)
             : this(null, message, type)
         {
         }
 
-        [JsonConstructor]
-        public MessageResult(string key, string message, int typeCode)
+        public MessageResult(string message, string customType)
+           : this(message, MessageType.Custom, customType)
         {
-            Key = key;
-            Message = message;
-            Type = (MessageType)typeCode;
+        }
+
+        public MessageResult(string message, MessageType type, string customType)
+            : this(null, message, type, customType)
+        {
         }
 
         public MessageResult(string key, string message, MessageType type)
+            : this(key, message, type, null)
+        {
+        }
+
+        public MessageResult(string key, string message, MessageType type, string customType)
         {
             Key = key;
             Message = message;
             Type = type;
+            CustomType = customType;
         }
         #endregion
 
@@ -60,12 +62,14 @@ namespace Mvp24Hours.Core.ValueObjects.Logic
         /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IMessageResult.Type"/>
         /// </summary>
         [DataMember]
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter))]
         public MessageType Type { get; }
         /// <summary>
-        /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IMessageResult.TypeCode"/>
+        /// <see cref="Mvp24Hours.Core.Contract.ValueObjects.Logic.IMessageResult.CustomType"/>
         /// </summary>
         [DataMember]
-        public int TypeCode { get { return (int)Type; } }
+        public string CustomType { get; }
         #endregion
 
         #region [ Methods ]
@@ -74,6 +78,7 @@ namespace Mvp24Hours.Core.ValueObjects.Logic
             yield return Key;
             yield return Message;
             yield return Type;
+            yield return CustomType;
         }
         #endregion
     }

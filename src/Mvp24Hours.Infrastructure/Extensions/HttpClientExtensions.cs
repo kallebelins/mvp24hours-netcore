@@ -177,13 +177,12 @@ namespace Mvp24Hours.Extensions
 
         public static async Task<string> HttpSendAsync(this HttpClient client, string url, Dictionary<string, string> headers, string method, string data)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "infra-httpclient-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "infra-httpclient-start");
             try
             {
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
 
-                if (EncodingRequest == null)
-                    EncodingRequest = Encoding.UTF8;
+                EncodingRequest ??= Encoding.UTF8;
 
                 string urlRequest = $"{client.BaseAddress}{url}";
 
@@ -226,7 +225,7 @@ namespace Mvp24Hours.Extensions
                     request.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(mediaType);
                 }
 
-                TelemetryHelper.Execute(TelemetryLevel.Verbose, "infra-httpclient-sendasync", $"url:{url}|method:{method}");
+                TelemetryHelper.Execute(TelemetryLevels.Verbose, "infra-httpclient-sendasync", $"url:{url}|method:{method}");
 
                 var response = await client.SendAsync(request);
 
@@ -248,12 +247,12 @@ namespace Mvp24Hours.Extensions
             }
             catch (Exception ex)
             {
-                TelemetryHelper.Execute(TelemetryLevel.Error, "infra-httpclient-failure", ex);
+                TelemetryHelper.Execute(TelemetryLevels.Error, "infra-httpclient-failure", ex);
                 throw;
             }
             finally
             {
-                TelemetryHelper.Execute(TelemetryLevel.Verbose, "infra-httpclient-end");
+                TelemetryHelper.Execute(TelemetryLevels.Verbose, "infra-httpclient-end");
             }
         }
     }

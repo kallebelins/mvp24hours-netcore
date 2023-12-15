@@ -13,19 +13,19 @@ namespace Mvp24Hours.Core.Extensions
 {
     public static class TelemetryExtensions
     {
-        public static IServiceCollection AddMvp24HoursTelemetry(this IServiceCollection services, TelemetryLevel level, params Action<string>[] actions)
+        public static IServiceCollection AddMvp24HoursTelemetry(this IServiceCollection services, TelemetryLevels level, params Action<string>[] actions)
         {
             TelemetryHelper.Add(level, actions);
             return services;
         }
 
-        public static IServiceCollection AddMvp24HoursTelemetry(this IServiceCollection services, TelemetryLevel level, params Action<string, object[]>[] actions)
+        public static IServiceCollection AddMvp24HoursTelemetry(this IServiceCollection services, TelemetryLevels level, params Action<string, object[]>[] actions)
         {
             TelemetryHelper.Add(level, actions);
             return services;
         }
 
-        public static IServiceCollection AddMvp24HoursTelemetry(this IServiceCollection services, TelemetryLevel level, params ITelemetryService[] telemetryServices)
+        public static IServiceCollection AddMvp24HoursTelemetry(this IServiceCollection services, TelemetryLevels level, params ITelemetryService[] telemetryServices)
         {
             TelemetryHelper.Add(level, telemetryServices);
             return services;

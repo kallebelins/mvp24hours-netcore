@@ -87,18 +87,18 @@ namespace Mvp24Hours.Identity.Keycloak.Infrastructure.Extensions
                 List<string> realmRoles = null;
                 if (realm_access != null)
                 {
-                    realmRoles = ((JArray)((dynamic)realm_access).roles)?.ToObject<List<string>>();
+                    realmRoles = (((dynamic)realm_access).roles as JArray)?.ToObject<List<string>>();
                 }
 
                 List<string> resourceRoles = null;
                 if (resource_access != null)
                 {
-                    resourceRoles = ((JArray)((dynamic)((dynamic)resource_access).account)?.roles)?.ToObject<List<string>>();
+                    resourceRoles = (((dynamic)resource_access).account?.roles as JArray)?.ToObject<List<string>>();
                 }
 
                 return new UserToken
                 {
-                    Id = (Guid)sub?.ToString()?.ToGuid(),
+                    Id = sub.ToString().ToGuid(),
                     Name = name?.ToString(),
                     PreferredUserName = preferred_username?.ToString(),
                     Email = email?.ToString(),

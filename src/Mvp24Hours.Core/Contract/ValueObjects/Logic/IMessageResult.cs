@@ -21,12 +21,12 @@ namespace Mvp24Hours.Core.Contract.ValueObjects.Logic
         /// </summary>
         string Message { get; }
         /// <summary>
-        /// User feedback type
+        /// User feedback type categorized
         /// </summary>
         MessageType Type { get; }
         /// <summary>
-        /// User feedback type code
+        /// Customized feedback message
         /// </summary>
-        int TypeCode { get; }
+        string CustomType { get; }
     }
 }

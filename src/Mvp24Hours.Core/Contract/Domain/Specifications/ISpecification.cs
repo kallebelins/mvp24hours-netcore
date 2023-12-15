@@ -11,8 +11,7 @@ namespace Mvp24Hours.Core.Contract.Domain.Specifications
     /// whereby business rules can be recombined by chaining the business rules together using boolean logic. The pattern is frequently used in the context of domain-driven design.
     /// Learn more: https://www.martinfowler.com/apsupp/spec.pdf
     /// </summary>
-    /// <typeparam name="T">Represents an entity</typeparam>
-    public interface ISpecification<T>
+    public interface ISpecification
     {
     }
 }

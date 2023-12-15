@@ -14,6 +14,7 @@ namespace Mvp24Hours.Core.Enums
         Success,
         Info,
         Warning,
-        Error
+        Error,
+        Custom
     }
 }

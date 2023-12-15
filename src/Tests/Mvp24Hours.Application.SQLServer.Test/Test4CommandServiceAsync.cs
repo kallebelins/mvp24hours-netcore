@@ -72,7 +72,7 @@ namespace Mvp24Hours.Application.SQLServer.Test
             }
             await service.AddAsync(customers);
             // assert
-            Assert.True(!customers.Any(x => x.Id == 0));
+            Assert.True(!customers.AnySafe(x => x.Id == 0));
             // dispose
             startup.Cleanup(serviceProvider);
         }

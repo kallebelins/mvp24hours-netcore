@@ -32,11 +32,13 @@ namespace Mvp24Hours.Identity.Keycloak.Core.ValueObjects.Authorization.Decision
                 return;
             }
 
-            var data = new Dictionary<string, string>();
-            data.Add("grant_type", "urn:ietf:params:oauth:grant-type:uma-ticket");
-            data.Add("response_mode", "decision");
-            data.Add("audience", options.Audience);
-            data.Add("permission", $"{requirement.Resource}#{requirement.Scope}");
+            var data = new Dictionary<string, string>
+            {
+                { "grant_type", "urn:ietf:params:oauth:grant-type:uma-ticket" },
+                { "response_mode", "decision" },
+                { "audience", options.Audience },
+                { "permission", $"{requirement.Resource}#{requirement.Scope}" }
+            };
 
             var client = new HttpClient();
             var token = await httpContext.GetTokenAsync(JwtBearerDefaults.AuthenticationScheme, "access_token");

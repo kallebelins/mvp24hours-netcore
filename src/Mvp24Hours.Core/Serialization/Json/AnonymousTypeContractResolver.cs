@@ -57,19 +57,17 @@ namespace Mvp24Hours.Core.Serialization.Json
             {
                 _memberInfo = memberInfo;
                 var fieldName = string.Format("<{0}>i__Field", memberInfo.Name);
+#pragma warning disable S3011 // Reflection should not be used to increase accessibility of classes, methods, or fields
                 _fieldInfo = memberInfo.DeclaringType.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)
                         .First(fi => fi.Name.Equals(fieldName, StringComparison.InvariantCultureIgnoreCase));
+#pragma warning restore S3011 // Reflection should not be used to increase accessibility of classes, methods, or fields
             }
 
             public void SetValue(object target, object value)
             {
                 try
                 {
-                    if (_setter == null)
-                    {
-                        _setter = (t, v) => { _fieldInfo.SetValue(t, v); };
-                    }
-
+                    _setter ??= (t, v) => { _fieldInfo.SetValue(t, v); };
                     _setter(target, value);
                 }
                 catch (Exception ex)
@@ -82,11 +80,7 @@ namespace Mvp24Hours.Core.Serialization.Json
             {
                 try
                 {
-                    if (_getter == null)
-                    {
-                        _getter = t => { return _fieldInfo.GetValue(t); };
-                    }
-
+                    _getter ??= t => { return _fieldInfo.GetValue(t); };
                     return _getter(target);
                 }
                 catch (Exception ex)

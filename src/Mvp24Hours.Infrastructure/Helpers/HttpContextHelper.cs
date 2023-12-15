@@ -24,7 +24,7 @@ namespace Mvp24Hours.Helpers
             ServiceProviderHelper.SetProvider((state) =>
             {
                 if (state is IHttpContextAccessor http)
-                    return http?.HttpContext?.RequestServices;
+                    return http.HttpContext?.RequestServices;
                 return null;
             }, accessor);
         }
@@ -48,12 +48,12 @@ namespace Mvp24Hours.Helpers
 
                 if (ip.Contains(":"))
                 {
-                    ip = ip.Split(':').First().Trim();
+                    ip = ip.Split(':')[0].Trim();
                 }
 
                 if (ip.Contains(","))
                 {
-                    ip = ip.Split(',').First().Trim();
+                    ip = ip.Split(',')[0].Trim();
                 }
 
                 return ip;

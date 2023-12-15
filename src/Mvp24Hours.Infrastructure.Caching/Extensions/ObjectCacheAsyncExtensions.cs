@@ -18,7 +18,7 @@ namespace Mvp24Hours.Extensions
         public static async Task<T> GetObjectAsync<T>(this IDistributedCache cache, string key, JsonSerializerSettings jsonSerializerSettings = null, CancellationToken cancellationToken = default)
             where T : class
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-objectcacheasyncextensions-getobject-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "caching-objectcacheasyncextensions-getobject-start");
             try
             {
                 if (cache == null || !key.HasValue())
@@ -32,13 +32,13 @@ namespace Mvp24Hours.Extensions
                 }
                 return value.ToDeserialize<T>(jsonSerializerSettings);
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-objectcacheasyncextensions-getobject-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "caching-objectcacheasyncextensions-getobject-end"); }
         }
 
         public static async Task SetObjectAsync<T>(this IDistributedCache cache, string key, T value, JsonSerializerSettings jsonSerializerSettings = null, CancellationToken cancellationToken = default)
             where T : class
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-objectcacheasyncextensions-setobjectasync-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "caching-objectcacheasyncextensions-setobjectasync-start");
             try
             {
                 if (cache == null || !key.HasValue() || value == null)
@@ -48,13 +48,13 @@ namespace Mvp24Hours.Extensions
                 string result = value.ToSerialize(jsonSerializerSettings);
                 await cache.SetStringAsync(key, result, cancellationToken);
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-objectcacheasyncextensions-setobjectasync-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "caching-objectcacheasyncextensions-setobjectasync-end"); }
         }
 
         public static async Task SetObjectAsync<T>(this IDistributedCache cache, string key, T value, int minutes, JsonSerializerSettings jsonSerializerSettings = null, CancellationToken cancellationToken = default)
             where T : class
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-objectcacheasyncextensions-setobjectasync-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "caching-objectcacheasyncextensions-setobjectasync-start");
             try
             {
                 if (cache == null || !key.HasValue() || value == null)
@@ -64,12 +64,12 @@ namespace Mvp24Hours.Extensions
                 string result = value.ToSerialize(jsonSerializerSettings);
                 await cache.SetStringAsync(key, result, minutes, cancellationToken);
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-objectcacheasyncextensions-setobjectasync-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "caching-objectcacheasyncextensions-setobjectasync-end"); }
         }
 
         public static async Task SetObjectAsync(this IDistributedCache cache, string key, object value, DateTimeOffset time, JsonSerializerSettings jsonSerializerSettings = null, CancellationToken cancellationToken = default)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-objectcacheasyncextensions-setobjectasync-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "caching-objectcacheasyncextensions-setobjectasync-start");
             try
             {
                 if (cache == null || !key.HasValue() || value == null)
@@ -79,7 +79,7 @@ namespace Mvp24Hours.Extensions
                 string result = value.ToSerialize(jsonSerializerSettings);
                 await cache.SetStringAsync(key, result, time, cancellationToken);
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-objectcacheasyncextensions-setobjectasync-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "caching-objectcacheasyncextensions-setobjectasync-end"); }
         }
     }
 }

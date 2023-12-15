@@ -27,52 +27,52 @@ namespace Mvp24Hours.Infrastructure.Caching
 
         public virtual async Task<T> GetAsync(string key, CancellationToken cancellationToken = default)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-repositorycacheasync-getasync-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "caching-repositorycacheasync-getasync-start");
             try
             {
                 return await Cache.GetObjectAsync<T>(key, cancellationToken: cancellationToken);
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-repositorycacheasync-getasync-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "caching-repositorycacheasync-getasync-end"); }
         }
 
         public virtual async Task<string> GetStringAsync(string key, CancellationToken cancellationToken = default)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-repositorycacheasync-getstringasync-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "caching-repositorycacheasync-getstringasync-start");
             try
             {
                 return await Cache.GetStringAsync(key, token: cancellationToken);
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-repositorycacheasync-getstringasync-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "caching-repositorycacheasync-getstringasync-end"); }
         }
 
         public virtual async Task SetAsync(string key, T model, CancellationToken cancellationToken = default)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-repositorycacheasync-setasync-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "caching-repositorycacheasync-setasync-start");
             try
             {
                 await Cache.SetObjectAsync(key, model, cancellationToken: cancellationToken);
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-repositorycacheasync-setasync-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "caching-repositorycacheasync-setasync-end"); }
         }
 
         public virtual async Task SetStringAsync(string key, string value, CancellationToken cancellationToken = default)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-repositorycacheasync-setstringasync-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "caching-repositorycacheasync-setstringasync-start");
             try
             {
                 await Cache.SetStringAsync(key, value, token: cancellationToken);
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-repositorycacheasync-setstringasync-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "caching-repositorycacheasync-setstringasync-end"); }
         }
 
         public virtual async Task RemoveAsync(string key, CancellationToken cancellationToken = default)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-repositorycacheasync-removeasync-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "caching-repositorycacheasync-removeasync-start");
             try
             {
                 await Cache.RemoveAsync(key, token: cancellationToken);
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "caching-repositorycacheasync-removeasync-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "caching-repositorycacheasync-removeasync-end"); }
         }
     }
 }

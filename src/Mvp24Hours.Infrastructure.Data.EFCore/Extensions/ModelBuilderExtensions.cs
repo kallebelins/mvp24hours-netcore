@@ -20,7 +20,7 @@ namespace Mvp24Hours.Extensions
         /// </summary>
         public static void ApplyGlobalFilters<TInterface>(this ModelBuilder modelBuilder, Expression<Func<TInterface, bool>> expression)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "modelbuilderextensions-applyglobalfilters-execute");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "modelbuilderextensions-applyglobalfilters-execute");
 
             var entities = modelBuilder.Model
                 .GetEntityTypes()

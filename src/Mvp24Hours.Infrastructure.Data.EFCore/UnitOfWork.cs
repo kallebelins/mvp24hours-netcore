@@ -89,7 +89,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
         /// </summary>
         public int SaveChanges(CancellationToken cancellationToken = default)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-unitofwork-savechanges-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-unitofwork-savechanges-start");
             try
             {
                 if (!cancellationToken.IsCancellationRequested)
@@ -99,7 +99,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                 Rollback();
                 return default;
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-unitofwork-savechanges-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-unitofwork-savechanges-end"); }
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
         /// </summary>
         public void Rollback()
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-unitofwork-rollback-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-unitofwork-rollback-start");
             try
             {
                 var changedEntries = this.DbContext.ChangeTracker.Entries()
@@ -130,7 +130,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                     }
                 }
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcore-unitofwork-rollback-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-unitofwork-rollback-end"); }
         }
 
         #endregion

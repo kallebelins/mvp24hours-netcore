@@ -96,7 +96,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         /// </summary>
         public int SaveChanges(CancellationToken cancellationToken = default)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-unitofwork-savechanges-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-unitofwork-savechanges-start");
             try
             {
                 DbContext.SaveChanges(cancellationToken);
@@ -109,7 +109,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
             }
             finally
             {
-                TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-unitofwork-savechanges-end");
+                TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-unitofwork-savechanges-end");
             }
         }
 
@@ -118,12 +118,12 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
         /// </summary>
         public void Rollback()
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-unitofwork-rollback-start");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-unitofwork-rollback-start");
             try
             {
                 DbContext.Rollback();
             }
-            finally { TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-unitofwork-rollback-end"); }
+            finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-unitofwork-rollback-end"); }
         }
 
         #endregion

@@ -23,7 +23,7 @@ namespace Mvp24Hours.Extensions
             Func<IServiceProvider, TDbContext> dbFactory = null,
             ServiceLifetime lifetime = ServiceLifetime.Scoped) where TDbContext : DbContext
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcoreserviceextensions-addmvp24hoursdbcontext-execute");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcoreserviceextensions-addmvp24hoursdbcontext-execute");
 
             if (dbFactory != null)
             {
@@ -46,7 +46,7 @@ namespace Mvp24Hours.Extensions
             Type unitOfWork = null,
             ServiceLifetime lifetime = ServiceLifetime.Scoped)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcoreserviceextensions-addmvp24hoursrepository-execute");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcoreserviceextensions-addmvp24hoursrepository-execute");
 
             if (options != null)
             {
@@ -87,7 +87,7 @@ namespace Mvp24Hours.Extensions
             Type unitOfWorkAsync = null,
             ServiceLifetime lifetime = ServiceLifetime.Scoped)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "efcoreserviceextensions-addmvp24hoursrepositoryasync-execute");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcoreserviceextensions-addmvp24hoursrepositoryasync-execute");
 
             if (options != null)
             {

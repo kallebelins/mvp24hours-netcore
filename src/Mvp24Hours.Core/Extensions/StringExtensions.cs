@@ -27,13 +27,13 @@ namespace Mvp24Hours.Extensions
         public static string Truncate(this string text, int size)
         {
             string value = text ?? string.Empty;
-            return value.Length > size ? value.Substring(0, size) : value;
+            return value.Length > size ? value[..size] : value;
         }
 
         public static string Reticence(this string text, int size)
         {
             string value = text ?? string.Empty;
-            return value.Length > size ? value.Substring(0, size) + "..." : value;
+            return value.Length > size ? value[..size] + "..." : value;
         }
 
         public static string SubstringSafe(this string text, int start, int length = int.MaxValue)

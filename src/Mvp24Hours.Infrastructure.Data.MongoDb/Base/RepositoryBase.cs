@@ -76,7 +76,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
         /// </summary>
         protected IQueryable<T> GetQuery(IQueryable<T> query, IPagingCriteria criteria, bool onlyNavigation = false)
         {
-            TelemetryHelper.Execute(TelemetryLevel.Verbose, "mongodb-repositorybase-querycriteria-object", criteria);
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repositorybase-querycriteria-object", criteria);
             var ordered = false;
 
             if (!onlyNavigation)
