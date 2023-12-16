@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30907.101
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.Core", "Mvp24Hours.Core\Mvp24Hours.Core.csproj", "{3303E8ED-0010-4B02-9144-B8FE2C25A839}"
 EndProject
@@ -39,8 +39,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.Infrastructure.Caching.Redis", "Mvp24Hours.Infrastructure.Caching.Redis\Mvp24Hours.Infrastructure.Caching.Redis.csproj", "{2F1B36FE-6759-403F-9EC1-C7911FA7D0A0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.Patterns.Test", "Tests\Mvp24Hours.Patterns.Test\Mvp24Hours.Patterns.Test.csproj", "{E581E2B0-4DD2-43D4-AEFE-B190CFAA2193}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvp24Hours.Identity.Keycloak", "Mvp24Hours.Identity.Keycloak\Mvp24Hours.Identity.Keycloak.csproj", "{E59EA185-1BA7-41B4-BD1F-E39A60402B41}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -120,10 +118,6 @@ Global
 		{E581E2B0-4DD2-43D4-AEFE-B190CFAA2193}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E581E2B0-4DD2-43D4-AEFE-B190CFAA2193}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E581E2B0-4DD2-43D4-AEFE-B190CFAA2193}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E59EA185-1BA7-41B4-BD1F-E39A60402B41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E59EA185-1BA7-41B4-BD1F-E39A60402B41}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E59EA185-1BA7-41B4-BD1F-E39A60402B41}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E59EA185-1BA7-41B4-BD1F-E39A60402B41}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
