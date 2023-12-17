@@ -89,8 +89,15 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
 
                 policy.Execute(() =>
                 {
-                    _connection = _connectionFactory
-                            .CreateConnection();
+                    try
+                    {
+                        _connection = _connectionFactory
+                                .CreateConnection();
+                    }
+                    catch (Exception ex)
+                    {
+                        TelemetryHelper.Execute(TelemetryLevels.Error, "rabbitmq-connection-tryconnect-failure", $"RabbitMQ Client could not connect. ({ex.Message}).");
+                    }
                 });
 
                 if (IsConnected)

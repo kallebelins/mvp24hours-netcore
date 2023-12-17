@@ -1,39 +1,80 @@
+//=====================================================================================
+// Developed by Kallebe Lins (https://github.com/kallebelins)
+//=====================================================================================
+// Reproduction or sharing is free! Contribute to a better world!
+//=====================================================================================
 using Microsoft.Extensions.DependencyInjection;
-using Mvp24Hours.Application.RabbitMQ.Test.Setup;
+using Mvp24Hours.Application.RabbitMQ.Test.Support.Consumers;
 using Mvp24Hours.Application.RabbitMQ.Test.Support.Dto;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Infrastructure.RabbitMQ;
 using System;
-using System.Threading;
+using System.Threading.Tasks;
+using Testcontainers.RabbitMq;
 using Xunit;
 using Xunit.Priority;
 
 namespace Mvp24Hours.Application.RabbitMQ.Test
 {
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Name)]
-    public class Test1RabbitMQ
+    public class Test1RabbitMQ : IAsyncLifetime
     {
-        private readonly Startup startup;
+        #region [ Container ]
+        private readonly RabbitMqContainer _rabbitMqContainer = new RabbitMqBuilder()
+            .WithImage("rabbitmq:3-management")
+            .WithExposedPort(5672)
+            .WithUsername("guest")
+            .WithPassword("guest")
+            .WithCleanUp(true)
+            .Build();
 
-        /// <summary>
-        /// Initialize
-        /// </summary>
-        public Test1RabbitMQ()
+        public async Task InitializeAsync()
+            => await _rabbitMqContainer.StartAsync().ConfigureAwait(false);
+
+        public async Task DisposeAsync()
+            => await _rabbitMqContainer.DisposeAsync().ConfigureAwait(false);
+        #endregion
+
+        #region [ Fields ]
+        private IServiceProvider serviceProvider;
+        #endregion
+
+        #region [ Configure ]
+        public Test1RabbitMQ() { }
+
+        private void Setup()
         {
-            startup = new Startup();
+            var services = new ServiceCollection();
+            services.AddMvp24HoursRabbitMQ(
+                typeof(CustomerConsumer).Assembly,
+                connectionOptions =>
+                {
+                    connectionOptions.ConnectionString = _rabbitMqContainer.GetConnectionString();
+                    connectionOptions.DispatchConsumersAsync = true;
+                    connectionOptions.RetryCount = 3;
+                },
+                clientOptions =>
+                {
+                    clientOptions.MaxRedeliveredCount = 1;
+                }
+            );
+            services.AddScoped<CustomerConsumer, CustomerConsumer>();
+            serviceProvider = services.BuildServiceProvider();
         }
+        #endregion
+
 
         [Fact, Priority(1)]
         public void CreateProducer()
         {
+            Setup();
             // arrange
-            var serviceProvider = startup.Initialize();
             var client = serviceProvider.GetService<MvpRabbitMQClient>();
 
             // act
             string result = client.Publish(new CustomerEvent
             {
-                Id = 99,
+                Id = 1,
                 Name = "Test 1",
                 Active = true
             }, typeof(CustomerEvent).Name);
@@ -45,16 +86,20 @@ namespace Mvp24Hours.Application.RabbitMQ.Test
         [Fact, Priority(2)]
         public void CreateConsumer()
         {
+            Setup();
+            var client = serviceProvider.GetService<MvpRabbitMQClient>();
+
             // arrange
-            var serviceProvider = startup.Initialize();
+            client.Publish(new CustomerEvent
+            {
+                Id = 2,
+                Name = "Test 2",
+                Active = true
+            }, typeof(CustomerEvent).Name);
+
 
             // act
-            var source = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-            while (!source.IsCancellationRequested)
-            {
-                var client = serviceProvider.GetService<MvpRabbitMQClient>();
-                client.Consume();
-            }
+            client.Consume();
 
             // assert
             Assert.True(true);

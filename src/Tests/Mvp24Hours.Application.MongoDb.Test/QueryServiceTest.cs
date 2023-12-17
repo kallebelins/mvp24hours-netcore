@@ -6,12 +6,13 @@
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Bson;
 using Mvp24Hours.Application.MongoDb.Test.Support.Entities;
-using Mvp24Hours.Application.MongoDb.Test.Support.Helpers;
 using Mvp24Hours.Application.MongoDb.Test.Support.Services;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Testcontainers.MongoDb;
 using Xunit;
 using Xunit.Priority;
 
@@ -21,78 +22,108 @@ namespace Mvp24Hours.Application.MongoDb.Test
     /// 
     /// </summary>
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Name)]
-    public class QueryServiceTest
+    public class QueryServiceTest : IAsyncLifetime
     {
-        private readonly IServiceProvider serviceProvider;
+        #region [ Container ]
+        private readonly MongoDbContainer _mongoDbContainer =
+            new MongoDbBuilder().Build();
 
-        public QueryServiceTest()
+        public async Task InitializeAsync()
+            => await _mongoDbContainer.StartAsync().ConfigureAwait(false);
+
+        public async Task DisposeAsync()
+            => await _mongoDbContainer.DisposeAsync().ConfigureAwait(false);
+        #endregion
+
+        #region [ Fields ]
+        private IServiceProvider serviceProvider;
+        #endregion
+
+        #region [ Configure ]
+        public QueryServiceTest() { }
+
+        private void Setup()
         {
-            serviceProvider = StartupHelper.ConfigureServices();
+            var services = new ServiceCollection();
+            services.AddMvp24HoursDbContext(options =>
+            {
+                options.DatabaseName = "queryservicetest";
+                options.ConnectionString = _mongoDbContainer.GetConnectionString();
+            });
+            services.AddMvp24HoursRepository();
+            services.AddScoped<CustomerService, CustomerService>();
+            serviceProvider = services.BuildServiceProvider();
+
+            CreateManyCustomers();
         }
 
-        [Fact, Priority(1)]
-        public void CreateManyCustomers()
+        private void CreateManyCustomers()
         {
             var service = serviceProvider.GetService<CustomerService>();
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 3; i++)
             {
                 service.Add(new Customer
                 {
-                    Oid = ObjectId.GenerateNewId(),
                     Created = DateTime.Now,
                     Name = $"Test {i}",
                     Active = true
                 });
             }
-            var result = service.GetByCount(x => x.Active);
-            Assert.True(result.GetDataValue() > 0);
         }
+        #endregion
 
-        [Fact, Priority(2)]
+        #region [ Facts ]
+        [Fact]
         public void GetFilterCustomerList()
         {
+            Setup();
             var service = serviceProvider.GetService<CustomerService>();
             var result = service.List();
             Assert.True(result.GetDataCount() > 0);
         }
 
-        [Fact, Priority(3)]
+        [Fact]
         public void GetFilterCustomerListAny()
         {
+            Setup();
             var service = serviceProvider.GetService<CustomerService>();
             var result = service.ListAny();
             Assert.True(result.GetDataValue());
         }
 
-        [Fact, Priority(4)]
+        [Fact]
         public void GetFilterCustomerListCount()
         {
+            Setup();
             var service = serviceProvider.GetService<CustomerService>();
             var result = service.ListCount();
             Assert.True(result.GetDataValue() > 0);
         }
 
-        [Fact, Priority(5)]
+        [Fact]
         public void GetFilterCustomerListPaging()
         {
+            Setup();
             var service = serviceProvider.GetService<CustomerService>();
             var paging = new PagingCriteria(3, 0);
             var result = service.List(paging);
             Assert.True(result.HasDataCount(3));
         }
 
-        [Fact, Priority(6)]
+        [Fact]
         public void GetFilterCustomerListOrder()
         {
+            Setup();
             var service = serviceProvider.GetService<CustomerService>();
             var paging = new PagingCriteria(3, 0, new List<string> { "Name desc" });
             var result = service.List(paging);
             Assert.True(result.HasDataCount(3));
         }
 
-        [Fact, Priority(7)]
+        [Fact]
         public void GetFilterCustomerListOrderExpression()
         {
+            Setup();
             var service = serviceProvider.GetService<CustomerService>();
             var paging = new PagingCriteriaExpression<Customer>(3, 0);
             paging.OrderByDescendingExpr.Add(x => x.Name);
@@ -100,21 +131,24 @@ namespace Mvp24Hours.Application.MongoDb.Test
             Assert.True(result.HasDataCount(3));
         }
 
-        [Fact, Priority(8)]
+        [Fact]
         public void GetFilterCustomerListPagingExpression()
         {
+            Setup();
             var service = serviceProvider.GetService<CustomerService>();
             var paging = new PagingCriteriaExpression<Customer>(3, 0);
             var result = service.List(paging);
             Assert.True(result.HasDataCount(3));
         }
 
-        [Fact, Priority(9)]
+        [Fact]
         public void GetFilterCustomerByName()
         {
+            Setup();
             var service = serviceProvider.GetService<CustomerService>();
             var result = service.GetBy(x => x.Name == "Test 2");
             Assert.True(result.HasData());
         }
+        #endregion
     }
 }

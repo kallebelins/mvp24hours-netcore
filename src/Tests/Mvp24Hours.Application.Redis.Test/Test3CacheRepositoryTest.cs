@@ -4,33 +4,61 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Microsoft.Extensions.DependencyInjection;
-using Mvp24Hours.Application.Redis.Test.Setup;
 using Mvp24Hours.Application.Redis.Test.Support.Entities;
 using Mvp24Hours.Core.Contract.Data;
 using Mvp24Hours.Core.Helpers;
 using Mvp24Hours.Extensions;
+using Mvp24Hours.Infrastructure.Caching;
 using System;
+using System.Threading.Tasks;
+using Testcontainers.Redis;
 using Xunit;
 using Xunit.Priority;
 
 namespace Mvp24Hours.Application.Redis.Test
 {
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Name)]
-    public class Test3CacheRepositoryTest
+    public class Test3CacheRepositoryTest : IAsyncLifetime
     {
+        #region [ Container ]
+        private readonly RedisContainer _redisContainer = new RedisBuilder()
+            .WithImage("redis:3.2.5-alpine")
+            .WithExposedPort(6379)
+            .WithCleanUp(true)
+            .Build();
+
+        public async Task InitializeAsync()
+            => await _redisContainer.StartAsync().ConfigureAwait(false);
+
+        public async Task DisposeAsync()
+            => await _redisContainer.DisposeAsync().ConfigureAwait(false);
+        #endregion
+
         private readonly string keyString = $"stringtest-{StringHelper.GenerateKey(5)}";
         private readonly string keyObject = $"objecttest-{StringHelper.GenerateKey(5)}";
-        private readonly Startup startup;
+        private IServiceProvider serviceProvider;
 
         public Test3CacheRepositoryTest()
         {
-            startup = new Startup();
+        }
+
+        private void Setup()
+        {
+            var services = new ServiceCollection();
+            // caching
+            services.AddScoped<IRepositoryCache<Customer>, RepositoryCache<Customer>>();
+            services.AddScoped<IRepositoryCacheAsync<Customer>, RepositoryCacheAsync<Customer>>();
+
+            // caching.redis
+            services.AddMvp24HoursCaching();
+            services.AddMvp24HoursCachingRedis(_redisContainer.GetConnectionString());
+            serviceProvider = services.BuildServiceProvider();
         }
 
         [Fact, Priority(1)]
         public void SetContentCache()
         {
-            var serviceProvider = startup.Initialize();
+            Setup();
             var customer = new Customer
             {
                 Oid = Guid.NewGuid(),
@@ -47,7 +75,7 @@ namespace Mvp24Hours.Application.Redis.Test
         [Fact, Priority(2)]
         public void GetString()
         {
-            var serviceProvider = startup.Initialize();
+            Setup();
             var repo = serviceProvider.GetService<IRepositoryCache<Customer>>();
             repo.SetString(keyString, "Test");
             string content = repo.GetString(keyString);
@@ -57,7 +85,7 @@ namespace Mvp24Hours.Application.Redis.Test
         [Fact, Priority(3)]
         public void RemoveString()
         {
-            var serviceProvider = startup.Initialize();
+            Setup();
             var repo = serviceProvider.GetService<IRepositoryCache<Customer>>();
             repo.Remove(keyString);
             string content = repo.GetString(keyString);
@@ -67,7 +95,7 @@ namespace Mvp24Hours.Application.Redis.Test
         [Fact, Priority(4)]
         public void SetObjectContentCache()
         {
-            var serviceProvider = startup.Initialize();
+            Setup();
             var customer = new Customer
             {
                 Oid = Guid.NewGuid(),
@@ -82,7 +110,7 @@ namespace Mvp24Hours.Application.Redis.Test
         [Fact, Priority(5)]
         public void GetObject()
         {
-            var serviceProvider = startup.Initialize();
+            Setup();
             var repo = serviceProvider.GetService<IRepositoryCache<Customer>>();
             repo.Set(keyObject, new Customer { });
             var customer = repo.Get(keyObject);
@@ -92,7 +120,7 @@ namespace Mvp24Hours.Application.Redis.Test
         [Fact, Priority(6)]
         public void RemoveObject()
         {
-            var serviceProvider = startup.Initialize();
+            Setup();
             var repo = serviceProvider.GetService<IRepositoryCache<Customer>>();
             repo.Remove(keyObject);
             var customer = repo.Get(keyObject);
