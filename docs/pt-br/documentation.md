@@ -7,7 +7,7 @@ O Swagger permite você documentar facilmente sua API RESTful compartilhando com
 ### Instalação
 ```csharp
 /// Package Manager Console >
-Install-Package Mvp24Hours.WebAPI -Version 3.4.111
+Install-Package Mvp24Hours.WebAPI -Version 3.12.151
 ```
 
 ### Configuração

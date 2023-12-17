@@ -4,6 +4,7 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Application.MySql.Test.Support.Data;
 using Mvp24Hours.Application.MySql.Test.Support.Entities;
@@ -11,6 +12,7 @@ using Mvp24Hours.Application.MySql.Test.Support.Enums;
 using Mvp24Hours.Application.MySql.Test.Support.Services;
 using Mvp24Hours.Core.Helpers;
 using Mvp24Hours.Extensions;
+using Mvp24Hours.Helpers;
 using System;
 using System.Collections.Generic;
 
