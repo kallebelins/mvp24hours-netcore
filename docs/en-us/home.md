@@ -1,4 +1,4 @@
-# <img  style="vertical-align:middle" width="42" height="42" src="/_media/icon.png" alt="Mvp24Hours" /> Mvp24Hours (v3.12.151)
+# <img  style="vertical-align:middle" width="42" height="42" src="/_media/icon.png" alt="Mvp24Hours" /> Mvp24Hours (v3.12.221)
 
 
 This project was developed to contribute to the rapid construction of services. I used the reference of solutions for building microservices.
@@ -51,6 +51,6 @@ Be a sponsor by choosing this project to accelerate your products.
 * Implementation of Polly to apply resilience and fault tolerance concepts;
 * Correction of automatic loading of mapping classes with IMapFrom;
 
-### 3.12.151
+### 3.12.221
 * Removed generic typing from the IMapFrom class;
 * Implementation of Testcontainers for RabbitMQ, Redis and MongoDb projects;
