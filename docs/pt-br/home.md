@@ -17,17 +17,17 @@ Você poderá estudar diversas soluções com a biblioteca Mvp24Hours. Além dis
 <br>Templates: https://github.com/kallebelins/mvp24hours-netcore-samples/tree/main/vstemplate
 
 ## Próximos Passos
-* Implementar requisição com HttpFactory para aplicar conceitos de resiliência;
+~~* Implementar requisição com HttpFactory para aplicar conceitos de resiliência;~~
 * Implementar requisição com Consul (Service Discovery) usando chave de serviço;
-* Criar log de http para monitoramento de recursos exclusivos;
+~~* Criar log de http para monitoramento de recursos exclusivos;~~
 * Criar modelo de projeto usando Consul (Service Discovery);
-* Criar modelo de projeto para aplicação de observabilidade/monitoramento com ElasticSearch (ELK) - log distribuído;
+~~* Criar modelo de projeto para aplicação de observabilidade/monitoramento com ElasticSearch (ELK) - log distribuído;~~
 * Criar modelo de projeto com ASP.Net Identity;
-* Criar modelo de projeto com geração dinâmica das classes com [Mvp24Hours-Entity-T4](https://github.com/kallebelins/mvp24hours-entity-t4);
-* Criar modelo de projeto para aplicar conceitos de resiliência e tolerância a falhas;
+~~* Criar modelo de projeto com geração dinâmica das classes com [Mvp24Hours-Entity-T4](https://github.com/kallebelins/mvp24hours-entity-t4);~~
+~~* Criar modelo de projeto para aplicar conceitos de resiliência e tolerância a falhas;~~
 * Criar modelo de projeto com Grpc sobre HTTP2 (servidor e cliente);
 * Implementar integração com Kafka (message broker);
-* Criar modelo de projeto com WatchDog para monitorar a saúde dos serviços;
+~~* Criar modelo de projeto com WatchDog para monitorar a saúde dos serviços;~~
 * Criar modelo de projeto para gateway (ocelot) com service discovery (consul);
 * Criar modelo de projeto para gateway (ocelot) com agregador;
 * Gravar vídeos de treinamento para a comunidade;
@@ -40,3 +40,15 @@ Usuários, interessados, estudantes, entusiastas, desenvolvedores, programadores
 
 ## Patrocinadores
 Seja um patrocinador escolhendo este projeto para acelerar seus produtos.
+
+## Release
+
+### 3.12.221
+* Implementação de Delegation Handlers para propagação de chaves no Header (correlation-id, authorization, etc);
+* Implementação de Polly para aplicar conceitos de resiliência e tolerância a falhas;
+* Correção de carregamento automático de classes de mapeamento com IMapFrom;
+
+### 3.12.151
+* Remoção de tipagem genérica da classe IMapFrom;
+* Implmentação de Testcontainers para projetos RabbitMQ, Redis e MongoDb;
+

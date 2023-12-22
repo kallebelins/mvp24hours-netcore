@@ -1,4 +1,9 @@
-﻿using Mvp24Hours.Core.Enums.Infrastructure;
+﻿//=====================================================================================
+// Developed by Kallebe Lins (https://github.com/kallebelins)
+//=====================================================================================
+// Reproduction or sharing is free! Contribute to a better world!
+//=====================================================================================
+using Mvp24Hours.Core.Enums.Infrastructure;
 using Mvp24Hours.Helpers;
 using System.Net;
 using System.Net.Http;
@@ -6,7 +11,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Mvp24Hours.Infrastructure.Logging
+namespace Mvp24Hours.Infrastructure.Http.DelegatingHandlers
 {
     /// <summary>
     /// A type for HTTP handlers that delegate the processing of HTTP response messages to another handler, called the inner handler.

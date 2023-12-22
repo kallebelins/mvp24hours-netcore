@@ -3,6 +3,8 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Core.Enums.Infrastructure;
 using Mvp24Hours.Core.Exceptions;
 using Mvp24Hours.Helpers;
@@ -191,39 +193,7 @@ namespace Mvp24Hours.Extensions
 
                 using var request = new HttpRequestMessage(new HttpMethod(method), new Uri(urlRequest));
 
-                string mediaType = string.Empty;
-
-                if (headers.AnyOrNotNull())
-                {
-                    foreach (var keyValue in headers)
-                    {
-                        if (!keyValue.Key.HasValue() || !keyValue.Value.HasValue())
-                            continue;
-                        if (keyValue.Key == "Content-Type")
-                        {
-                            mediaType = keyValue.Value.Split(';').ElementAtOrDefault(0);
-                        }
-                        request.Headers.TryAddWithoutValidation(keyValue.Key, keyValue.Value);
-                    }
-                }
-
-                if (!mediaType.HasValue())
-                {
-                    mediaType = "application/json";
-                }
-
-                if (!headers.ContainsKeySafe("Content-Type"))
-                {
-                    request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue(mediaType));
-                    request.Headers.TryAddWithoutValidation("Content-Type", $"{mediaType}; charset={EncodingRequest.BodyName.ToLower()}");
-                }
-
-                if (method == "POST" || method == "PUT" || method == "PATCH")
-                {
-                    request.Headers.TryAddWithoutValidation("Content-Length", EncodingRequest.GetBytes(data ?? string.Empty).Length.ToString());
-                    request.Content = new StringContent(data, EncodingRequest);
-                    request.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(mediaType);
-                }
+                MediaTypeBuilder(headers, method, data, request);
 
                 TelemetryHelper.Execute(TelemetryLevels.Verbose, "infra-httpclient-sendasync", $"url:{url}|method:{method}");
 
@@ -254,6 +224,115 @@ namespace Mvp24Hours.Extensions
             {
                 TelemetryHelper.Execute(TelemetryLevels.Verbose, "infra-httpclient-end");
             }
+        }
+
+        private static void MediaTypeBuilder(Dictionary<string, string> headers, string method, string data, HttpRequestMessage request)
+        {
+            string mediaType = string.Empty;    
+
+            if (headers.AnyOrNotNull())
+            {
+                foreach (var keyValue in headers)
+                {
+                    if (!keyValue.Key.HasValue() || !keyValue.Value.HasValue())
+                        continue;
+                    if (keyValue.Key == "Content-Type")
+                    {
+                        mediaType = keyValue.Value.Split(';').ElementAtOrDefault(0);
+                    }
+                    request.Headers.TryAddWithoutValidation(keyValue.Key, keyValue.Value);
+                }
+            }
+
+            if (!mediaType.HasValue())
+            {
+                mediaType = "application/json";
+            }
+
+            if (!headers.ContainsKeySafe("Content-Type"))
+            {
+                request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue(mediaType));
+                request.Headers.TryAddWithoutValidation("Content-Type", $"{mediaType}; charset={EncodingRequest.BodyName.ToLower()}");
+            }
+
+            if (method == "POST" || method == "PUT" || method == "PATCH")
+            {
+                request.Headers.TryAddWithoutValidation("Content-Length", EncodingRequest.GetBytes(data ?? string.Empty).Length.ToString());
+                request.Content = new StringContent(data, EncodingRequest);
+                request.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(mediaType);
+            }
+        }
+
+        public static HttpClient PropagateHeaderKey(this HttpClient c, IServiceCollection services, params string[] keys)
+        {
+            var serviceProvider = services.BuildServiceProvider();
+            c.PropagateHeaderKey(serviceProvider, keys);
+            return c;
+        }
+
+        public static HttpClient PropagateHeaderKey(this HttpClient c, IServiceProvider serviceProvider, params string[] keys)
+        {
+            var httpAccessor = serviceProvider.GetService<IHttpContextAccessor>();
+            c.PropagateHeaderKey(httpAccessor, keys);
+            return c;
+        }
+
+        public static HttpClient PropagateHeaderKey(this HttpClient c, IHttpContextAccessor httpAccessor, params string[] keys)
+        {
+            foreach (var key in keys)
+            {
+                string headerValue = httpAccessor.GetHeaderValue(key);
+                if (headerValue != null)
+                    c.DefaultRequestHeaders.TryAddWithoutValidation(key, headerValue);
+            }
+            return c;
+        }
+
+        public static HttpRequestMessage PropagateHeaderKey(this HttpRequestMessage request, IServiceCollection services, params string[] keys)
+        {
+            var serviceProvider = services.BuildServiceProvider();
+            request.PropagateHeaderKey(serviceProvider, keys);
+            return request;
+        }
+
+        public static HttpRequestMessage PropagateHeaderKey(this HttpRequestMessage request, IServiceProvider serviceProvider, params string[] keys)
+        {
+            var httpAccessor = serviceProvider.GetService<IHttpContextAccessor>();
+            request.PropagateHeaderKey(httpAccessor, keys);
+            return request;
+        }
+
+        public static HttpRequestMessage PropagateHeaderKey(this HttpRequestMessage request, IHttpContextAccessor httpAccessor, params string[] keys)
+        {
+            if (httpAccessor?.HttpContext != null)
+            {
+                foreach (var key in keys)
+                {
+                    var headers = httpAccessor.HttpContext.Request.Headers;
+                    var headerValue = headers.GetHeaderValue(key);
+                    if (headerValue.HasValue())
+                        request.Headers.TryAddWithoutValidation(key, headerValue);
+                }
+            }
+            return request;
+        }
+
+        public static string GetHeaderValue(this IHttpContextAccessor httpAccessor, string key)
+        {
+            if (httpAccessor?.HttpContext != null)
+            {
+                return httpAccessor.HttpContext.Request.Headers.GetHeaderValue(key);
+            }
+            return null;
+        }
+
+        public static string GetHeaderValue(this IHeaderDictionary headers, string key)
+        {
+            if (headers.AnyOrNotNull() && headers.ContainsKey(key) && !string.IsNullOrEmpty(headers[key]))
+            {
+                return headers[key].ToString();
+            }
+            return null;
         }
     }
 }

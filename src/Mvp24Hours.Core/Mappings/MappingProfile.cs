@@ -31,8 +31,7 @@ namespace Mvp24Hours.Core.Mappings
         private void ApplyMappingsFromAssembly(Assembly assembly)
         {
             var types = assembly.GetExportedTypes()
-                .Where(t => t.GetInterfaces().AnySafe(i =>
-                    i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IMapFrom)))
+                .Where(t => t.GetInterfaces().AnySafe(i => i == typeof(IMapFrom)))
                 .ToList();
 
             foreach (var type in types)

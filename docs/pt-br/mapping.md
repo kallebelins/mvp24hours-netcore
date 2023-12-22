@@ -26,7 +26,7 @@ public class Customer
 }
 
 /// CustomerResponse.cs
-public class CustomerResponse : IMapFrom<Customer>
+public class CustomerResponse : IMapFrom
 {
     public string Name { get; set; }
     public void Mapping(Profile profile) => profile.CreateMap<Customer, CustomerResponse>();

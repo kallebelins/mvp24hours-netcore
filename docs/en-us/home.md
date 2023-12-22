@@ -20,17 +20,17 @@ You can study different solutions with the Mvp24Hours library. Also, create quic
 
 ## Next Steps
 
-* Implement request with HttpFactory to apply resilience concepts;
+~~* Implement request with HttpFactory to apply resilience concepts;~~
 * Implement request with Consul (Service Discovery) using service key;
-* Create http log for monitoring unique resources;
+~~* Create http log for monitoring unique resources;~~
 * Create project template using Consul (Service Discovery);
-* Create project model for observability/monitoring application with ElasticSearch (ELK) - distributed log;
+~~* Create project model for observability/monitoring application with ElasticSearch (ELK) - distributed log;~~
 * Create project model with ASP.Net Identity;
-* Create project model with dynamic generation of classes with [Mvp24Hours-Entity-T4](https://github.com/kallebelins/mvp24hours-entity-t4);
-* Create design model to apply resilience and fault tolerance concepts;
+~~* Create project model with dynamic generation of classes with [Mvp24Hours-Entity-T4](https://github.com/kallebelins/mvp24hours-entity-t4);~~
+~~* Create design model to apply resilience and fault tolerance concepts;~~
 * Create project template with Grpc over HTTP2 (server and client);
 * Implement integration with Kafka (message broker);
-* Create project template with WatchDog to monitor the health of services;
+~~* Create project template with WatchDog to monitor the health of services;~~
 * Create project template for gateway (ocelot) with service discovery (consul);
 * Create project template for gateway (ocelot) with aggregator;
 * Record training videos for the community;
@@ -43,3 +43,14 @@ Users, stakeholders, students, enthusiasts, developers, programmers [connect on 
 
 ## Sponsors
 Be a sponsor by choosing this project to accelerate your products.
+
+## Release
+
+### 3.12.221
+* Implementation of Delegation Handlers to propagate keys in the Header (correlation-id, authorization, etc);
+* Implementation of Polly to apply resilience and fault tolerance concepts;
+* Correction of automatic loading of mapping classes with IMapFrom;
+
+### 3.12.151
+* Removed generic typing from the IMapFrom class;
+* Implementation of Testcontainers for RabbitMQ, Redis and MongoDb projects;

@@ -4,7 +4,6 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Microsoft.AspNetCore.Http;
-using System.Linq;
 
 namespace Mvp24Hours.Helpers
 {
