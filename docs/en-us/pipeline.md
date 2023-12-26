@@ -4,7 +4,7 @@ It is a design pattern that represents a tube with several operations (filters),
 ## Installation
 ```csharp
 /// Package Manager Console >
-Install-Package Mvp24Hours.Infrastructure.Pipe -Version 3.12.261
+Install-Package Mvp24Hours.Infrastructure.Pipe -Version 3.12.262
 ```
 
 ## Configuration

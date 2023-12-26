@@ -1,6 +1,6 @@
 # O que há de novo?
 
-## v3.12.261
+## v3.12.262
 * Refatoração para migrar configurações de arquivo json para extensões fluentes;
 * Substituição do padrão de notificação;
 * Revisão dos templates;

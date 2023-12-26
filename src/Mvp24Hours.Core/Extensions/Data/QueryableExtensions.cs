@@ -8,7 +8,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Mvp24Hours.Extensions.Data
+namespace Mvp24Hours.Extensions
 {
     /// <summary>
     /// 

@@ -9,7 +9,7 @@ using Mvp24Hours.Core.Enums.Infrastructure;
 using Mvp24Hours.Helpers;
 using System;
 
-namespace Mvp24Hours.Core.Extensions
+namespace Mvp24Hours.Extensions
 {
     public static class TelemetryExtensions
     {

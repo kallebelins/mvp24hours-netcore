@@ -5,7 +5,7 @@
 //=====================================================================================
 using System.Diagnostics;
 
-namespace Mvp24Hours.Infrastructure.Extensions
+namespace Mvp24Hours.Extensions
 {
     public static class ActivityExtensions
     {

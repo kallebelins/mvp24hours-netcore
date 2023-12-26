@@ -1,4 +1,4 @@
-# <img  style="vertical-align:middle" width="42" height="42" src="/_media/icon.png" alt="Mvp24Hours" /> Mvp24Hours (v3.12.261)
+# <img  style="vertical-align:middle" width="42" height="42" src="/_media/icon.png" alt="Mvp24Hours" /> Mvp24Hours (v3.12.262)
 Este projeto foi desenvolvido para contribuir com a construção rápida de serviços. Usei a referência de soluções para construção de microserviços.
 
 ## Características
@@ -42,6 +42,9 @@ Usuários, interessados, estudantes, entusiastas, desenvolvedores, programadores
 Seja um patrocinador escolhendo este projeto para acelerar seus produtos.
 
 ## Release
+
+### 3.12.262
+* Refatoração de extensões.
 
 ### 3.12.261
 * Implementação de teste de middleware.

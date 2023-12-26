@@ -10,7 +10,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Rottur.Shared.Infrastructure.Extensions
+namespace Mvp24Hours.Extensions
 {
     public static class DatabaseExtensions
     {

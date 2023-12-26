@@ -1,4 +1,4 @@
-# <img  style="vertical-align:middle" width="42" height="42" src="/_media/icon.png" alt="Mvp24Hours" /> Mvp24Hours (v3.12.261)
+# <img  style="vertical-align:middle" width="42" height="42" src="/_media/icon.png" alt="Mvp24Hours" /> Mvp24Hours (v3.12.262)
 
 
 This project was developed to contribute to the rapid construction of services. I used the reference of solutions for building microservices.
@@ -45,6 +45,9 @@ Users, stakeholders, students, enthusiasts, developers, programmers [connect on 
 Be a sponsor by choosing this project to accelerate your products.
 
 ## Release
+
+### 3.12.262
+* Refactoring extensions.
 
 ### 3.12.261
 * Middleware test implementation.
