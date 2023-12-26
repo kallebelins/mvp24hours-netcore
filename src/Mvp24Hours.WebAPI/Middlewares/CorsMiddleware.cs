@@ -64,7 +64,7 @@ namespace Mvp24Hours.WebAPI.Middlewares
             }
 
             // New Code Starts here
-            if (context.Request.Method == "OPTIONS")
+            if (options.AllowRequestOptions && context.Request.Method == "OPTIONS")
             {
                 context.Response.StatusCode = (int)HttpStatusCode.OK;
                 await context.Response.WriteAsync(string.Empty);

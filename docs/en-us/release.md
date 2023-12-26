@@ -1,6 +1,6 @@
 # What's new?
 
-## v3.12.221
+## v3.12.261
 * Refactoring to migrate json file settings to fluent extensions;
 * Replacement of the notification pattern;
 * Review of templates;

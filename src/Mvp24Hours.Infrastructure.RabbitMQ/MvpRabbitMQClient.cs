@@ -137,14 +137,14 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
 
                 if (Connection.Options.DispatchConsumersAsync)
                 {
-                    if (TypeConsumers.Any(x => x.InheritsOrImplements(typeof(IMvpRabbitMQConsumerSync))))
+                    if (TypeConsumers.AnySafe(x => x.InheritsOrImplements(typeof(IMvpRabbitMQConsumerSync))))
                     {
                         throw new ArgumentException("DispatchConsumersAsync is enabled, so register only classes that implement the IMvpRabbitMQConsumerAsync interface.");
                     }
                 }
                 else
                 {
-                    if (TypeConsumers.Any(x => x.InheritsOrImplements(typeof(IMvpRabbitMQConsumerAsync))))
+                    if (TypeConsumers.AnySafe(x => x.InheritsOrImplements(typeof(IMvpRabbitMQConsumerAsync))))
                     {
                         throw new ArgumentException("DispatchConsumersAsync is disabled, so register only classes that implement the IMvpRabbitMQConsumerSync interface.");
                     }

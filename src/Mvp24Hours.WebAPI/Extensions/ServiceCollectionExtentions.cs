@@ -18,6 +18,7 @@ using Mvp24Hours.WebAPI.Filters.Swagger;
 using Mvp24Hours.WebAPI.Models;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Filters;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -110,59 +111,11 @@ namespace Mvp24Hours.WebAPI.Extensions
 
                 if (oAuthScheme == SwaggerAuthorizationScheme.Bearer)
                 {
-                    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                    {
-                        Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n 
-                          Enter 'Bearer' [space] and then your token in the text input below.
-                          \r\n\r\nExample: 'Bearer 12345abcdef'",
-                        Name = "Authorization",
-                        In = ParameterLocation.Header,
-                        Type = SecuritySchemeType.ApiKey,
-                        Scheme = "Bearer"
-                    });
-
-                    if (authTypes == null)
-                    {
-                        c.AddSecurityRequirement(new OpenApiSecurityRequirement() {
-                            {
-                                new OpenApiSecurityScheme {
-                                    Reference = new OpenApiReference {
-                                        Type = ReferenceType.SecurityScheme,
-                                        Id = "Bearer"
-                                    }
-                                },
-                                new List<string>()
-                            }
-                        });
-                    }
+                    BearerBuilder(authTypes, c);
                 }
                 else if (oAuthScheme == SwaggerAuthorizationScheme.Basic)
                 {
-                    c.AddSecurityDefinition("Basic", new OpenApiSecurityScheme
-                    {
-                        Description = @"Authorization header using the Basic scheme. \r\n\r\n 
-                          Enter 'Basic' [space] and then your token in the text input below.
-                          \r\n\r\nExample: 'Basic 12345abcdef'",
-                        Name = "Authorization",
-                        In = ParameterLocation.Header,
-                        Type = SecuritySchemeType.Http,
-                        Scheme = "Basic"
-                    });
-
-                    if (authTypes == null)
-                    {
-                        c.AddSecurityRequirement(new OpenApiSecurityRequirement() {
-                            {
-                                new OpenApiSecurityScheme {
-                                    Reference = new OpenApiReference {
-                                        Type = ReferenceType.SecurityScheme,
-                                        Id = "Basic"
-                                    },
-                                },
-                                new List<string>()
-                            }
-                        });
-                    }
+                    BasicBuilder(authTypes, c);
                 }
 
                 if (oAuthScheme != SwaggerAuthorizationScheme.None && authTypes != null)
@@ -187,6 +140,64 @@ namespace Mvp24Hours.WebAPI.Extensions
             }
 
             return services;
+        }
+
+        private static void BasicBuilder(IEnumerable<Type> authTypes, SwaggerGenOptions c)
+        {
+            c.AddSecurityDefinition("Basic", new OpenApiSecurityScheme
+            {
+                Description = @"Authorization header using the Basic scheme. \r\n\r\n 
+                          Enter 'Basic' [space] and then your token in the text input below.
+                          \r\n\r\nExample: 'Basic 12345abcdef'",
+                Name = "Authorization",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.Http,
+                Scheme = "Basic"
+            });
+
+            if (authTypes == null)
+            {
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement() {
+                    {
+                        new OpenApiSecurityScheme {
+                            Reference = new OpenApiReference {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Basic"
+                            },
+                        },
+                        new List<string>()
+                    }
+                });
+            }
+        }
+
+        private static void BearerBuilder(IEnumerable<Type> authTypes, SwaggerGenOptions c)
+        {
+            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n 
+                          Enter 'Bearer' [space] and then your token in the text input below.
+                          \r\n\r\nExample: 'Bearer 12345abcdef'",
+                Name = "Authorization",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.ApiKey,
+                Scheme = "Bearer"
+            });
+
+            if (authTypes == null)
+            {
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement() {
+                {
+                    new OpenApiSecurityScheme {
+                            Reference = new OpenApiReference {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new List<string>()
+                    }
+                });
+            }
         }
 
         /// <summary>

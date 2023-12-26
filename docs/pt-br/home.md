@@ -1,4 +1,4 @@
-# <img  style="vertical-align:middle" width="42" height="42" src="/_media/icon.png" alt="Mvp24Hours" /> Mvp24Hours (v3.12.221)
+# <img  style="vertical-align:middle" width="42" height="42" src="/_media/icon.png" alt="Mvp24Hours" /> Mvp24Hours (v3.12.261)
 Este projeto foi desenvolvido para contribuir com a construção rápida de serviços. Usei a referência de soluções para construção de microserviços.
 
 ## Características
@@ -43,12 +43,15 @@ Seja um patrocinador escolhendo este projeto para acelerar seus produtos.
 
 ## Release
 
+### 3.12.261
+* Implementação de teste de middleware.
+
 ### 3.12.221
 * Implementação de Delegation Handlers para propagação de chaves no Header (correlation-id, authorization, etc);
 * Implementação de Polly para aplicar conceitos de resiliência e tolerância a falhas;
 * Correção de carregamento automático de classes de mapeamento com IMapFrom;
 
-### 3.12.221
+### 3.12.151
 * Remoção de tipagem genérica da classe IMapFrom;
 * Implmentação de Testcontainers para projetos RabbitMQ, Redis e MongoDb;
 

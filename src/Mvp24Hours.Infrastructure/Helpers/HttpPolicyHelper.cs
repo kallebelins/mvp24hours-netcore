@@ -18,9 +18,9 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Mvp24Hours.WebAPI.Extensions
+namespace Mvp24Hours.Infrastructure.Helpers
 {
-    public static class PollyPolicyExtensions
+    public static class HttpPolicyHelper
     {
         /// <summary>
         /// Allows configuring automatic retries.

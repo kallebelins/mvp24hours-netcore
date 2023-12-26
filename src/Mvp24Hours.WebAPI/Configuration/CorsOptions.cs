@@ -10,6 +10,8 @@ namespace Mvp24Hours.WebAPI.Configuration
     {
         public bool AllowAll { get; set; }
 
+        public bool AllowRequestOptions { get; set; } = true;
+
         public string Origin { get; set; }
         public string Headers { get; set; }
         public string Methods { get; set; }

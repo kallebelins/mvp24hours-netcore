@@ -6,7 +6,7 @@
 ### Installation
 ```csharp
 /// Package Manager Console >
-Install-Package Mvp24Hours.Infrastructure.RabbitMQ -Version 3.12.221
+Install-Package Mvp24Hours.Infrastructure.RabbitMQ -Version 3.12.261
 ```
 
 
