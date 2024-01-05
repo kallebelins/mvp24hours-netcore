@@ -28,15 +28,6 @@ namespace Mvp24Hours.Extensions
                 throw new ArgumentNullException(nameof(assemblyConsumers));
             }
 
-            var types = assemblyConsumers.GetExportedTypes()
-                .Where(t => t.InheritsOrImplements(typeof(IMvpRabbitMQConsumer)))
-                .ToList();
-
-            foreach (var type in types)
-            {
-                MvpRabbitMQClient.Register(type);
-            }
-
             if (connectionOptions != null)
             {
                 services.Configure(connectionOptions);
@@ -57,7 +48,59 @@ namespace Mvp24Hours.Extensions
                 services.Configure<RabbitMQClientOptions>(options => { });
             }
 
-            services.AddSingleton<MvpRabbitMQClient, MvpRabbitMQClient>();
+            services.AddSingleton(sp =>
+            {
+                var client = new MvpRabbitMQClient(sp);
+
+                assemblyConsumers.GetExportedTypes()
+                    .Where(t => t.InheritsOrImplements(typeof(IMvpRabbitMQConsumer)))
+                    .ToList()
+                    .ForEach(x => client.Register(x));
+
+                return client;
+            });
+
+            return services;
+        }
+
+        /// <summary>
+        /// Add rabbitmq
+        /// </summary>
+        public static IServiceCollection AddMvp24HoursRabbitMQWithConsumers(this IServiceCollection services,
+            Action<RabbitMQConnectionOptions> connectionOptions,
+            Action<RabbitMQClientOptions> clientOptions,
+            params Type[] typeConsumers)
+        {
+            if (connectionOptions != null)
+            {
+                services.Configure(connectionOptions);
+            }
+            else
+            {
+                services.Configure<RabbitMQConnectionOptions>(connectionOptions => { });
+            }
+
+            services.AddSingleton<IMvpRabbitMQConnection, MvpRabbitMQConnection>();
+
+            if (clientOptions != null)
+            {
+                services.Configure(clientOptions);
+            }
+            else
+            {
+                services.Configure<RabbitMQClientOptions>(options => { });
+            }
+
+            services.AddSingleton(sp =>
+            {
+                var client = new MvpRabbitMQClient(sp);
+
+                if (typeConsumers.AnySafe())
+                    foreach (var item in typeConsumers)
+                        client.Register(item);
+
+                return client;
+            });
 
             return services;
         }

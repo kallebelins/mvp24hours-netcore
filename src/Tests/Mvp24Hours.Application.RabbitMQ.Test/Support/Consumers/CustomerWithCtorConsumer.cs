@@ -8,11 +8,20 @@ using System.Threading.Tasks;
 
 namespace Mvp24Hours.Application.RabbitMQ.Test.Support.Consumers
 {
-    public class CustomerConsumer : IMvpRabbitMQConsumerAsync
+    public class CustomerWithCtorConsumer : IMvpRabbitMQConsumerAsync
     {
-        public string RoutingKey => typeof(CustomerConsumer).Name;
+        public CustomerWithCtorConsumer(CustomerEvent _event)
+        {
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "customer-consumer-ctor", $"dto:{_event?.ToSerialize()}");
+            if (_event == null || _event.Name != "event")
+            {
+                throw new ArgumentException("Error event.");
+            }
+        }
 
-        public string QueueName => typeof(CustomerConsumer).Name;
+        public string RoutingKey => typeof(CustomerWithCtorConsumer).Name;
+
+        public string QueueName => typeof(CustomerWithCtorConsumer).Name;
 
         public async Task ReceivedAsync(object message, string token)
         {

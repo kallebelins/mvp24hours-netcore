@@ -26,6 +26,8 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
         private readonly RabbitMQClientOptions _options;
         private readonly IMvpRabbitMQConnection _connection;
         private readonly Dictionary<string, IModel> _channels;
+        private readonly IServiceProvider _provider;
+        private readonly List<IMvpRabbitMQConsumer> _consumers;
 
         protected virtual RabbitMQClientOptions Options => _options;
         protected virtual IMvpRabbitMQConnection Connection => _connection;
@@ -33,18 +35,14 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
         #endregion
 
         #region [ Ctors ]
-        [ActivatorUtilitiesConstructor]
-        public MvpRabbitMQClient(IOptions<RabbitMQClientOptions> options, IMvpRabbitMQConnection connection)
-            : this(options?.Value, connection)
-        {
-        }
-
-        public MvpRabbitMQClient(RabbitMQClientOptions options, IMvpRabbitMQConnection connection)
+        public MvpRabbitMQClient(IServiceProvider _provider)
         {
             TelemetryHelper.Execute(TelemetryLevels.Verbose, "rabbitmq-client-ctor");
-            this._options = options ?? throw new ArgumentNullException(nameof(options));
-            this._connection = connection ?? throw new ArgumentNullException(nameof(connection));
+            this._provider = _provider;
+            this._options = _provider.GetService<IOptions<RabbitMQClientOptions>>()?.Value ?? throw new ArgumentNullException(nameof(_provider));
+            this._connection = _provider.GetService<IMvpRabbitMQConnection>() ?? throw new ArgumentNullException(nameof(_provider));
             this._channels = new Dictionary<string, IModel>();
+            this._consumers = new List<IMvpRabbitMQConsumer>();
         }
         #endregion
 
@@ -130,27 +128,27 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
             {
                 TelemetryHelper.Execute(TelemetryLevels.Verbose, "rabbitmq-consumer-start");
 
-                if (!TypeConsumers.AnySafe())
+                if (!_consumers.AnySafe())
                 {
                     throw new ArgumentException("We didn't find consumers registered through the configuration.");
                 }
 
                 if (Connection.Options.DispatchConsumersAsync)
                 {
-                    if (TypeConsumers.AnySafe(x => x.InheritsOrImplements(typeof(IMvpRabbitMQConsumerSync))))
+                    if (_consumers.AnySafe(x => x.GetType().InheritsOrImplements(typeof(IMvpRabbitMQConsumerSync))))
                     {
                         throw new ArgumentException("DispatchConsumersAsync is enabled, so register only classes that implement the IMvpRabbitMQConsumerAsync interface.");
                     }
                 }
                 else
                 {
-                    if (TypeConsumers.AnySafe(x => x.InheritsOrImplements(typeof(IMvpRabbitMQConsumerAsync))))
+                    if (_consumers.AnySafe(x => x.GetType().InheritsOrImplements(typeof(IMvpRabbitMQConsumerAsync))))
                     {
                         throw new ArgumentException("DispatchConsumersAsync is disabled, so register only classes that implement the IMvpRabbitMQConsumerSync interface.");
                     }
                 }
 
-                foreach (var customer in GetConsumers())
+                foreach (var customer in _consumers)
                 {
                     var channel = CreateConsumerChannel(QueueBind, customer.RoutingKey, customer.QueueName);
 
@@ -457,61 +455,73 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
 
         #endregion
 
-        #region [ Static ]
-        static List<IMvpRabbitMQConsumer> _consumers;
-        static List<IMvpRabbitMQConsumer> GetConsumers()
+        #region [ Registrars ]
+        public void Register<T>() where T : class, IMvpRabbitMQConsumer
         {
-            if (_consumers == null)
-            {
-                var consumersSync = TypeConsumers
-                    .Where(x => x.InheritsOrImplements(typeof(IMvpRabbitMQConsumerSync)))
-                    .Select(t => (IMvpRabbitMQConsumerAsync)Activator.CreateInstance(t))
-                    .ToList();
-
-                var consumersAsync = TypeConsumers
-                    .Where(x => x.InheritsOrImplements(typeof(IMvpRabbitMQConsumerAsync)))
-                    .Select(t => (IMvpRabbitMQConsumerAsync)Activator.CreateInstance(t))
-                    .ToList();
-
-                _consumers = new List<IMvpRabbitMQConsumer>();
-                _consumers.AddRange(consumersSync);
-                _consumers.AddRange(consumersAsync);
-            }
-            return _consumers;
-        }
-        static readonly List<Type> TypeConsumers = new();
-
-        public static void Register<T>() where T : class, IMvpRabbitMQConsumer
-        {
-            TelemetryHelper.Execute(TelemetryLevels.Verbose, "rabbitmq-client-consumer-register");
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "rabbitmq-client-consumer-register-generic");
             Register(typeof(T));
         }
-        public static void Register(Type consumerType)
+        public void Register(Type consumerType)
         {
             TelemetryHelper.Execute(TelemetryLevels.Verbose, "rabbitmq-client-consumer-register");
             if (consumerType == null)
             {
                 throw new ArgumentNullException(nameof(consumerType));
             }
-            TypeConsumers.Add(consumerType);
-            _consumers = null;
+            if (consumerType.InheritsOrImplements(typeof(IMvpRabbitMQConsumerSync)))
+            {
+                _consumers.Add((IMvpRabbitMQConsumerSync)(_provider.GetService(consumerType) ?? Activator.CreateInstance(consumerType)));
+            }
+            else if (consumerType.InheritsOrImplements(typeof(IMvpRabbitMQConsumerAsync)))
+            {
+                _consumers.Add((IMvpRabbitMQConsumerAsync)(_provider.GetService(consumerType) ?? Activator.CreateInstance(consumerType)));
+            }
+            else if (consumerType.InheritsOrImplements(typeof(IMvpRabbitMQConsumerRecoverySync)))
+            {
+                _consumers.Add((IMvpRabbitMQConsumerRecoverySync)(_provider.GetService(consumerType) ?? Activator.CreateInstance(consumerType)));
+            }
+            else if (consumerType.InheritsOrImplements(typeof(IMvpRabbitMQConsumerRecoveryAsync)))
+            {
+                _consumers.Add((IMvpRabbitMQConsumerRecoveryAsync)(_provider.GetService(consumerType) ?? Activator.CreateInstance(consumerType)));
+            }
+            else
+            {
+                throw new ArgumentException("Invalid type for consumers.");
+            }
         }
-        public static void Unregister<T>() where T : class, IMvpRabbitMQConsumer
+        public void Register(IMvpRabbitMQConsumer consumer)
         {
-            TelemetryHelper.Execute(TelemetryLevels.Verbose, "rabbitmq-client-consumer-unregister");
-            TypeConsumers
-                .FindAll(x => x.InheritsOrImplements(typeof(T)))
-                ?.ForEach(item => TypeConsumers.Remove(item));
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "rabbitmq-client-consumer-register");
+            if (consumer == null)
+            {
+                throw new ArgumentNullException(nameof(consumer));
+            }
+            _consumers.Add(consumer);
         }
-        public static void Unregister(Type consumerType)
+        public void Unregister<T>() where T : class, IMvpRabbitMQConsumer
+        {
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "rabbitmq-client-consumer-unregister-generic");
+            Unregister(typeof(T));
+        }
+        public void Unregister(Type consumerType)
         {
             TelemetryHelper.Execute(TelemetryLevels.Verbose, "rabbitmq-client-consumer-unregister");
             if (consumerType == null)
             {
                 throw new ArgumentNullException(nameof(consumerType));
             }
-            TypeConsumers.Remove(consumerType);
-            _consumers = null;
+            _consumers
+                .FindAll(x => x.GetType().InheritsOrImplements(consumerType))
+                .ForEach(item => Unregister(item));
+        }
+        public void Unregister(IMvpRabbitMQConsumer consumer)
+        {
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "rabbitmq-client-consumer-unregister");
+            if (consumer == null)
+            {
+                throw new ArgumentNullException(nameof(consumer));
+            }
+            _consumers.Remove(consumer);
         }
         #endregion
     }
