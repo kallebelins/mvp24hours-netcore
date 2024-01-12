@@ -10,6 +10,7 @@ using Mvp24Hours.Extensions;
 using Mvp24Hours.Infrastructure.RabbitMQ;
 using Mvp24Hours.Infrastructure.RabbitMQ.Core.Contract;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Testcontainers.RabbitMq;
@@ -44,36 +45,16 @@ namespace Mvp24Hours.Application.RabbitMQ.Test
         #region [ Configure ]
         public Test1RabbitMQ() { }
 
-        private void Setup()
+        private void SetupTypeAssembly()
         {
             var services = new ServiceCollection();
-            
+
             services.AddScoped<CustomerConsumer, CustomerConsumer>();
-
-            services.AddMvp24HoursRabbitMQWithConsumers(
-                connectionOptions =>
-                {
-                    connectionOptions.ConnectionString = _rabbitMqContainer.GetConnectionString();
-                    connectionOptions.DispatchConsumersAsync = true;
-                    connectionOptions.RetryCount = 3;
-                },
-                clientOptions =>
-                {
-                    clientOptions.MaxRedeliveredCount = 1;
-                },
-                typeof(CustomerConsumer)
-            );
-            serviceProvider = services.BuildServiceProvider();
-        }
-
-        private void SetupWithCtor()
-        {
-            var services = new ServiceCollection();
-            
             services.AddScoped<CustomerWithCtorConsumer, CustomerWithCtorConsumer>();
             services.AddTransient(x => new CustomerEvent() { Name = "event" });
 
-            services.AddMvp24HoursRabbitMQWithConsumers(
+            services.AddMvp24HoursRabbitMQ(
+                typeof(CustomerConsumer).Assembly,
                 connectionOptions =>
                 {
                     connectionOptions.ConnectionString = _rabbitMqContainer.GetConnectionString();
@@ -83,13 +64,55 @@ namespace Mvp24Hours.Application.RabbitMQ.Test
                 clientOptions =>
                 {
                     clientOptions.MaxRedeliveredCount = 1;
-                }, 
-                typeof(CustomerWithCtorConsumer)
+                }
             );
             serviceProvider = services.BuildServiceProvider();
         }
-        
-        private void SetupList()
+
+        private void SetupTypeAssemblyWithoutInjection()
+        {
+            var services = new ServiceCollection();
+
+            services.AddMvp24HoursRabbitMQ(
+                new List<Type> { typeof(CustomerConsumer) },
+                connectionOptions =>
+                {
+                    connectionOptions.ConnectionString = _rabbitMqContainer.GetConnectionString();
+                    connectionOptions.DispatchConsumersAsync = true;
+                    connectionOptions.RetryCount = 3;
+                },
+                clientOptions =>
+                {
+                    clientOptions.MaxRedeliveredCount = 1;
+                }
+            );
+            serviceProvider = services.BuildServiceProvider();
+        }
+
+        private void SetupTypeDefined()
+        {
+            var services = new ServiceCollection();
+
+            services.AddScoped<CustomerWithCtorConsumer, CustomerWithCtorConsumer>();
+            services.AddTransient(x => new CustomerEvent() { Name = "event" });
+
+            services.AddMvp24HoursRabbitMQ(
+                new List<Type> { typeof(CustomerWithCtorConsumer) },
+                connectionOptions =>
+                {
+                    connectionOptions.ConnectionString = _rabbitMqContainer.GetConnectionString();
+                    connectionOptions.DispatchConsumersAsync = true;
+                    connectionOptions.RetryCount = 3;
+                },
+                clientOptions =>
+                {
+                    clientOptions.MaxRedeliveredCount = 1;
+                }
+            );
+            serviceProvider = services.BuildServiceProvider();
+        }
+
+        private void SetupTypeDefinedList()
         {
             var services = new ServiceCollection();
 
@@ -102,7 +125,8 @@ namespace Mvp24Hours.Application.RabbitMQ.Test
                     .Where(t => t.InheritsOrImplements(typeof(IMvpRabbitMQConsumer)))
                     .ToArray();
 
-            services.AddMvp24HoursRabbitMQWithConsumers(
+            services.AddMvp24HoursRabbitMQ(
+                consumers,
                 connectionOptions =>
                 {
                     connectionOptions.ConnectionString = _rabbitMqContainer.GetConnectionString();
@@ -112,17 +136,16 @@ namespace Mvp24Hours.Application.RabbitMQ.Test
                 clientOptions =>
                 {
                     clientOptions.MaxRedeliveredCount = 1;
-                },
-                consumers
+                }
             );
             serviceProvider = services.BuildServiceProvider();
         }
         #endregion
 
         [Fact]
-        public void CreateProducer()
+        public void CreateProducerAssembly()
         {
-            Setup();
+            SetupTypeAssembly();
             // arrange
             var client = serviceProvider.GetService<MvpRabbitMQClient>();
 
@@ -139,9 +162,9 @@ namespace Mvp24Hours.Application.RabbitMQ.Test
         }
 
         [Fact]
-        public void CreateConsumer()
+        public void CreateConsumerAssembly()
         {
-            Setup();
+            SetupTypeAssembly();
             var client = serviceProvider.GetService<MvpRabbitMQClient>();
 
             // arrange
@@ -161,28 +184,9 @@ namespace Mvp24Hours.Application.RabbitMQ.Test
         }
 
         [Fact]
-        public void CreateProducerWithCtor()
+        public void CreateConsumerWithoutInjection()
         {
-            SetupWithCtor();
-            // arrange
-            var client = serviceProvider.GetService<MvpRabbitMQClient>();
-
-            // act
-            string result = client.Publish(new CustomerEvent
-            {
-                Id = 1,
-                Name = "Test 1",
-                Active = true
-            }, typeof(CustomerEvent).Name);
-
-            // assert
-            Assert.True(result.HasValue());
-        }
-
-        [Fact]
-        public void CreateConsumerWithCtor()
-        {
-            SetupWithCtor();
+            SetupTypeAssemblyWithoutInjection();
             var client = serviceProvider.GetService<MvpRabbitMQClient>();
 
             // arrange
@@ -202,9 +206,50 @@ namespace Mvp24Hours.Application.RabbitMQ.Test
         }
 
         [Fact]
-        public void CreateConsumerWithCtorList()
+        public void CreateProducerDefined()
         {
-            SetupList();
+            SetupTypeDefined();
+            // arrange
+            var client = serviceProvider.GetService<MvpRabbitMQClient>();
+
+            // act
+            string result = client.Publish(new CustomerEvent
+            {
+                Id = 1,
+                Name = "Test 1",
+                Active = true
+            }, typeof(CustomerEvent).Name);
+
+            // assert
+            Assert.True(result.HasValue());
+        }
+
+        [Fact]
+        public void CreateConsumerDefined()
+        {
+            SetupTypeDefined();
+            var client = serviceProvider.GetService<MvpRabbitMQClient>();
+
+            // arrange
+            client.Publish(new CustomerEvent
+            {
+                Id = 2,
+                Name = "Test 2",
+                Active = true
+            }, typeof(CustomerEvent).Name);
+
+
+            // act
+            client.Consume();
+
+            // assert
+            Assert.True(true);
+        }
+
+        [Fact]
+        public void CreateConsumerDefinedList()
+        {
+            SetupTypeDefinedList();
             var client = serviceProvider.GetService<MvpRabbitMQClient>();
 
             // arrange

@@ -3,12 +3,15 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
+using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Application.Pipe.Test.Operations;
+using Mvp24Hours.Application.Pipe.Test.Setup;
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Core.Enums.Infrastructure;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Infrastructure.Pipe;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Xunit;
 using Xunit.Priority;
 
@@ -18,13 +21,24 @@ namespace Mvp24Hours.Application.Pipe.Test
     /// 
     /// </summary>
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Name)]
-    public class PipelineTest
+    public class PipelineAsyncWithInjectionTest
     {
+        private readonly StartupAsync startup;
+
+        /// <summary>
+        /// Initialize
+        /// </summary>
+        public PipelineAsyncWithInjectionTest()
+        {
+            startup = new StartupAsync();
+        }
+
         [Fact, Priority(1)]
-        public void PipelineStarted()
+        public async Task PipelineStarted()
         {
             // arrange
-            IPipeline pipeline = new Pipeline();
+            var serviceProvider = startup.SetupInjectionAsync();
+            var pipeline = serviceProvider.GetService<IPipelineAsync>();
 
             // act
             pipeline.Add(_ =>
@@ -39,17 +53,18 @@ namespace Mvp24Hours.Application.Pipe.Test
             {
                 Trace.WriteLine("Test 3");
             });
-            pipeline.Execute();
+            await pipeline.ExecuteAsync();
 
             // assert
             Assert.True(pipeline.GetMessage() != null);
         }
 
         [Fact, Priority(2)]
-        public void PipelineMessageContentGet()
+        public async Task PipelineMessageContentGet()
         {
             // arrange
-            IPipeline pipeline = new Pipeline();
+            var serviceProvider = startup.SetupInjectionAsync();
+            var pipeline = serviceProvider.GetService<IPipelineAsync>();
 
             // act
 
@@ -73,17 +88,18 @@ namespace Mvp24Hours.Application.Pipe.Test
             // define param
             var message = "Parameter received.".ToMessage();
 
-            pipeline.Execute(message);
+            await pipeline.ExecuteAsync(message);
 
             // assert
             Assert.True(pipeline.GetMessage() != null);
         }
 
         [Fact, Priority(3)]
-        public void PipelineMessageContentAdd()
+        public async Task PipelineMessageContentAdd()
         {
             // arrange
-            IPipeline pipeline = new Pipeline();
+            var serviceProvider = startup.SetupInjectionAsync();
+            var pipeline = serviceProvider.GetService<IPipelineAsync>();
 
             // act
 
@@ -107,7 +123,7 @@ namespace Mvp24Hours.Application.Pipe.Test
             // define attachment for message 
             var message = "Parameter received.".ToMessage();
 
-            pipeline.Execute(message);
+            await pipeline.ExecuteAsync(message);
 
             // get content from result
             foreach (var item in pipeline.GetMessage().GetContentAll())
@@ -123,10 +139,11 @@ namespace Mvp24Hours.Application.Pipe.Test
         }
 
         [Fact, Priority(4)]
-        public void PipelineMessageContentValidate()
+        public async Task PipelineMessageContentValidate()
         {
             // arrange
-            IPipeline pipeline = new Pipeline();
+            var serviceProvider = startup.SetupInjectionAsync();
+            var pipeline = serviceProvider.GetService<IPipelineAsync>();
 
             // act
 
@@ -143,9 +160,9 @@ namespace Mvp24Hours.Application.Pipe.Test
                     Trace.WriteLine("Content not found");
                 }
             });
-            pipeline.Execute();
+            await pipeline.ExecuteAsync();
             var result1 = pipeline.GetMessage();
-            pipeline.Execute("Parameter received.".ToMessage());
+            await pipeline.ExecuteAsync("Parameter received.".ToMessage());
             var result2 = pipeline.GetMessage();
 
             // assert
@@ -153,10 +170,11 @@ namespace Mvp24Hours.Application.Pipe.Test
         }
 
         [Fact, Priority(5)]
-        public void PipelineOperationLock()
+        public async Task PipelineOperationLock()
         {
             // arrange
-            IPipeline pipeline = new Pipeline();
+            var serviceProvider = startup.SetupInjectionAsync();
+            var pipeline = serviceProvider.GetService<IPipelineAsync>();
 
             // act
 
@@ -179,17 +197,18 @@ namespace Mvp24Hours.Application.Pipe.Test
                 Trace.WriteLine($"Test 3 - {param}");
             });
 
-            pipeline.Execute("Parameter received.".ToMessage());
+            await pipeline.ExecuteAsync("Parameter received.".ToMessage());
 
             // assert
             Assert.True(pipeline.GetMessage() != null);
         }
 
         [Fact, Priority(5)]
-        public void PipelineOperationLockExecuteForce()
+        public async Task PipelineOperationLockExecuteForce()
         {
             // arrange
-            IPipeline pipeline = new Pipeline();
+            var serviceProvider = startup.SetupInjectionAsync();
+            var pipeline = serviceProvider.GetService<IPipelineAsync>();
 
             // act
 
@@ -228,17 +247,18 @@ namespace Mvp24Hours.Application.Pipe.Test
                 Trace.WriteLine("Locked-Operation, only one time.");
             }, PipelineInterceptorType.Locked);
 
-            pipeline.Execute("Parameter received.".ToMessage());
+            await pipeline.ExecuteAsync("Parameter received.".ToMessage());
 
             // assert
             Assert.True(pipeline.GetMessage() != null);
         }
 
         [Fact, Priority(6)]
-        public void PipelineOperationFailure()
+        public async Task PipelineOperationFailure()
         {
             // arrange
-            IPipeline pipeline = new Pipeline();
+            var serviceProvider = startup.SetupInjectionAsync();
+            var pipeline = serviceProvider.GetService<IPipelineAsync>();
 
             // act
 
@@ -267,17 +287,18 @@ namespace Mvp24Hours.Application.Pipe.Test
                 Trace.WriteLine("Faulty-Operation, only one time.");
             }, PipelineInterceptorType.Faulty);
 
-            pipeline.Execute("Parameter received.".ToMessage());
+            await pipeline.ExecuteAsync("Parameter received.".ToMessage());
 
             // assert
             Assert.True(pipeline.GetMessage() != null);
         }
 
         [Fact, Priority(7)]
-        public void PipelineOperationLockWithNotification()
+        public async Task PipelineOperationLockWithNotification()
         {
             // arrange
-            IPipeline pipeline = new Pipeline();
+            var serviceProvider = startup.SetupInjectionAsync();
+            var pipeline = serviceProvider.GetService<IPipelineAsync>();
 
             // act
 
@@ -297,7 +318,7 @@ namespace Mvp24Hours.Application.Pipe.Test
                 Trace.WriteLine("Locked-Operation, only one time.");
             }, PipelineInterceptorType.Locked);
 
-            pipeline.Execute();
+            await pipeline.ExecuteAsync();
 
             var message = pipeline.GetMessage();
 
@@ -311,10 +332,11 @@ namespace Mvp24Hours.Application.Pipe.Test
         }
 
         [Fact, Priority(8)]
-        public void PipelineInterceptors()
+        public async Task PipelineInterceptors()
         {
             // arrange
-            IPipeline pipeline = new Pipeline();
+            var serviceProvider = startup.SetupInjectionAsync();
+            var pipeline = serviceProvider.GetService<IPipelineAsync>();
 
             // act
 
@@ -380,17 +402,18 @@ namespace Mvp24Hours.Application.Pipe.Test
                 return input.HasContent<int>();
             });
 
-            pipeline.Execute();
+            await pipeline.ExecuteAsync();
 
             // assert
             Assert.True(pipeline.GetMessage() != null);
         }
 
         [Fact, Priority(9)]
-        public void PipelineEventInterceptors()
+        public async Task PipelineEventInterceptors()
         {
             // arrange
-            IPipeline pipeline = new Pipeline();
+            var serviceProvider = startup.SetupInjectionAsync();
+            var pipeline = serviceProvider.GetService<IPipelineAsync>();
 
             // act
 
@@ -456,17 +479,18 @@ namespace Mvp24Hours.Application.Pipe.Test
                 return input.HasContent<int>();
             });
 
-            pipeline.Execute();
+            await pipeline.ExecuteAsync();
 
             // assert
             Assert.True(pipeline.GetMessage() != null);
         }
 
         [Fact, Priority(10)]
-        public void PipelineEventInterceptorsWithLock()
+        public async Task PipelineEventInterceptorsWithLock()
         {
             // arrange
-            IPipeline pipeline = new Pipeline();
+            var serviceProvider = startup.SetupInjectionAsync();
+            var pipeline = serviceProvider.GetService<IPipelineAsync>();
 
             // act
 
@@ -534,23 +558,47 @@ namespace Mvp24Hours.Application.Pipe.Test
                 return input.HasContent<int>();
             });
 
-            pipeline.Execute();
+            await pipeline.ExecuteAsync();
 
             // assert
             Assert.True(pipeline.GetMessage() != null);
         }
 
         [Fact, Priority(11)]
+        public async Task PipelineFactory()
+        {
+            // arrange
+            var serviceProvider = startup.SetupInjectionFactoryAsync();
+            var pipeline = serviceProvider.GetService<IPipelineAsync>();
+
+            // act
+            pipeline.Add(_ =>
+            {
+                Trace.WriteLine("Test 1");
+            });
+            pipeline.Add(_ =>
+           {
+               Trace.WriteLine("Test 2");
+           });
+            await pipeline.ExecuteAsync();
+
+            // assert
+            var message = pipeline.GetMessage();
+            Assert.True(message.GetContent<int>("factory") == 1);
+        }
+
+        [Fact, Priority(12)]
         public void PipelineWithOperation()
         {
             // arrange
-            IPipeline pipeline = new Pipeline();
+            var serviceProvider = startup.SetupInjectionAsync();
+            var pipeline = serviceProvider.GetService<IPipelineAsync>();
 
             // act
-            pipeline.Add<OperationTest>();
+            pipeline.Add<OperationTestAsync>();
 
             // operations
-            pipeline.Execute();
+            pipeline.ExecuteAsync();
             var result = pipeline.GetMessage().GetContent<int>("key-test");
 
             // assert

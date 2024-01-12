@@ -6,9 +6,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Mvp24Hours.Helpers;
-using Mvp24Hours.WebAPI.Configuration;
 using Mvp24Hours.WebAPI.Middlewares;
 using System;
 

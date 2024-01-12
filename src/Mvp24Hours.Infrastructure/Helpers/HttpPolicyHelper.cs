@@ -3,9 +3,7 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-using Microsoft.AspNetCore.Http;
 using Mvp24Hours.Core.Enums.Infrastructure;
-using Mvp24Hours.Extensions;
 using Mvp24Hours.Helpers;
 using Polly;
 using Polly.CircuitBreaker;
@@ -14,7 +12,6 @@ using Polly.Timeout;
 using System;
 using System.Net;
 using System.Net.Http;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -121,6 +118,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
                     })
                 );
         }
+
         /// <summary>
         /// Defines an alternative value to be returned (or action to be executed) on failure.
         /// </summary>
@@ -249,6 +247,5 @@ namespace Mvp24Hours.Infrastructure.Helpers
                 })
             );
         }
-
     }
 }

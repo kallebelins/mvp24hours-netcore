@@ -30,7 +30,7 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
         /// <summary>
         /// Records operations
         /// </summary>
-        IPipelineAsync Add<T>() where T : IOperationAsync;
+        IPipelineAsync Add<T>() where T : class, IOperationAsync;
         /// <summary>
         /// Records operations
         /// </summary>
@@ -42,7 +42,7 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
         /// <summary>
         /// Records operations interceptors
         /// </summary>
-        IPipelineAsync AddInterceptors<T>(PipelineInterceptorType pipelineInterceptor = PipelineInterceptorType.PostOperation) where T : IOperationAsync;
+        IPipelineAsync AddInterceptors<T>(PipelineInterceptorType pipelineInterceptor = PipelineInterceptorType.PostOperation) where T : class, IOperationAsync;
         /// <summary>
         /// Records operations interceptors
         /// </summary>
@@ -54,7 +54,7 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
         /// <summary>
         /// Records operations interceptors
         /// </summary>
-        IPipelineAsync AddInterceptors<T>(Func<IPipelineMessage, bool> condition, bool postOperation = true) where T : IOperationAsync;
+        IPipelineAsync AddInterceptors<T>(Func<IPipelineMessage, bool> condition, bool postOperation = true) where T : class, IOperationAsync;
         /// <summary>
         /// Records operations interceptors
         /// </summary>

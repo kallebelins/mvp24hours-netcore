@@ -27,6 +27,7 @@ namespace Mvp24Hours.Helpers
                 return null;
             }, accessor);
         }
+
         /// <summary>
         /// Get individual HTTP request context
         /// </summary>
@@ -34,6 +35,7 @@ namespace Mvp24Hours.Helpers
         {
             return httpContextAccessor?.HttpContext;
         }
+
         /// <summary>
         /// Gets IP of the user who originated the current request
         /// </summary>
@@ -59,6 +61,7 @@ namespace Mvp24Hours.Helpers
             }
             return "0.0.0.0";
         }
+
         /// <summary>
         /// Get web address dynamically from current service
         /// </summary>

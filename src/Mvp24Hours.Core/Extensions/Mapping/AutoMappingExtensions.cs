@@ -4,9 +4,13 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Core.Contract.ValueObjects.Logic;
 using Mvp24Hours.Helpers;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -20,7 +24,7 @@ namespace Mvp24Hours.Extensions
         /// <summary>
         /// Maps properties as ignored.
         /// </summary>
-        public static IMappingExpression<TSource, TDestination> Ignore<TSource, TDestination>(
+        public static IMappingExpression<TSource, TDestination> MapIgnore<TSource, TDestination>(
             this IMappingExpression<TSource, TDestination> map,
             Expression<Func<TDestination, object>> selector)
         {
@@ -43,45 +47,27 @@ namespace Mvp24Hours.Extensions
         /// <summary>
         /// Convert instance to mapped object
         /// </summary>
-        public static TDestination MapTo<TDestination>(this object source)
+        public static IPagingResult<TDestination> MapPagingTo<TSource, TDestination>(this IMapper mapper, IPagingResult<TSource> source)
         {
-            if (source == null)
+            if (source == null || mapper == null)
             {
                 return default;
             }
-
-            IMapper mapper = ServiceProviderHelper.GetService<IMapper>()
-                ?? throw new ArgumentException("Profile not registered for AutoMapper.");
-            return mapper.Map<TDestination>(source);
-        }
-
-        /// <summary>
-        /// Convert instance to mapped object
-        /// </summary>
-        public static IPagingResult<TDestination> MapPagingTo<TSource, TDestination>(this IPagingResult<TSource> source)
-        {
-            if (source == null)
-            {
-                return default;
-            }
-
-            _ = ServiceProviderHelper.GetService<IMapper>()
-                ?? throw new ArgumentException("Profile not registered for AutoMapper.");
 
             if (source.Messages.AnySafe())
             {
-                return source.Data
-                    .MapTo<TDestination>()
+                return mapper
+                    .Map<TDestination>(source.Data)
                     .ToBusinessPaging(
                         source.Paging,
                         source.Summary,
-                        source.Messages?.ToList()
+                        source.Messages.ToList()
                     );
             }
             else
             {
-                return source.Data
-                    .MapTo<TDestination>()
+                return mapper
+                    .Map<TDestination>(source.Data)
                     .ToBusinessPaging(
                         source.Paging,
                         source.Summary
@@ -92,28 +78,130 @@ namespace Mvp24Hours.Extensions
         /// <summary>
         /// Convert instance to mapped object
         /// </summary>
-        public static IBusinessResult<TDestination> MapBusinessTo<TSource, TDestination>(this IBusinessResult<TSource> source)
+        public static IBusinessResult<TDestination> MapBusinessTo<TSource, TDestination>(this IMapper mapper, IBusinessResult<TSource> source)
         {
-            if (source == null)
+            if (source == null || mapper == null)
             {
                 return default;
             }
 
-            _ = ServiceProviderHelper.GetService<IMapper>()
-                ?? throw new ArgumentException("Profile not registered for AutoMapper.");
-
             if (source.Messages.AnySafe())
             {
-                return source.Data
-                    .MapTo<TDestination>()
-                    .ToBusiness(source.Messages.ToArray());
+                return mapper
+                    .Map<TDestination>(source.Data)
+                    .ToBusiness(source.Messages.ToList());
             }
             else
             {
-                return source.Data
-                    .MapTo<TDestination>()
+                return mapper
+                    .Map<TDestination>(source.Data)
                     .ToBusiness();
             }
+        }
+
+        /// <summary>
+        /// Maps the specified sources to the specified destination type.
+        /// </summary>
+        /// <typeparam name="T">The type of the destination</typeparam>
+        /// <param name="sources">The sources.</param>
+        /// <returns></returns>
+        /// <example>
+        /// Retrieve the person, address and comment entities 
+        /// and map them on to a person view model entity.
+        /// 
+        /// var personId = 23;
+        /// var person = _personTasks.GetPerson(personId);
+        /// var address = _personTasks.GetAddress(personId);
+        /// var comment = _personTasks.GetComment(personId);
+        /// 
+        /// var personViewModel = EntityMapper.Map<PersonViewModel>(person, address, comment);
+        /// </example>
+        public static T MapMerge<T>(this IMapper mapper, IList<object> sources) where T : class
+        {
+            return MapMerge<T>(mapper, sources?.ToArray());
+        }
+
+        /// <summary>
+        /// Maps the specified sources to the specified destination type.
+        /// </summary>
+        /// <typeparam name="T">The type of the destination</typeparam>
+        /// <param name="sources">The sources.</param>
+        /// <returns></returns>
+        /// <example>
+        /// Retrieve the person, address and comment entities 
+        /// and map them on to a person view model entity.
+        /// 
+        /// var personId = 23;
+        /// var person = _personTasks.GetPerson(personId);
+        /// var address = _personTasks.GetAddress(personId);
+        /// var comment = _personTasks.GetComment(personId);
+        /// 
+        /// var personViewModel = EntityMapper.Map<PersonViewModel>(person, address, comment);
+        /// </example>
+        public static T MapMerge<T>(this IMapper mapper, params object[] sources) where T : class
+        {
+            // If there are no sources just return the destination object
+            if (mapper == null || !sources.AnySafe())
+            {
+                return default;
+            }
+
+            // Get the inital source and map it
+            var initialSource = sources[0];
+            var mappingResult = Map<T>(mapper, initialSource);
+
+            // Now map the remaining source objects
+            if (sources.Count() > 1)
+            {
+                Map(mapper, mappingResult, sources.Skip(1).ToArray());
+            }
+
+            // return the destination object
+            return mappingResult;
+        }
+
+        /// <summary>
+        /// Maps the specified sources to the specified destination.
+        /// </summary>
+        /// <param name="destination">The destination.</param>
+        /// <param name="sources">The sources.</param>
+        private static void Map(IMapper mapper, object destination, params object[] sources)
+        {
+            // If there are no sources just return the destination object
+            if (!sources.Any())
+            {
+                return;
+            }
+
+            // Get the destination type
+            var destinationType = destination.GetType();
+
+            // Itereate through all of the sources...
+            foreach (var source in sources)
+            {
+                // ... get the source type and map the source to the destination
+                var sourceType = source.GetType();
+                mapper.Map(source, destination, sourceType, destinationType);
+            }
+        }
+
+        /// <summary>
+        /// Maps the specified source to the destination.
+        /// </summary>
+        /// <typeparam name="T">type of teh destination</typeparam>
+        /// <param name="source">The source.</param>
+        /// <returns></returns>
+        private static T Map<T>(IMapper mapper, object source) where T : class
+        {
+            // Get thr source and destination types
+            var destinationType = typeof(T);
+            var sourceType = source.GetType();
+
+            // Get the destination using AutoMapper's Map
+            var mappingResult = mapper.Map(source, sourceType, destinationType);
+
+            // Return the destination
+            return mappingResult as T;
         }
     }
 }

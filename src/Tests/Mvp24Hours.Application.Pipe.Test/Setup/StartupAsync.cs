@@ -13,7 +13,7 @@ namespace Mvp24Hours.Application.Pipe.Test.Setup
 {
     public class StartupAsync
     {
-        public IServiceProvider Initialize()
+        public IServiceProvider SetupInjectionAsync()
         {
             var services = new ServiceCollection()
                            .AddSingleton(ConfigurationHelper.AppSettings);
@@ -26,14 +26,14 @@ namespace Mvp24Hours.Application.Pipe.Test.Setup
             return services.BuildServiceProvider();
         }
 
-        public IServiceProvider InitializeWithFactory()
+        public IServiceProvider SetupInjectionFactoryAsync()
         {
             var services = new ServiceCollection()
                            .AddSingleton(ConfigurationHelper.AppSettings);
 
-            services.AddMvp24HoursPipelineAsync(factory: (_) =>
+            services.AddMvp24HoursPipelineAsync(factory: (sp) =>
             {
-                var pipeline = new PipelineAsync();
+                var pipeline = new PipelineAsync(sp);
                 pipeline.AddInterceptors(input =>
                 {
                     input.AddContent<int>("factory", 1);

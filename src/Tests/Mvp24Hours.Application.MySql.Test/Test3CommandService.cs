@@ -10,7 +10,6 @@ using Mvp24Hours.Application.MySql.Test.Support.Services;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Extensions;
 using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 using Xunit.Priority;
 

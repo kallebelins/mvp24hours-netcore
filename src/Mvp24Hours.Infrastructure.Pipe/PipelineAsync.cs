@@ -27,27 +27,18 @@ namespace Mvp24Hours.Infrastructure.Pipe
     public class PipelineAsync : PipelineBase, IPipelineAsync
     {
         #region [ Ctor ]
-        public PipelineAsync()
-            : this(false) { }
 
-        public PipelineAsync(bool isBreakOnFail)
-            : base(isBreakOnFail)
+        public PipelineAsync(IServiceProvider _provider = null)
         {
-            operations = new List<IOperationAsync>();
+            TelemetryHelper.Execute(TelemetryLevels.Verbose, "pipelineasync-ctor");
+            this.provider = _provider;
 
-            preCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, IOperationAsync>>();
-            postCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, IOperationAsync>>();
-            dictionaryInterceptors = new Dictionary<PipelineInterceptorType, IList<IOperationAsync>>();
+            var options = _provider?.GetService<IOptions<PipelineOptions>>()?.Value;
+            if (options != null)
+            {
+                this.IsBreakOnFail = options.IsBreakOnFail;
+            }
 
-            dictionaryEventInterceptors = new Dictionary<PipelineInterceptorType, IList<EventHandler<IPipelineMessage, EventArgs>>>();
-            preEventCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>>();
-            postEventCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>>();
-        }
-
-        [ActivatorUtilitiesConstructor]
-        public PipelineAsync(IOptions<PipelineAsyncOptions> options)
-            : base(options?.Value?.IsBreakOnFail ?? false)
-        {
             operations = new List<IOperationAsync>();
 
             preCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, IOperationAsync>>();
@@ -62,6 +53,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
         #endregion
 
         #region [ Fields / Properties ]
+        private readonly IServiceProvider provider;
         private readonly IList<IOperationAsync> operations;
 
         private readonly IList<KeyValuePair<Func<IPipelineMessage, bool>, IOperationAsync>> preCustomInterceptors;
@@ -85,9 +77,9 @@ namespace Mvp24Hours.Infrastructure.Pipe
         public IList<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>> GetPostEvents() => postEventCustomInterceptors;
         #endregion
 
-        public IPipelineAsync Add<T>() where T : IOperationAsync
+        public IPipelineAsync Add<T>() where T : class, IOperationAsync
         {
-            IOperationAsync instance = ServiceProviderHelper.GetService<T>();
+            IOperationAsync instance = provider?.GetService<T>();
             if (instance == null)
             {
                 Type type = typeof(T);
@@ -121,9 +113,9 @@ namespace Mvp24Hours.Infrastructure.Pipe
             return this;
         }
 
-        public IPipelineAsync AddBuilder<T>() where T : IPipelineBuilderAsync
+        public IPipelineAsync AddBuilder<T>() where T : class, IPipelineBuilderAsync
         {
-            IPipelineBuilderAsync pipelineBuilder = ServiceProviderHelper.GetService<T>();
+            IPipelineBuilderAsync pipelineBuilder = provider?.GetService<T>();
             if (pipelineBuilder == null)
             {
                 Type type = typeof(T);
@@ -148,9 +140,9 @@ namespace Mvp24Hours.Infrastructure.Pipe
             return this;
         }
 
-        public IPipelineAsync AddInterceptors<T>(PipelineInterceptorType pipelineInterceptor = PipelineInterceptorType.PostOperation) where T : IOperationAsync
+        public IPipelineAsync AddInterceptors<T>(PipelineInterceptorType pipelineInterceptor = PipelineInterceptorType.PostOperation) where T : class, IOperationAsync
         {
-            IOperationAsync instance = ServiceProviderHelper.GetService<T>();
+            IOperationAsync instance = provider?.GetService<T>();
             if (instance == null)
             {
                 Type type = typeof(T);
@@ -191,9 +183,9 @@ namespace Mvp24Hours.Infrastructure.Pipe
             this.dictionaryInterceptors[pipelineInterceptor].Add(new OperationActionAsync(action));
             return this;
         }
-        public IPipelineAsync AddInterceptors<T>(Func<IPipelineMessage, bool> condition, bool postOperation = true) where T : IOperationAsync
+        public IPipelineAsync AddInterceptors<T>(Func<IPipelineMessage, bool> condition, bool postOperation = true) where T : class, IOperationAsync
         {
-            IOperationAsync instance = ServiceProviderHelper.GetService<T>();
+            IOperationAsync instance = provider?.GetService<T>();
             if (instance == null)
             {
                 Type type = typeof(T);

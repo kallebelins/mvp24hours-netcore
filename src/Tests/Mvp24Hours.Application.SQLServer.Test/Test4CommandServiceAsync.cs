@@ -10,7 +10,6 @@ using Mvp24Hours.Application.SQLServer.Test.Support.Services.Async;
 using Mvp24Hours.Core.ValueObjects.Logic;
 using Mvp24Hours.Extensions;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Priority;

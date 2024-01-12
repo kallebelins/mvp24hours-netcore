@@ -1,16 +1,13 @@
-﻿using Mvp24Hours.Core.Mappings;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Xunit.Priority;
-using Xunit;
-using System.Reflection;
-using Mvp24Hours.Core.Contract.Mappings;
-using AutoMapper;
-using Mvp24Hours.Extensions;
+﻿using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
+using Mvp24Hours.Core.Contract.Mappings;
+using Mvp24Hours.Core.Mappings;
+using Mvp24Hours.Extensions;
 using Mvp24Hours.Helpers;
+using System.Reflection;
 using System.Threading.Tasks;
+using Xunit;
+using Xunit.Priority;
 
 namespace Mvp24Hours.Patterns.Test
 {
@@ -19,20 +16,60 @@ namespace Mvp24Hours.Patterns.Test
     {
         public class TestAClass
         {
-            public int MyProperty { get; set; }
+            public int MyProperty1 { get; set; }
         }
 
         public class TestBClass : IMapFrom
         {
-            public int MyProperty { get; set; }
+            public int MyProperty1 { get; set; }
             public void Mapping(Profile profile)
             {
                 profile.CreateMap<TestAClass, TestBClass>();
             }
         }
 
+        public class TestCClass : IMapFrom
+        {
+            public int MyProperty2 { get; set; }
+            public void Mapping(Profile profile)
+            {
+                profile.CreateMap<TestBClass, TestCClass>();
+            }
+        }
+
+        public class TestDClass : IMapFrom
+        {
+            public int MyProperty1 { get; set; }
+            public int MyProperty2 { get; set; }
+            public void Mapping(Profile profile)
+            {
+                profile.CreateMap<TestAClass, TestDClass>();
+                profile.CreateMap<TestCClass, TestDClass>();
+            }
+        }
+
+        public class TestIgnoreClass : IMapFrom
+        {
+            public int MyProperty1 { get; set; }
+            public void Mapping(Profile profile)
+            {
+                profile.CreateMap<TestAClass, TestIgnoreClass>()
+                    .MapIgnore(x => x.MyProperty1);
+            }
+        }
+
+        public class TestPropertyClass : IMapFrom
+        {
+            public int MyPropertyX { get; set; }
+            public void Mapping(Profile profile)
+            {
+                profile.CreateMap<TestAClass, TestPropertyClass>()
+                    .MapProperty(x => x.MyProperty1, x => x.MyPropertyX);
+            }
+        }
+
         [Fact]
-        public async Task TestAsync()
+        public async Task DefaultTest()
         {
             var local = Assembly.GetExecutingAssembly();
             var mapperConfig = new MapperConfiguration(mc =>
@@ -41,13 +78,55 @@ namespace Mvp24Hours.Patterns.Test
             });
             IMapper mapper = mapperConfig.CreateMapper();
 
-            var services = new ServiceCollection();
-            services.AddSingleton(mapper);
-            ServiceProviderHelper.SetProvider(services.BuildServiceProvider());
+            var classA = new TestAClass { MyProperty1 = 1 };
+            var classB = mapper.Map<TestBClass>(classA);
+            Assert.True(classB != null && classB.MyProperty1 == 1);
+        }
 
-            var classA = new TestAClass { MyProperty = 1 };
-            var classB = classA.MapTo<TestBClass>();
-            Assert.True(classB != null && classB.MyProperty == 1);
+        [Fact]
+        public async Task IgnoreTest()
+        {
+            var local = Assembly.GetExecutingAssembly();
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile(local));
+            });
+            IMapper mapper = mapperConfig.CreateMapper();
+
+            var classA = new TestAClass { MyProperty1 = 1 };
+            var classB = mapper.Map<TestIgnoreClass>(classA);
+            Assert.True(classB != null && classB.MyProperty1 == 0);
+        }
+
+        [Fact]
+        public async Task PropertyTest()
+        {
+            var local = Assembly.GetExecutingAssembly();
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile(local));
+            });
+            IMapper mapper = mapperConfig.CreateMapper();
+
+            var classA = new TestAClass { MyProperty1 = 1 };
+            var classB = mapper.Map<TestPropertyClass>(classA);
+            Assert.True(classB != null && classB.MyPropertyX == 1);
+        }
+
+        [Fact]
+        public async Task MergeTest()
+        {
+            var local = Assembly.GetExecutingAssembly();
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile(local));
+            });
+            IMapper mapper = mapperConfig.CreateMapper();
+
+            var classA = new TestAClass { MyProperty1 = 1 };
+            var classC = new TestCClass { MyProperty2 = 2 };
+            var classD = mapper.MapMerge<TestDClass>(classA, classC);
+            Assert.True(classD != null && classD.MyProperty1 == 1 && classD.MyProperty2 == 2);
         }
     }
 }

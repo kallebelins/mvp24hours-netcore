@@ -8,8 +8,6 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Mvp24Hours.WebAPI.Configuration;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Mvp24Hours.WebAPI.Middlewares

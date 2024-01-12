@@ -3,13 +3,12 @@
 //=====================================================================================
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
-using Microsoft.Extensions.DependencyInjection;
-using Mvp24Hours.Application.Pipe.Test.Setup;
+using Mvp24Hours.Application.Pipe.Test.Operations;
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Core.Enums.Infrastructure;
 using Mvp24Hours.Extensions;
+using Mvp24Hours.Infrastructure.Pipe;
 using System.Diagnostics;
-using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Priority;
@@ -22,36 +21,25 @@ namespace Mvp24Hours.Application.Pipe.Test
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Name)]
     public class PipelineAsyncTest
     {
-        private readonly StartupAsync startup;
-
-        /// <summary>
-        /// Initialize
-        /// </summary>
-        public PipelineAsyncTest()
-        {
-            startup = new StartupAsync();
-        }
-
         [Fact, Priority(1)]
         public async Task PipelineStarted()
         {
             // arrange
-            var serviceProvider = startup.Initialize();
-            var pipeline = serviceProvider.GetService<IPipelineAsync>();
+            IPipelineAsync pipeline = new PipelineAsync();
 
             // act
             pipeline.Add(_ =>
-           {
-               Trace.WriteLine("Test 1");
-           });
+            {
+                Trace.WriteLine("Test 1");
+            });
             pipeline.Add(_ =>
-           {
-               Trace.WriteLine("Test 2");
-           });
+            {
+                Trace.WriteLine("Test 2");
+            });
             pipeline.Add(_ =>
-           {
-               Trace.WriteLine("Test 3");
-           });
+            {
+                Trace.WriteLine("Test 3");
+            });
             await pipeline.ExecuteAsync();
 
             // assert
@@ -62,8 +50,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineMessageContentGet()
         {
             // arrange
-            var serviceProvider = startup.Initialize();
-            var pipeline = serviceProvider.GetService<IPipelineAsync>();
+            IPipelineAsync pipeline = new PipelineAsync();
 
             // act
 
@@ -97,8 +84,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineMessageContentAdd()
         {
             // arrange
-            var serviceProvider = startup.Initialize();
-            var pipeline = serviceProvider.GetService<IPipelineAsync>();
+            IPipelineAsync pipeline = new PipelineAsync();
 
             // act
 
@@ -141,8 +127,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineMessageContentValidate()
         {
             // arrange
-            var serviceProvider = startup.Initialize();
-            var pipeline = serviceProvider.GetService<IPipelineAsync>();
+            IPipelineAsync pipeline = new PipelineAsync();
 
             // act
 
@@ -172,8 +157,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineOperationLock()
         {
             // arrange
-            var serviceProvider = startup.Initialize();
-            var pipeline = serviceProvider.GetService<IPipelineAsync>();
+            IPipelineAsync pipeline = new PipelineAsync();
 
             // act
 
@@ -206,8 +190,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineOperationLockExecuteForce()
         {
             // arrange
-            var serviceProvider = startup.Initialize();
-            var pipeline = serviceProvider.GetService<IPipelineAsync>();
+            IPipelineAsync pipeline = new PipelineAsync();
 
             // act
 
@@ -256,8 +239,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineOperationFailure()
         {
             // arrange
-            var serviceProvider = startup.Initialize();
-            var pipeline = serviceProvider.GetService<IPipelineAsync>();
+            IPipelineAsync pipeline = new PipelineAsync();
 
             // act
 
@@ -296,8 +278,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineOperationLockWithNotification()
         {
             // arrange
-            var serviceProvider = startup.Initialize();
-            var pipeline = serviceProvider.GetService<IPipelineAsync>();
+            IPipelineAsync pipeline = new PipelineAsync();
 
             // act
 
@@ -334,16 +315,15 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineInterceptors()
         {
             // arrange
-            var serviceProvider = startup.Initialize();
-            var pipeline = serviceProvider.GetService<IPipelineAsync>();
+            IPipelineAsync pipeline = new PipelineAsync();
 
             // act
 
             // operations
             pipeline.Add(_ =>
-           {
-               Trace.WriteLine("Test 1");
-           });
+            {
+                Trace.WriteLine("Test 1");
+            });
             pipeline.Add(input =>
             {
                 Trace.WriteLine("Test 2");
@@ -351,9 +331,9 @@ namespace Mvp24Hours.Application.Pipe.Test
                 input.AddContent(1);
             });
             pipeline.Add(_ =>
-           {
-               Trace.WriteLine("Test 3");
-           });
+            {
+                Trace.WriteLine("Test 3");
+            });
 
             // interceptors -> first-operation
             pipeline.AddInterceptors(_ =>
@@ -411,16 +391,15 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineEventInterceptors()
         {
             // arrange
-            var serviceProvider = startup.Initialize();
-            var pipeline = serviceProvider.GetService<IPipelineAsync>();
+            IPipelineAsync pipeline = new PipelineAsync();
 
             // act
 
             // operations
             pipeline.Add(_ =>
-           {
-               Trace.WriteLine("Test 1");
-           });
+            {
+                Trace.WriteLine("Test 1");
+            });
             pipeline.Add(input =>
             {
                 Trace.WriteLine("Test 2");
@@ -428,9 +407,9 @@ namespace Mvp24Hours.Application.Pipe.Test
                 input.AddContent(1);
             });
             pipeline.Add(_ =>
-           {
-               Trace.WriteLine("Test 3");
-           });
+            {
+                Trace.WriteLine("Test 3");
+            });
 
             // event interceptors -> first-operation
             pipeline.AddInterceptors((input, e) =>
@@ -488,16 +467,15 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineEventInterceptorsWithLock()
         {
             // arrange
-            var serviceProvider = startup.Initialize();
-            var pipeline = serviceProvider.GetService<IPipelineAsync>();
+            IPipelineAsync pipeline = new PipelineAsync();
 
             // act
 
             // operations
             pipeline.Add(_ =>
-           {
-               Trace.WriteLine("Test 1");
-           });
+            {
+                Trace.WriteLine("Test 1");
+            });
             pipeline.Add(input =>
             {
                 Trace.WriteLine("Test 2");
@@ -564,27 +542,20 @@ namespace Mvp24Hours.Application.Pipe.Test
         }
 
         [Fact, Priority(11)]
-        public async Task PipelineFactory()
+        public void PipelineWithOperation()
         {
             // arrange
-            var serviceProvider = startup.InitializeWithFactory();
-            var pipeline = serviceProvider.GetService<IPipelineAsync>();
+            IPipelineAsync pipeline = new PipelineAsync();
 
             // act
-            pipeline.Add(_ =>
-           {
-               Trace.WriteLine("Test 1");
-           });
-            pipeline.Add(_ =>
-           {
-               Trace.WriteLine("Test 2");
-           });
-            await pipeline.ExecuteAsync();
+            pipeline.Add<OperationTestAsync>();
+
+            // operations
+            pipeline.ExecuteAsync();
+            var result = pipeline.GetMessage().GetContent<int>("key-test");
 
             // assert
-            var message = pipeline.GetMessage();
-            Assert.True(message.GetContent<int>("factory") == 1);
+            Assert.True(result == 1);
         }
-
     }
 }

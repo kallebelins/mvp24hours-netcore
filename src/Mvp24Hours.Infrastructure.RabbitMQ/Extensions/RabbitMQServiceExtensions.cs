@@ -8,6 +8,7 @@ using Mvp24Hours.Infrastructure.RabbitMQ;
 using Mvp24Hours.Infrastructure.RabbitMQ.Configuration;
 using Mvp24Hours.Infrastructure.RabbitMQ.Core.Contract;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -66,10 +67,10 @@ namespace Mvp24Hours.Extensions
         /// <summary>
         /// Add rabbitmq
         /// </summary>
-        public static IServiceCollection AddMvp24HoursRabbitMQWithConsumers(this IServiceCollection services,
-            Action<RabbitMQConnectionOptions> connectionOptions,
-            Action<RabbitMQClientOptions> clientOptions,
-            params Type[] typeConsumers)
+        public static IServiceCollection AddMvp24HoursRabbitMQ(this IServiceCollection services,
+            IList<Type> typeConsumers,
+            Action<RabbitMQConnectionOptions> connectionOptions = null,
+            Action<RabbitMQClientOptions> clientOptions = null)
         {
             if (connectionOptions != null)
             {

@@ -8,8 +8,6 @@ using Microsoft.Extensions.Options;
 using Mvp24Hours.WebAPI.Configuration;
 using Mvp24Hours.WebAPI.Middlewares;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mvp24Hours.WebAPI.Extensions
 {

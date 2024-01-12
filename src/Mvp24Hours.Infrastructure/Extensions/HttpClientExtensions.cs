@@ -228,7 +228,7 @@ namespace Mvp24Hours.Extensions
 
         private static void MediaTypeBuilder(Dictionary<string, string> headers, string method, string data, HttpRequestMessage request)
         {
-            string mediaType = string.Empty;    
+            string mediaType = string.Empty;
 
             if (headers.AnyOrNotNull())
             {

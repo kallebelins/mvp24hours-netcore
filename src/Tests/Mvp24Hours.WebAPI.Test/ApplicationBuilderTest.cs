@@ -4,28 +4,17 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Mvp24Hours.Extensions;
-using Mvp24Hours.Helpers;
+using Microsoft.Extensions.Hosting;
+using Mvp24Hours.WebAPI.Extensions;
+using System;
+using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Priority;
-using Mvp24Hours.WebAPI.Extensions;
-using Mvp24Hours.WebAPI.Middlewares;
-using Microsoft.AspNetCore.Http;
-using System.IO;
-using Microsoft.Extensions.Primitives;
-using System.Collections.Generic;
-using Moq;
-using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using System.Net;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using System;
-using System.Net.Http;
-using Microsoft.AspNetCore.DataProtection.KeyManagement;
 
 namespace Mvp24Hours.Patterns.Test
 {

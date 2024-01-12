@@ -13,7 +13,6 @@ using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Exceptions;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,7 +26,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
         private readonly IMvpRabbitMQConnection _connection;
         private readonly Dictionary<string, IModel> _channels;
         private readonly IServiceProvider _provider;
-        private readonly List<IMvpRabbitMQConsumer> _consumers;
+        private readonly List<Type> _consumers;
 
         protected virtual RabbitMQClientOptions Options => _options;
         protected virtual IMvpRabbitMQConnection Connection => _connection;
@@ -42,7 +41,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
             this._options = _provider.GetService<IOptions<RabbitMQClientOptions>>()?.Value ?? throw new ArgumentNullException(nameof(_provider));
             this._connection = _provider.GetService<IMvpRabbitMQConnection>() ?? throw new ArgumentNullException(nameof(_provider));
             this._channels = new Dictionary<string, IModel>();
-            this._consumers = new List<IMvpRabbitMQConsumer>();
+            this._consumers = new List<Type>();
         }
         #endregion
 
@@ -135,29 +134,31 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
 
                 if (Connection.Options.DispatchConsumersAsync)
                 {
-                    if (_consumers.AnySafe(x => x.GetType().InheritsOrImplements(typeof(IMvpRabbitMQConsumerSync))))
+                    if (_consumers.AnySafe(x => x.InheritsOrImplements(typeof(IMvpRabbitMQConsumerSync))))
                     {
                         throw new ArgumentException("DispatchConsumersAsync is enabled, so register only classes that implement the IMvpRabbitMQConsumerAsync interface.");
                     }
                 }
                 else
                 {
-                    if (_consumers.AnySafe(x => x.GetType().InheritsOrImplements(typeof(IMvpRabbitMQConsumerAsync))))
+                    if (_consumers.AnySafe(x => x.InheritsOrImplements(typeof(IMvpRabbitMQConsumerAsync))))
                     {
                         throw new ArgumentException("DispatchConsumersAsync is disabled, so register only classes that implement the IMvpRabbitMQConsumerSync interface.");
                     }
                 }
 
-                foreach (var customer in _consumers)
+                foreach (var item in _consumers)
                 {
-                    var channel = CreateConsumerChannel(QueueBind, customer.RoutingKey, customer.QueueName);
+                    var consumer = GetService(item);
+                    if (consumer == null) continue;
+                    var channel = CreateConsumerChannel(QueueBind, consumer.RoutingKey, consumer.QueueName);
 
                     // dead letter
                     if (Options.DeadLetter != null)
                     {
                         ExchangeDeclare(channel, Options.DeadLetter);
-                        QueueDeclare(channel, Options.DeadLetter, $"dead-letter-{customer.QueueName}");
-                        QueueBind(channel, Options.DeadLetter, customer.RoutingKey, $"dead-letter-{customer.QueueName}");
+                        QueueDeclare(channel, Options.DeadLetter, $"dead-letter-{consumer.QueueName}");
+                        QueueBind(channel, Options.DeadLetter, consumer.RoutingKey, $"dead-letter-{consumer.QueueName}");
                     }
 
                     TelemetryHelper.Execute(TelemetryLevels.Verbose, "rabbitmq-consumer-event", $"channel-number:{channel.ChannelNumber}");
@@ -169,7 +170,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
                         _eventAsync.Received += async (sender, e) =>
                         {
                             TelemetryHelper.Execute(TelemetryLevels.Verbose, "rabbitmq-consumer-received");
-                            await HandleConsumeAsync(e, channel, (IMvpRabbitMQConsumerAsync)customer);
+                            await HandleConsumeAsync(e, channel, (IMvpRabbitMQConsumerAsync)consumer);
                         };
                         _event = _eventAsync;
                     }
@@ -179,7 +180,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
                         _eventSync.Received += (sender, e) =>
                         {
                             TelemetryHelper.Execute(TelemetryLevels.Verbose, "rabbitmq-consumer-received");
-                            HandleConsume(e, channel, (IMvpRabbitMQConsumerSync)customer);
+                            HandleConsume(e, channel, (IMvpRabbitMQConsumerSync)consumer);
                         };
                         _event = _eventSync;
                     }
@@ -187,8 +188,8 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
                     TelemetryHelper.Execute(TelemetryLevels.Verbose, "rabbitmq-consumer-basic-qos", $"prefetchSize:{0}|prefetchCount:{1}|global: false");
                     channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
 
-                    TelemetryHelper.Execute(TelemetryLevels.Verbose, "rabbitmq-consumer-basic", $"queue:{customer.QueueName ?? Options.QueueName ?? string.Empty}|autoAck: false");
-                    channel.BasicConsume(queue: customer.QueueName ?? Options.QueueName ?? string.Empty,
+                    TelemetryHelper.Execute(TelemetryLevels.Verbose, "rabbitmq-consumer-basic", $"queue:{consumer.QueueName ?? Options.QueueName ?? string.Empty}|autoAck: false");
+                    channel.BasicConsume(queue: consumer.QueueName ?? Options.QueueName ?? string.Empty,
                          autoAck: false,
                          consumer: _event);
                 }
@@ -456,6 +457,26 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
         #endregion
 
         #region [ Registrars ]
+        private IMvpRabbitMQConsumer GetService(Type consumerType)
+        {
+            if (consumerType.InheritsOrImplements(typeof(IMvpRabbitMQConsumerSync)))
+            {
+                return (IMvpRabbitMQConsumerSync)(_provider.GetService(consumerType) ?? Activator.CreateInstance(consumerType));
+            }
+            else if (consumerType.InheritsOrImplements(typeof(IMvpRabbitMQConsumerAsync)))
+            {
+                return (IMvpRabbitMQConsumerAsync)(_provider.GetService(consumerType) ?? Activator.CreateInstance(consumerType));
+            }
+            else if (consumerType.InheritsOrImplements(typeof(IMvpRabbitMQConsumerRecoverySync)))
+            {
+                return (IMvpRabbitMQConsumerRecoverySync)(_provider.GetService(consumerType) ?? Activator.CreateInstance(consumerType));
+            }
+            else if (consumerType.InheritsOrImplements(typeof(IMvpRabbitMQConsumerRecoveryAsync)))
+            {
+                return (IMvpRabbitMQConsumerRecoveryAsync)(_provider.GetService(consumerType) ?? Activator.CreateInstance(consumerType));
+            }
+            throw new ArgumentException("Invalid type for consumers.");
+        }
         public void Register<T>() where T : class, IMvpRabbitMQConsumer
         {
             TelemetryHelper.Execute(TelemetryLevels.Verbose, "rabbitmq-client-consumer-register-generic");
@@ -468,35 +489,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
             {
                 throw new ArgumentNullException(nameof(consumerType));
             }
-            if (consumerType.InheritsOrImplements(typeof(IMvpRabbitMQConsumerSync)))
-            {
-                _consumers.Add((IMvpRabbitMQConsumerSync)(_provider.GetService(consumerType) ?? Activator.CreateInstance(consumerType)));
-            }
-            else if (consumerType.InheritsOrImplements(typeof(IMvpRabbitMQConsumerAsync)))
-            {
-                _consumers.Add((IMvpRabbitMQConsumerAsync)(_provider.GetService(consumerType) ?? Activator.CreateInstance(consumerType)));
-            }
-            else if (consumerType.InheritsOrImplements(typeof(IMvpRabbitMQConsumerRecoverySync)))
-            {
-                _consumers.Add((IMvpRabbitMQConsumerRecoverySync)(_provider.GetService(consumerType) ?? Activator.CreateInstance(consumerType)));
-            }
-            else if (consumerType.InheritsOrImplements(typeof(IMvpRabbitMQConsumerRecoveryAsync)))
-            {
-                _consumers.Add((IMvpRabbitMQConsumerRecoveryAsync)(_provider.GetService(consumerType) ?? Activator.CreateInstance(consumerType)));
-            }
-            else
-            {
-                throw new ArgumentException("Invalid type for consumers.");
-            }
-        }
-        public void Register(IMvpRabbitMQConsumer consumer)
-        {
-            TelemetryHelper.Execute(TelemetryLevels.Verbose, "rabbitmq-client-consumer-register");
-            if (consumer == null)
-            {
-                throw new ArgumentNullException(nameof(consumer));
-            }
-            _consumers.Add(consumer);
+            _consumers.Add(consumerType);
         }
         public void Unregister<T>() where T : class, IMvpRabbitMQConsumer
         {
@@ -511,17 +504,8 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
                 throw new ArgumentNullException(nameof(consumerType));
             }
             _consumers
-                .FindAll(x => x.GetType().InheritsOrImplements(consumerType))
-                .ForEach(item => Unregister(item));
-        }
-        public void Unregister(IMvpRabbitMQConsumer consumer)
-        {
-            TelemetryHelper.Execute(TelemetryLevels.Verbose, "rabbitmq-client-consumer-unregister");
-            if (consumer == null)
-            {
-                throw new ArgumentNullException(nameof(consumer));
-            }
-            _consumers.Remove(consumer);
+                .FindAll(x => x.InheritsOrImplements(consumerType))
+                .ForEach(item => _consumers.Remove(item));
         }
         #endregion
     }

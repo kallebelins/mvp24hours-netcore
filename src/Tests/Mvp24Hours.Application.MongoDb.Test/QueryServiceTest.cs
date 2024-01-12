@@ -4,7 +4,6 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Microsoft.Extensions.DependencyInjection;
-using MongoDB.Bson;
 using Mvp24Hours.Application.MongoDb.Test.Support.Entities;
 using Mvp24Hours.Application.MongoDb.Test.Support.Services;
 using Mvp24Hours.Core.ValueObjects.Logic;

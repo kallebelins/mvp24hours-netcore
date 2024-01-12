@@ -1,4 +1,3 @@
-using Mvp24Hours.Application.RabbitMQ.Test.Support.Dto;
 using Mvp24Hours.Core.Enums.Infrastructure;
 using Mvp24Hours.Extensions;
 using Mvp24Hours.Helpers;
