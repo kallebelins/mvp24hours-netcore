@@ -15,6 +15,30 @@ namespace Mvp24Hours.Extensions
 {
     public static class ConvertExtensions
     {
+
+        public static string ToBase64(this string text)
+        {
+            return ToBase64(text, Encoding.UTF8);
+        }
+
+        public static string ToBase64(this string text, Encoding encoding)
+        {
+            byte[] textAsBytes = encoding.GetBytes(text);
+            return Convert.ToBase64String(textAsBytes);
+        }
+
+        public static string From64(this string text)
+        {
+            return From64(text, Encoding.UTF8);
+        }
+
+        public static string From64(this string text, Encoding encoding)
+        {
+            byte[] textAsBytes = Convert.FromBase64String(text);
+            return encoding.GetString(textAsBytes);
+
+        }
+
         public static T ToEnum<T>(this string value, T defaultValue = default) where T : Enum
         {
             return Enum.TryParse(typeof(T), value, true, out object result) ? (T)result : defaultValue;
