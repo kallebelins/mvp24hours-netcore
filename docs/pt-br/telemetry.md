@@ -38,6 +38,6 @@ services.AddMvp24HoursTelemetryIgnore("rabbitmq-consumer-basic");
 ## Rodar / Executar
 ```csharp
 /// MyFile.cs
-TelemetryHelper.Execute(TelemetryLevel.Verbose, "rabbitmq-client-publish-start", $"token:{tokenDefault}");
+TelemetryHelper.Execute(TelemetryLevels.Verbose, "rabbitmq-client-publish-start", $"token:{tokenDefault}");
 
 ```

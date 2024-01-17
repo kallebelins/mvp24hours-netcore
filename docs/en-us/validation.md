@@ -1,15 +1,15 @@
 # Data Validation
 We can use two methods for data validation, using Fluent Validation or Data Annotations.
-Validation is only applied at the time of persisting the data.
+Validation is only applied when data is persisted.
 
 ## Fluent Validation
 
-### Installation
+### Setup
 ```csharp
 /// Package Manager Console >
 Install-Package FluentValidation -Version 10.3.5
 ```
-### Configuration
+### Settings
 
 ```csharp
 // CustomerValidator.cs
@@ -29,7 +29,7 @@ services.AddSingleton<IValidator<Customer>, CustomerValidator>();
 
 ## Data Annotations
 
-### Configuration
+### Settings
 ```csharp
 /// Customer.cs
 
@@ -57,16 +57,16 @@ public class Customer : EntityBase<Customer, int>, IEntityBase
 
 ```
 
-## Usage example
+## Example Usage
 
 ```csharp
-// apply data validation to the model/entity with FluentValidation or DataAnnotation
+// apply data validation to model/entity with FluentValidation or DataAnnotation
 var errors = entity.TryValidate(Validator);
 if (errors.AnySafe())
 {
     return errors.ToBusiness<int>();
 }
 
-// perform create action on the database
+// perform the create action on the database
 
 ```

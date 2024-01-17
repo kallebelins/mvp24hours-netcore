@@ -1,12 +1,12 @@
 # Logging
-> Em construção.
+> Under construction.
 
 ## Serilog
 Serilog is a diagnostic logging library for .NET applications. Access and discover:
 [Serilog](https://serilog.net/)
 
 ## NLog
-NLog is an easy-to-configure library. Access and discover:
+NLog is an easy to configure library. Access and discover:
 [NLog Asp.NET Core 3](https://github.com/NLog/NLog/wiki/Getting-started-with-ASP.NET-Core-3)
 
 Follow the xml file templates for NLog configuration.
@@ -31,7 +31,7 @@ Follow the xml file templates for NLog configuration.
 </nlog>
 ```
 
-### Log File
+### Log Arquivo
 ```xml
 <?xml version="1.0" encoding="utf-8" ?>
 <nlog xmlns="http://www.nlog-project.org/schemas/NLog.xsd"
@@ -199,4 +199,4 @@ Install-Package NLog.Targets.ElasticSearch
 </nlog>
 ```
 
-See other options in [NLog-Project](https://nlog-project.org/config/?tab=layout-renderers).
+See other options at [NLog-Project](https://nlog-project.org/config/?tab=layout-renderers).

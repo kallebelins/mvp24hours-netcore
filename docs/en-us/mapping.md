@@ -1,41 +1,64 @@
 # Mapping
-> A data mapper is a data access layer that performs the bidirectional transfer of data between a persistent data store (usually a relational database) and an in-memory data representation (the domain layer). [Wikipedia](https://en.wikipedia.org/wiki/Data_mapper_pattern)
+> A data mapper is a data access layer that performs bidirectional data transfer between a persistent data store (usually a relational database) and an in-memory data representation (the domain layer). [Wikipedia](https://en.wikipedia.org/wiki/Data_mapper_pattern)
 
 ## AutoMapper
 
-### Installation
+### Setup
 ```csharp
 /// Package Manager Console >
-Install-Package Mvp24Hours.Infrastructure -Version 3.12.262
+Install-Package Mvp24Hours.Infrastructure -Version 4.1.171
 ```
 
-### Configuration
-```csharp
-/// Startup.cs
-services.AddMvp24HoursMapService(Assembly.GetExecutingAssembly());
-```
+### Basic Settings
+Implement the Mapping contract of the IMapFrom interface.
 
-### Usage Example
 ```csharp
-/// Customer.cs
-public class Customer
-{
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public bool Active { get; set; }
-}
-
 /// CustomerResponse.cs
 public class CustomerResponse : IMapFrom
 {
     public string Name { get; set; }
     public void Mapping(Profile profile) => profile.CreateMap<Customer, CustomerResponse>();
 }
+```
 
-/// ApplicationClass.cs => Method
-var customer = new Customer();
-// using extension
-var customerResp1 = customer.MapTo<CustomerResponse>();
-// using helper
-var customerResp2 = AutoMapperHelper.Map<CustomerResponse>(customer);
+#### Ignoring Properties
+```csharp
+public class TestIgnoreClass : IMapFrom
+{
+    public int MyProperty1 { get; set; }
+    public void Mapping(Profile profile)
+    {
+        profile.CreateMap<TestAClass, TestIgnoreClass>()
+            .MapIgnore(x => x.MyProperty1);
+    }
+}
+```
+
+#### Mapping New Properties
+```csharp
+public class TestPropertyClass : IMapFrom
+{
+    public int MyPropertyX { get; set; }
+    public void Mapping(Profile profile)
+    {
+        profile.CreateMap<TestAClass, TestPropertyClass>()
+            .MapProperty(x => x.MyProperty1, x => x.MyPropertyX);
+    }
+}
+```
+
+### Loading Settings
+```csharp
+/// Startup.cs
+services.AddMvp24HoursMapService(Assembly.GetExecutingAssembly());
+```
+
+### Basic Execution
+```csharp
+// setting
+IMapper mapper = [mapperConfig].CreateMapper();
+
+// running
+var classA = new TestAClass { MyProperty1 = 1 };
+var classB = mapper.Map<TestIgnoreClass>(classA);
 ```

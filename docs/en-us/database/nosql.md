@@ -1,31 +1,32 @@
 # NoSQL Database
->A NoSQL (originally referring to "non-SQL" or "non-relational")[1] database provides a mechanism for storage and retrieval of data that is modeled in means other than the tabular relations used in relational databases. [Wikipedia](https://en.wikipedia.org/wiki/NoSQL)
+>NoSQL (originally referring to "no SQL": "non-SQL" or "non-relational", later extended to Not Only SQL) is a generic term representing non-relational databases. A defined class of database that provides a mechanism for storing and retrieving data that is modeled in ways other than the tabular relationships used in relational databases. [Wikipedia](https://pt.wikipedia.org/wiki/NoSQL)
 
 ## Document Oriented
-> A document-oriented database, or document store, is a computer program and data storage system designed for storing, retrieving and managing document-oriented information, also known as semi-structured data.  [Wikipedia](https://en.wikipedia.org/wiki/Document-oriented_database)
+> A document-oriented database, or document store, is a computer program and data storage system designed to store, retrieve, and manage document-oriented information, also known as semi-structured data. [Wikipedia](https://en.wikipedia.org/wiki/Document-oriented_database)
 
-Repository pattern was implemented with search and paging criteria, in addition to unit of work ([See Repository](en-us/database/use-repository)). This implementation does not only support late loading of related objects.
+A repository pattern with search and pagination criteria was implemented, as well as a unit of work ([See Repository](en-us/database/use-repository)). This implementation does not support late loading of related objects only.
 
 ### MongoDB
 
-#### Prerequisites (Not Required)
+#### Prerequisites (Not Mandatory)
 Add a configuration file to the project named "appsettings.json". The file must contain a key with connection data, for example, ConnectionStrings/DataContext as below:
 ```json
 {
   "ConnectionStrings": {
-    "DataContext": "connection string"
+    "DataContext": "Connection string"
   }
 }
 ```
-You will be able to use direct database connection, which is not recommended. Access the [ConnectionStrings](https://www.connectionstrings.com/) website and see how to set up the connection with your bank.
+You may be able to use direct database connection, which is not recommended. Access the website [ConnectionStrings](https://www.connectionstrings.com/) and see how to set up the connection with your database.
 
-#### Installation
+#### Setup
 ```csharp
 /// Package Manager Console >
+
 Install-Package MongoDB.Driver -Version 2.13.2
-Install-Package Mvp24Hours.Infrastructure.Data.MongoDb -Version 3.12.262
+Install-Package Mvp24Hours.Infrastructure.Data.MongoDb -Version 4.1.171
 ```
-#### Configuration
+#### Settings
 ```csharp
 /// Startup.cs
 services.AddMvp24HoursDbContext(options =>
@@ -34,6 +35,7 @@ services.AddMvp24HoursDbContext(options =>
     options.ConnectionString = Configuration.GetConnectionString("DataContext");
 });
 services.AddMvp24HoursRepository(); // async => AddMvp24HoursRepositoryAsync()
+
 ```
 
 #### Using Docker
@@ -47,7 +49,7 @@ mongodb://localhost:27017
 
 ```
 
-**Database Command with Password**
+**Command for Database with Password**
 ```
 // Command
 docker run --name mongodb -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=user -e MONGO_INITDB_ROOT_PASSWORD=123456 mongo
@@ -58,13 +60,13 @@ mongodb://user:123456@localhost:27017
 ```
 
 ## Key-Value Oriented
->A key–value database, or key–value store, is a data storage paradigm designed for storing, retrieving, and managing associative arrays, and a data structure more commonly known today as a dictionary or hash table. [Wikipedia](https://en.wikipedia.org/wiki/Key%E2%80%93value_database)
+> A key-value database, or key-value store, is a data storage paradigm designed to store, retrieve, and manage associative arrays and a data structure more commonly known today as a dictionary or hash table. [Wikipedia](https://pt.wikipedia.org/wiki/Banco_de_dados_de_chave-valor)
 
 ### Redis
-In-memory data structure, used as a distributed key-value database, cache and message agent.
+In-memory data structure, used as a distributed key-value database, cache, and message broker.
 
-#### Prerequisites (Not Required)
-Add a configuration file to the project named "appsettings.json", as below:
+#### Prerequisites (Not Mandatory)
+Add a configuration file to the project with the name "appsettings.json", as follows:
 ```json
 {
   "ConnectionStrings": {
@@ -75,13 +77,13 @@ Add a configuration file to the project named "appsettings.json", as below:
 ```
 You can use structural configuration or connection string.
 
-#### Installation
+#### Setup
 ```csharp
 /// Package Manager Console >
-Install-Package Mvp24Hours.Infrastructure.Caching.Redis -Version 3.12.262
+Install-Package Mvp24Hours.Infrastructure.Caching.Redis -Version 4.1.171
 ```
 
-#### Configuration
+#### Settings
 ```csharp
 /// Startup.cs
 
@@ -93,8 +95,9 @@ services.AddMvp24HoursCachingRedis(Configuration.GetConnectionString("RedisDbCon
 
 ```
 
-#### Usage Example
-You can use Redis to record simple values or complex objects, like this:
+#### Example of use
+You can use Redis to register simple value or complex objects, like this:
+
 
 ```csharp
 // get cache
@@ -122,7 +125,7 @@ cache.Remove("key");
 // add complex value
 cache.SetObject("key", customer);
 
-// recover complex value
+// retrieve complex value
 var customer = cache.GetObject<Customer>("key");
 
 // remove complex value
@@ -130,7 +133,7 @@ cache.Remove("key");
 
 ```
 
-You can use extensions to interact with the IDistributedCache interface in the "Mvp24Hours.Infrastructure.Extensions" namespace.
+You will be able to use extensions to interact with the IDistributedCache interface in the "Mvp24Hours.Infrastructure.Extensions" namespace.
 
 You can still use the repository concept to restrict the unique types for use.
 
@@ -164,7 +167,7 @@ repo.Remove(_keyString);
 var repo = serviceProvider.GetService<IRepositoryCache<Customer>>();
 repo.Set("key", customer);
 
-// recover complex value
+// retrieve complex value
 var repo = serviceProvider.GetService<IRepositoryCache<Customer>>();
 var customer = repo.Get("key");
 

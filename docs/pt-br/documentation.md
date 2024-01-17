@@ -7,7 +7,7 @@ O Swagger permite você documentar facilmente sua API RESTful compartilhando com
 ### Instalação
 ```csharp
 /// Package Manager Console >
-Install-Package Mvp24Hours.WebAPI -Version 3.12.262
+Install-Package Mvp24Hours.WebAPI -Version 4.1.171
 ```
 
 ### Configuração
@@ -45,12 +45,12 @@ services.AddMvp24HoursSwagger(
 public class WeatherForecast
 {
     /// <summary>
-    /// The date of the forecast in ISO-whatever format
+    /// A data da previsão em qualquer formato ISO
     /// </summary>
     public DateTime Date { get; set; }
 
     /// <summary>
-    /// Temperature in celcius
+    /// Temperatura em Celsius
     /// </summary>
     /// <example>25</example>
     public int TemperatureC { get; set; }
@@ -58,9 +58,9 @@ public class WeatherForecast
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 
     /// <summary>
-    /// A textual summary
+    /// Um resumo textual
     /// </summary>
-    /// <example>Cloudy with a chance of rain</example>
+    /// <example>Nublado com possibilidade de chuva</example>
     public string Summary { get; set; }
 }
 

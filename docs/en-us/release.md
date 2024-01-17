@@ -1,21 +1,39 @@
 # What's new?
 
-## v3.12.262
+## 4.1.171
+* Under construction.
+
+## 3.12.262
+* Refactoring extensions.
+
+## 3.12.261
+* Middleware test implementation.
+
+## 3.12.221
+* Implementation of Delegation Handlers to propagate keys in the Header (correlation-id, authorization, etc);
+* Implementation of Polly to apply concepts of resilience and fault tolerance;
+* Correction of automatic loading of mapping classes with IMapFrom;
+
+## 3.12.151
+* Removed generic typing from the IMapFrom class;
+* Implementation of Testcontainers for RabbitMQ, Redis and MongoDb projects;
+
+## 3.2.241
 * Refactoring to migrate json file settings to fluent extensions;
 * Replacement of the notification pattern;
 * Review of templates;
-* Added HealthCheck on all samples;
-* Basic WebStatus project creation with HealthCheckUI;
+* Addition of HealthCheck to all samples;
+* Creation of a basic WebStatus project with HealthCheckUI;
 * Replacement of logging dependencies for trace injection through actions;
-* Trace/Verbose on all main libraries and layers;
-* Transaction isolation level configuration for queries with EF;
-* RabbitMQ library refactoring for consumer injection and fluid configuration for "DeadLetterQueue";
-* Persistent connection and resiliency with Polly for RabbitMQ;
-* Asynchronous consumer implementation for RabbitMQ;
-* Pipeline adjustment to allow adding messages in the package (info, error, warning, success) - replacement of the notification pattern;
-* Validation change (FluentValidation or DataAnnotations) to return message list - notification pattern replacement;
-* Documentation change and configuration addition for WebAPI;
-* Test library refactoring;
+* Trace/Verbose in all main libraries and layers;
+* Configuration of transaction isolation level for queries with EF;
+* Refactoring of the RabbitMQ library for consumer injection and fluid configuration for "DeadLetterQueue";
+* Persistent connection and resilience with Polly for RabbitMQ;
+* Implementation of asynchronous consumer for RabbitMQ;
+* Pipeline adjustment to allow adding messages to the package (info, error, warning, success) - replacement of the notification pattern;
+* Validation change (FluentValidation or DataAnnotations) to return list of messages - replacement of notification pattern;
+* Changed documentation and added configuration for WebAPI;
+* Refactoring of library testing;
 * Refactoring for migration from Core to .NET 6.
 
 ## Other versions...
@@ -26,4 +44,4 @@
 * Documentation (Swagger)
 * Mapping (AutoMapper)
 * Logging
-* Standards for data validation (FluentValidation and Data Annotations), specifications (Specification pattern), unit of work, repository, among others.
+* Standards for data validation (FluentValidation and Data Annotations), specifications (Specification pattern), work unit, repository, among others.

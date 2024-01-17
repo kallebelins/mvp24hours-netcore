@@ -20,8 +20,8 @@ Você poderá usar a conexão de banco de dados direto, o que não é recomendad
 /// Package Manager Console >
 
 Install-Package Microsoft.Extensions.DependencyInjection -Version 6.0.0
-Install-Package Microsoft.EntityFrameworkCore.SqlServer -Version 5.0.10
-Install-Package Mvp24Hours.Infrastructure.Data.EFCore -Version 3.12.262
+Install-Package Microsoft.EntityFrameworkCore.SqlServer -Version 5.0.12
+Install-Package Mvp24Hours.Infrastructure.Data.EFCore -Version 4.1.171
 ```
 ### Configuração
 ```csharp
@@ -34,7 +34,7 @@ services.AddMvp24HoursDbContext<DataContext>();
 services.AddMvp24HoursRepository(options =>
 {
     options.MaxQtyByQueryPage = 100;
-    options.TransactionIsolationLevel = System.Transactions.IsolationLevel.ReadCommitted;
+    options.TransactionIsolationLevel = System.Transactions.IsolationLevel.ReadCommitted; // Serializable, RepeatableRead, ReadUncommitted, Snapshot, Chaos
 });  // async => services.AddMvp24HoursRepositoryAsync();
 
 ```
@@ -55,7 +55,7 @@ Data Source=.,1433;Initial Catalog=MyTestDb;Persist Security Info=True;User ID=s
 
 Install-Package Microsoft.Extensions.DependencyInjection -Version 6.0.0
 Install-Package Npgsql.EntityFrameworkCore.PostgreSQL -Version 5.0.10
-Install-Package Mvp24Hours.Infrastructure.Data.EFCore -Version 3.12.262
+Install-Package Mvp24Hours.Infrastructure.Data.EFCore -Version 4.1.171
 ```
 ### Configuração
 ```csharp
@@ -70,7 +70,7 @@ services.AddMvp24HoursDbContext<DataContext>();
 services.AddMvp24HoursRepository(options =>
 {
     options.MaxQtyByQueryPage = 100;
-    options.TransactionIsolationLevel = System.Transactions.IsolationLevel.ReadCommitted;
+    options.TransactionIsolationLevel = System.Transactions.IsolationLevel.ReadCommitted; // Serializable, RepeatableRead, ReadUncommitted, Snapshot, Chaos
 });  // async => services.AddMvp24HoursRepositoryAsync();
 
 ```
@@ -91,7 +91,7 @@ Host=localhost;Port=5432;Pooling=true;Database=MyTestDb;User Id=postgres;Passwor
 
 Install-Package Microsoft.Extensions.DependencyInjection -Version 6.0.0
 Install-Package MySql.EntityFrameworkCore -Version 5.0.8
-Install-Package Mvp24Hours.Infrastructure.Data.EFCore -Version 3.12.262
+Install-Package Mvp24Hours.Infrastructure.Data.EFCore -Version 4.1.171
 ```
 ### Configuração
 ```csharp
@@ -104,7 +104,7 @@ services.AddMvp24HoursDbContext<DataContext>();
 services.AddMvp24HoursRepository(options =>
 {
     options.MaxQtyByQueryPage = 100;
-    options.TransactionIsolationLevel = System.Transactions.IsolationLevel.ReadCommitted;
+    options.TransactionIsolationLevel = System.Transactions.IsolationLevel.ReadCommitted; // Serializable, RepeatableRead, ReadUncommitted, Snapshot, Chaos
 });  // async => services.AddMvp24HoursRepositoryAsync();
 
 ```

@@ -1,11 +1,11 @@
 # ASP.NET Web API
-In this topic you will find some resources to speed up the construction of web services with ASP.NET Web API.
+In this topic you will find some resources to speed up building web services with ASP.NET Web API.
 
 ## Services
 ```csharp
 // Startup.cs => ConfigureServices(IServiceCollection)
 
-/// essential
+/// essencial
 services.AddMvp24HoursWebEssential();
 
 /// automapper
@@ -89,7 +89,6 @@ services.AddHealthChecks()
         });
     });
 
-
 ```
 
 ## Application / Middlewares
@@ -108,7 +107,7 @@ if (!env.IsProduction()) {
     app.UseMvp24HoursSwagger();
 }
 
-/// essential
+/// essencial
 app.UseMvp24Hours();
 ```
 
@@ -118,7 +117,7 @@ Use IHttpClientFactory to implement resilient HTTP requests.
 ```csharp
 // Startup.cs  => ConfigureServices(IServiceCollection)
 
-/// inject HttpClient using custom name
+/// inject httpclient using custom name
 services.AddHttpClient("my-api-url", client =>
 {
     client.BaseAddress = new Uri("https://myexampleapi.com");

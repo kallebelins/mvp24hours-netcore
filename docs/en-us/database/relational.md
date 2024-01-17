@@ -1,29 +1,29 @@
 # Relational Database
->A relational database is a digital database based on the relational model of data. [Wikipedia](https://en.wikipedia.org/wiki/Relational_database)
+>A relational database is a database that models data in such a way that it is perceived by the user as tables, or more formally relationships. [Wikipedia](https://pt.wikipedia.org/wiki/Banco_de_dados_relacional)
 
-A repository pattern with search and paging criteria was implemented, as well as a work unit. We use Entity Framework to perform persistence. The Entity Framework supports several databases and those that have been tested are: PostgreSql, MySQL and SQLServer.
+A repository standard was implemented with search and pagination criteria, in addition to a work unit. We use Entity Framework to perform persistence. The Entity Framework supports several databases and those that have already been tested are: PostgreSql, MySQL and SQLServer.
 
-## Prerequisites (Not Required)
+## Prerequisites (Not Mandatory)
 Add a configuration file to the project named "appsettings.json". The file must contain a key with connection data, for example, ConnectionStrings/DataContext as below:
 ```json
 {
   "ConnectionStrings": {
-    "DataContext": "connection string"
+    "DataContext": "Connection string"
   }
 }
 ```
-You will be able to use direct database connection, which is not recommended. Access the [ConnectionStrings](https://www.connectionstrings.com/) website and see how to set up the connection with your bank.
-
+You may be able to use direct database connection, which is not recommended. Access the website [ConnectionStrings](https://www.connectionstrings.com/) and see how to set up the connection with your database.
 
 ## SQL Server
-### Installation
+### Setup
 ```csharp
 /// Package Manager Console >
+
 Install-Package Microsoft.Extensions.DependencyInjection -Version 6.0.0
-Install-Package Microsoft.EntityFrameworkCore.SqlServer -Version 5.0.10
-Install-Package Mvp24Hours.Infrastructure.Data.EFCore -Version 3.12.262
+Install-Package Microsoft.EntityFrameworkCore.SqlServer -Version 5.0.12
+Install-Package Mvp24Hours.Infrastructure.Data.EFCore -Version 4.1.171
 ```
-### Configuration
+### Settings
 ```csharp
 /// Startup.cs
 
@@ -34,7 +34,7 @@ services.AddMvp24HoursDbContext<DataContext>();
 services.AddMvp24HoursRepository(options =>
 {
     options.MaxQtyByQueryPage = 100;
-    options.TransactionIsolationLevel = System.Transactions.IsolationLevel.ReadCommitted;
+    options.TransactionIsolationLevel = System.Transactions.IsolationLevel.ReadCommitted; // Serializable, RepeatableRead, ReadUncommitted, Snapshot, Chaos
 });  // async => services.AddMvp24HoursRepositoryAsync();
 
 ```
@@ -49,14 +49,15 @@ Data Source=.,1433;Initial Catalog=MyTestDb;Persist Security Info=True;User ID=s
 ```
 
 ## PostgreSql
-### Installation
+### Setup
 ```csharp
 /// Package Manager Console >
+
 Install-Package Microsoft.Extensions.DependencyInjection -Version 6.0.0
 Install-Package Npgsql.EntityFrameworkCore.PostgreSQL -Version 5.0.10
-Install-Package Mvp24Hours.Infrastructure.Data.EFCore -Version 3.12.262
+Install-Package Mvp24Hours.Infrastructure.Data.EFCore -Version 4.1.171
 ```
-### Configuration
+### Settings
 ```csharp
 /// Startup.cs
 
@@ -69,7 +70,7 @@ services.AddMvp24HoursDbContext<DataContext>();
 services.AddMvp24HoursRepository(options =>
 {
     options.MaxQtyByQueryPage = 100;
-    options.TransactionIsolationLevel = System.Transactions.IsolationLevel.ReadCommitted;
+    options.TransactionIsolationLevel = System.Transactions.IsolationLevel.ReadCommitted; // Serializable, RepeatableRead, ReadUncommitted, Snapshot, Chaos
 });  // async => services.AddMvp24HoursRepositoryAsync();
 
 ```
@@ -84,14 +85,15 @@ Host=localhost;Port=5432;Pooling=true;Database=MyTestDb;User Id=postgres;Passwor
 ```
 
 ## MySql
-### Installation
+### Setup
 ```csharp
 /// Package Manager Console >
+
 Install-Package Microsoft.Extensions.DependencyInjection -Version 6.0.0
 Install-Package MySql.EntityFrameworkCore -Version 5.0.8
-Install-Package Mvp24Hours.Infrastructure.Data.EFCore -Version 3.12.262
+Install-Package Mvp24Hours.Infrastructure.Data.EFCore -Version 4.1.171
 ```
-### Configuration
+### Settings
 ```csharp
 /// Startup.cs
 
@@ -102,7 +104,7 @@ services.AddMvp24HoursDbContext<DataContext>();
 services.AddMvp24HoursRepository(options =>
 {
     options.MaxQtyByQueryPage = 100;
-    options.TransactionIsolationLevel = System.Transactions.IsolationLevel.ReadCommitted;
+    options.TransactionIsolationLevel = System.Transactions.IsolationLevel.ReadCommitted; // Serializable, RepeatableRead, ReadUncommitted, Snapshot, Chaos
 });  // async => services.AddMvp24HoursRepositoryAsync();
 
 ```

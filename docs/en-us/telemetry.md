@@ -1,7 +1,7 @@
 # Telemetry
-Solution created to track all application execution levels. You will be able to inject actions for treatment using any log manager, including metrics and trace.
+Solution created to track all application execution levels. You can inject actions for processing using any log manager, including metrics and trace.
 
-## Configuration
+## Settings
 ```csharp
 
 /// Startup.cs
@@ -15,7 +15,7 @@ services.AddMvp24HoursTelemetry(TelemetryLevel.Information | TelemetryLevel.Verb
     }
 );
 
-// error
+// erro
 services.AddMvp24HoursTelemetry(TelemetryLevel.Error,
     (name, state) =>
     {
@@ -35,9 +35,9 @@ services.AddMvp24HoursTelemetryIgnore("rabbitmq-consumer-basic");
 
 ```
 
-## Run /  Execute
+## Run
 ```csharp
 /// MyFile.cs
-TelemetryHelper.Execute(TelemetryLevel.Verbose, "rabbitmq-client-publish-start", $"token:{tokenDefault}");
+TelemetryHelper.Execute(TelemetryLevels.Verbose, "rabbitmq-client-publish-start", $"token:{tokenDefault}");
 
 ```

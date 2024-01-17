@@ -1,6 +1,24 @@
 # O que há de novo?
 
-## v3.12.262
+## 4.1.171
+* Em construção.
+
+## 3.12.262
+* Refatoração de extensões.
+
+## 3.12.261
+* Implementação de teste de middleware.
+
+## 3.12.221
+* Implementação de Delegation Handlers para propagação de chaves no Header (correlation-id, authorization, etc);
+* Implementação de Polly para aplicar conceitos de resiliência e tolerância a falhas;
+* Correção de carregamento automático de classes de mapeamento com IMapFrom;
+
+## 3.12.151
+* Remoção de tipagem genérica da classe IMapFrom;
+* Implmentação de Testcontainers para projetos RabbitMQ, Redis e MongoDb;
+
+## 3.2.241
 * Refatoração para migrar configurações de arquivo json para extensões fluentes;
 * Substituição do padrão de notificação;
 * Revisão dos templates;

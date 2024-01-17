@@ -6,10 +6,12 @@
 ### Instalação
 ```csharp
 /// Package Manager Console >
-Install-Package Mvp24Hours.Infrastructure.RabbitMQ -Version 3.12.262
+Install-Package Mvp24Hours.Infrastructure.RabbitMQ -Version 4.1.171
 ```
 
 ### Configuração Básica
+Basicamente podemos registrar uma conexão com RabbitMQ levando em consideração todos os consumers de um projeto (assembly), execução assíncrona e retentativas caso ocorram falhas.
+
 ```csharp
 /// Startup.cs
 
@@ -25,14 +27,36 @@ services.AddMvp24HoursRabbitMQ(
 
 ```
 
-### Configuração Avançada
-Exemplo de configuração de Dead Letter Queue:
+### Configuração Básica com Lista
+Semelhante ao item anterior, com exceção dos itens registrados. Neste ponto, você poderá registrar consumers específicos para uma configuração exclusiva.
 
 ```csharp
 /// Startup.cs
 
 services.AddMvp24HoursRabbitMQ(
-    typeof(MyClassConsumer).Assembly,
+    new List<Type> { typeof(CustomerConsumer) },
+    connectionOptions =>
+    {
+        connectionOptions.ConnectionString = _rabbitMqContainer.GetConnectionString();
+        connectionOptions.DispatchConsumersAsync = true;
+        connectionOptions.RetryCount = 3;
+    },
+    clientOptions =>
+    {
+        clientOptions.MaxRedeliveredCount = 1;
+    }
+);
+
+```
+
+### Configuração Avançada
+Caso seu projeto tenha a necessidade de executar passos de recuperação (SAGA) após falhas previstas ou não, você pode usar Dead Letter Queue configurando assim:
+
+```csharp
+/// Startup.cs
+
+services.AddMvp24HoursRabbitMQ(
+    typeof(MyClassConsumer).Assembly, // ou lista
     connectionOptions =>
     {
         connectionOptions.ConnectionString = configuration.GetConnectionString("RabbitMQContext");
@@ -63,11 +87,10 @@ services.AddMvp24HoursRabbitMQ(
 
 ```
 
-### Implementação de Producer/Consumer
+### Implementação de Producer
 
 ```csharp
-
-/// CustomerService.cs // Save Method
+/// CustomerService.cs
 var client = serviceProvider.GetService<MvpRabbitMQClient>();
 client.Publish(new CustomerDto
 {
@@ -76,8 +99,31 @@ client.Publish(new CustomerDto
     Active = true
 }, typeof(CustomerDto).Name);
 
+```
+
+### Implementação de Consumer
+
+```csharp
 /// CustomerConsumer.cs
 public class CustomerConsumer : IMvpRabbitMQConsumerAsync
+{
+    public string RoutingKey => typeof(CustomerDto).Name;
+
+    public string QueueName => typeof(CustomerDto).Name;
+
+    public async Task ReceivedAsync(object message, string token)
+    {
+        // tome uma atitude
+        await Task.CompletedTask;
+    }
+}
+```
+
+### Implementação de Consumer com Recovery
+
+```csharp
+/// CustomerRecoveryConsumer.cs
+public class CustomerConsumer : IMvpRabbitMQConsumerRecoveryAsync
 {
     public string RoutingKey => typeof(CustomerDto).Name;
 
@@ -103,7 +149,11 @@ public class CustomerConsumer : IMvpRabbitMQConsumerAsync
         await Task.CompletedTask;
     }
 }
+```
 
+### Executando Consumidores
+
+```csharp
 /// HostService.cs
 var source = new CancellationTokenSource(TimeSpan.FromSeconds(5));
 while (!source.IsCancellationRequested)
@@ -123,3 +173,6 @@ docker run -d --name my-rabbit -p 5672:5672 -p 5673:5673 -p 15672:15672 rabbitmq
 [127.0.0.1:6379](amqp://guest:guest@localhost:5672)
 
 ```
+
+### Injeção vs Instância Padrão
+É criada uma instância dinamicamente, com exceção das registradas na coleção de serviços para provedor (IServiceProvider).

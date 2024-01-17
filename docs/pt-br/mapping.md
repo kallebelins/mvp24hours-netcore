@@ -6,36 +6,59 @@
 ### Instalação
 ```csharp
 /// Package Manager Console >
-Install-Package Mvp24Hours.Infrastructure -Version 3.12.262
+Install-Package Mvp24Hours.Infrastructure -Version 4.1.171
 ```
 
-### Configuração
-```csharp
-/// Startup.cs
-services.AddMvp24HoursMapService(Assembly.GetExecutingAssembly());
-```
+### Configuração Básica
+Implementar o contrato Mapping da interface IMapFrom.
 
-### Exemplo de uso
 ```csharp
-/// Customer.cs
-public class Customer
-{
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public bool Active { get; set; }
-}
-
 /// CustomerResponse.cs
 public class CustomerResponse : IMapFrom
 {
     public string Name { get; set; }
     public void Mapping(Profile profile) => profile.CreateMap<Customer, CustomerResponse>();
 }
+```
 
-/// ApplicationClass.cs => Method
-var customer = new Customer();
-// usando extension
-var customerResp1 = customer.MapTo<CustomerResponse>();
-// usando helper
-var customerResp2 = AutoMapperHelper.Map<CustomerResponse>(customer);
+#### Ignorando Propriedades
+```csharp
+public class TestIgnoreClass : IMapFrom
+{
+    public int MyProperty1 { get; set; }
+    public void Mapping(Profile profile)
+    {
+        profile.CreateMap<TestAClass, TestIgnoreClass>()
+            .MapIgnore(x => x.MyProperty1);
+    }
+}
+```
+
+#### Mapeando Novas Propriedades
+```csharp
+public class TestPropertyClass : IMapFrom
+{
+    public int MyPropertyX { get; set; }
+    public void Mapping(Profile profile)
+    {
+        profile.CreateMap<TestAClass, TestPropertyClass>()
+            .MapProperty(x => x.MyProperty1, x => x.MyPropertyX);
+    }
+}
+```
+
+### Carregando Configurações
+```csharp
+/// Startup.cs
+services.AddMvp24HoursMapService(Assembly.GetExecutingAssembly());
+```
+
+### Execução Básica
+```csharp
+// configurando
+IMapper mapper = [mapperConfig].CreateMapper();
+
+// executando
+var classA = new TestAClass { MyProperty1 = 1 };
+var classB = mapper.Map<TestIgnoreClass>(classA);
 ```

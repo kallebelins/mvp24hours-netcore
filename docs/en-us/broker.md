@@ -1,16 +1,17 @@
 # Message Broker
-> Message Broker is software that allows applications, systems and services to communicate with each other and exchange information. [What is a Message Broker?](https://medium.com/@bookgrahms/o-que-%C3%A9-um-corretor-de-mensagens-message-broker-c9fbe219443b)
+>Message broker is software that allows applications, systems and services to communicate with each other and exchange information. [Message Broker](https://en.wikipedia.org/wiki/Message_broker)
 
 ## RabbitMQ
 
-### Installation
+### Setup
 ```csharp
 /// Package Manager Console >
-Install-Package Mvp24Hours.Infrastructure.RabbitMQ -Version 3.12.262
+Install-Package Mvp24Hours.Infrastructure.RabbitMQ -Version 4.1.171
 ```
 
+### Basic Settings
+Basically, we can register a connection with RabbitMQ taking into account all consumers of a project (assembly), asynchronous execution and retrying if failures occur.
 
-### Basic Configuration
 ```csharp
 /// Startup.cs
 
@@ -26,14 +27,36 @@ services.AddMvp24HoursRabbitMQ(
 
 ```
 
-### Advanced Configuration
-Dead Letter Queue configuration example:
+### Basic Settings with List
+Similar to the previous item, with the exception of registered items. At this point, you can register specific consumers for a unique configuration.
 
 ```csharp
 /// Startup.cs
 
 services.AddMvp24HoursRabbitMQ(
-    typeof(MyClassConsumer).Assembly,
+    new List<Type> { typeof(CustomerConsumer) },
+    connectionOptions =>
+    {
+        connectionOptions.ConnectionString = _rabbitMqContainer.GetConnectionString();
+        connectionOptions.DispatchConsumersAsync = true;
+        connectionOptions.RetryCount = 3;
+    },
+    clientOptions =>
+    {
+        clientOptions.MaxRedeliveredCount = 1;
+    }
+);
+
+```
+
+### Advanced Setting
+If your project needs to perform recovery steps (SAGA) after expected or unforeseen failures, you can use Dead Letter Queue by configuring it like this:
+
+```csharp
+/// Startup.cs
+
+services.AddMvp24HoursRabbitMQ(
+    typeof(MyClassConsumer).Assembly, // ou lista
     connectionOptions =>
     {
         connectionOptions.ConnectionString = configuration.GetConnectionString("RabbitMQContext");
@@ -64,10 +87,10 @@ services.AddMvp24HoursRabbitMQ(
 
 ```
 
-### Producer/Consumer Implementation
+### Producer Implementation
 
 ```csharp
-/// CustomerService.cs // Save Method
+/// CustomerService.cs
 var client = serviceProvider.GetService<MvpRabbitMQClient>();
 client.Publish(new CustomerDto
 {
@@ -76,8 +99,31 @@ client.Publish(new CustomerDto
     Active = true
 }, typeof(CustomerDto).Name);
 
+```
+
+### Consumer Implementation
+
+```csharp
 /// CustomerConsumer.cs
 public class CustomerConsumer : IMvpRabbitMQConsumerAsync
+{
+    public string RoutingKey => typeof(CustomerDto).Name;
+
+    public string QueueName => typeof(CustomerDto).Name;
+
+    public async Task ReceivedAsync(object message, string token)
+    {
+        // take action
+        await Task.CompletedTask;
+    }
+}
+```
+
+### Implementation of Consumer with Recovery
+
+```csharp
+/// CustomerRecoveryConsumer.cs
+public class CustomerConsumer : IMvpRabbitMQConsumerRecoveryAsync
 {
     public string RoutingKey => typeof(CustomerDto).Name;
 
@@ -91,19 +137,23 @@ public class CustomerConsumer : IMvpRabbitMQConsumerAsync
 
     public async Task FailureAsync(Exception exception, string token)
     {
-        // perform handling for integration failures in RabbitMQ
-        // write to a temp table, send email, create specialized log, etc.
+        // perform integration failure handling in RabbitMQ
+        // write to a temporary table, send email, create specialized log, etc.
         await Task.CompletedTask;
     }
 
     public async Task RejectedAsync(object message, string token)
     {
-        // we tried to consume the resource for 3 times, in this case as we did not treat it, we will disregard
-        // write to a temp table, send email, create specialized log, etc.
+        // we tried to consume the resource 3 times, in this case as we did not treat it, we will disregard it
+        // write to a temporary table, send email, create specialized log, etc.
         await Task.CompletedTask;
     }
 }
+```
 
+### Running Consumers
+
+```csharp
 /// HostService.cs
 var source = new CancellationTokenSource(TimeSpan.FromSeconds(5));
 while (!source.IsCancellationRequested)
@@ -123,3 +173,6 @@ docker run -d --name my-rabbit -p 5672:5672 -p 5673:5673 -p 15672:15672 rabbitmq
 [127.0.0.1:6379](amqp://guest:guest@localhost:5672)
 
 ```
+
+### Injection vs Standard Instance
+An instance is created dynamically, with the exception of those registered in the service collection for the provider (IServiceProvider).

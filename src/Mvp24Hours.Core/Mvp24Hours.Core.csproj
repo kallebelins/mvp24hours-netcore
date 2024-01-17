@@ -10,9 +10,9 @@
     <Company>Kallebe Lins</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>4.1.051</Version>
-    <AssemblyVersion>4.1.05.1</AssemblyVersion>
-    <FileVersion>4.1.05.1</FileVersion>
+    <Version>4.1.171</Version>
+    <AssemblyVersion>4.1.17.1</AssemblyVersion>
+    <FileVersion>4.1.17.1</FileVersion>
     <RepositoryUrl>https://github.com/kallebelins/mvp24hours-netcore</RepositoryUrl>
   </PropertyGroup>
 	
