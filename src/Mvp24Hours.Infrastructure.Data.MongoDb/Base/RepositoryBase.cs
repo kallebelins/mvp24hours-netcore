@@ -211,8 +211,8 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
 
                 if (_keyInfo == null)
                 {
-                    if (typeof(T).InheritsOrImplements(typeof(EntityBase<,>))
-                        || typeof(T).InheritsOrImplements(typeof(EntityBaseLog<,,>)))
+                    if (typeof(T).InheritsOrImplements(typeof(EntityBase<>))
+                        || typeof(T).InheritsOrImplements(typeof(EntityBaseLog<,>)))
                     {
                         _keyInfo = typeof(T).GetTypeInfo()
                             .GetProperties(BindingFlags.Instance | BindingFlags.Public)

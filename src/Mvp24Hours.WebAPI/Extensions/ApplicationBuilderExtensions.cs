@@ -4,11 +4,7 @@
 // Reproduction or sharing is free! Contribute to a better world!
 //=====================================================================================
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Mvp24Hours.Helpers;
 using Mvp24Hours.WebAPI.Middlewares;
-using System;
 
 namespace Mvp24Hours.WebAPI.Extensions
 {
@@ -58,31 +54,6 @@ namespace Mvp24Hours.WebAPI.Extensions
                 opt.SwaggerEndpoint($"{swaggerJsonBasePath}/swagger/{version}/swagger.json", name);
             });
             return builder;
-        }
-
-        /// <summary>
-        /// Configure application context
-        /// </summary>
-        public static IApplicationBuilder UseMvp24Hours(this IApplicationBuilder app)
-        {
-            IServiceProvider service = app.ApplicationServices;
-
-            service.GetService<IHttpContextAccessor>()
-                .AddContext();
-
-            var globalService = service.GetService<IServiceCollection>();
-            if (globalService != null)
-            {
-                ServiceProviderHelper.SetProvider(globalService.BuildServiceProvider());
-            }
-
-            return app;
-        }
-
-        private static IHttpContextAccessor AddContext(this IHttpContextAccessor accessor)
-        {
-            HttpContextHelper.SetContext(accessor);
-            return accessor;
         }
     }
 }

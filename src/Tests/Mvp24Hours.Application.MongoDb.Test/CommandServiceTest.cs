@@ -83,7 +83,7 @@ namespace Mvp24Hours.Application.MongoDb.Test
             CreateCustomer();
             var service = serviceProvider.GetService<CustomerService>();
 
-            var customer = service.GetById(oid).GetDataFirstOrDefault();
+            var customer = service.GetById(oid).GetDataValue();
 
             customer.Name = "Test Updated";
 

@@ -14,6 +14,11 @@ using Mvp24Hours.Extensions;
 using System;
 using System.Collections.Generic;
 
+#if !InMemory 
+using Microsoft.Extensions.Configuration;
+using Mvp24Hours.Helpers;
+#endif
+
 namespace Mvp24Hours.Application.SQLServer.Test.Setup
 {
     public class StartupAsync

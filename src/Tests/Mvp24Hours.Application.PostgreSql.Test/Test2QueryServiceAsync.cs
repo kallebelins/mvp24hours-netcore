@@ -178,7 +178,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             // act
             var result = await service.GetByIdAsync(1);
             // assert
-            Assert.True(result.GetDataFirstOrDefault() != null);
+            Assert.True(result.GetDataValue() != null);
         }
         [Fact, Priority(13)]
         public async Task GetFilterCustomerGetByIdNavigation()
@@ -189,7 +189,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             // act
             var result = await service.GetByIdAsync(1, paging);
             // assert
-            Assert.True(result.GetDataFirstOrDefault().Contacts.AnyOrNotNull());
+            Assert.True(result.GetDataValue().Contacts.AnyOrNotNull());
         }
         [Fact, Priority(14)]
         public async Task GetFilterCustomerGetBy()

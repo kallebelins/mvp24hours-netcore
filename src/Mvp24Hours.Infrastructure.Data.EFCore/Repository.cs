@@ -338,7 +338,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
 
                 // properties that can not be changed
 
-                if (entity.GetType().InheritsOrImplements(typeof(IEntityLog<>)) || entity.GetType().InheritsOrImplements(typeof(EntityBaseLog<,,>)))
+                if (entity.GetType().InheritsOrImplements(typeof(IEntityLog<>)) || entity.GetType().InheritsOrImplements(typeof(EntityBaseLog<,>)))
                 {
                     TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repository-modify-log");
                     var entityLog = (dynamic)entity;
@@ -380,12 +380,20 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                     return;
                 }
 
-                if (entity.GetType().InheritsOrImplements(typeof(IEntityLog<>)) || entity.GetType().InheritsOrImplements(typeof(EntityBaseLog<,,>)))
+                bool hasUserLog = (entity.GetType().InheritsOrImplements(typeof(IEntityLog<>))
+                    || entity.GetType().InheritsOrImplements(typeof(EntityBaseLog<,>)));
+
+                bool hasUserLogDate = hasUserLog || entity.GetType().InheritsOrImplements(typeof(IEntityDateLog));
+
+                if (hasUserLog || hasUserLogDate)
                 {
                     TelemetryHelper.Execute(TelemetryLevels.Verbose, "efcore-repository-remove-log");
                     var entityLog = (dynamic)entity;
                     entityLog.Removed = TimeZoneHelper.GetTimeZoneNow();
-                    entityLog.RemovedBy = (dynamic)EntityLogBy;
+                    if (hasUserLog)
+                    {
+                        entityLog.RemovedBy = (dynamic)EntityLogBy;
+                    }
                     this.Modify(entity);
                 }
                 else

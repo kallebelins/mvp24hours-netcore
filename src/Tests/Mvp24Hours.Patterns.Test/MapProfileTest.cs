@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
-using Microsoft.Extensions.DependencyInjection;
 using Mvp24Hours.Core.Contract.Mappings;
 using Mvp24Hours.Core.Mappings;
 using Mvp24Hours.Extensions;
-using Mvp24Hours.Helpers;
 using System.Reflection;
 using System.Threading.Tasks;
 using Xunit;

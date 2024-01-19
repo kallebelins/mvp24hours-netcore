@@ -354,7 +354,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
 
                 // properties that can not be changed
 
-                if (entity.GetType().InheritsOrImplements(typeof(IEntityLog<>)) || entity.GetType().InheritsOrImplements(typeof(EntityBaseLog<,,>)))
+                if (entity.GetType().InheritsOrImplements(typeof(IEntityLog<>)) || entity.GetType().InheritsOrImplements(typeof(EntityBaseLog<,>)))
                 {
                     var entityLog = (dynamic)entity;
                     var entityDbLog = (dynamic)entityDb;
@@ -396,7 +396,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
 
                 // properties that can not be changed
 
-                if (entity.GetType().InheritsOrImplements(typeof(IEntityLog<>)) || entity.GetType().InheritsOrImplements(typeof(EntityBaseLog<,,>)))
+                if (entity.GetType().InheritsOrImplements(typeof(IEntityLog<>)) || entity.GetType().InheritsOrImplements(typeof(EntityBaseLog<,>)))
                 {
                     var entityLog = (dynamic)entity;
                     entityLog.Removed = TimeZoneHelper.GetTimeZoneNow();

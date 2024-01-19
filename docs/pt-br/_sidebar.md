@@ -9,6 +9,8 @@
 * [Logging](pt-br/logging.md)
 * [Telemetry](pt-br/telemetry.md)
 * Padrões
+* * [Entidade](pt-br/database/use-entity.md)
+* * [Contexto de Banco](pt-br/database/use-context.md)
 * * [Unidade de Trabalho](pt-br/database/use-unitofwork.md)
 * * [Repositório](pt-br/database/use-repository.md)
 * * [Serviço de Repositório](pt-br/database/use-service.md)

@@ -15,7 +15,7 @@ namespace Mvp24Hours.WebAPI.Configuration
         {
             StatusCodeHandle = (Exception exception) =>
             {
-                return exception != null ? (int)HttpStatusCode.InternalServerError : throw new ArgumentNullException("Invalid status code.");
+                return exception != null ? (int)HttpStatusCode.InternalServerError : throw new ArgumentNullException(nameof(exception), "Invalid status code.");
             };
         }
 

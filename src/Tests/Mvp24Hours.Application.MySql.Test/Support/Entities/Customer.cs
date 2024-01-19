@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Mvp24Hours.Application.MySql.Test.Support.Entities
 {
-    public class Customer : EntityBase<Customer, int>
+    public class Customer : EntityBase<int>
     {
         public Customer()
         {

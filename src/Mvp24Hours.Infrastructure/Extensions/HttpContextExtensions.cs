@@ -5,44 +5,26 @@
 //=====================================================================================
 using Microsoft.AspNetCore.Http;
 
-namespace Mvp24Hours.Helpers
+namespace Mvp24Hours.Infrastructure.Extensions
 {
     /// <summary>
     /// Contains functions to register and obtain context of the application that is running
     /// </summary>
-    public static class HttpContextHelper
+    public static class HttpContextExtensions
     {
-        private static IHttpContextAccessor httpContextAccessor;
-
         /// <summary>
-        /// Defines individual HTTP request context
+        /// Gets IP of the user who originated the current request
         /// </summary>
-        public static void SetContext(IHttpContextAccessor accessor)
+        public static string GetUserIP(this IHttpContextAccessor accessor)
         {
-            httpContextAccessor = accessor;
-            ServiceProviderHelper.SetProvider((state) =>
-            {
-                if (state is IHttpContextAccessor http)
-                    return http.HttpContext?.RequestServices;
-                return null;
-            }, accessor);
-        }
-
-        /// <summary>
-        /// Get individual HTTP request context
-        /// </summary>
-        public static HttpContext GetContext()
-        {
-            return httpContextAccessor?.HttpContext;
+            return accessor?.HttpContext?.GetUserIP();
         }
 
         /// <summary>
         /// Gets IP of the user who originated the current request
         /// </summary>
-        public static string GetUserIP()
+        public static string GetUserIP(this HttpContext context)
         {
-            var context = GetContext();
-
             if (context != null)
             {
                 string ip = context.Connection?.RemoteIpAddress?.ToString() ?? context.Connection?.LocalIpAddress?.ToString() ?? "127.0.0.1";
@@ -65,9 +47,21 @@ namespace Mvp24Hours.Helpers
         /// <summary>
         /// Get web address dynamically from current service
         /// </summary>
-        public static string GetBaseUrl()
+        public static string GetBaseUrl(this IHttpContextAccessor accessor)
         {
-            return $"{GetContext().Request.Scheme}://{GetContext().Request.Host.Value}{GetContext().Request.PathBase.Value}";
+            return accessor?.HttpContext?.GetBaseUrl();
+        }
+
+        /// <summary>
+        /// Get web address dynamically from current service
+        /// </summary>
+        public static string GetBaseUrl(this HttpContext context)
+        {
+            if (context != null)
+            {
+                return $"{context.Request.Scheme}://{context.Request.Host.Value}{context.Request.PathBase.Value}";
+            }
+            return null;
         }
     }
 }

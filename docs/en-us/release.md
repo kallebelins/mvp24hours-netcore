@@ -1,7 +1,12 @@
 # What's new?
 
-## 4.1.171
-* Under construction.
+## 4.1.181
+* Anti-pattern removal;
+* Separation of log entity contexts for contract use only;
+* Update and detail architectural resources in documentation;
+* Correction of dependency injection in the RabbitMQ and Pipeline client;
+* Configuration of isolated consumers for RabbitMQ client;
+* Implementation of tests for database context with log;
 
 ## 3.12.262
 * Refactoring extensions.

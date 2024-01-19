@@ -160,18 +160,11 @@ namespace Mvp24Hours.Extensions
             return false;
         }
 
-        public static T GetDataFirstOrDefault<T>(this IBusinessResult<T> value)
+        public static T GetDataFirstOrDefault<T>(this IBusinessResult<IList<T>> value)
         {
             if (value.HasData())
             {
-                if (value.Data.IsList())
-                {
-                    return (T)(value.Data as IEnumerable<object>).FirstOrDefault();
-                }
-                else
-                {
-                    return value.Data;
-                }
+                return value.Data.FirstOrDefault();
             }
             return default;
         }

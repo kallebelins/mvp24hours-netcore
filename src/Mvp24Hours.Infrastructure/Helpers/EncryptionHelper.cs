@@ -1,18 +1,17 @@
 ﻿using System;
 using System.IO;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace Mvp24Hours.Infrastructure.Helpers
 {
     /// <summary>
     /// 
     /// </summary>
-    public class EncryptionHelper
+    public static class EncryptionHelper
     {
         public static string CreateKeyBase64()
         {
-            return CreateKeyBase64(16);
+            return CreateKeyBase64(32);
         }
 
         public static string CreateKeyBase64(int keySizeInBytes)

@@ -14,7 +14,7 @@ namespace Mvp24Hours.Core.Entities
     /// <summary>
     /// Represents an entity
     /// </summary>
-    public abstract class EntityBase<TObject, TKey> : IEntityBase
+    public abstract class EntityBase<TKey> : IEntityBase
     {
         #region [ Primitive members ]
 

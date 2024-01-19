@@ -101,27 +101,38 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
             foreach (var entry in this.ChangeTracker
                 .Entries()
                 .Where(e =>
-                    (e.Entity.GetType().BaseType.Name == typeof(IEntityLog<>).Name || e.Entity.GetType().BaseType.Name == typeof(EntityBaseLog<,,>).Name)
+                    (e.Entity.GetType().InheritsOrImplements(typeof(IEntityLog<>))
+                        || e.Entity.GetType().InheritsOrImplements(typeof(EntityBaseLog<,>))
+                        || e.Entity.GetType().InheritsOrImplements(typeof(IEntityDateLog)))
                     && (e.State == EntityState.Added || e.State == EntityState.Modified || e.State == EntityState.Deleted)))
             {
+                bool hasUserBy = (entry.Entity.GetType().InheritsOrImplements(typeof(IEntityLog<>))
+                        || entry.Entity.GetType().InheritsOrImplements(typeof(EntityBaseLog<,>)));
+
                 var e = (dynamic)entry.Entity;
                 if (entry.State == EntityState.Added)
                 {
                     e.Created = TimeZoneHelper.GetTimeZoneNow();
-                    e.CreatedBy = (dynamic)EntityLogBy;
-
                     e.Modified = null;
-                    e.ModifiedBy = null;
-
                     e.Removed = null;
-                    e.RemovedBy = null;
+
+                    if (hasUserBy)
+                    {
+                        e.CreatedBy = (dynamic)EntityLogBy;
+                        e.ModifiedBy = null;
+                        e.RemovedBy = null;
+                    }
                 }
                 else if (entry.State == EntityState.Modified)
                 {
                     if (e.Removed == null)
                     {
                         e.Modified = TimeZoneHelper.GetTimeZoneNow();
-                        e.ModifiedBy = (dynamic)EntityLogBy;
+
+                        if (hasUserBy)
+                        {
+                            e.ModifiedBy = (dynamic)EntityLogBy;
+                        }
                     }
                 }
                 else if (entry.State == EntityState.Deleted)

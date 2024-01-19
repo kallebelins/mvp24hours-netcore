@@ -9,7 +9,6 @@ using Mvp24Hours.Application.Pipe.Test.Setup;
 using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Core.Enums.Infrastructure;
 using Mvp24Hours.Extensions;
-using Mvp24Hours.Infrastructure.Pipe;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Xunit;

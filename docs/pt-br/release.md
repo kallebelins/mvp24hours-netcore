@@ -1,7 +1,12 @@
 # O que há de novo?
 
-## 4.1.171
-* Em construção.
+## 4.1.181
+* Remoção de Anti-patterns;
+* Separação de contextos de entidade de log para uso apenas de contratos;
+* Atualização e detalhamento de recuros arquiteturais na documentação;
+* Correção de injeção de dependência no client do RabbitMQ e Pipeline;
+* Configuração de consumers isolados para client do RabbitMQ;
+* Implementação de testes para contexto de banco de dados com log;
 
 ## 3.12.262
 * Refatoração de extensões.

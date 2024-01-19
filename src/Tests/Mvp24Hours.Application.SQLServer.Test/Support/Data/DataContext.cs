@@ -5,6 +5,9 @@
 //=====================================================================================
 using Microsoft.EntityFrameworkCore;
 using Mvp24Hours.Application.SQLServer.Test.Support.Entities;
+using Mvp24Hours.Application.SQLServer.Test.Support.Entities.BasicLogs;
+using Mvp24Hours.Application.SQLServer.Test.Support.Entities.Basics;
+using Mvp24Hours.Application.SQLServer.Test.Support.Entities.Logs;
 using Mvp24Hours.Infrastructure.Data.EFCore;
 
 namespace Mvp24Hours.Application.SQLServer.Test.Support.Data
@@ -25,11 +28,23 @@ namespace Mvp24Hours.Application.SQLServer.Test.Support.Data
 
         #endregion
 
+        #region [ Overrides ]
+        public override bool CanApplyEntityLog => true;
+        #endregion
+
         #region [ Sets ]
 
         public virtual DbSet<Customer> Customer { get; set; }
         public virtual DbSet<Contact> Contact { get; set; }
 
+        public virtual DbSet<CustomerBasic> CustomerBasic { get; set; }
+        public virtual DbSet<ContactBasic> ContactBasic { get; set; }
+
+        public virtual DbSet<CustomerLog> CustomerLog { get; set; }
+        public virtual DbSet<ContactLog> ContactLog { get; set; }
+
+        public virtual DbSet<CustomerBasicLog> CustomerBasicLog { get; set; }
+        public virtual DbSet<ContactBasicLog> ContactBasicLog { get; set; }
         #endregion
     }
 }

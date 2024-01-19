@@ -107,8 +107,8 @@ if (!env.IsProduction()) {
     app.UseMvp24HoursSwagger();
 }
 
-/// essencial
-app.UseMvp24Hours();
+/// correlation-id
+app.UseMvp24HoursCorrelationId();
 ```
 
 ## Resilient HTTP Requests

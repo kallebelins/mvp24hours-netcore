@@ -37,7 +37,7 @@ services.AddSingleton<IValidator<Customer>, CustomerValidator>();
 using System.ComponentModel.DataAnnotations;
 
 // implementing
-public class Customer : EntityBase<Customer, int>, IEntityBase
+public class Customer : EntityBase<int>, IEntityBase
 {
     public Customer()
     {

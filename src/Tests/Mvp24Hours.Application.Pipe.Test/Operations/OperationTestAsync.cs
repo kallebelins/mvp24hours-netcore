@@ -1,8 +1,5 @@
 ﻿using Mvp24Hours.Core.Contract.Infrastructure.Pipe;
 using Mvp24Hours.Infrastructure.Pipe.Operations;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Mvp24Hours.Application.Pipe.Test.Operations

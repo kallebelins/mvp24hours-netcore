@@ -9,6 +9,8 @@
 * [Logging](en-us/logging.md)
 * [Telemetry](en-us/telemetry.md)
 * Patterns
+* * [Entity](en-us/database/use-entity.md)
+* * [Database Context](en-us/database/use-context.md)
 * * [Unit of Work](en-us/database/use-unitofwork.md)
 * * [Repository](en-us/database/use-repository.md)
 * * [Repository Service](en-us/database/use-service.md)

@@ -10,7 +10,7 @@ using System.Text.Json.Serialization;
 
 namespace Mvp24Hours.Application.MySql.Test.Support.Entities
 {
-    public class Contact : EntityBase<Contact, int>
+    public class Contact : EntityBase<int>
     {
         [Required]
         [JsonConverter(typeof(JsonStringEnumConverter))]
