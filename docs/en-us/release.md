@@ -1,5 +1,8 @@
 # What's new?
 
+## 4.1.191
+* Refactoring for asynchronous result mapping;
+
 ## 4.1.181
 * Anti-pattern removal;
 * Separation of log entity contexts for contract use only;

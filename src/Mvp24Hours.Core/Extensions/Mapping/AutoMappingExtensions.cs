@@ -24,8 +24,9 @@ namespace Mvp24Hours.Extensions
             this IMappingExpression<TSource, TDestination> map,
             Expression<Func<TDestination, object>> selector)
         {
-            map.ForMember(selector, config => config.Ignore());
-            return map;
+            if (map == null)
+                throw new ArgumentException(nameof(map));
+            return map.ForMember(selector, config => config.Ignore());
         }
 
         /// <summary>
@@ -36,8 +37,9 @@ namespace Mvp24Hours.Extensions
             Expression<Func<TSource, TProperty>> sourceMember,
             Expression<Func<TDestination, object>> targetMember)
         {
-            map.ForMember(targetMember, opt => opt.MapFrom(sourceMember));
-            return map;
+            if (map == null)
+                throw new ArgumentException(nameof(map));
+            return map.ForMember(targetMember, opt => opt.MapFrom(sourceMember));
         }
 
         /// <summary>
@@ -45,10 +47,13 @@ namespace Mvp24Hours.Extensions
         /// </summary>
         public static IPagingResult<TDestination> MapPagingTo<TSource, TDestination>(this IMapper mapper, IPagingResult<TSource> source)
         {
-            if (source == null || mapper == null)
+            if (source == null)
             {
                 return default;
             }
+
+            if (mapper == null)
+                throw new ArgumentException(nameof(mapper));
 
             if (source.Messages.AnySafe())
             {
@@ -76,10 +81,13 @@ namespace Mvp24Hours.Extensions
         /// </summary>
         public static IBusinessResult<TDestination> MapBusinessTo<TSource, TDestination>(this IMapper mapper, IBusinessResult<TSource> source)
         {
-            if (source == null || mapper == null)
+            if (source == null)
             {
                 return default;
             }
+
+            if (mapper == null)
+                throw new ArgumentException(nameof(mapper));
 
             if (source.Messages.AnySafe())
             {

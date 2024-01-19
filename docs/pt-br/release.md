@@ -1,5 +1,8 @@
 # O que há de novo?
 
+## 4.1.191
+* Refatoração para mapeamento de resultados assíncronos;
+
 ## 4.1.181
 * Remoção de Anti-patterns;
 * Separação de contextos de entidade de log para uso apenas de contratos;

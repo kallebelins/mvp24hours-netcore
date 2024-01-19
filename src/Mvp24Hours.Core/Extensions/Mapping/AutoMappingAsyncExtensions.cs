@@ -20,7 +20,7 @@ namespace Mvp24Hours.Extensions
         /// <summary>
         /// Convert instance to mapped object
         /// </summary>
-        public static async Task<IPagingResult<TDestination>> MapPagingToAsync<TSource, TDestination>(this Task<IPagingResult<TSource>> sourceAsync, IServiceProvider provider)
+        public static async Task<IPagingResult<TDestination>> MapPagingToAsync<TSource, TDestination>(this IMapper mapper, Task<IPagingResult<TSource>> sourceAsync)
         {
             var source = await sourceAsync;
 
@@ -29,8 +29,9 @@ namespace Mvp24Hours.Extensions
                 return default;
             }
 
-            IMapper mapper = provider.GetService<IMapper>()
-                ?? throw new ArgumentException("Profile not registered for AutoMapper.");
+            if (mapper == null)
+                throw new ArgumentException(nameof(mapper));
+
             if (source.Messages.AnySafe())
             {
                 return mapper
@@ -55,7 +56,7 @@ namespace Mvp24Hours.Extensions
         /// <summary>
         /// Convert instance to mapped object
         /// </summary>
-        public static async Task<IBusinessResult<TDestination>> MapBusinessToAsync<TSource, TDestination>(this Task<IBusinessResult<TSource>> sourceAsync, IServiceProvider provider)
+        public static async Task<IBusinessResult<TDestination>> MapBusinessToAsync<TSource, TDestination>(this IMapper mapper, Task<IBusinessResult<TSource>> sourceAsync)
         {
             var source = await sourceAsync;
 
@@ -64,8 +65,9 @@ namespace Mvp24Hours.Extensions
                 return default;
             }
 
-            IMapper mapper = provider.GetService<IMapper>()
-                ?? throw new ArgumentException("Profile not registered for AutoMapper.");
+            if (mapper == null)
+                throw new ArgumentException(nameof(mapper));
+
             if (source.Messages.AnySafe())
             {
                 return mapper
