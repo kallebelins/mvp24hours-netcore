@@ -199,4 +199,32 @@ Install-Package NLog.Targets.ElasticSearch
 </nlog>
 ```
 
+### ElasticSearch APM
+```xml
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- 
+Install-Package Elastic.Apm.NLog
+-->
+<nlog xmlns="http://www.nlog-project.org/schemas/NLog.xsd"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  autoReload="true">
+	<extensions>
+		<add assembly="Elastic.Apm.NLog"/>
+	</extensions>
+	<targets>
+		<target type="file" name="logfile" fileName="myfile.txt">
+			<layout type="jsonlayout">
+				<attribute name="traceid" layout="${ElasticApmTraceId}" />
+				<attribute name="transactionid" layout="${ElasticApmTransactionId}" />
+			</layout>
+		</target>
+	</targets>
+	<rules>
+		<logger name="*" minlevel="Trace" writeTo="logfile" />
+	</rules>
+</nlog>
+```
+O pré-requisito para funcionar corretamente é estar com um Agente Elastic APM configurado. Se o agente não estiver configurado, os espaços reservados do APM estarão vazios. Acesse [APM Agent .NET](https://github.com/elastic/apm-agent-dotnet).
+
+### Outras Configurações
 Veja outras opções em [NLog-Project](https://nlog-project.org/config/?tab=layout-renderers).
