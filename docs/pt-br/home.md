@@ -1,5 +1,5 @@
 # <img  style="vertical-align:middle" width="42" height="42" src="/_media/icon.png" alt="Mvp24Hours" /> Mvp24Hours (v4.1.191)
-Este projeto foi desenvolvido para contribuir com a construção rápida de serviços. Usei a referência de soluções para construção de microserviços.
+Este projeto foi desenvolvido para contribuir com a construção rápida de serviços com [.NET](https://learn.microsoft.com/pt-br/training/dotnet/). Usei a referência de soluções de mercado para construção de microserviços.
 
 ## Características
 * Banco de dados relacional (SQL Server, PostgreSql e MySql)
