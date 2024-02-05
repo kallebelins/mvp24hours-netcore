@@ -45,4 +45,7 @@ Seja um patrocinador escolhendo este projeto para acelerar seus produtos.
 ## O que há de novo?
 Veja as novidades e atualizações desse projeto. [Novidades](en-us/release)
 
+## Você migrou seu projeto?
+Acompanhe as mudanças para manter seu código funcionando corretamente. [Migração](en-us/migration)
+
 

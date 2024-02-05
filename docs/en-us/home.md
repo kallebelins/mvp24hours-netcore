@@ -44,3 +44,6 @@ Be a sponsor by choosing this project to accelerate your products.
 
 ## What's new?
 See the news and updates on this project. [News](en-us/release)
+
+## Have you migrated your project?
+Keep track of changes to keep your code working correctly. [Migration](en-us/migration)

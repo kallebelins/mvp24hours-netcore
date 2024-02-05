@@ -18,3 +18,4 @@
 * * [Specification](en-us/specification.md)
 * [ASP.NET Web API](en-us/webapi.md)
 * [Release](en-us/release.md)
+* [Migration](en-us/migration.md)

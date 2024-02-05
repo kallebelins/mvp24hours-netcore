@@ -1,4 +1,4 @@
-* [Início](/)
+* [Início](pt-br/home)
 * [Começando](pt-br/getting-started.md)
 * [Banco de Dados Relacional](pt-br/database/relational.md)
 * [Banco de Dados NoSQL](pt-br/database/nosql.md)
@@ -18,3 +18,4 @@
 * * [Especificação](pt-br/specification.md)
 * [ASP.NET Web API](pt-br/webapi.md)
 * [Release](pt-br/release.md)
+* [Migração](pt-br/migration.md)
