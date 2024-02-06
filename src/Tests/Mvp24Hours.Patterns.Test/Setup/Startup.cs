@@ -9,9 +9,9 @@ using System;
 
 namespace Mvp24Hours.Patterns.Test.Setup
 {
-    public class Startup
+    public static class Startup
     {
-        public IServiceProvider InitializeHttp()
+        public static IServiceProvider InitializeHttp()
         {
             var services = new ServiceCollection()
                             .AddSingleton(ConfigurationHelper.AppSettings);

@@ -1,4 +1,15 @@
 # Migração
+## Versão v4.2.101
+### IBsonClassMap
+Remover tipagem genérica de IBsonClassMap<T>:
+```csharp
+// antes
+public class MyEntityConfiguration : IBsonClassMap<MyEntity>
+
+// depois
+public class MyEntityConfiguration : IBsonClassMap
+```
+
 ## Versão v4.1.191
 ### EntityBase
 ```csharp

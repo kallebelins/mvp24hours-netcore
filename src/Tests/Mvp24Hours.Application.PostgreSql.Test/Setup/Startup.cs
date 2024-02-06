@@ -39,7 +39,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test.Setup
             return serviceProvider;
         }
 
-        public void Cleanup(IServiceProvider serviceProvider)
+        public static void Cleanup(IServiceProvider serviceProvider)
         {
             // ensure database drop
             var db = serviceProvider?.GetService<DataContext>();
@@ -50,7 +50,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test.Setup
             }
         }
 
-        private IServiceProvider ConfigureServices()
+        private static IServiceProvider ConfigureServices()
         {
 #if InMemory
             var services = new ServiceCollection();

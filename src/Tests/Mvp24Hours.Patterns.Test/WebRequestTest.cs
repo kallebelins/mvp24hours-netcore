@@ -86,7 +86,7 @@ namespace Mvp24Hours.Patterns.Test
             };
             var result = await WebRequestHelper.PatchAsync("https://jsonplaceholder.typicode.com/posts/1", dto.ToSerialize());
             // assert
-            Assert.True(result != null);
+            Assert.NotNull(result);
         }
     }
 }

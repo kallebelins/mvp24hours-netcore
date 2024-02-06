@@ -47,7 +47,7 @@ namespace Mvp24Hours.Extensions
         /// </summary>
         public static IPipelineMessage ToMessageWithToken<T>(this T value, string keyContent, string tokenDefault)
         {
-            IPipelineMessage message = new PipelineMessage(tokenDefault);
+            var message = new PipelineMessage(tokenDefault);
             if (value != null)
             {
                 message.AddContent(keyContent, value);
@@ -60,7 +60,7 @@ namespace Mvp24Hours.Extensions
         /// </summary>
         public static IPipelineMessage ToMessageWithToken<T>(this T value, string tokenDefault)
         {
-            IPipelineMessage message = new PipelineMessage(tokenDefault);
+            var message = new PipelineMessage(tokenDefault);
             if (value != null)
             {
                 message.AddContent(value);
@@ -73,7 +73,7 @@ namespace Mvp24Hours.Extensions
         /// </summary>
         public static IPipelineMessage ToMessageWithToken<T>(IBusinessResult<T> bo, string tokenDefault)
         {
-            IPipelineMessage message = new PipelineMessage(bo?.Token ?? tokenDefault);
+            var message = new PipelineMessage(bo?.Token ?? tokenDefault);
             if (bo != null && bo.Data != null)
             {
                 if (bo.Data.IsList())
@@ -104,7 +104,7 @@ namespace Mvp24Hours.Extensions
         /// </summary>
         public static IPipelineMessage ToMessageCloneWithToken<T>(IBusinessResult<T> bo, string tokenDefault)
         {
-            IPipelineMessage message = new PipelineMessage(bo?.Token ?? tokenDefault);
+            var message = new PipelineMessage(bo?.Token ?? tokenDefault);
             if (bo != null && bo.Data != null)
             {
                 if (bo.Data.IsList())

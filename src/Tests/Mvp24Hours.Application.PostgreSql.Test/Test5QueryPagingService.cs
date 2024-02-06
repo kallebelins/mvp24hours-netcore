@@ -19,7 +19,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
     /// 
     /// </summary>
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Name)]
-    public class Test5QueryPagingService : IDisposable
+    public class Test5QueryPagingService
     {
         private readonly Startup startup;
         private readonly IServiceProvider serviceProvider;
@@ -32,14 +32,6 @@ namespace Mvp24Hours.Application.PostgreSql.Test
         {
             startup = new Startup();
             serviceProvider = startup.Initialize();
-        }
-
-        /// <summary>
-        /// Cleanup
-        /// </summary>
-        public void Dispose()
-        {
-            startup.Cleanup(serviceProvider);
         }
         #endregion
 

@@ -333,7 +333,8 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                     return;
                 }
 
-                T entityDb = dbContext.Set<T>().Find(keyValues: new[] { entity.EntityKey })
+                T entityDb = dbContext.Set<T>()
+                                      .Find(keyValues: new[] { entity.EntityKey })
                     ?? throw new InvalidOperationException("Key value not found.");
 
                 // properties that can not be changed

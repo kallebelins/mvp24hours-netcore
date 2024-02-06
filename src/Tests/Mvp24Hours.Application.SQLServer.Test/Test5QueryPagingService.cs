@@ -19,9 +19,8 @@ namespace Mvp24Hours.Application.SQLServer.Test
     /// 
     /// </summary>
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Name)]
-    public class Test5QueryPagingService : IDisposable
+    public class Test5QueryPagingService
     {
-        private readonly Startup startup;
         private readonly IServiceProvider serviceProvider;
 
         #region [ Ctor ]
@@ -30,16 +29,7 @@ namespace Mvp24Hours.Application.SQLServer.Test
         /// </summary>
         public Test5QueryPagingService()
         {
-            startup = new Startup();
-            serviceProvider = startup.Initialize();
-        }
-
-        /// <summary>
-        /// Cleanup
-        /// </summary>
-        public void Dispose()
-        {
-            startup.Cleanup(serviceProvider);
+            serviceProvider = Startup.Initialize();
         }
         #endregion
 
@@ -52,7 +42,7 @@ namespace Mvp24Hours.Application.SQLServer.Test
             // act
             var pagingResult = service.ListWithPagination();
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         [Fact, Priority(5)]
         public void GetFilterCustomerListPaging()
@@ -63,7 +53,7 @@ namespace Mvp24Hours.Application.SQLServer.Test
             // act
             var pagingResult = service.ListWithPagination(paging);
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         [Fact, Priority(5)]
         public void GetFilterCustomerListNavigation()
@@ -74,7 +64,7 @@ namespace Mvp24Hours.Application.SQLServer.Test
             // act
             var pagingResult = service.ListWithPagination(paging);
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         [Fact, Priority(6)]
         public void GetFilterCustomerListOrderAsc()
@@ -85,7 +75,7 @@ namespace Mvp24Hours.Application.SQLServer.Test
             // act
             var pagingResult = service.ListWithPagination(paging);
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         [Fact, Priority(6)]
         public void GetFilterCustomerListOrderDesc()
@@ -96,7 +86,7 @@ namespace Mvp24Hours.Application.SQLServer.Test
             // act
             var pagingResult = service.ListWithPagination(paging);
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         [Fact, Priority(7)]
         public void GetFilterCustomerListOrderAscExpression()
@@ -108,7 +98,7 @@ namespace Mvp24Hours.Application.SQLServer.Test
             // act
             var pagingResult = service.ListWithPagination(paging);
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         [Fact, Priority(8)]
         public void GetFilterCustomerListOrderDescExpression()
@@ -120,7 +110,7 @@ namespace Mvp24Hours.Application.SQLServer.Test
             // act
             var pagingResult = service.ListWithPagination(paging);
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         [Fact, Priority(9)]
         public void GetFilterCustomerListPagingExpression()
@@ -131,7 +121,7 @@ namespace Mvp24Hours.Application.SQLServer.Test
             // act
             var pagingResult = service.ListWithPagination(paging);
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         [Fact, Priority(9)]
         public void GetFilterCustomerListNavigationExpression()
@@ -143,7 +133,7 @@ namespace Mvp24Hours.Application.SQLServer.Test
             // act
             var pagingResult = service.ListWithPagination(paging);
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         #endregion
 
@@ -156,7 +146,7 @@ namespace Mvp24Hours.Application.SQLServer.Test
             // act
             var pagingResult = service.GetByWithPagination(x => x.Name.Contains("Test"));
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         [Fact, Priority(5)]
         public void GetFilterCustomerGetByPaging()
@@ -167,7 +157,7 @@ namespace Mvp24Hours.Application.SQLServer.Test
             // act
             var pagingResult = service.GetByWithPagination(x => x.Name.Contains("Test"), paging);
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         [Fact, Priority(5)]
         public void GetFilterCustomerGetByNavigation()
@@ -178,7 +168,7 @@ namespace Mvp24Hours.Application.SQLServer.Test
             // act
             var pagingResult = service.GetByWithPagination(x => x.Name.Contains("Test"), paging);
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         [Fact, Priority(6)]
         public void GetFilterCustomerGetByOrderAsc()
@@ -189,7 +179,7 @@ namespace Mvp24Hours.Application.SQLServer.Test
             // act
             var pagingResult = service.GetByWithPagination(x => x.Name.Contains("Test"), paging);
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         [Fact, Priority(6)]
         public void GetFilterCustomerGetByOrderDesc()
@@ -200,7 +190,7 @@ namespace Mvp24Hours.Application.SQLServer.Test
             // act
             var pagingResult = service.GetByWithPagination(x => x.Name.Contains("Test"), paging);
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         [Fact, Priority(7)]
         public void GetFilterCustomerGetByOrderAscExpression()
@@ -212,7 +202,7 @@ namespace Mvp24Hours.Application.SQLServer.Test
             // act
             var pagingResult = service.GetByWithPagination(x => x.Name.Contains("Test"), paging);
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         [Fact, Priority(8)]
         public void GetFilterCustomerGetByOrderDescExpression()
@@ -224,7 +214,7 @@ namespace Mvp24Hours.Application.SQLServer.Test
             // act
             var pagingResult = service.GetByWithPagination(x => x.Name.Contains("Test"), paging);
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         [Fact, Priority(9)]
         public void GetFilterCustomerGetByPagingExpression()
@@ -235,7 +225,7 @@ namespace Mvp24Hours.Application.SQLServer.Test
             // act
             var pagingResult = service.GetByWithPagination(x => x.Name.Contains("Test"), paging);
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         [Fact, Priority(9)]
         public void GetFilterCustomerGetByNavigationExpression()
@@ -247,7 +237,7 @@ namespace Mvp24Hours.Application.SQLServer.Test
             // act
             var pagingResult = service.GetByWithPagination(x => x.Name.Contains("Test"), paging);
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         #endregion
     }

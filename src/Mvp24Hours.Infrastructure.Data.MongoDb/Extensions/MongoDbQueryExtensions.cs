@@ -14,27 +14,27 @@ namespace Mvp24Hours.Extensions
     {
         public static Task<bool> AnyAsync<TSource>(this IQueryable<TSource> source, CancellationToken cancellationToken = default)
         {
-            if (cancellationToken != null && cancellationToken.IsCancellationRequested)
-                return default;
-            return source.Any().TaskResult();
+            return cancellationToken.IsCancellationRequested 
+                ? default 
+                : source.Any().TaskResult();
         }
         public static Task<int> CountAsync<TSource>(this IQueryable<TSource> source, CancellationToken cancellationToken = default)
         {
-            if (cancellationToken != null && cancellationToken.IsCancellationRequested)
-                return default;
-            return source.Count().TaskResult();
+            return cancellationToken.IsCancellationRequested 
+                ? default 
+                : source.Count().TaskResult();
         }
         public static Task<TSource> SingleOrDefaultAsync<TSource>(this IQueryable<TSource> source, CancellationToken cancellationToken = default)
         {
-            if (cancellationToken != null && cancellationToken.IsCancellationRequested)
-                return default;
-            return source.SingleOrDefault().TaskResult();
+            return cancellationToken.IsCancellationRequested 
+                ? default 
+                : source.SingleOrDefault().TaskResult();
         }
         public static Task<IList<TSource>> ToListAsync<TSource>(this IQueryable<TSource> source, CancellationToken cancellationToken = default)
         {
-            if (cancellationToken != null && cancellationToken.IsCancellationRequested)
-                return default;
-            return ((IList<TSource>)source.ToList()).TaskResult();
+            return cancellationToken.IsCancellationRequested
+                ? default
+                : ((IList<TSource>)source.ToList()).TaskResult();
         }
 
     }

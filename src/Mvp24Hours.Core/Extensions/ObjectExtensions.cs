@@ -28,7 +28,6 @@ namespace Mvp24Hours.Extensions
             where U : class
         {
             ArgumentNullException.ThrowIfNull(source);
-
             ArgumentNullException.ThrowIfNull(destination);
 
             // Getting the Types of the objects

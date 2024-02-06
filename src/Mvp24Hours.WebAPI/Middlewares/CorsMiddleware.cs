@@ -30,7 +30,7 @@ namespace Mvp24Hours.WebAPI.Middlewares
         {
             if (options.Credentials.HasValue())
             {
-                context.Response.Headers.Add("Access-Control-Allow-Credentials", options.Credentials);
+                context.Response.Headers.Append("Access-Control-Allow-Credentials", options.Credentials);
             }
 
             string originCors, headersCors, methodsCors;
@@ -50,17 +50,17 @@ namespace Mvp24Hours.WebAPI.Middlewares
 
             if (originCors.HasValue())
             {
-                context.Response.Headers.Add("Access-Control-Allow-Origin", originCors);
+                context.Response.Headers.Append("Access-Control-Allow-Origin", originCors);
             }
             // Added "Accept-Encoding" to this list
             if (headersCors.HasValue())
             {
-                context.Response.Headers.Add("Access-Control-Allow-Headers", headersCors);
+                context.Response.Headers.Append("Access-Control-Allow-Headers", headersCors);
             }
 
             if (methodsCors.HasValue())
             {
-                context.Response.Headers.Add("Access-Control-Allow-Methods", methodsCors);
+                context.Response.Headers.Append("Access-Control-Allow-Methods", methodsCors);
             }
 
             // New Code Starts here

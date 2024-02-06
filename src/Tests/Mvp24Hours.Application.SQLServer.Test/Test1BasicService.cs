@@ -20,9 +20,8 @@ namespace Mvp24Hours.Application.SQLServer.Test
     /// 
     /// </summary>
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Name)]
-    public class Test1BasicService : IDisposable
+    public class Test1BasicService 
     {
-        private readonly Startup startup;
         private readonly IServiceProvider serviceProvider;
 
         #region [ Ctor ]
@@ -31,16 +30,7 @@ namespace Mvp24Hours.Application.SQLServer.Test
         /// </summary>
         public Test1BasicService()
         {
-            startup = new Startup();
-            serviceProvider = startup.InitializeBasic();
-        }
-
-        /// <summary>
-        /// Cleanup
-        /// </summary>
-        public void Dispose()
-        {
-            startup.Cleanup(serviceProvider);
+            serviceProvider = Startup.InitializeBasic();
         }
         #endregion
 
@@ -177,7 +167,7 @@ namespace Mvp24Hours.Application.SQLServer.Test
             // act
             var result = service.GetById(1);
             // assert
-            Assert.True(result.GetDataValue() != null);
+            Assert.NotNull(result.GetDataValue());
         }
         [Fact, Priority(13)]
         public void GetFilterCustomerGetByIdNavigation()

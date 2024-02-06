@@ -67,7 +67,7 @@ namespace Mvp24Hours.Patterns.Test
         }
 
         [Fact]
-        public async Task DefaultTest()
+        public void DefaultTest()
         {
             var local = Assembly.GetExecutingAssembly();
             var mapperConfig = new MapperConfiguration(mc =>
@@ -82,7 +82,7 @@ namespace Mvp24Hours.Patterns.Test
         }
 
         [Fact]
-        public async Task IgnoreTest()
+        public void IgnoreTest()
         {
             var local = Assembly.GetExecutingAssembly();
             var mapperConfig = new MapperConfiguration(mc =>
@@ -97,7 +97,7 @@ namespace Mvp24Hours.Patterns.Test
         }
 
         [Fact]
-        public async Task PropertyTest()
+        public void PropertyTest()
         {
             var local = Assembly.GetExecutingAssembly();
             var mapperConfig = new MapperConfiguration(mc =>
@@ -112,7 +112,7 @@ namespace Mvp24Hours.Patterns.Test
         }
 
         [Fact]
-        public async Task MergeTest()
+        public void MergeTest()
         {
             var local = Assembly.GetExecutingAssembly();
             var mapperConfig = new MapperConfiguration(mc =>

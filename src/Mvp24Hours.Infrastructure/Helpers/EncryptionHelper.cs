@@ -16,7 +16,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
 
         public static string CreateKeyBase64(int keySizeInBytes)
         {
-            using var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
+            using var rngCryptoServiceProvider = RandomNumberGenerator.Create();
             byte[] key = new byte[keySizeInBytes];
             rngCryptoServiceProvider.GetBytes(key);
             return Convert.ToBase64String(key);
@@ -38,14 +38,12 @@ namespace Mvp24Hours.Infrastructure.Helpers
 
             //Encryption will be done in a memory stream through a CryptoStream object
             using MemoryStream ms = new();
+            using CryptoStream cs = new(ms, encryptor, CryptoStreamMode.Write);
+            using (StreamWriter sw = new(cs))
             {
-                using CryptoStream cs = new(ms, encryptor, CryptoStreamMode.Write);
-                using (StreamWriter sw = new(cs))
-                {
-                    sw.Write(plainText);
-                }
-                encryptedData = ms.ToArray();
+                sw.Write(plainText);
             }
+            encryptedData = ms.ToArray();
 
             return Convert.ToBase64String(encryptedData);
         }
@@ -62,7 +60,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
             byte[] cipher = Convert.FromBase64String(cipherText);
 
             //Decryption will be done in a memory stream through a CryptoStream object
-            using MemoryStream ms = new MemoryStream(cipher);
+            using MemoryStream ms = new(cipher);
             using CryptoStream cs = new(ms, decryptor, CryptoStreamMode.Read);
             using StreamReader sr = new(cs);
             return sr.ReadToEnd();

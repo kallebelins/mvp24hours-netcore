@@ -19,9 +19,8 @@ namespace Mvp24Hours.Application.MySql.Test
     /// 
     /// </summary>
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Name)]
-    public class Test5QueryPagingService : IDisposable
+    public class Test5QueryPagingService 
     {
-        private readonly Startup startup;
         private readonly IServiceProvider serviceProvider;
 
         #region [ Ctor ]
@@ -30,16 +29,7 @@ namespace Mvp24Hours.Application.MySql.Test
         /// </summary>
         public Test5QueryPagingService()
         {
-            startup = new Startup();
-            serviceProvider = startup.Initialize();
-        }
-
-        /// <summary>
-        /// Cleanup
-        /// </summary>
-        public void Dispose()
-        {
-            startup.Cleanup(serviceProvider);
+            serviceProvider = Startup.Initialize();
         }
         #endregion
 
@@ -63,7 +53,7 @@ namespace Mvp24Hours.Application.MySql.Test
             // act
             var pagingResult = service.ListWithPagination(paging);
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         [Fact, Priority(5)]
         public void GetFilterCustomerListNavigation()

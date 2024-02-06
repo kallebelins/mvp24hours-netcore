@@ -52,7 +52,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             // assert
             Assert.True(customer.Id > 0);
             // dispose
-            startup.Cleanup(serviceProvider);
+            Startup.Cleanup(serviceProvider);
         }
         [Fact, Priority(2)]
         public void CreateManyCustomers()
@@ -72,9 +72,9 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             }
             service.Add(customers);
             // assert
-            Assert.True(!customers.Any(x => x.Id == 0));
+            Assert.DoesNotContain(customers, x => x.Id == 0);
             // dispose
-            startup.Cleanup(serviceProvider);
+            Startup.Cleanup(serviceProvider);
         }
         [Fact, Priority(3)]
         public void UpdateCustomer()
@@ -88,9 +88,9 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             service.Modify(customer);
             customer = service.GetById(1).GetDataValue();
             // assert
-            Assert.True(customer?.Name == "Test Updated");
+            Assert.Equal("Test Updated", customer?.Name);
             // dispose
-            startup.Cleanup(serviceProvider);
+            Startup.Cleanup(serviceProvider);
         }
         [Fact, Priority(4)]
         public void UpdateManyCustomers()
@@ -109,7 +109,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             // assert
             Assert.True(result.GetDataValue() > 0);
             // dispose
-            startup.Cleanup(serviceProvider);
+            Startup.Cleanup(serviceProvider);
         }
         [Fact, Priority(5)]
         public void DeleteCustomer()
@@ -122,9 +122,9 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             service.RemoveById(customer.Id);
             var result = service.GetById(customer.Id);
             // assert
-            Assert.True(result.GetDataValue() == null);
+            Assert.Null(result.GetDataValue());
             // dispose
-            startup.Cleanup(serviceProvider);
+            Startup.Cleanup(serviceProvider);
         }
         [Fact, Priority(6)]
         public void DeleteManyCustomers()
@@ -137,9 +137,9 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             service.Remove(customers);
             var result = service.ListCount();
             // assert
-            Assert.True(result.GetDataValue() == 0);
+            Assert.Equal(0, result.GetDataValue());
             // dispose
-            startup.Cleanup(serviceProvider);
+            Startup.Cleanup(serviceProvider);
         }
         #endregion
     }

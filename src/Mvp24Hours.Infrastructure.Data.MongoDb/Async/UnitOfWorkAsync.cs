@@ -75,7 +75,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
             return repositories[typeof(T)] as IRepositoryAsync<T>;
         }
 
-        [Obsolete("MongoDb does not support IDbConnection. Use the database (IMongoDatabase) from context.")]
+        [Obsolete("MongoDb does not support IDbConnection. Use the database (IMongoDatabase) from context.", true)]
         public IDbConnection GetConnection()
         {
             throw new NotSupportedException("MongoDb does not support IDbConnection. Use the database (IMongoDatabase) from context.");

@@ -77,7 +77,7 @@ namespace Mvp24Hours.Patterns.Test
                                 x.TraceMiddleware = false;
                                 x.StatusCodeHandle = (Exception exception) =>
                                 {
-                                    return exception is ArgumentNullException ? (int)HttpStatusCode.BadRequest : (int)HttpStatusCode.InternalServerError;
+                                    return exception is NotImplementedException ? (int)HttpStatusCode.BadRequest : (int)HttpStatusCode.InternalServerError;
                                 };
                             });
                         })
@@ -87,7 +87,7 @@ namespace Mvp24Hours.Patterns.Test
                             app.UseMvp24HoursExceptionHandling();
                             app.UseEndpoints(endpoints =>
                             {
-                                endpoints.MapGet("/", (_) => { throw new ArgumentNullException(); });
+                                endpoints.MapGet("/", requestDelegate: (_) => { throw new NotImplementedException(); });
                             });
                         });
                 })

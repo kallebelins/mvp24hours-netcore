@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.Serialization;
 
 namespace Mvp24Hours.Core.Exceptions
 {
-    [Serializable]
     public class HttpStatusCodeException : HttpRequestException
     {
         public HttpStatusCodeException(HttpStatusCode statusCode, HttpMethod method = null, Uri requestUri = null)
@@ -21,7 +21,7 @@ namespace Mvp24Hours.Core.Exceptions
             ResponseBody = responseBody;
         }
 
-        public HttpStatusCode StatusCode { get; private set; }
+        new public HttpStatusCode StatusCode { get; private set; }
         public HttpMethod Method { get; private set; }
         public Uri RequestUri { get; private set; }
         public string ResponseBody { get; set; }

@@ -23,11 +23,11 @@ using Mvp24Hours.Helpers;
 
 namespace Mvp24Hours.Application.SQLServer.Test.Setup
 {
-    public class Startup
+    public static class Startup
     {
-        public IServiceProvider Initialize(bool canLoadData = true)
+        public static IServiceProvider Initialize(bool canLoadData = true)
         {
-            var serviceProvider = ConfigureServices();
+            var serviceProvider = ConfigureServices;
 
             // ensure database
             var db = serviceProvider.GetService<DataContext>();
@@ -40,9 +40,10 @@ namespace Mvp24Hours.Application.SQLServer.Test.Setup
             }
             return serviceProvider;
         }
-        public IServiceProvider InitializeBasic(bool canLoadData = true)
+        
+        public static IServiceProvider InitializeBasic(bool canLoadData = true)
         {
-            var serviceProvider = ConfigureServices();
+            var serviceProvider = ConfigureServices;
 
             // ensure database
             var db = serviceProvider.GetService<DataContext>();
@@ -56,9 +57,9 @@ namespace Mvp24Hours.Application.SQLServer.Test.Setup
             return serviceProvider;
         }
 
-        public IServiceProvider InitializeLog(bool canLoadData = true)
+        public static IServiceProvider InitializeLog(bool canLoadData = true)
         {
-            var serviceProvider = ConfigureServices();
+            var serviceProvider = ConfigureServices;
 
             // ensure database
             var db = serviceProvider.GetService<DataContext>();
@@ -72,9 +73,9 @@ namespace Mvp24Hours.Application.SQLServer.Test.Setup
             return serviceProvider;
         }
 
-        public IServiceProvider InitializeBasicLog(bool canLoadData = true)
+        public static IServiceProvider InitializeBasicLog(bool canLoadData = true)
         {
-            var serviceProvider = ConfigureServices();
+            var serviceProvider = ConfigureServices;
 
             // ensure database
             var db = serviceProvider.GetService<DataContext>();
@@ -88,8 +89,7 @@ namespace Mvp24Hours.Application.SQLServer.Test.Setup
             return serviceProvider;
         }
 
-
-        public void Cleanup(IServiceProvider serviceProvider)
+        public static void Cleanup(IServiceProvider serviceProvider)
         {
             // ensure database drop
             var db = serviceProvider?.GetService<DataContext>();
@@ -100,13 +100,15 @@ namespace Mvp24Hours.Application.SQLServer.Test.Setup
             }
         }
 
-        private IServiceProvider ConfigureServices()
+        private static IServiceProvider ConfigureServices
         {
+            get
+            {
 #if InMemory
-            var services = new ServiceCollection();
-            services.AddDbContext<DataContext>(options =>
-                options
-                    .UseInMemoryDatabase(StringHelper.GenerateKey(10)));
+                var services = new ServiceCollection();
+                services.AddDbContext<DataContext>(options =>
+                    options
+                        .UseInMemoryDatabase(StringHelper.GenerateKey(10)));
 #else
             var services = new ServiceCollection()
                 .AddSingleton(Helpers.ConfigurationHelper.AppSettings);
@@ -116,25 +118,26 @@ namespace Mvp24Hours.Application.SQLServer.Test.Setup
                     .UseSqlServer(Helpers.ConfigurationHelper.AppSettings.GetConnectionString("DataContext")
                         .Format(StringHelper.GenerateKey(10))));
 #endif
-            services.AddMvp24HoursDbContext<DataContext>();
-            services.AddMvp24HoursRepository(options: options =>
-            {
-                options.MaxQtyByQueryPage = 100;
-                options.TransactionIsolationLevel = System.Transactions.IsolationLevel.ReadCommitted;
-            });
+                services.AddMvp24HoursDbContext<DataContext>();
+                services.AddMvp24HoursRepository(options: options =>
+                {
+                    options.MaxQtyByQueryPage = 100;
+                    options.TransactionIsolationLevel = System.Transactions.IsolationLevel.ReadCommitted;
+                });
 
-            // register my services
-            services.AddScoped<CustomerService, CustomerService>();
-            services.AddScoped<ContactService, ContactService>();
-            services.AddScoped<CustomerBasicService, CustomerBasicService>();
-            services.AddScoped<CustomerLogService, CustomerLogService>();
-            services.AddScoped<CustomerBasicLogService, CustomerBasicLogService>();
-            services.AddScoped<CustomerPagingService, CustomerPagingService>();
+                // register my services
+                services.AddScoped<CustomerService, CustomerService>();
+                services.AddScoped<ContactService, ContactService>();
+                services.AddScoped<CustomerBasicService, CustomerBasicService>();
+                services.AddScoped<CustomerLogService, CustomerLogService>();
+                services.AddScoped<CustomerBasicLogService, CustomerBasicLogService>();
+                services.AddScoped<CustomerPagingService, CustomerPagingService>();
 
-            return services.BuildServiceProvider();
+                return services.BuildServiceProvider();
+            }
         }
 
-        private void LoadData(IServiceProvider serviceProvider)
+        private static void LoadData(IServiceProvider serviceProvider)
         {
             var service = serviceProvider.GetService<CustomerService>();
             List<Customer> customers = new();
@@ -162,7 +165,7 @@ namespace Mvp24Hours.Application.SQLServer.Test.Setup
             service.Add(customers);
         }
 
-        private void LoadDataBasic(IServiceProvider serviceProvider)
+        private static void LoadDataBasic(IServiceProvider serviceProvider)
         {
             var service = serviceProvider.GetService<CustomerBasicService>();
             List<CustomerBasic> customers = new();
@@ -190,7 +193,7 @@ namespace Mvp24Hours.Application.SQLServer.Test.Setup
             service.Add(customers);
         }
 
-        private void LoadDataLog(IServiceProvider serviceProvider)
+        private static void LoadDataLog(IServiceProvider serviceProvider)
         {
             var service = serviceProvider.GetService<CustomerLogService>();
             List<CustomerLog> customers = new();
@@ -218,7 +221,7 @@ namespace Mvp24Hours.Application.SQLServer.Test.Setup
             service.Add(customers);
         }
 
-        private void LoadDataBasicLog(IServiceProvider serviceProvider)
+        private static void LoadDataBasicLog(IServiceProvider serviceProvider)
         {
             var service = serviceProvider.GetService<CustomerBasicLogService>();
             List<CustomerBasicLog> customers = new();

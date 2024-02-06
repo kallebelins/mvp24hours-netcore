@@ -41,7 +41,7 @@ namespace Mvp24Hours.WebAPI.Middlewares
                 // apply the correlation ID to the response header for client side tracking
                 context.Response.OnStarting(() =>
                 {
-                    context.Response.Headers.Add(_options.Header, new[] { context.TraceIdentifier });
+                    context.Response.Headers.Append(_options.Header, new[] { context.TraceIdentifier });
                     return Task.CompletedTask;
                 });
             }

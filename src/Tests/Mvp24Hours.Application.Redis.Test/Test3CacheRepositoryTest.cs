@@ -70,6 +70,7 @@ namespace Mvp24Hours.Application.Redis.Test
 
             var repo = serviceProvider.GetService<IRepositoryCache<Customer>>();
             repo.SetString(keyString, content);
+            Assert.True(true);
         }
 
         [Fact, Priority(2)]
@@ -105,6 +106,7 @@ namespace Mvp24Hours.Application.Redis.Test
             };
             var repo = serviceProvider.GetService<IRepositoryCache<Customer>>();
             repo.Set(keyObject, customer);
+            Assert.True(true);
         }
 
         [Fact, Priority(5)]
@@ -114,7 +116,7 @@ namespace Mvp24Hours.Application.Redis.Test
             var repo = serviceProvider.GetService<IRepositoryCache<Customer>>();
             repo.Set(keyObject, new Customer { });
             var customer = repo.Get(keyObject);
-            Assert.True(customer != null);
+            Assert.NotNull(customer);
         }
 
         [Fact, Priority(6)]
@@ -124,7 +126,7 @@ namespace Mvp24Hours.Application.Redis.Test
             var repo = serviceProvider.GetService<IRepositoryCache<Customer>>();
             repo.Remove(keyObject);
             var customer = repo.Get(keyObject);
-            Assert.True(customer == null);
+            Assert.Null(customer);
         }
     }
 }

@@ -601,7 +601,7 @@ namespace Mvp24Hours.Application.Pipe.Test
             var result = pipeline.GetMessage().GetContent<int>("key-test");
 
             // assert
-            Assert.True(result == 1);
+            Assert.Equal(1, result);
         }
     }
 }

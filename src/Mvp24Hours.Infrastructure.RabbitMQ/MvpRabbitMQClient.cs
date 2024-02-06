@@ -210,9 +210,9 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
             string queueKeyName = queueName ?? Options.QueueName ?? string.Empty;
             IModel channel = null;
 
-            if (Channels.ContainsKey(queueKeyName))
+            if (Channels.TryGetValue(queueKeyName, out IModel value))
             {
-                channel = Channels[queueKeyName];
+                channel = value;
             }
 
             if (channel == null || channel.IsClosed)
@@ -245,7 +245,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
             return channel;
         }
 
-        private void ExchangeDeclare(IModel channelCtx, RabbitMQOptions optionsCtx)
+        private static void ExchangeDeclare(IModel channelCtx, RabbitMQOptions optionsCtx)
         {
             if (channelCtx == null || optionsCtx == null) return;
 
@@ -259,7 +259,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
             );
         }
 
-        private void QueueDeclare(IModel channelCtx, RabbitMQOptions optionsCtx, string queueName = null)
+        private static void QueueDeclare(IModel channelCtx, RabbitMQOptions optionsCtx, string queueName = null)
         {
             if (channelCtx == null || optionsCtx == null) return;
 
@@ -412,32 +412,32 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
             }
         }
 
-        private int GetRedeliveredCount(IBasicProperties properties)
+        private static int GetRedeliveredCount(IBasicProperties properties)
         {
             int result = (int?)properties.Headers?["x-redelivered-count"] ?? 0;
             return result + 1;
         }
 
-        private void SetRedeliveredCount(IBasicProperties properties, int count)
+        private static void SetRedeliveredCount(IBasicProperties properties, int count)
         {
             TelemetryHelper.Execute(TelemetryLevels.Verbose, "rabbitmq-consumer-received-retryaccount");
             properties.Headers ??= new Dictionary<string, object>();
             properties.Headers["x-redelivered-count"] = count;
         }
 
-        private void BasicAck(BasicDeliverEventArgs e, IModel channel)
+        private static void BasicAck(BasicDeliverEventArgs e, IModel channel)
         {
             TelemetryHelper.Execute(TelemetryLevels.Verbose, "rabbitmq-consumer-received-basicack");
             channel.BasicAck(e.DeliveryTag, false);
         }
 
-        private void BasicNack(BasicDeliverEventArgs e, IModel channel)
+        private static void BasicNack(BasicDeliverEventArgs e, IModel channel)
         {
             TelemetryHelper.Execute(TelemetryLevels.Verbose, "rabbitmq-consumer-received-basicnack");
             channel.BasicNack(e.DeliveryTag, false, false);
         }
 
-        private IBusinessEvent ExtractBodyToBusinessEvent(BasicDeliverEventArgs e)
+        private static IBusinessEvent ExtractBodyToBusinessEvent(BasicDeliverEventArgs e)
         {
             TelemetryHelper.Execute(TelemetryLevels.Verbose, "rabbitmq-consumer-received-body-extract-start");
             try

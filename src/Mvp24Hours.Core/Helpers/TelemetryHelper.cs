@@ -155,68 +155,50 @@ namespace Mvp24Hours.Helpers
         #region [ Get Services ]
         public static IList<ITelemetryService> GetServices(TelemetryLevels level)
         {
-            return services.TryGetValue(level, out List<ITelemetryService> value) ? value : default(IList<ITelemetryService>);
+            return services.TryGetValue(level, out List<ITelemetryService> value) ? value : new List<ITelemetryService>();
         }
 
         public static IList<Action<string>> GetActions1(TelemetryLevels level)
         {
-            return servicesAction1.TryGetValue(level, out List<Action<string>> value) ? value : default(IList<Action<string>>);
+            return servicesAction1.TryGetValue(level, out List<Action<string>> value) ? value : new List<Action<string>>();
         }
 
         public static IList<Action<string, object[]>> GetActions2(TelemetryLevels level)
         {
-            return servicesAction2.TryGetValue(level, out List<Action<string, object[]>> value) ? value : (IList<Action<string, object[]>>)default;
+            return servicesAction2.TryGetValue(level, out List<Action<string, object[]>> value) ? value : new List<Action<string, object[]>>();
         }
 
         public static IList<ITelemetryService> GetFilters(string serviceName)
         {
-            return serviceFilters.TryGetValue(serviceName, out List<ITelemetryService> value) ? value : (IList<ITelemetryService>)default;
+            return serviceFilters.TryGetValue(serviceName, out List<ITelemetryService> value) ? value : new List<ITelemetryService>();
         }
 
         public static IList<Action<string>> GetActionFilters1(string serviceName)
         {
-            return serviceActionFilters1.TryGetValue(serviceName, out List<Action<string>> value) ? value : (IList<Action<string>>)default;
+            return serviceActionFilters1.TryGetValue(serviceName, out List<Action<string>> value) ? value : new List<Action<string>>();
         }
 
         public static IList<Action<string, object[]>> GetActionFilters2(string serviceName)
         {
-            return serviceActionFilters2.TryGetValue(serviceName, out List<Action<string, object[]>> value) ? value : (IList<Action<string, object[]>>)default;
+            return serviceActionFilters2.TryGetValue(serviceName, out List<Action<string, object[]>> value) ? value : new List<Action<string, object[]>>();
         }
         #endregion
 
         #region [ Remove Services ]
         public static void Remove(TelemetryLevels level)
         {
-            if (servicesAction1.ContainsKey(level))
-            {
-                servicesAction1.Remove(level);
-            }
-            if (servicesAction2.ContainsKey(level))
-            {
-                servicesAction2.Remove(level);
-            }
-            if (services.ContainsKey(level))
-            {
-                services.Remove(level);
-            }
+            servicesAction1.Remove(level);
+            servicesAction2.Remove(level);
+            services.Remove(level);
         }
 
         public static void Remove(string serviceName)
         {
             if (serviceName.HasValue())
             {
-                if (serviceActionFilters1.ContainsKey(serviceName))
-                {
-                    serviceActionFilters1.Remove(serviceName);
-                }
-                if (serviceActionFilters2.ContainsKey(serviceName))
-                {
-                    serviceActionFilters2.Remove(serviceName);
-                }
-                if (serviceFilters.ContainsKey(serviceName))
-                {
-                    serviceFilters.Remove(serviceName);
-                }
+                serviceActionFilters1.Remove(serviceName);
+                serviceActionFilters2.Remove(serviceName);
+                serviceFilters.Remove(serviceName);
             }
         }
 
@@ -239,29 +221,14 @@ namespace Mvp24Hours.Helpers
             if (ignoreNames.AnySafe(x => x == eventName)) return;
 
             // filtered
-            if (serviceFiltersStarted && serviceFilters.ContainsKey(eventName))
-            {
-                foreach (var item in serviceFilters[eventName])
-                {
-                    item.Execute(eventName, args);
-                }
-            }
-            if (serviceActionFilters1Started && serviceActionFilters1.ContainsKey(eventName))
-            {
-                foreach (var item in serviceActionFilters1[eventName])
-                {
-                    item.Invoke(eventName);
-                }
-            }
-            if (serviceActionFilters2Started && serviceActionFilters2.ContainsKey(eventName))
-            {
-                foreach (var item in serviceActionFilters2[eventName])
-                {
-                    item.Invoke(eventName, args);
-                }
-            }
+            ExecuteFilters(eventName, args);
 
             // services
+            ExecuteServices(level, eventName, args);
+        }
+
+        private static void ExecuteServices(TelemetryLevels level, string eventName, object[] args)
+        {
             if (servicesStarted && services.Any(x => x.Key.HasFlag(level)))
             {
                 foreach (var key in services.Keys.Where(x => x.HasFlag(level)).ToList())
@@ -290,6 +257,31 @@ namespace Mvp24Hours.Helpers
                     {
                         item.Invoke(eventName, args);
                     }
+                }
+            }
+        }
+
+        private static void ExecuteFilters(string eventName, object[] args)
+        {
+            if (serviceFiltersStarted && serviceFilters.TryGetValue(eventName, out List<ITelemetryService> value1))
+            {
+                foreach (var item in value1)
+                {
+                    item.Execute(eventName, args);
+                }
+            }
+            if (serviceActionFilters1Started && serviceActionFilters1.TryGetValue(eventName, out List<Action<string>> value2))
+            {
+                foreach (var item in value2)
+                {
+                    item.Invoke(eventName);
+                }
+            }
+            if (serviceActionFilters2Started && serviceActionFilters2.TryGetValue(eventName, out List<Action<string, object[]>> value3))
+            {
+                foreach (var item in value3)
+                {
+                    item.Invoke(eventName, args);
                 }
             }
         }

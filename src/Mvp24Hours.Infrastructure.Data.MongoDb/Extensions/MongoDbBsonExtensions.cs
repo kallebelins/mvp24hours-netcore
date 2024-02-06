@@ -19,8 +19,7 @@ namespace Mvp24Hours.Extensions
         public static Mvp24HoursContext ApplyConfigurationsFromAssembly(this Mvp24HoursContext context, Assembly assembly)
         {
             var types = assembly.GetExportedTypes()
-                .Where(t => t.GetInterfaces().AnySafe(i =>
-                    i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IBsonClassMap<>)))
+                .Where(t => t.InheritsOrImplements(typeof(IBsonClassMap)))
                 .ToList();
 
             foreach (var type in types)

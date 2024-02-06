@@ -21,9 +21,8 @@ namespace Mvp24Hours.Application.MySql.Test
     /// 
     /// </summary>
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Name)]
-    public class Test2QueryServiceAsync : IDisposable
+    public class Test2QueryServiceAsync 
     {
-        private readonly StartupAsync startup;
         private readonly IServiceProvider serviceProvider;
 
         #region [ Ctor ]
@@ -32,16 +31,7 @@ namespace Mvp24Hours.Application.MySql.Test
         /// </summary>
         public Test2QueryServiceAsync()
         {
-            startup = new StartupAsync();
-            serviceProvider = startup.Initialize();
-        }
-
-        /// <summary>
-        /// Cleanup
-        /// </summary>
-        public void Dispose()
-        {
-            startup.Cleanup(serviceProvider);
+            serviceProvider = StartupAsync.Initialize();
         }
         #endregion
 

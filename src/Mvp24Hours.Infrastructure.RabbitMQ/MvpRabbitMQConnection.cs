@@ -15,7 +15,7 @@ using System.Net.Sockets;
 
 namespace Mvp24Hours.Infrastructure.RabbitMQ
 {
-    public class MvpRabbitMQConnection : IMvpRabbitMQConnection, IDisposable
+    public sealed class MvpRabbitMQConnection : IMvpRabbitMQConnection, IDisposable
     {
         private readonly IConnectionFactory _connectionFactory;
         private readonly RabbitMQConnectionOptions _options;
@@ -156,7 +156,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
             GC.SuppressFinalize(this);
         }
 
-        protected virtual void Dispose(bool disposing)
+        public void Dispose(bool disposing)
         {
             if (disposing)
             {

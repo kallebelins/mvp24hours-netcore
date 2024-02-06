@@ -35,7 +35,7 @@ namespace Mvp24Hours.Application.SQLServer.Test.Setup
             // load data
             if (canLoadData)
             {
-                LoadDataAsync(serviceProvider);
+                LoadDataAsync(serviceProvider).Wait();
             }
             return serviceProvider;
         }

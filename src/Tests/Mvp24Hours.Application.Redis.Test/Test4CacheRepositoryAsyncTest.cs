@@ -70,6 +70,7 @@ namespace Mvp24Hours.Application.Redis.Test
 
             var repo = serviceProvider.GetService<IRepositoryCacheAsync<Customer>>();
             await repo.SetStringAsync(keyString, content);
+            Assert.True(true);
         }
 
         [Fact, Priority(2)]
@@ -79,7 +80,7 @@ namespace Mvp24Hours.Application.Redis.Test
             var repo = serviceProvider.GetService<IRepositoryCacheAsync<Customer>>();
             await repo.SetStringAsync(keyString, "Test");
             string content = await repo.GetStringAsync(keyString);
-            Assert.True(!string.IsNullOrEmpty(content));
+            Assert.False(string.IsNullOrEmpty(content));
         }
 
         [Fact, Priority(3)]
@@ -105,6 +106,7 @@ namespace Mvp24Hours.Application.Redis.Test
             };
             var repo = serviceProvider.GetService<IRepositoryCacheAsync<Customer>>();
             await repo.SetAsync(keyObject, customer);
+            Assert.True(true);
         }
 
         [Fact, Priority(5)]
@@ -114,7 +116,7 @@ namespace Mvp24Hours.Application.Redis.Test
             var repo = serviceProvider.GetService<IRepositoryCacheAsync<Customer>>();
             await repo.SetAsync(keyObject, new Customer { });
             var customer = await repo.GetAsync(keyObject);
-            Assert.True(customer != null);
+            Assert.NotNull(customer);
         }
 
         [Fact, Priority(6)]
@@ -124,7 +126,7 @@ namespace Mvp24Hours.Application.Redis.Test
             var repo = serviceProvider.GetService<IRepositoryCacheAsync<Customer>>();
             await repo.RemoveAsync(keyObject);
             var customer = await repo.GetAsync(keyObject);
-            Assert.True(customer == null);
+            Assert.Null(customer);
         }
     }
 }

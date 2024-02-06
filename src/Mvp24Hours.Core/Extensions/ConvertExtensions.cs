@@ -5,6 +5,7 @@
 //=====================================================================================
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Security.Cryptography;
@@ -84,14 +85,14 @@ namespace Mvp24Hours.Extensions
             return decimal.TryParse(value, out decimal result) ? result : defaultValue;
         }
 
-        public static DateTime? ToDateTime(this string value, DateTime? defaultValue = null)
+        public static DateTime? ToDateTime(this string value, DateTime? defaultValue = null, CultureInfo info = null)
         {
             if (!value.HasValue())
             {
                 return defaultValue;
             }
 
-            return DateTime.TryParse(value, out DateTime result) ? result : defaultValue;
+            return DateTime.TryParse(value, info ?? new CultureInfo("en-US"), out DateTime result) ? result : defaultValue;
         }
 
         public static string NullSafe(this string target)
@@ -144,25 +145,23 @@ namespace Mvp24Hours.Extensions
         public static string GetSHA256Hash(this string str)
         {
             byte[] bytes = Encoding.UTF8.GetBytes(str.NullSafe());
-            using SHA256Managed hashstring = new();
+            using SHA256 hashstring = SHA256.Create();
             byte[] hash = hashstring.ComputeHash(bytes);
-            StringBuilder hashString = new();
-            foreach (byte x in hash)
-            {
-                hashString.Append(String.Format("{0:x2}", x));
-            }
-            return hashString.ToString();
+            return Convert.ToBase64String(hash);
         }
 
-        public static string GetHash(string input)
+        public static string GetSHA512Hash(this string str)
         {
-            HashAlgorithm hashAlgorithm = new SHA256CryptoServiceProvider();
+            byte[] bytes = Encoding.UTF8.GetBytes(str.NullSafe());
+            using SHA512 hashstring = SHA512.Create();
+            byte[] hash = hashstring.ComputeHash(bytes);
+            return Convert.ToBase64String(hash);
+        }
 
-            byte[] byteValue = System.Text.Encoding.UTF8.GetBytes(input.NullSafe());
-
-            byte[] byteHash = hashAlgorithm.ComputeHash(byteValue);
-
-            return Convert.ToBase64String(byteHash);
+        [Obsolete("Use the GetSHA512Hash method.")]
+        public static string GetHash(string str)
+        {
+            return GetSHA512Hash(str);
         }
 
         public static string ZipBase64(this string str)

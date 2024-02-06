@@ -25,7 +25,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineStarted()
         {
             // arrange
-            IPipelineAsync pipeline = new PipelineAsync();
+            var pipeline = new PipelineAsync();
 
             // act
             pipeline.Add(_ =>
@@ -43,14 +43,14 @@ namespace Mvp24Hours.Application.Pipe.Test
             await pipeline.ExecuteAsync();
 
             // assert
-            Assert.True(pipeline.GetMessage() != null);
+            Assert.NotNull(pipeline.GetMessage());
         }
 
         [Fact, Priority(2)]
         public async Task PipelineMessageContentGet()
         {
             // arrange
-            IPipelineAsync pipeline = new PipelineAsync();
+            var pipeline = new PipelineAsync();
 
             // act
 
@@ -84,7 +84,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineMessageContentAdd()
         {
             // arrange
-            IPipelineAsync pipeline = new PipelineAsync();
+            var pipeline = new PipelineAsync();
 
             // act
 
@@ -127,7 +127,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineMessageContentValidate()
         {
             // arrange
-            IPipelineAsync pipeline = new PipelineAsync();
+            var pipeline = new PipelineAsync();
 
             // act
 
@@ -157,7 +157,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineOperationLock()
         {
             // arrange
-            IPipelineAsync pipeline = new PipelineAsync();
+            var pipeline = new PipelineAsync();
 
             // act
 
@@ -190,7 +190,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineOperationLockExecuteForce()
         {
             // arrange
-            IPipelineAsync pipeline = new PipelineAsync();
+            var pipeline = new PipelineAsync();
 
             // act
 
@@ -239,7 +239,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineOperationFailure()
         {
             // arrange
-            IPipelineAsync pipeline = new PipelineAsync();
+            var pipeline = new PipelineAsync();
 
             // act
 
@@ -278,7 +278,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineOperationLockWithNotification()
         {
             // arrange
-            IPipelineAsync pipeline = new PipelineAsync();
+            var pipeline = new PipelineAsync();
 
             // act
 
@@ -315,7 +315,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineInterceptors()
         {
             // arrange
-            IPipelineAsync pipeline = new PipelineAsync();
+            var pipeline = new PipelineAsync();
 
             // act
 
@@ -391,7 +391,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineEventInterceptors()
         {
             // arrange
-            IPipelineAsync pipeline = new PipelineAsync();
+            var pipeline = new PipelineAsync();
 
             // act
 
@@ -467,7 +467,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineEventInterceptorsWithLock()
         {
             // arrange
-            IPipelineAsync pipeline = new PipelineAsync();
+            var pipeline = new PipelineAsync();
 
             // act
 
@@ -542,16 +542,16 @@ namespace Mvp24Hours.Application.Pipe.Test
         }
 
         [Fact, Priority(11)]
-        public void PipelineWithOperation()
+        public async Task PipelineWithOperation()
         {
             // arrange
-            IPipelineAsync pipeline = new PipelineAsync();
+            var pipeline = new PipelineAsync();
 
             // act
             pipeline.Add<OperationTestAsync>();
 
             // operations
-            pipeline.ExecuteAsync();
+            await pipeline.ExecuteAsync();
             var result = pipeline.GetMessage().GetContent<int>("key-test");
 
             // assert

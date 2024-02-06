@@ -154,7 +154,7 @@ namespace Mvp24Hours.Infrastructure.Pipe.Resolvers
 
                 return result;
             }
-            return default;
+            return new();
         }
 
         /// <summary>

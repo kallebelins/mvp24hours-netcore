@@ -20,9 +20,8 @@ namespace Mvp24Hours.Application.MySql.Test
     /// 
     /// </summary>
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Name)]
-    public class Test6QueryPagingServiceAsync : IDisposable
+    public class Test6QueryPagingServiceAsync 
     {
-        private readonly StartupAsync startup;
         private readonly IServiceProvider serviceProvider;
 
         #region [ Ctor ]
@@ -31,16 +30,7 @@ namespace Mvp24Hours.Application.MySql.Test
         /// </summary>
         public Test6QueryPagingServiceAsync()
         {
-            startup = new StartupAsync();
-            serviceProvider = startup.Initialize();
-        }
-
-        /// <summary>
-        /// Cleanup
-        /// </summary>
-        public void Dispose()
-        {
-            startup.Cleanup(serviceProvider);
+            serviceProvider = StartupAsync.Initialize();
         }
         #endregion
 
@@ -75,7 +65,7 @@ namespace Mvp24Hours.Application.MySql.Test
             // act
             var pagingResult = await service.ListWithPaginationAsync(paging);
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         [Fact, Priority(6)]
         public async Task GetFilterCustomerListOrderAsc()

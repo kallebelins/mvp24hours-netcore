@@ -21,9 +21,9 @@ using Mvp24Hours.Helpers;
 
 namespace Mvp24Hours.Application.MySql.Test.Setup
 {
-    public class Startup
+    public static class Startup
     {
-        public IServiceProvider Initialize(bool canLoadData = true)
+        public static IServiceProvider Initialize(bool canLoadData = true)
         {
             var serviceProvider = ConfigureServices();
 
@@ -39,7 +39,7 @@ namespace Mvp24Hours.Application.MySql.Test.Setup
             return serviceProvider;
         }
 
-        public void Cleanup(IServiceProvider serviceProvider)
+        public static void Cleanup(IServiceProvider serviceProvider)
         {
             // ensure database drop
             var db = serviceProvider?.GetService<DataContext>();
@@ -50,7 +50,7 @@ namespace Mvp24Hours.Application.MySql.Test.Setup
             }
         }
 
-        private IServiceProvider ConfigureServices()
+        private static IServiceProvider ConfigureServices()
         {
 #if InMemory
             var services = new ServiceCollection();
@@ -79,7 +79,7 @@ namespace Mvp24Hours.Application.MySql.Test.Setup
             return services.BuildServiceProvider();
         }
 
-        private void LoadData(IServiceProvider serviceProvider)
+        private static void LoadData(IServiceProvider serviceProvider)
         {
             var service = serviceProvider.GetService<CustomerService>();
             List<Customer> customers = new();

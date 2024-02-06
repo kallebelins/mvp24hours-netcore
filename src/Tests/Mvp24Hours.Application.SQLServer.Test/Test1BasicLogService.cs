@@ -21,9 +21,8 @@ namespace Mvp24Hours.Application.SQLServer.Test
     /// 
     /// </summary>
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Name)]
-    public class Test1BasicLogService : IDisposable
+    public class Test1BasicLogService 
     {
-        private readonly Startup startup;
         private readonly IServiceProvider serviceProvider;
 
         #region [ Ctor ]
@@ -32,16 +31,7 @@ namespace Mvp24Hours.Application.SQLServer.Test
         /// </summary>
         public Test1BasicLogService()
         {
-            startup = new Startup();
-            serviceProvider = startup.InitializeBasicLog();
-        }
-
-        /// <summary>
-        /// Cleanup
-        /// </summary>
-        public void Dispose()
-        {
-            startup.Cleanup(serviceProvider);
+            serviceProvider = Startup.InitializeBasicLog();
         }
         #endregion
 

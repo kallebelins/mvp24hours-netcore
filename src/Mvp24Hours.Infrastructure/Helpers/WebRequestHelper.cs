@@ -176,7 +176,9 @@ namespace Mvp24Hours.Helpers
 
                 EncodingRequest ??= Encoding.UTF8;
 
-                var client = (HttpWebRequest)System.Net.WebRequest.Create(url);
+#pragma warning disable SYSLIB0014 // Type or member is obsolete
+                HttpWebRequest client = (HttpWebRequest)WebRequest.Create(url);
+#pragma warning restore SYSLIB0014 // Type or member is obsolete
                 client.Method = method;
                 client.Timeout = 300000;
 

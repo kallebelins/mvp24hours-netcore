@@ -21,25 +21,12 @@ namespace Mvp24Hours.Application.SQLServer.Test
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Name)]
     public class Test3CommandService
     {
-        private readonly Startup startup;
-
-        #region [ Ctor ]
-        /// <summary>
-        /// Initialize
-        /// </summary>
-        public Test3CommandService()
-        {
-            startup = new Startup();
-        }
-
-        #endregion
-
         #region [ Actions ]
         [Fact, Priority(1)]
         public void CreateCustomer()
         {
             // arrange
-            var serviceProvider = startup.Initialize(false);
+            var serviceProvider = Startup.Initialize(false);
             var service = serviceProvider.GetService<CustomerService>();
             // act
             var customer = new Customer
@@ -51,13 +38,13 @@ namespace Mvp24Hours.Application.SQLServer.Test
             // assert
             Assert.True(customer.Id > 0);
             // dispose
-            startup.Cleanup(serviceProvider);
+            Startup.Cleanup(serviceProvider);
         }
         [Fact, Priority(2)]
         public void CreateManyCustomers()
         {
             // arrange
-            var serviceProvider = startup.Initialize(false);
+            var serviceProvider = Startup.Initialize(false);
             var service = serviceProvider.GetService<CustomerService>();
             // act
             List<Customer> customers = new();
@@ -73,13 +60,13 @@ namespace Mvp24Hours.Application.SQLServer.Test
             // assert
             Assert.True(!customers.AnySafe(x => x.Id == 0));
             // dispose
-            startup.Cleanup(serviceProvider);
+            Startup.Cleanup(serviceProvider);
         }
         [Fact, Priority(3)]
         public void UpdateCustomer()
         {
             // arrange
-            var serviceProvider = startup.Initialize();
+            var serviceProvider = Startup.Initialize();
             var service = serviceProvider.GetService<CustomerService>();
             // act
             var customer = service.GetById(1).GetDataValue();
@@ -89,13 +76,13 @@ namespace Mvp24Hours.Application.SQLServer.Test
             // assert
             Assert.True(customer?.Name == "Test Updated");
             // dispose
-            startup.Cleanup(serviceProvider);
+            Startup.Cleanup(serviceProvider);
         }
         [Fact, Priority(4)]
         public void UpdateManyCustomers()
         {
             // arrange
-            var serviceProvider = startup.Initialize();
+            var serviceProvider = Startup.Initialize();
             var service = serviceProvider.GetService<CustomerService>();
             // act
             var paging = new PagingCriteria(1, 0);
@@ -108,13 +95,13 @@ namespace Mvp24Hours.Application.SQLServer.Test
             // assert
             Assert.True(result.GetDataValue() > 0);
             // dispose
-            startup.Cleanup(serviceProvider);
+            Startup.Cleanup(serviceProvider);
         }
         [Fact, Priority(5)]
         public void DeleteCustomer()
         {
             // arrange
-            var serviceProvider = startup.Initialize();
+            var serviceProvider = Startup.Initialize();
             var service = serviceProvider.GetService<CustomerService>();
             // act
             var customer = service.GetById(1).GetDataValue();
@@ -123,13 +110,13 @@ namespace Mvp24Hours.Application.SQLServer.Test
             // assert
             Assert.True(result.GetDataValue() == null);
             // dispose
-            startup.Cleanup(serviceProvider);
+            Startup.Cleanup(serviceProvider);
         }
         [Fact, Priority(6)]
         public void DeleteManyCustomers()
         {
             // arrange
-            var serviceProvider = startup.Initialize();
+            var serviceProvider = Startup.Initialize();
             var service = serviceProvider.GetService<CustomerService>();
             // act
             var customers = service.List().Data;
@@ -138,7 +125,7 @@ namespace Mvp24Hours.Application.SQLServer.Test
             // assert
             Assert.True(result.GetDataValue() == 0);
             // dispose
-            startup.Cleanup(serviceProvider);
+            Startup.Cleanup(serviceProvider);
         }
         #endregion
     }

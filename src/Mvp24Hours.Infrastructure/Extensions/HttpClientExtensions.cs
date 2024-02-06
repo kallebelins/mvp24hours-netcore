@@ -328,9 +328,9 @@ namespace Mvp24Hours.Extensions
 
         public static string GetHeaderValue(this IHeaderDictionary headers, string key)
         {
-            if (headers.AnyOrNotNull() && headers.ContainsKey(key) && !string.IsNullOrEmpty(headers[key]))
+            if (headers.AnyOrNotNull() && headers.TryGetValue(key, out Microsoft.Extensions.Primitives.StringValues value) && !string.IsNullOrEmpty(value))
             {
-                return headers[key].ToString();
+                return value.ToString();
             }
             return null;
         }

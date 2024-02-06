@@ -61,7 +61,7 @@ namespace Mvp24Hours.Helpers
 
         private static void LoadSettings()
         {
-            IConfigurationBuilder builder = new ConfigurationBuilder();
+            var builder = new ConfigurationBuilder();
             builder.AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json"), optional: true, reloadOnChange: true);
             var env = GetEnvironment();
             if (env != null)

@@ -13,9 +13,9 @@ using System;
 
 namespace Mvp24Hours.Application.Redis.Test.Setup
 {
-    public class Startup
+    public static class Startup
     {
-        public IServiceProvider Initialize()
+        public static IServiceProvider Initialize()
         {
             var services = new ServiceCollection()
                 .AddSingleton(ConfigurationHelper.AppSettings);

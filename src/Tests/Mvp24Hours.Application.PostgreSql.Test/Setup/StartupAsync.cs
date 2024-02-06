@@ -13,6 +13,7 @@ using Mvp24Hours.Core.Helpers;
 using Mvp24Hours.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 #if !InMemory 
 using Microsoft.Extensions.Configuration;
@@ -34,7 +35,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test.Setup
             // load data
             if (canLoadData)
             {
-                LoadDataAsync(serviceProvider);
+                LoadDataAsync(serviceProvider).Wait();
             }
             return serviceProvider;
         }
@@ -81,7 +82,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test.Setup
             return services.BuildServiceProvider();
         }
 
-        private async void LoadDataAsync(IServiceProvider serviceProvider)
+        private static async Task LoadDataAsync(IServiceProvider serviceProvider)
         {
             var service = serviceProvider.GetService<CustomerServiceAsync>();
             List<Customer> customers = new();

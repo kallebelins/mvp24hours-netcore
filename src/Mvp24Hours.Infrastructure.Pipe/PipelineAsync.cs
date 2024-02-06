@@ -370,7 +370,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
                 catch (Exception ex)
                 {
                     TelemetryHelper.Execute(TelemetryLevels.Error, "pipe-pipeline-execute-failure", ex);
-                    current.Messages.Add(new MessageResult((ex?.InnerException ?? ex).Message, MessageType.Error));
+                    current.Messages.Add(new MessageResult((ex.InnerException ?? ex).Message, MessageType.Error));
                     input.AddContent(ex);
                 }
                 return current;

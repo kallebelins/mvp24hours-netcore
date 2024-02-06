@@ -206,8 +206,8 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
             if (_keyInfo == null)
             {
                 _keyInfo = typeof(T).GetTypeInfo()
-                    .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                    .FirstOrDefault(x => x.GetCustomAttribute<BsonIdAttribute>() != null);
+                                    .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                                    .FirstOrDefault(x => x.GetCustomAttribute<BsonIdAttribute>() != null);
 
                 if (_keyInfo == null)
                 {
@@ -215,15 +215,15 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
                         || typeof(T).InheritsOrImplements(typeof(EntityBaseLog<,>)))
                     {
                         _keyInfo = typeof(T).GetTypeInfo()
-                            .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                            .FirstOrDefault(x => x.Name == "Id");
+                                            .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                                            .FirstOrDefault(x => x.Name == "Id");
                     }
 
                     if (_keyInfo == null)
                     {
                         _keyInfo = typeof(T).GetTypeInfo()
-                            .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                            .FirstOrDefault(x => x.Name == BsonClassMap.LookupClassMap(typeof(T)).IdMemberMap.MemberName);
+                                            .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                                            .FirstOrDefault(x => x.Name == BsonClassMap.LookupClassMap(typeof(T)).IdMemberMap.MemberName);
                     }
 
                     if (_keyInfo == null)

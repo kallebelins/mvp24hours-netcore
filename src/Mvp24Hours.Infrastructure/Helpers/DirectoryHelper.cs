@@ -18,7 +18,7 @@ namespace Mvp24Hours.Infrastructure.Helpers
     {
         public static string GetExecutingDirectory()
         {
-            UriBuilder uri = new(Assembly.GetExecutingAssembly().CodeBase);
+            UriBuilder uri = new(uri: Assembly.GetExecutingAssembly().Location);
             string path = Uri.UnescapeDataString(uri.Path);
             return Path.GetDirectoryName(path);
         }
