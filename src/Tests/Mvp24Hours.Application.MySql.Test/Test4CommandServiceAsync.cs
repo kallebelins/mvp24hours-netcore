@@ -71,7 +71,7 @@ namespace Mvp24Hours.Application.MySql.Test
             }
             await service.AddAsync(customers);
             // assert
-            Assert.True(!customers.AnySafe(x => x.Id == 0));
+            Assert.False(customers.AnySafe(x => x.Id == 0));
             // dispose
             startup.Cleanup(serviceProvider);
         }
@@ -87,7 +87,7 @@ namespace Mvp24Hours.Application.MySql.Test
             await service.ModifyAsync(customer);
             customer = await service.GetByIdAsync(1).GetDataValueAsync();
             // assert
-            Assert.True(customer?.Name == "Test Updated");
+            Assert.Equal("Test Updated", customer?.Name);
             // dispose
             startup.Cleanup(serviceProvider);
         }

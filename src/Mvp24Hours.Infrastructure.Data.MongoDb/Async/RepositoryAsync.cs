@@ -211,7 +211,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
                     return;
                 }
 
-                var entityDb = (await dbContext.Set<T>().FindAsync(GetKeyFilter(entity), cancellationToken: cancellationToken)).FirstOrDefault()
+                T entityDb = (await dbContext.Set<T>().FindAsync(GetKeyFilter(entity), cancellationToken: cancellationToken)).FirstOrDefault(cancellationToken: cancellationToken)
                     ?? throw new InvalidOperationException("Key value not found.");
 
                 // properties that can not be changed

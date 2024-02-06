@@ -177,7 +177,7 @@ namespace Mvp24Hours.Application.MySql.Test
             // act
             var result = service.GetById(1);
             // assert
-            Assert.True(result.GetDataValue() != null);
+            Assert.NotNull(result.GetDataValue());
         }
         [Fact, Priority(13)]
         public void GetFilterCustomerGetByIdNavigation()

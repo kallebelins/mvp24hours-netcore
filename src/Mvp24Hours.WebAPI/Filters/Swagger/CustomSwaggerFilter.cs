@@ -14,7 +14,7 @@ namespace Mvp24Hours.WebAPI.Filters.Swagger
         public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
         {
             var nonMobileRoutes = swaggerDoc.Paths
-                .Where(x => !x.Key.ToLower().Contains("public"))
+                .Where(predicate: x => !x.Key.Contains("public", System.StringComparison.CurrentCultureIgnoreCase))
                 .ToList();
             nonMobileRoutes.ForEach(x => { swaggerDoc.Paths.Remove(x.Key); });
         }

@@ -42,14 +42,11 @@ namespace Mvp24Hours.Infrastructure.Pipe.Resolvers
         /// </summary>
         public PipelineBuilderResolverContainer<TService> Add(string key, PipelineBuilderResolver obj)
         {
-            if (_resolvers.ContainsKey(key))
+            if (!_resolvers.TryAdd(key, obj))
             {
                 _resolvers[key] = obj;
             }
-            else
-            {
-                _resolvers.Add(key, obj);
-            }
+
             return this;
         }
 
@@ -70,9 +67,9 @@ namespace Mvp24Hours.Infrastructure.Pipe.Resolvers
         /// </summary>
         public PipelineBuilderResolver Get(string key)
         {
-            if (_resolvers.ContainsKey(key))
+            if (_resolvers.TryGetValue(key, out PipelineBuilderResolver value))
             {
-                return _resolvers[key];
+                return value;
             }
             return default;
         }

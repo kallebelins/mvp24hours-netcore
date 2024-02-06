@@ -13,6 +13,7 @@ using Mvp24Hours.Core.Helpers;
 using Mvp24Hours.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 #if !InMemory 
 using Microsoft.Extensions.Configuration;
@@ -81,7 +82,7 @@ namespace Mvp24Hours.Application.SQLServer.Test.Setup
             return services.BuildServiceProvider();
         }
 
-        private async void LoadDataAsync(IServiceProvider serviceProvider)
+        private async Task LoadDataAsync(IServiceProvider serviceProvider)
         {
             var service = serviceProvider.GetService<CustomerServiceAsync>();
             List<Customer> customers = new();

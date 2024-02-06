@@ -24,10 +24,7 @@ namespace Mvp24Hours.Extensions
             Action<RabbitMQConnectionOptions> connectionOptions = null,
             Action<RabbitMQClientOptions> clientOptions = null)
         {
-            if (assemblyConsumers == null)
-            {
-                throw new ArgumentNullException(nameof(assemblyConsumers));
-            }
+            ArgumentNullException.ThrowIfNull(assemblyConsumers);
 
             if (connectionOptions != null)
             {

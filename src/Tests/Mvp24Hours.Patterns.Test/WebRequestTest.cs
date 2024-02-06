@@ -23,7 +23,7 @@ namespace Mvp24Hours.Patterns.Test
             // arrange
             var result = await WebRequestHelper.GetAsync("https://jsonplaceholder.typicode.com/posts");
             // assert
-            Assert.True(result != null);
+            Assert.NotNull(result);
         }
 
         [Fact, Priority(2)]
@@ -32,7 +32,7 @@ namespace Mvp24Hours.Patterns.Test
             // arrange
             var result = await WebRequestHelper.GetAsync("https://jsonplaceholder.typicode.com/posts/1");
             // assert
-            Assert.True(result != null);
+            Assert.NotNull(result);
         }
 
         [Fact, Priority(3)]
@@ -47,7 +47,7 @@ namespace Mvp24Hours.Patterns.Test
             };
             var result = await WebRequestHelper.PostAsync("https://jsonplaceholder.typicode.com/posts", dto.ToSerialize());
             // assert
-            Assert.True(result != null);
+            Assert.NotNull(result);
         }
 
         [Fact, Priority(4)]
@@ -63,7 +63,7 @@ namespace Mvp24Hours.Patterns.Test
             };
             var result = await WebRequestHelper.PutAsync("https://jsonplaceholder.typicode.com/posts/1", dto.ToSerialize());
             // assert
-            Assert.True(result != null);
+            Assert.NotNull(result);
         }
 
 
@@ -73,7 +73,7 @@ namespace Mvp24Hours.Patterns.Test
             // arrange
             var result = await WebRequestHelper.DeleteAsync("https://jsonplaceholder.typicode.com/posts/1");
             // assert
-            Assert.True(result == "{}");
+            Assert.Equal("{}", result);
         }
 
         [Fact, Priority(6)]

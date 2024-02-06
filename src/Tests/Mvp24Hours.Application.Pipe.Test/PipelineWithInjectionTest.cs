@@ -89,7 +89,7 @@ namespace Mvp24Hours.Application.Pipe.Test
             pipeline.Execute(message);
 
             // assert
-            Assert.True(pipeline.GetMessage() != null);
+            Assert.NotNull(pipeline.GetMessage());
         }
 
         [Fact, Priority(3)]
@@ -133,7 +133,7 @@ namespace Mvp24Hours.Application.Pipe.Test
             }
 
             // assert
-            Assert.True(pipeline.GetMessage() != null);
+            Assert.NotNull(pipeline.GetMessage());
         }
 
         [Fact, Priority(4)]
@@ -198,7 +198,7 @@ namespace Mvp24Hours.Application.Pipe.Test
             pipeline.Execute("Parameter received.".ToMessage());
 
             // assert
-            Assert.True(pipeline.GetMessage() != null);
+            Assert.NotNull(pipeline.GetMessage());
         }
 
         [Fact, Priority(5)]
@@ -248,7 +248,7 @@ namespace Mvp24Hours.Application.Pipe.Test
             pipeline.Execute("Parameter received.".ToMessage());
 
             // assert
-            Assert.True(pipeline.GetMessage() != null);
+            Assert.NotNull(pipeline.GetMessage());
         }
 
         [Fact, Priority(6)]
@@ -288,7 +288,7 @@ namespace Mvp24Hours.Application.Pipe.Test
             pipeline.Execute("Parameter received.".ToMessage());
 
             // assert
-            Assert.True(pipeline.GetMessage() != null);
+            Assert.NotNull(pipeline.GetMessage());
         }
 
         [Fact, Priority(7)]
@@ -403,7 +403,7 @@ namespace Mvp24Hours.Application.Pipe.Test
             pipeline.Execute();
 
             // assert
-            Assert.True(pipeline.GetMessage() != null);
+            Assert.NotNull(pipeline.GetMessage());
         }
 
         [Fact, Priority(9)]
@@ -582,7 +582,7 @@ namespace Mvp24Hours.Application.Pipe.Test
 
             // assert
             var message = pipeline.GetMessage();
-            Assert.True(message.GetContent<int>("factory") == 1);
+            Assert.Equal(1, message.GetContent<int>("factory"));
         }
 
         [Fact, Priority(12)]

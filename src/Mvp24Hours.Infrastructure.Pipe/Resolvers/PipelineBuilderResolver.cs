@@ -49,12 +49,13 @@ namespace Mvp24Hours.Infrastructure.Pipe.Resolvers
                 keyName = $"{key}_{typeof(T).FullName}";
             }
 
-            if (!_buildersComplex.ContainsKey(keyName))
+            if (!_buildersComplex.TryGetValue(keyName, out List<Type> value))
             {
-                _buildersComplex.Add(keyName, new List<Type>());
+                value = new List<Type>();
+                _buildersComplex.Add(keyName, value);
             }
 
-            _buildersComplex[keyName].Add(typeof(U));
+            value.Add(typeof(U));
             return this;
         }
 
@@ -115,9 +116,9 @@ namespace Mvp24Hours.Infrastructure.Pipe.Resolvers
                 keyName = $"{key}_{typeof(T).FullName}";
             }
 
-            if (_builders.ContainsKey(keyName))
+            if (_builders.TryGetValue(keyName, out Type value))
             {
-                return (T)Activator.CreateInstance(_builders[keyName]);
+                return (T)Activator.CreateInstance(value);
             }
             return default;
         }
@@ -143,10 +144,10 @@ namespace Mvp24Hours.Infrastructure.Pipe.Resolvers
                 keyName = $"{key}_{typeof(T).FullName}";
             }
 
-            if (_buildersComplex.ContainsKey(keyName))
+            if (_buildersComplex.TryGetValue(keyName, out List<Type> value))
             {
                 var result = new List<T>();
-                foreach (var item in _buildersComplex[keyName])
+                foreach (var item in value)
                 {
                     result.Add((T)Activator.CreateInstance(item));
                 }

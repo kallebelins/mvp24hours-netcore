@@ -42,7 +42,7 @@ namespace Mvp24Hours.Application.Pipe.Test
             pipeline.Execute();
 
             // assert
-            Assert.True(pipeline.GetMessage() != null);
+            Assert.NotNull(pipeline.GetMessage());
         }
 
         [Fact, Priority(2)]
@@ -76,7 +76,7 @@ namespace Mvp24Hours.Application.Pipe.Test
             pipeline.Execute(message);
 
             // assert
-            Assert.True(pipeline.GetMessage() != null);
+            Assert.NotNull(pipeline.GetMessage());
         }
 
         [Fact, Priority(3)]
@@ -119,7 +119,7 @@ namespace Mvp24Hours.Application.Pipe.Test
             }
 
             // assert
-            Assert.True(pipeline.GetMessage() != null);
+            Assert.NotNull(pipeline.GetMessage());
         }
 
         [Fact, Priority(4)]
@@ -182,7 +182,7 @@ namespace Mvp24Hours.Application.Pipe.Test
             pipeline.Execute("Parameter received.".ToMessage());
 
             // assert
-            Assert.True(pipeline.GetMessage() != null);
+            Assert.NotNull(pipeline.GetMessage());
         }
 
         [Fact, Priority(5)]
@@ -231,7 +231,7 @@ namespace Mvp24Hours.Application.Pipe.Test
             pipeline.Execute("Parameter received.".ToMessage());
 
             // assert
-            Assert.True(pipeline.GetMessage() != null);
+            Assert.NotNull(pipeline.GetMessage());
         }
 
         [Fact, Priority(6)]
@@ -270,7 +270,7 @@ namespace Mvp24Hours.Application.Pipe.Test
             pipeline.Execute("Parameter received.".ToMessage());
 
             // assert
-            Assert.True(pipeline.GetMessage() != null);
+            Assert.NotNull(pipeline.GetMessage());
         }
 
         [Fact, Priority(7)]
@@ -383,7 +383,7 @@ namespace Mvp24Hours.Application.Pipe.Test
             pipeline.Execute();
 
             // assert
-            Assert.True(pipeline.GetMessage() != null);
+            Assert.NotNull(pipeline.GetMessage());
         }
 
         [Fact, Priority(9)]
@@ -459,7 +459,7 @@ namespace Mvp24Hours.Application.Pipe.Test
             pipeline.Execute();
 
             // assert
-            Assert.True(pipeline.GetMessage() != null);
+            Assert.NotNull(pipeline.GetMessage());
         }
 
         [Fact, Priority(10)]
@@ -537,7 +537,7 @@ namespace Mvp24Hours.Application.Pipe.Test
             pipeline.Execute();
 
             // assert
-            Assert.True(pipeline.GetMessage() != null);
+            Assert.NotNull(pipeline.GetMessage());
         }
 
         [Fact, Priority(11)]
@@ -554,7 +554,7 @@ namespace Mvp24Hours.Application.Pipe.Test
             var result = pipeline.GetMessage().GetContent<int>("key-test");
 
             // assert
-            Assert.True(result == 1);
+            Assert.Equal(1, result);
         }
     }
 }

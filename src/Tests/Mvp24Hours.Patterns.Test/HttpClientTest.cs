@@ -39,7 +39,7 @@ namespace Mvp24Hours.Patterns.Test
             var client = factory.CreateClient(typeof(HttpClientTest).Name);
             var result = await client.HttpGetAsync("users");
             // assert
-            Assert.True(result != null);
+            Assert.NotNull(result);
         }
 
         [Fact, Priority(1)]
@@ -51,7 +51,7 @@ namespace Mvp24Hours.Patterns.Test
             var client = factory.CreateClient("jsonUrl");
             var result = await client.HttpGetAsync("users");
             // assert
-            Assert.True(result != null);
+            Assert.NotNull(result);
         }
 
         [Fact, Priority(1)]
@@ -65,7 +65,7 @@ namespace Mvp24Hours.Patterns.Test
                 var client = factory.CreateClient("jsonUrl");
                 var result = await client.HttpGetAsync("notFound");
                 // assert
-                Assert.True(result != null);
+                Assert.NotNull(result);
             });
         }
 
@@ -78,7 +78,7 @@ namespace Mvp24Hours.Patterns.Test
             var client = factory.CreateClient("jsonUrl");
             var result = await client.HttpGetAsync("posts/1");
             // assert
-            Assert.True(result != null);
+            Assert.NotNull(result);
         }
 
         [Fact, Priority(3)]
@@ -115,7 +115,7 @@ namespace Mvp24Hours.Patterns.Test
             var client = factory.CreateClient("jsonUrl");
             var result = await client.HttpPutAsync("posts/1", dto.ToSerialize());
             // assert
-            Assert.True(result != null);
+            Assert.NotNull(result);
         }
 
 

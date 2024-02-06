@@ -240,8 +240,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
 
                 action?.Invoke(channel, Options, routingKey, queueName);
 
-                if (!Channels.ContainsKey(queueKeyName))
-                    Channels.Add(queueKeyName, channel);
+                Channels.TryAdd(queueKeyName, channel);
             }
             return channel;
         }
@@ -485,10 +484,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
         public void Register(Type consumerType)
         {
             TelemetryHelper.Execute(TelemetryLevels.Verbose, "rabbitmq-client-consumer-register");
-            if (consumerType == null)
-            {
-                throw new ArgumentNullException(nameof(consumerType));
-            }
+            ArgumentNullException.ThrowIfNull(consumerType);
             _consumers.Add(consumerType);
         }
         public void Unregister<T>() where T : class, IMvpRabbitMQConsumer
@@ -499,10 +495,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
         public void Unregister(Type consumerType)
         {
             TelemetryHelper.Execute(TelemetryLevels.Verbose, "rabbitmq-client-consumer-unregister");
-            if (consumerType == null)
-            {
-                throw new ArgumentNullException(nameof(consumerType));
-            }
+            ArgumentNullException.ThrowIfNull(consumerType);
             _consumers
                 .FindAll(x => x.InheritsOrImplements(consumerType))
                 .ForEach(item => _consumers.Remove(item));

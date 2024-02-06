@@ -29,7 +29,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
             {
                 string ip = context.Connection?.RemoteIpAddress?.ToString() ?? context.Connection?.LocalIpAddress?.ToString() ?? "127.0.0.1";
 
-                if (ip.Contains(":"))
+                if (ip.Contains(':'))
                 {
                     ip = ip.Split(':')[0].Trim();
                 }

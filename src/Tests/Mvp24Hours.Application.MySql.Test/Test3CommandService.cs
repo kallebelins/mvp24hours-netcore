@@ -71,7 +71,7 @@ namespace Mvp24Hours.Application.MySql.Test
             }
             service.Add(customers);
             // assert
-            Assert.True(!customers.AnySafe(x => x.Id == 0));
+            Assert.False(customers.AnySafe(x => x.Id == 0));
             // dispose
             startup.Cleanup(serviceProvider);
         }
@@ -87,7 +87,7 @@ namespace Mvp24Hours.Application.MySql.Test
             service.Modify(customer);
             customer = service.GetById(1).GetDataValue();
             // assert
-            Assert.True(customer?.Name == "Test Updated");
+            Assert.Equal("Test Updated", customer?.Name);
             // dispose
             startup.Cleanup(serviceProvider);
         }
@@ -121,7 +121,7 @@ namespace Mvp24Hours.Application.MySql.Test
             service.RemoveById(customer.Id);
             var result = service.GetById(customer.Id);
             // assert
-            Assert.True(result.GetDataValue() == null);
+            Assert.Null(result.GetDataValue());
             // dispose
             startup.Cleanup(serviceProvider);
         }
@@ -136,7 +136,7 @@ namespace Mvp24Hours.Application.MySql.Test
             service.Remove(customers);
             var result = service.ListCount();
             // assert
-            Assert.True(result.GetDataValue() == 0);
+            Assert.Equal(0, result.GetDataValue());
             // dispose
             startup.Cleanup(serviceProvider);
         }

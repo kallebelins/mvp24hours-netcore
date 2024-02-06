@@ -163,11 +163,13 @@ namespace Mvp24Hours.Infrastructure.Pipe
             {
                 throw new ArgumentNullException(nameof(operation), "Operation has not been defined or is null.");
             }
-            if (!this.dictionaryInterceptors.ContainsKey(pipelineInterceptor))
+            if (!dictionaryInterceptors.TryGetValue(pipelineInterceptor, out IList<IOperationAsync> value))
             {
-                this.dictionaryInterceptors.Add(pipelineInterceptor, new List<IOperationAsync>());
+                value = new List<IOperationAsync>();
+                this.dictionaryInterceptors.Add(pipelineInterceptor, value);
             }
-            this.dictionaryInterceptors[pipelineInterceptor].Add(operation);
+
+            value.Add(operation);
             return this;
         }
         public IPipelineAsync AddInterceptors(Action<IPipelineMessage> action, PipelineInterceptorType pipelineInterceptor = PipelineInterceptorType.PostOperation)
@@ -176,11 +178,13 @@ namespace Mvp24Hours.Infrastructure.Pipe
             {
                 throw new ArgumentNullException(nameof(action), "Action is mandatory.");
             }
-            if (!this.dictionaryInterceptors.ContainsKey(pipelineInterceptor))
+            if (!dictionaryInterceptors.TryGetValue(pipelineInterceptor, out IList<IOperationAsync> value))
             {
-                this.dictionaryInterceptors.Add(pipelineInterceptor, new List<IOperationAsync>());
+                value = new List<IOperationAsync>();
+                this.dictionaryInterceptors.Add(pipelineInterceptor, value);
             }
-            this.dictionaryInterceptors[pipelineInterceptor].Add(new OperationActionAsync(action));
+
+            value.Add(new OperationActionAsync(action));
             return this;
         }
         public IPipelineAsync AddInterceptors<T>(Func<IPipelineMessage, bool> condition, bool postOperation = true) where T : class, IOperationAsync
@@ -243,11 +247,13 @@ namespace Mvp24Hours.Infrastructure.Pipe
                 throw new ArgumentNullException(nameof(handler), "Handler has not been defined or is null.");
             }
 
-            if (!this.dictionaryEventInterceptors.ContainsKey(pipelineInterceptor))
+            if (!dictionaryEventInterceptors.TryGetValue(pipelineInterceptor, out IList<EventHandler<IPipelineMessage, EventArgs>> value))
             {
-                this.dictionaryEventInterceptors.Add(pipelineInterceptor, new List<EventHandler<IPipelineMessage, EventArgs>>());
+                value = new List<EventHandler<IPipelineMessage, EventArgs>>();
+                this.dictionaryEventInterceptors.Add(pipelineInterceptor, value);
             }
-            this.dictionaryEventInterceptors[pipelineInterceptor].Add(handler);
+
+            value.Add(handler);
             return this;
         }
         public IPipelineAsync AddInterceptors(EventHandler<IPipelineMessage, EventArgs> handler, Func<IPipelineMessage, bool> condition, bool postOperation = true)
@@ -381,9 +387,9 @@ namespace Mvp24Hours.Infrastructure.Pipe
 
         protected virtual async Task RunOperationInterceptorsAsync(IPipelineMessage input, PipelineInterceptorType interceptorType, bool canClearList = false)
         {
-            if (dictionaryInterceptors.ContainsKey(interceptorType))
+            if (dictionaryInterceptors.TryGetValue(interceptorType, out IList<IOperationAsync> value))
             {
-                await RunOperationsAsync(dictionaryInterceptors[interceptorType], input, true);
+                await RunOperationsAsync(value, input, true);
                 if (canClearList)
                 {
                     dictionaryInterceptors.Remove(interceptorType);

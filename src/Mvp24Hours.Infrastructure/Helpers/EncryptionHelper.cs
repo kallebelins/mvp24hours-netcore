@@ -37,10 +37,10 @@ namespace Mvp24Hours.Infrastructure.Helpers
             byte[] encryptedData;
 
             //Encryption will be done in a memory stream through a CryptoStream object
-            using MemoryStream ms = new MemoryStream();
+            using MemoryStream ms = new();
             {
-                using CryptoStream cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write);
-                using (StreamWriter sw = new StreamWriter(cs))
+                using CryptoStream cs = new(ms, encryptor, CryptoStreamMode.Write);
+                using (StreamWriter sw = new(cs))
                 {
                     sw.Write(plainText);
                 }
@@ -63,8 +63,8 @@ namespace Mvp24Hours.Infrastructure.Helpers
 
             //Decryption will be done in a memory stream through a CryptoStream object
             using MemoryStream ms = new MemoryStream(cipher);
-            using CryptoStream cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read);
-            using StreamReader sr = new StreamReader(cs);
+            using CryptoStream cs = new(ms, decryptor, CryptoStreamMode.Read);
+            using StreamReader sr = new(cs);
             return sr.ReadToEnd();
         }
     }

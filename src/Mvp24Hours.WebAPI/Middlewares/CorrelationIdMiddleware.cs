@@ -22,10 +22,7 @@ namespace Mvp24Hours.WebAPI.Middlewares
 
         public CorrelationIdMiddleware(RequestDelegate next, IOptions<CorrelationIdOptions> options)
         {
-            if (options == null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
+            ArgumentNullException.ThrowIfNull(options);
 
             _next = next ?? throw new ArgumentNullException(nameof(next));
 

@@ -1,3 +1,4 @@
+using Mvp24Hours.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -26,11 +27,9 @@ namespace Mvp24Hours.Extensions
             where T : class
             where U : class
         {
-            if (source is null)
-                throw new ArgumentNullException(nameof(source));
+            ArgumentNullException.ThrowIfNull(source);
 
-            if (destination is null)
-                throw new ArgumentNullException(nameof(destination));
+            ArgumentNullException.ThrowIfNull(destination);
 
             // Getting the Types of the objects
             Type typeDest = destination.GetType();
@@ -97,12 +96,7 @@ namespace Mvp24Hours.Extensions
         public static T DeepClone<T>(this T objectToClone)
             where T : class
         {
-            BinaryFormatter bFormatter = new();
-            MemoryStream stream = new();
-            bFormatter.Serialize(stream, objectToClone);
-            stream.Seek(0, SeekOrigin.Begin);
-            T clonedObject = (T)bFormatter.Deserialize(stream);
-            return clonedObject;
+            return ObjectHelper.Clone<T>(objectToClone);
         }
 
         /// <summary>

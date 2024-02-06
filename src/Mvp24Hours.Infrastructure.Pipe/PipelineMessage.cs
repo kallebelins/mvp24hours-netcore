@@ -38,7 +38,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
             this._contents = new Dictionary<string, object>();
             this.Token = token;
 
-            if (args?.Count() > 0)
+            if (args?.Length > 0)
             {
                 foreach (var item in args)
                 {
@@ -106,9 +106,9 @@ namespace Mvp24Hours.Infrastructure.Pipe
         }
         public T GetContent<T>(string key)
         {
-            if (_contents.ContainsKey(key))
+            if (_contents.TryGetValue(key, out object value))
             {
-                return (T)_contents[key];
+                return (T)value;
             }
             return default;
         }

@@ -18,21 +18,13 @@ namespace Mvp24Hours.WebAPI.Extensions
     {
         public static IApplicationBuilder UseMvp24HoursCorrelationId(this IApplicationBuilder app)
         {
-            if (app == null)
-            {
-                throw new ArgumentNullException(nameof(app));
-            }
-
+            ArgumentNullException.ThrowIfNull(app);
             return app.UseMiddleware<CorrelationIdMiddleware>();
         }
 
         public static IApplicationBuilder UseMvp24HoursCorrelationId(this IApplicationBuilder app, string header)
         {
-            if (app == null)
-            {
-                throw new ArgumentNullException(nameof(app));
-            }
-
+            ArgumentNullException.ThrowIfNull(app);
             return app.UseMvp24HoursCorrelationId(new CorrelationIdOptions
             {
                 Header = header
@@ -41,16 +33,8 @@ namespace Mvp24Hours.WebAPI.Extensions
 
         public static IApplicationBuilder UseMvp24HoursCorrelationId(this IApplicationBuilder app, CorrelationIdOptions options)
         {
-            if (app == null)
-            {
-                throw new ArgumentNullException(nameof(app));
-            }
-
-            if (options == null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
-
+            ArgumentNullException.ThrowIfNull(app);
+            ArgumentNullException.ThrowIfNull(options);
             return app.UseMiddleware<CorrelationIdMiddleware>(Options.Create(options));
         }
     }

@@ -155,44 +155,32 @@ namespace Mvp24Hours.Helpers
         #region [ Get Services ]
         public static IList<ITelemetryService> GetServices(TelemetryLevels level)
         {
-            if (services.ContainsKey(level))
-                return services[level];
-            return default;
+            return services.TryGetValue(level, out List<ITelemetryService> value) ? value : default(IList<ITelemetryService>);
         }
 
         public static IList<Action<string>> GetActions1(TelemetryLevels level)
         {
-            if (servicesAction1.ContainsKey(level))
-                return servicesAction1[level];
-            return default;
+            return servicesAction1.TryGetValue(level, out List<Action<string>> value) ? value : default(IList<Action<string>>);
         }
 
         public static IList<Action<string, object[]>> GetActions2(TelemetryLevels level)
         {
-            if (servicesAction2.ContainsKey(level))
-                return servicesAction2[level];
-            return default;
+            return servicesAction2.TryGetValue(level, out List<Action<string, object[]>> value) ? value : (IList<Action<string, object[]>>)default;
         }
 
         public static IList<ITelemetryService> GetFilters(string serviceName)
         {
-            if (serviceFilters.ContainsKey(serviceName))
-                return serviceFilters[serviceName];
-            return default;
+            return serviceFilters.TryGetValue(serviceName, out List<ITelemetryService> value) ? value : (IList<ITelemetryService>)default;
         }
 
         public static IList<Action<string>> GetActionFilters1(string serviceName)
         {
-            if (serviceActionFilters1.ContainsKey(serviceName))
-                return serviceActionFilters1[serviceName];
-            return default;
+            return serviceActionFilters1.TryGetValue(serviceName, out List<Action<string>> value) ? value : (IList<Action<string>>)default;
         }
 
         public static IList<Action<string, object[]>> GetActionFilters2(string serviceName)
         {
-            if (serviceActionFilters2.ContainsKey(serviceName))
-                return serviceActionFilters2[serviceName];
-            return default;
+            return serviceActionFilters2.TryGetValue(serviceName, out List<Action<string, object[]>> value) ? value : (IList<Action<string, object[]>>)default;
         }
         #endregion
 

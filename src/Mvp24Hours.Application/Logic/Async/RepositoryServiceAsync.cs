@@ -191,7 +191,7 @@ namespace Mvp24Hours.Application.Logic
                 }
             }
             var rep = this.UnitOfWork.GetRepository<TEntity>();
-            await Task.WhenAll(entities?.Select(entity => rep.AddAsync(entity, cancellationToken: cancellationToken)));
+            await Task.WhenAll(tasks: entities?.Select(entity => rep.AddAsync(entity, cancellationToken: cancellationToken)));
             return await this.UnitOfWork.SaveChangesAsync(cancellationToken: cancellationToken)
                 .ToBusinessAsync();
         }

@@ -401,7 +401,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
                     var entityLog = (dynamic)entity;
                     entityLog.Removed = TimeZoneHelper.GetTimeZoneNow();
                     entityLog.RemovedBy = (dynamic)EntityLogBy;
-                    await ModifyAsync(entity);
+                    await ModifyAsync(entity, cancellationToken);
                 }
                 else
                 {

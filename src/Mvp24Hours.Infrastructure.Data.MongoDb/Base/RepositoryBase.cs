@@ -32,7 +32,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
 
         protected RepositoryBase(Mvp24HoursContext dbContext, IOptions<MongoDbRepositoryOptions> options)
         {
-            this.dbContext = dbContext ?? throw new ArgumentNullException("dbContext");
+            this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             dbEntities = dbContext.Set<T>();
             this.Options = options?.Value ?? new MongoDbRepositoryOptions();
         }

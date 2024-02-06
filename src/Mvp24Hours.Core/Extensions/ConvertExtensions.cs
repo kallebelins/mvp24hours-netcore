@@ -144,7 +144,7 @@ namespace Mvp24Hours.Extensions
         public static string GetSHA256Hash(this string str)
         {
             byte[] bytes = Encoding.UTF8.GetBytes(str.NullSafe());
-            SHA256Managed hashstring = new();
+            using SHA256Managed hashstring = new();
             byte[] hash = hashstring.ComputeHash(bytes);
             StringBuilder hashString = new();
             foreach (byte x in hash)

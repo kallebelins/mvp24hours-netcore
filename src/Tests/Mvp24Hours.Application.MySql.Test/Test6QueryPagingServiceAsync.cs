@@ -53,7 +53,7 @@ namespace Mvp24Hours.Application.MySql.Test
             // act
             var pagingResult = await service.ListWithPaginationAsync();
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         [Fact, Priority(5)]
         public async Task GetFilterCustomerListPaging()
@@ -64,7 +64,7 @@ namespace Mvp24Hours.Application.MySql.Test
             // act
             var pagingResult = await service.ListWithPaginationAsync(paging);
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         [Fact, Priority(5)]
         public async Task GetFilterCustomerListNavigation()
@@ -86,7 +86,7 @@ namespace Mvp24Hours.Application.MySql.Test
             // act
             var pagingResult = await service.ListWithPaginationAsync(paging);
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         [Fact, Priority(6)]
         public async Task GetFilterCustomerListOrderDesc()
@@ -97,7 +97,7 @@ namespace Mvp24Hours.Application.MySql.Test
             // act
             var pagingResult = await service.ListWithPaginationAsync(paging);
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         [Fact, Priority(7)]
         public async Task GetFilterCustomerListOrderAscExpression()
@@ -109,7 +109,7 @@ namespace Mvp24Hours.Application.MySql.Test
             // act
             var pagingResult = await service.ListWithPaginationAsync(paging);
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         [Fact, Priority(8)]
         public async Task GetFilterCustomerListOrderDescExpression()
@@ -121,7 +121,7 @@ namespace Mvp24Hours.Application.MySql.Test
             // act
             var pagingResult = await service.ListWithPaginationAsync(paging);
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         [Fact, Priority(9)]
         public async Task GetFilterCustomerListPagingExpression()
@@ -132,7 +132,7 @@ namespace Mvp24Hours.Application.MySql.Test
             // act
             var pagingResult = await service.ListWithPaginationAsync(paging);
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         [Fact, Priority(9)]
         public async Task GetFilterCustomerListNavigationExpression()
@@ -144,7 +144,7 @@ namespace Mvp24Hours.Application.MySql.Test
             // act
             var pagingResult = await service.ListWithPaginationAsync(paging);
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         #endregion
 
@@ -157,7 +157,7 @@ namespace Mvp24Hours.Application.MySql.Test
             // act
             var pagingResult = await service.GetByWithPaginationAsync(x => x.Name.Contains("Test"));
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         [Fact, Priority(5)]
         public async Task GetFilterCustomerGetByPaging()
@@ -168,7 +168,7 @@ namespace Mvp24Hours.Application.MySql.Test
             // act
             var pagingResult = await service.GetByWithPaginationAsync(x => x.Name.Contains("Test"), paging);
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         [Fact, Priority(5)]
         public async Task GetFilterCustomerGetByNavigation()
@@ -179,7 +179,7 @@ namespace Mvp24Hours.Application.MySql.Test
             // act
             var pagingResult = await service.GetByWithPaginationAsync(x => x.Name.Contains("Test"), paging);
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         [Fact, Priority(6)]
         public async Task GetFilterCustomerGetByOrderAsc()
@@ -190,7 +190,7 @@ namespace Mvp24Hours.Application.MySql.Test
             // act
             var pagingResult = await service.GetByWithPaginationAsync(x => x.Name.Contains("Test"), paging);
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         [Fact, Priority(6)]
         public async Task GetFilterCustomerGetByOrderDesc()
@@ -201,7 +201,7 @@ namespace Mvp24Hours.Application.MySql.Test
             // act
             var pagingResult = await service.GetByWithPaginationAsync(x => x.Name.Contains("Test"), paging);
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         [Fact, Priority(7)]
         public async Task GetFilterCustomerGetByOrderAscExpression()
@@ -213,7 +213,7 @@ namespace Mvp24Hours.Application.MySql.Test
             // act
             var pagingResult = await service.GetByWithPaginationAsync(x => x.Name.Contains("Test"), paging);
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         [Fact, Priority(8)]
         public async Task GetFilterCustomerGetByOrderDescExpression()
@@ -225,7 +225,7 @@ namespace Mvp24Hours.Application.MySql.Test
             // act
             var pagingResult = await service.GetByWithPaginationAsync(x => x.Name.Contains("Test"), paging);
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         [Fact, Priority(9)]
         public async Task GetFilterCustomerGetByPagingExpression()
@@ -236,7 +236,7 @@ namespace Mvp24Hours.Application.MySql.Test
             // act
             var pagingResult = await service.GetByWithPaginationAsync(x => x.Name.Contains("Test"), paging);
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         [Fact, Priority(9)]
         public async Task GetFilterCustomerGetByNavigationExpression()
@@ -248,7 +248,7 @@ namespace Mvp24Hours.Application.MySql.Test
             // act
             var pagingResult = await service.GetByWithPaginationAsync(x => x.Name.Contains("Test"), paging);
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         #endregion
     }

@@ -105,7 +105,7 @@ namespace Mvp24Hours.Application.MongoDb.Test
 
             var result = service.GetById(oid);
 
-            Assert.True(!result.HasData());
+            Assert.False(result.HasData());
         }
         #endregion
     }

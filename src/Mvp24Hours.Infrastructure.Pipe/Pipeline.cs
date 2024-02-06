@@ -164,11 +164,13 @@ namespace Mvp24Hours.Infrastructure.Pipe
             {
                 throw new ArgumentNullException(nameof(operation), "Operation has not been defined or is null.");
             }
-            if (!this.dictionaryInterceptors.ContainsKey(pipelineInterceptor))
+            if (!dictionaryInterceptors.TryGetValue(pipelineInterceptor, out IList<IOperation> value))
             {
-                this.dictionaryInterceptors.Add(pipelineInterceptor, new List<IOperation>());
+                value = new List<IOperation>();
+                this.dictionaryInterceptors.Add(pipelineInterceptor, value);
             }
-            this.dictionaryInterceptors[pipelineInterceptor].Add(operation);
+
+            value.Add(operation);
             return this;
         }
         public IPipeline AddInterceptors(Action<IPipelineMessage> action, PipelineInterceptorType pipelineInterceptor = PipelineInterceptorType.PostOperation)
@@ -177,11 +179,13 @@ namespace Mvp24Hours.Infrastructure.Pipe
             {
                 throw new ArgumentNullException(nameof(action), "Action is mandatory.");
             }
-            if (!this.dictionaryInterceptors.ContainsKey(pipelineInterceptor))
+            if (!dictionaryInterceptors.TryGetValue(pipelineInterceptor, out IList<IOperation> value))
             {
-                this.dictionaryInterceptors.Add(pipelineInterceptor, new List<IOperation>());
+                value = new List<IOperation>();
+                this.dictionaryInterceptors.Add(pipelineInterceptor, value);
             }
-            this.dictionaryInterceptors[pipelineInterceptor].Add(new OperationAction(action));
+
+            value.Add(new OperationAction(action));
             return this;
         }
         public IPipeline AddInterceptors<T>(Func<IPipelineMessage, bool> condition, bool postOperation = true) where T : class, IOperation
@@ -244,11 +248,13 @@ namespace Mvp24Hours.Infrastructure.Pipe
                 throw new ArgumentNullException(nameof(handler), "Handler has not been defined or is null.");
             }
 
-            if (!this.dictionaryEventInterceptors.ContainsKey(pipelineInterceptor))
+            if (!dictionaryEventInterceptors.TryGetValue(pipelineInterceptor, out IList<EventHandler<IPipelineMessage, EventArgs>> value))
             {
-                this.dictionaryEventInterceptors.Add(pipelineInterceptor, new List<EventHandler<IPipelineMessage, EventArgs>>());
+                value = new List<EventHandler<IPipelineMessage, EventArgs>>();
+                this.dictionaryEventInterceptors.Add(pipelineInterceptor, value);
             }
-            this.dictionaryEventInterceptors[pipelineInterceptor].Add(handler);
+
+            value.Add(handler);
             return this;
         }
         public IPipeline AddInterceptors(EventHandler<IPipelineMessage, EventArgs> handler, Func<IPipelineMessage, bool> condition, bool postOperation = true)
@@ -377,9 +383,9 @@ namespace Mvp24Hours.Infrastructure.Pipe
 
         protected virtual void RunOperationInterceptors(IPipelineMessage input, PipelineInterceptorType interceptorType, bool canClearList = false)
         {
-            if (dictionaryInterceptors.ContainsKey(interceptorType))
+            if (dictionaryInterceptors.TryGetValue(interceptorType, out IList<IOperation> value))
             {
-                RunOperations(dictionaryInterceptors[interceptorType], input, true);
+                RunOperations(value, input, true);
                 if (canClearList)
                 {
                     dictionaryInterceptors.Remove(interceptorType);
@@ -411,9 +417,9 @@ namespace Mvp24Hours.Infrastructure.Pipe
         }
         protected virtual void RunEventInterceptors(IPipelineMessage input, PipelineInterceptorType interceptorType, bool canClearList = false)
         {
-            if (dictionaryEventInterceptors.ContainsKey(interceptorType))
+            if (dictionaryEventInterceptors.TryGetValue(interceptorType, out IList<EventHandler<IPipelineMessage, EventArgs>> value))
             {
-                RunEvents(dictionaryEventInterceptors[interceptorType], input);
+                RunEvents(value, input);
                 if (canClearList)
                 {
                     dictionaryEventInterceptors.Remove(interceptorType);
