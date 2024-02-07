@@ -24,7 +24,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public void PipelineStarted()
         {
             // arrange
-            IPipeline pipeline = new Pipeline();
+            Pipeline pipeline = new();
 
             // act
             pipeline.Add(_ =>
@@ -49,7 +49,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public void PipelineMessageContentGet()
         {
             // arrange
-            IPipeline pipeline = new Pipeline();
+            Pipeline pipeline = new();
 
             // act
 
@@ -83,7 +83,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public void PipelineMessageContentAdd()
         {
             // arrange
-            IPipeline pipeline = new Pipeline();
+            Pipeline pipeline = new();
 
             // act
 
@@ -126,7 +126,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public void PipelineMessageContentValidate()
         {
             // arrange
-            IPipeline pipeline = new Pipeline();
+            Pipeline pipeline = new();
 
             // act
 
@@ -156,7 +156,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public void PipelineOperationLock()
         {
             // arrange
-            IPipeline pipeline = new Pipeline();
+            Pipeline pipeline = new();
 
             // act
 
@@ -189,7 +189,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public void PipelineOperationLockExecuteForce()
         {
             // arrange
-            IPipeline pipeline = new Pipeline();
+            Pipeline pipeline = new();
 
             // act
 
@@ -238,7 +238,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public void PipelineOperationFailure()
         {
             // arrange
-            IPipeline pipeline = new Pipeline();
+            Pipeline pipeline = new();
 
             // act
 
@@ -277,7 +277,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public void PipelineOperationLockWithNotification()
         {
             // arrange
-            IPipeline pipeline = new Pipeline();
+            Pipeline pipeline = new();
 
             // act
 
@@ -314,7 +314,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public void PipelineInterceptors()
         {
             // arrange
-            IPipeline pipeline = new Pipeline();
+            Pipeline pipeline = new();
 
             // act
 
@@ -390,7 +390,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public void PipelineEventInterceptors()
         {
             // arrange
-            IPipeline pipeline = new Pipeline();
+            Pipeline pipeline = new();
 
             // act
 
@@ -466,7 +466,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public void PipelineEventInterceptorsWithLock()
         {
             // arrange
-            IPipeline pipeline = new Pipeline();
+            Pipeline pipeline = new();
 
             // act
 
@@ -544,7 +544,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public void PipelineWithOperation()
         {
             // arrange
-            IPipeline pipeline = new Pipeline();
+            Pipeline pipeline = new();
 
             // act
             pipeline.Add<OperationTest>();

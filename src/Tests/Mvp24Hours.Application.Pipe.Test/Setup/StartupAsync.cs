@@ -11,9 +11,9 @@ using System;
 
 namespace Mvp24Hours.Application.Pipe.Test.Setup
 {
-    public class StartupAsync
+    public static class StartupAsync
     {
-        public IServiceProvider SetupInjectionAsync()
+        public static IServiceProvider SetupInjectionAsync()
         {
             var services = new ServiceCollection()
                            .AddSingleton(ConfigurationHelper.AppSettings);
@@ -26,7 +26,7 @@ namespace Mvp24Hours.Application.Pipe.Test.Setup
             return services.BuildServiceProvider();
         }
 
-        public IServiceProvider SetupInjectionFactoryAsync()
+        public static IServiceProvider SetupInjectionFactoryAsync()
         {
             var services = new ServiceCollection()
                            .AddSingleton(ConfigurationHelper.AppSettings);

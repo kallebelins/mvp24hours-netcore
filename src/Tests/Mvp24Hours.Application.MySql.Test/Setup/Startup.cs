@@ -11,10 +11,10 @@ using Mvp24Hours.Application.MySql.Test.Support.Enums;
 using Mvp24Hours.Application.MySql.Test.Support.Services;
 using Mvp24Hours.Core.Helpers;
 using Mvp24Hours.Extensions;
-using System;
 using System.Collections.Generic;
+using System;
 
-#if !InMemory 
+#if !InMemory
 using Microsoft.Extensions.Configuration;
 using Mvp24Hours.Helpers;
 #endif
@@ -50,7 +50,7 @@ namespace Mvp24Hours.Application.MySql.Test.Setup
             }
         }
 
-        private static IServiceProvider ConfigureServices()
+        private static ServiceProvider ConfigureServices()
         {
 #if InMemory
             var services = new ServiceCollection();

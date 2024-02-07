@@ -17,6 +17,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
 {
     public sealed class MvpRabbitMQConnection : IMvpRabbitMQConnection, IDisposable
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1859:Use concrete types when possible for improved performance", Justification = "Allows you to implement specialized rules.")]
         private readonly IConnectionFactory _connectionFactory;
         private readonly RabbitMQConnectionOptions _options;
         private IConnection _connection;

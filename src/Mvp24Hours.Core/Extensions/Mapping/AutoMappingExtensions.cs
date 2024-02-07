@@ -25,7 +25,7 @@ namespace Mvp24Hours.Extensions
             Expression<Func<TDestination, object>> selector)
         {
             if (map == null)
-                throw new ArgumentException(nameof(map));
+                throw new ArgumentException(null, nameof(map));
             return map.ForMember(selector, config => config.Ignore());
         }
 
@@ -38,7 +38,7 @@ namespace Mvp24Hours.Extensions
             Expression<Func<TDestination, object>> targetMember)
         {
             if (map == null)
-                throw new ArgumentException(nameof(map));
+                throw new ArgumentException(null, nameof(map));
             return map.ForMember(targetMember, opt => opt.MapFrom(sourceMember));
         }
 
@@ -53,7 +53,7 @@ namespace Mvp24Hours.Extensions
             }
 
             if (mapper == null)
-                throw new ArgumentException(nameof(mapper));
+                throw new ArgumentException(null, nameof(mapper));
 
             if (source.Messages.AnySafe())
             {
@@ -87,7 +87,7 @@ namespace Mvp24Hours.Extensions
             }
 
             if (mapper == null)
-                throw new ArgumentException(nameof(mapper));
+                throw new ArgumentException(null, nameof(mapper));
 
             if (source.Messages.AnySafe())
             {
@@ -155,7 +155,7 @@ namespace Mvp24Hours.Extensions
             var mappingResult = Map<T>(mapper, initialSource);
 
             // Now map the remaining source objects
-            if (sources.Count() > 1)
+            if (sources.Length > 1)
             {
                 Map(mapper, mappingResult, sources.Skip(1).ToArray());
             }
@@ -172,7 +172,7 @@ namespace Mvp24Hours.Extensions
         private static void Map(IMapper mapper, object destination, params object[] sources)
         {
             // If there are no sources just return the destination object
-            if (!sources.Any())
+            if (sources.Length == 0)
             {
                 return;
             }

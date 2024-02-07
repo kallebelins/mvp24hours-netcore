@@ -73,6 +73,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
         /// <summary>
         /// Gets database query with clause and aggregation of relationships
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S3776:Cognitive Complexity of methods should not be too high", Justification = "Low complexity")]
         protected IQueryable<T> GetQuery(IQueryable<T> query, IPagingCriteria criteria, bool onlyNavigation = false)
         {
             TelemetryHelper.Execute(TelemetryLevels.Verbose, "mongodb-repositorybase-querycriteria-object", criteria);
@@ -205,25 +206,25 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb.Base
         {
             if (_keyInfo == null)
             {
-                _keyInfo = typeof(T).GetTypeInfo()
+                _keyInfo = Array.Find(typeof(T).GetTypeInfo()
                                     .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                                    .FirstOrDefault(x => x.GetCustomAttribute<BsonIdAttribute>() != null);
+                                    , x => x.GetCustomAttribute<BsonIdAttribute>() != null);
 
                 if (_keyInfo == null)
                 {
                     if (typeof(T).InheritsOrImplements(typeof(EntityBase<>))
                         || typeof(T).InheritsOrImplements(typeof(EntityBaseLog<,>)))
                     {
-                        _keyInfo = typeof(T).GetTypeInfo()
+                        _keyInfo = Array.Find(typeof(T).GetTypeInfo()
                                             .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                                            .FirstOrDefault(x => x.Name == "Id");
+                                            , x => x.Name == "Id");
                     }
 
                     if (_keyInfo == null)
                     {
-                        _keyInfo = typeof(T).GetTypeInfo()
+                        _keyInfo = Array.Find(typeof(T).GetTypeInfo()
                                             .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                                            .FirstOrDefault(x => x.Name == BsonClassMap.LookupClassMap(typeof(T)).IdMemberMap.MemberName);
+                                            , x => x.Name == BsonClassMap.LookupClassMap(typeof(T)).IdMemberMap.MemberName);
                     }
 
                     if (_keyInfo == null)

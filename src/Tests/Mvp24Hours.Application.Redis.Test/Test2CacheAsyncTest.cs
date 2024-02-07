@@ -107,7 +107,7 @@ namespace Mvp24Hours.Application.Redis.Test
 
             // assert
             string content = await cache.GetStringAsync(keyString);
-            Assert.True(!content.HasValue());
+            Assert.False(content.HasValue());
         }
 
         [Fact, Priority(4)]
@@ -129,7 +129,7 @@ namespace Mvp24Hours.Application.Redis.Test
 
             // assert
             var result = await cache.GetObjectAsync<Customer>(keyObject);
-            Assert.True(result != null);
+            Assert.NotNull(result);
         }
 
         [Fact, Priority(5)]
@@ -151,7 +151,7 @@ namespace Mvp24Hours.Application.Redis.Test
             customer = await cache.GetObjectAsync<Customer>(keyObject);
 
             // assert
-            Assert.True(customer != null);
+            Assert.NotNull(customer);
         }
 
         [Fact, Priority(6)]
@@ -174,7 +174,7 @@ namespace Mvp24Hours.Application.Redis.Test
 
             // assert
             customer = await cache.GetObjectAsync<Customer>(keyObject);
-            Assert.True(customer == null);
+            Assert.Null(customer);
         }
     }
 }

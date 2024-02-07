@@ -25,7 +25,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineStarted()
         {
             // arrange
-            var pipeline = new PipelineAsync();
+            PipelineAsync pipeline = new();
 
             // act
             pipeline.Add(_ =>
@@ -50,7 +50,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineMessageContentGet()
         {
             // arrange
-            var pipeline = new PipelineAsync();
+            PipelineAsync pipeline = new();
 
             // act
 
@@ -84,7 +84,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineMessageContentAdd()
         {
             // arrange
-            var pipeline = new PipelineAsync();
+            PipelineAsync pipeline = new();
 
             // act
 
@@ -127,7 +127,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineMessageContentValidate()
         {
             // arrange
-            var pipeline = new PipelineAsync();
+            PipelineAsync pipeline = new();
 
             // act
 
@@ -157,7 +157,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineOperationLock()
         {
             // arrange
-            var pipeline = new PipelineAsync();
+            PipelineAsync pipeline = new();
 
             // act
 
@@ -190,7 +190,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineOperationLockExecuteForce()
         {
             // arrange
-            var pipeline = new PipelineAsync();
+            PipelineAsync pipeline = new();
 
             // act
 
@@ -239,7 +239,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineOperationFailure()
         {
             // arrange
-            var pipeline = new PipelineAsync();
+            PipelineAsync pipeline = new();
 
             // act
 
@@ -278,7 +278,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineOperationLockWithNotification()
         {
             // arrange
-            var pipeline = new PipelineAsync();
+            PipelineAsync pipeline = new();
 
             // act
 
@@ -315,7 +315,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineInterceptors()
         {
             // arrange
-            var pipeline = new PipelineAsync();
+            PipelineAsync pipeline = new();
 
             // act
 
@@ -391,7 +391,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineEventInterceptors()
         {
             // arrange
-            var pipeline = new PipelineAsync();
+            PipelineAsync pipeline = new();
 
             // act
 
@@ -467,7 +467,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineEventInterceptorsWithLock()
         {
             // arrange
-            var pipeline = new PipelineAsync();
+            PipelineAsync pipeline = new();
 
             // act
 
@@ -545,7 +545,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineWithOperation()
         {
             // arrange
-            var pipeline = new PipelineAsync();
+            PipelineAsync pipeline = new();
 
             // act
             pipeline.Add<OperationTestAsync>();

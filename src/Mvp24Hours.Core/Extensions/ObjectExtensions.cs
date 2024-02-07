@@ -23,6 +23,7 @@ namespace Mvp24Hours.Extensions
         /// <param name="ThrowOnTypeMismatch">when true, will throw a InvalidCastException if the data cannot be coerced</param>
         /// <exception cref="InvalidCastException">if there is a data type mismatch between source/destination and ThrowOnTypeMismatch is enabled and unable to coerce the data type.</exception>
         /// <returns>true if any properties were changed</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S3776:Cognitive Complexity of methods should not be too high", Justification = "Low complexity")]
         public static bool CopyPropertiesTo<T, U>(this T source, U destination, IEnumerable<string> PropertiesToIgnore = null, bool IgnoreNullProperties = false, bool ThrowOnTypeMismatch = true, bool CoerceDataType = false)
             where T : class
             where U : class

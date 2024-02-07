@@ -106,7 +106,7 @@ namespace Mvp24Hours.Application.Redis.Test
 
             // assert
             string content = cache.GetString(keyString);
-            Assert.True(!content.HasValue());
+            Assert.False(content.HasValue());
         }
 
         [Fact, Priority(4)]
@@ -128,7 +128,7 @@ namespace Mvp24Hours.Application.Redis.Test
 
             // assert
             var result = cache.GetObject<Customer>(keyObject);
-            Assert.True(result != null);
+            Assert.NotNull(result);
         }
 
         [Fact, Priority(5)]
@@ -150,7 +150,7 @@ namespace Mvp24Hours.Application.Redis.Test
             customer = cache.GetObject<Customer>(keyObject);
 
             // assert
-            Assert.True(customer != null);
+            Assert.NotNull(customer);
         }
 
         [Fact, Priority(6)]
@@ -173,7 +173,7 @@ namespace Mvp24Hours.Application.Redis.Test
 
             // assert
             customer = cache.GetObject<Customer>(keyObject);
-            Assert.True(customer == null);
+            Assert.Null(customer);
         }
     }
 }

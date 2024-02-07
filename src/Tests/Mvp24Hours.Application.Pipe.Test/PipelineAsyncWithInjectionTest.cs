@@ -22,21 +22,11 @@ namespace Mvp24Hours.Application.Pipe.Test
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Name)]
     public class PipelineAsyncWithInjectionTest
     {
-        private readonly StartupAsync startup;
-
-        /// <summary>
-        /// Initialize
-        /// </summary>
-        public PipelineAsyncWithInjectionTest()
-        {
-            startup = new StartupAsync();
-        }
-
         [Fact, Priority(1)]
         public async Task PipelineStarted()
         {
             // arrange
-            var serviceProvider = startup.SetupInjectionAsync();
+            var serviceProvider = StartupAsync.SetupInjectionAsync();
             var pipeline = serviceProvider.GetService<IPipelineAsync>();
 
             // act
@@ -62,7 +52,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineMessageContentGet()
         {
             // arrange
-            var serviceProvider = startup.SetupInjectionAsync();
+            var serviceProvider = StartupAsync.SetupInjectionAsync();
             var pipeline = serviceProvider.GetService<IPipelineAsync>();
 
             // act
@@ -97,7 +87,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineMessageContentAdd()
         {
             // arrange
-            var serviceProvider = startup.SetupInjectionAsync();
+            var serviceProvider = StartupAsync.SetupInjectionAsync();
             var pipeline = serviceProvider.GetService<IPipelineAsync>();
 
             // act
@@ -141,7 +131,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineMessageContentValidate()
         {
             // arrange
-            var serviceProvider = startup.SetupInjectionAsync();
+            var serviceProvider = StartupAsync.SetupInjectionAsync();
             var pipeline = serviceProvider.GetService<IPipelineAsync>();
 
             // act
@@ -172,7 +162,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineOperationLock()
         {
             // arrange
-            var serviceProvider = startup.SetupInjectionAsync();
+            var serviceProvider = StartupAsync.SetupInjectionAsync();
             var pipeline = serviceProvider.GetService<IPipelineAsync>();
 
             // act
@@ -206,7 +196,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineOperationLockExecuteForce()
         {
             // arrange
-            var serviceProvider = startup.SetupInjectionAsync();
+            var serviceProvider = StartupAsync.SetupInjectionAsync();
             var pipeline = serviceProvider.GetService<IPipelineAsync>();
 
             // act
@@ -256,7 +246,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineOperationFailure()
         {
             // arrange
-            var serviceProvider = startup.SetupInjectionAsync();
+            var serviceProvider = StartupAsync.SetupInjectionAsync();
             var pipeline = serviceProvider.GetService<IPipelineAsync>();
 
             // act
@@ -296,7 +286,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineOperationLockWithNotification()
         {
             // arrange
-            var serviceProvider = startup.SetupInjectionAsync();
+            var serviceProvider = StartupAsync.SetupInjectionAsync();
             var pipeline = serviceProvider.GetService<IPipelineAsync>();
 
             // act
@@ -334,7 +324,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineInterceptors()
         {
             // arrange
-            var serviceProvider = startup.SetupInjectionAsync();
+            var serviceProvider = StartupAsync.SetupInjectionAsync();
             var pipeline = serviceProvider.GetService<IPipelineAsync>();
 
             // act
@@ -411,7 +401,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineEventInterceptors()
         {
             // arrange
-            var serviceProvider = startup.SetupInjectionAsync();
+            var serviceProvider = StartupAsync.SetupInjectionAsync();
             var pipeline = serviceProvider.GetService<IPipelineAsync>();
 
             // act
@@ -488,7 +478,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineEventInterceptorsWithLock()
         {
             // arrange
-            var serviceProvider = startup.SetupInjectionAsync();
+            var serviceProvider = StartupAsync.SetupInjectionAsync();
             var pipeline = serviceProvider.GetService<IPipelineAsync>();
 
             // act
@@ -567,7 +557,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public async Task PipelineFactory()
         {
             // arrange
-            var serviceProvider = startup.SetupInjectionFactoryAsync();
+            var serviceProvider = StartupAsync.SetupInjectionFactoryAsync();
             var pipeline = serviceProvider.GetService<IPipelineAsync>();
 
             // act
@@ -590,7 +580,7 @@ namespace Mvp24Hours.Application.Pipe.Test
         public void PipelineWithOperation()
         {
             // arrange
-            var serviceProvider = startup.SetupInjectionAsync();
+            var serviceProvider = StartupAsync.SetupInjectionAsync();
             var pipeline = serviceProvider.GetService<IPipelineAsync>();
 
             // act

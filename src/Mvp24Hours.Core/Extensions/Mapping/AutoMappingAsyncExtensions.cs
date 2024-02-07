@@ -30,7 +30,7 @@ namespace Mvp24Hours.Extensions
             }
 
             if (mapper == null)
-                throw new ArgumentException(nameof(mapper));
+                throw new ArgumentException(null, nameof(mapper));
 
             if (source.Messages.AnySafe())
             {
@@ -66,7 +66,7 @@ namespace Mvp24Hours.Extensions
             }
 
             if (mapper == null)
-                throw new ArgumentException(nameof(mapper));
+                throw new ArgumentException(null, nameof(mapper));
 
             if (source.Messages.AnySafe())
             {

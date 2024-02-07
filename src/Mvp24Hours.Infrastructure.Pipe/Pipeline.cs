@@ -43,9 +43,9 @@ namespace Mvp24Hours.Infrastructure.Pipe
 
             preCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, IOperation>>();
             postCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, IOperation>>();
-            dictionaryInterceptors = new Dictionary<PipelineInterceptorType, IList<IOperation>>();
+            dictionaryInterceptors = new Dictionary<PipelineInterceptorType, List<IOperation>>();
 
-            dictionaryEventInterceptors = new Dictionary<PipelineInterceptorType, IList<EventHandler<IPipelineMessage, EventArgs>>>();
+            dictionaryEventInterceptors = new Dictionary<PipelineInterceptorType, List<EventHandler<IPipelineMessage, EventArgs>>>();
             preEventCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>>();
             postEventCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>>();
         }
@@ -54,27 +54,27 @@ namespace Mvp24Hours.Infrastructure.Pipe
 
         #region [ Fields / Properties ]
         private readonly IServiceProvider provider;
-        private readonly IList<IOperation> operations;
+        private readonly List<IOperation> operations;
 
-        private readonly IDictionary<PipelineInterceptorType, IList<IOperation>> dictionaryInterceptors;
-        private readonly IList<KeyValuePair<Func<IPipelineMessage, bool>, IOperation>> preCustomInterceptors;
-        private readonly IList<KeyValuePair<Func<IPipelineMessage, bool>, IOperation>> postCustomInterceptors;
+        private readonly Dictionary<PipelineInterceptorType, List<IOperation>> dictionaryInterceptors;
+        private readonly List<KeyValuePair<Func<IPipelineMessage, bool>, IOperation>> preCustomInterceptors;
+        private readonly List<KeyValuePair<Func<IPipelineMessage, bool>, IOperation>> postCustomInterceptors;
 
-        private readonly IDictionary<PipelineInterceptorType, IList<EventHandler<IPipelineMessage, EventArgs>>> dictionaryEventInterceptors;
-        private readonly IList<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>> preEventCustomInterceptors;
-        private readonly IList<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>> postEventCustomInterceptors;
+        private readonly Dictionary<PipelineInterceptorType, List<EventHandler<IPipelineMessage, EventArgs>>> dictionaryEventInterceptors;
+        private readonly List<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>> preEventCustomInterceptors;
+        private readonly List<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>> postEventCustomInterceptors;
         #endregion
 
         #region [ Methods ]
 
         #region [ Get ]
-        public IList<IOperation> GetOperations() => operations;
-        public IDictionary<PipelineInterceptorType, IList<IOperation>> GetInterceptors() => dictionaryInterceptors;
-        public IList<KeyValuePair<Func<IPipelineMessage, bool>, IOperation>> GetPreInterceptors() => preCustomInterceptors;
-        public IList<KeyValuePair<Func<IPipelineMessage, bool>, IOperation>> GetPostInterceptors() => postCustomInterceptors;
-        public IDictionary<PipelineInterceptorType, IList<EventHandler<IPipelineMessage, EventArgs>>> GetEvents() => dictionaryEventInterceptors;
-        public IList<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>> GetPreEvents() => preEventCustomInterceptors;
-        public IList<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>> GetPostEvents() => postEventCustomInterceptors;
+        public List<IOperation> GetOperations() => operations;
+        public Dictionary<PipelineInterceptorType, List<IOperation>> GetInterceptors() => dictionaryInterceptors;
+        public List<KeyValuePair<Func<IPipelineMessage, bool>, IOperation>> GetPreInterceptors() => preCustomInterceptors;
+        public List<KeyValuePair<Func<IPipelineMessage, bool>, IOperation>> GetPostInterceptors() => postCustomInterceptors;
+        public Dictionary<PipelineInterceptorType, List<EventHandler<IPipelineMessage, EventArgs>>> GetEvents() => dictionaryEventInterceptors;
+        public List<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>> GetPreEvents() => preEventCustomInterceptors;
+        public List<KeyValuePair<Func<IPipelineMessage, bool>, EventHandler<IPipelineMessage, EventArgs>>> GetPostEvents() => postEventCustomInterceptors;
         #endregion
 
         public IPipeline Add<T>() where T : class, IOperation
@@ -164,7 +164,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
             {
                 throw new ArgumentNullException(nameof(operation), "Operation has not been defined or is null.");
             }
-            if (!dictionaryInterceptors.TryGetValue(pipelineInterceptor, out IList<IOperation> value))
+            if (!dictionaryInterceptors.TryGetValue(pipelineInterceptor, out List<IOperation> value))
             {
                 value = new List<IOperation>();
                 this.dictionaryInterceptors.Add(pipelineInterceptor, value);
@@ -179,7 +179,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
             {
                 throw new ArgumentNullException(nameof(action), "Action is mandatory.");
             }
-            if (!dictionaryInterceptors.TryGetValue(pipelineInterceptor, out IList<IOperation> value))
+            if (!dictionaryInterceptors.TryGetValue(pipelineInterceptor, out List<IOperation> value))
             {
                 value = new List<IOperation>();
                 this.dictionaryInterceptors.Add(pipelineInterceptor, value);
@@ -248,7 +248,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
                 throw new ArgumentNullException(nameof(handler), "Handler has not been defined or is null.");
             }
 
-            if (!dictionaryEventInterceptors.TryGetValue(pipelineInterceptor, out IList<EventHandler<IPipelineMessage, EventArgs>> value))
+            if (!dictionaryEventInterceptors.TryGetValue(pipelineInterceptor, out List<EventHandler<IPipelineMessage, EventArgs>> value))
             {
                 value = new List<EventHandler<IPipelineMessage, EventArgs>>();
                 this.dictionaryEventInterceptors.Add(pipelineInterceptor, value);
@@ -288,7 +288,9 @@ namespace Mvp24Hours.Infrastructure.Pipe
             }
             finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "pipe-pipeline-execute-end"); }
         }
-        protected virtual IPipelineMessage RunOperations(IList<IOperation> _operations, IPipelineMessage input, bool onlyOperationDefault = false)
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S3776:Cognitive Complexity of methods should not be too high", Justification = "Low complexity")]
+        protected virtual IPipelineMessage RunOperations(List<IOperation> _operations, IPipelineMessage input, bool onlyOperationDefault = false)
         {
             if (!_operations.AnySafe())
             {
@@ -383,7 +385,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
 
         protected virtual void RunOperationInterceptors(IPipelineMessage input, PipelineInterceptorType interceptorType, bool canClearList = false)
         {
-            if (dictionaryInterceptors.TryGetValue(interceptorType, out IList<IOperation> value))
+            if (dictionaryInterceptors.TryGetValue(interceptorType, out List<IOperation> value))
             {
                 RunOperations(value, input, true);
                 if (canClearList)
@@ -417,7 +419,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
         }
         protected virtual void RunEventInterceptors(IPipelineMessage input, PipelineInterceptorType interceptorType, bool canClearList = false)
         {
-            if (dictionaryEventInterceptors.TryGetValue(interceptorType, out IList<EventHandler<IPipelineMessage, EventArgs>> value))
+            if (dictionaryEventInterceptors.TryGetValue(interceptorType, out List<EventHandler<IPipelineMessage, EventArgs>> value))
             {
                 RunEvents(value, input);
                 if (canClearList)
@@ -449,7 +451,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
                 }
             }
         }
-        protected virtual void RunEvents(IList<EventHandler<IPipelineMessage, EventArgs>> _handlers, IPipelineMessage input)
+        protected virtual void RunEvents(List<EventHandler<IPipelineMessage, EventArgs>> _handlers, IPipelineMessage input)
         {
             if (_handlers.AnySafe())
             {

@@ -61,11 +61,13 @@ namespace Mvp24Hours.Helpers
             {
                 throw new ArgumentNullException(nameof(actions));
             }
-            if (!servicesAction1.ContainsKey(level))
+            if (!servicesAction1.TryGetValue(level, out List<Action<string>> value))
             {
-                servicesAction1.Add(level, new List<Action<string>>());
+                value = new List<Action<string>>();
+                servicesAction1.Add(level, value);
             }
-            servicesAction1[level].AddRange(actions);
+
+            value.AddRange(actions);
             servicesAction1Started = true;
         }
 
@@ -75,11 +77,13 @@ namespace Mvp24Hours.Helpers
             {
                 throw new ArgumentNullException(nameof(actions));
             }
-            if (!servicesAction2.ContainsKey(level))
+            if (!servicesAction2.TryGetValue(level, out List<Action<string, object[]>> value))
             {
-                servicesAction2.Add(level, new List<Action<string, object[]>>());
+                value = new List<Action<string, object[]>>();
+                servicesAction2.Add(level, value);
             }
-            servicesAction2[level].AddRange(actions);
+
+            value.AddRange(actions);
             servicesAction2Started = true;
         }
 
@@ -89,11 +93,13 @@ namespace Mvp24Hours.Helpers
             {
                 throw new ArgumentNullException(nameof(telemetryServices));
             }
-            if (!services.ContainsKey(level))
+            if (!services.TryGetValue(level, out List<ITelemetryService> value))
             {
-                services.Add(level, new List<ITelemetryService>());
+                value = new List<ITelemetryService>();
+                services.Add(level, value);
             }
-            services[level].AddRange(telemetryServices);
+
+            value.AddRange(telemetryServices);
             servicesStarted = true;
         }
 
@@ -107,11 +113,13 @@ namespace Mvp24Hours.Helpers
             {
                 throw new ArgumentNullException(nameof(actions));
             }
-            if (!serviceActionFilters1.ContainsKey(serviceName))
+            if (!serviceActionFilters1.TryGetValue(serviceName, out List<Action<string>> value))
             {
-                serviceActionFilters1.Add(serviceName, new List<Action<string>>());
+                value = new List<Action<string>>();
+                serviceActionFilters1.Add(serviceName, value);
             }
-            serviceActionFilters1[serviceName].AddRange(actions);
+
+            value.AddRange(actions);
             serviceActionFilters1Started = true;
         }
 
@@ -125,11 +133,13 @@ namespace Mvp24Hours.Helpers
             {
                 throw new ArgumentNullException(nameof(actions));
             }
-            if (!serviceActionFilters2.ContainsKey(serviceName))
+            if (!serviceActionFilters2.TryGetValue(serviceName, out List<Action<string, object[]>> value))
             {
-                serviceActionFilters2.Add(serviceName, new List<Action<string, object[]>>());
+                value = new List<Action<string, object[]>>();
+                serviceActionFilters2.Add(serviceName, value);
             }
-            serviceActionFilters2[serviceName].AddRange(actions);
+
+            value.AddRange(actions);
             serviceActionFilters2Started = true;
         }
 
@@ -143,11 +153,13 @@ namespace Mvp24Hours.Helpers
             {
                 throw new ArgumentNullException(nameof(telemetryServices));
             }
-            if (!serviceFilters.ContainsKey(serviceName))
+            if (!serviceFilters.TryGetValue(serviceName, out List<ITelemetryService> value))
             {
-                serviceFilters.Add(serviceName, new List<ITelemetryService>());
+                value = new List<ITelemetryService>();
+                serviceFilters.Add(serviceName, value);
             }
-            serviceFilters[serviceName].AddRange(telemetryServices);
+
+            value.AddRange(telemetryServices);
             serviceFiltersStarted = true;
         }
         #endregion
@@ -227,6 +239,7 @@ namespace Mvp24Hours.Helpers
             ExecuteServices(level, eventName, args);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S3776:Cognitive Complexity of methods should not be too high", Justification = "Low complexity")]
         private static void ExecuteServices(TelemetryLevels level, string eventName, object[] args)
         {
             if (servicesStarted && services.Any(x => x.Key.HasFlag(level)))

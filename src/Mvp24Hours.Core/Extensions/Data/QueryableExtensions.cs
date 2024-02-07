@@ -35,14 +35,11 @@ namespace Mvp24Hours.Extensions
         /// </summary>
         static IOrderedQueryable<T> OrderExpression<T>(this IQueryable<T> source, string propertyName, bool isThenBy)
         {
-            if (source == null)
-            {
-                throw new ArgumentNullException("source");
-            }
+            ArgumentNullException.ThrowIfNull(source);
 
             if (string.IsNullOrEmpty(propertyName))
             {
-                throw new ArgumentNullException("propertyName");
+                throw new ArgumentNullException(nameof(propertyName));
             }
 
             bool isDescending = false;

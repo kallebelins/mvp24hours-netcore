@@ -22,24 +22,12 @@ namespace Mvp24Hours.Application.PostgreSql.Test
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Name)]
     public class Test4CommandServiceAsync
     {
-        private readonly StartupAsync startup;
-
-        #region [ Ctor ]
-        /// <summary>
-        /// Initialize
-        /// </summary>
-        public Test4CommandServiceAsync()
-        {
-            startup = new StartupAsync();
-        }
-        #endregion
-
         #region [ Actions ]
         [Fact, Priority(1)]
         public async Task CreateCustomer()
         {
             // arrange
-            var serviceProvider = startup.Initialize(false);
+            var serviceProvider = StartupAsync.Initialize(false);
             var service = serviceProvider.GetService<CustomerServiceAsync>();
             // act
             var customer = new Customer
@@ -51,13 +39,13 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             // assert
             Assert.True(customer.Id > 0);
             // dispose
-            startup.Cleanup(serviceProvider);
+            StartupAsync.Cleanup(serviceProvider);
         }
         [Fact, Priority(2)]
         public async Task CreateManyCustomers()
         {
             // arrange
-            var serviceProvider = startup.Initialize(false);
+            var serviceProvider = StartupAsync.Initialize(false);
             var service = serviceProvider.GetService<CustomerServiceAsync>();
             // act
             List<Customer> customers = new();
@@ -71,15 +59,15 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             }
             await service.AddAsync(customers);
             // assert
-            Assert.True(!customers.AnySafe(x => x.Id == 0));
+            Assert.False(customers.AnySafe(x => x.Id == 0));
             // dispose
-            startup.Cleanup(serviceProvider);
+            StartupAsync.Cleanup(serviceProvider);
         }
         [Fact, Priority(3)]
         public async Task UpdateCustomer()
         {
             // arrange
-            var serviceProvider = startup.Initialize();
+            var serviceProvider = StartupAsync.Initialize();
             var service = serviceProvider.GetService<CustomerServiceAsync>();
             // act
             var customer = await service.GetByIdAsync(1).GetDataValueAsync();
@@ -87,15 +75,15 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             await service.ModifyAsync(customer);
             customer = await service.GetByIdAsync(1).GetDataValueAsync();
             // assert
-            Assert.True(customer?.Name == "Test Updated");
+            Assert.Equal("Test Updated", customer?.Name);
             // dispose
-            startup.Cleanup(serviceProvider);
+            StartupAsync.Cleanup(serviceProvider);
         }
         [Fact, Priority(4)]
         public async Task UpdateManyCustomers()
         {
             // arrange
-            var serviceProvider = startup.Initialize();
+            var serviceProvider = StartupAsync.Initialize();
             var service = serviceProvider.GetService<CustomerServiceAsync>();
             var paging = new PagingCriteria(1, 0);
             var customers = await service.ListAsync(paging)
@@ -107,37 +95,37 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             // assert
             Assert.True(result.GetDataValue() > 0);
             // dispose
-            startup.Cleanup(serviceProvider);
+            StartupAsync.Cleanup(serviceProvider);
         }
         [Fact, Priority(5)]
         public async Task DeleteCustomer()
         {
             // arrange
-            var serviceProvider = startup.Initialize();
+            var serviceProvider = StartupAsync.Initialize();
             var service = serviceProvider.GetService<CustomerServiceAsync>();
             // act
             var customer = await service.GetByIdAsync(1).GetDataValueAsync();
             await service.RemoveByIdAsync(customer.Id);
             var result = await service.GetByIdAsync(customer.Id);
             // assert
-            Assert.True(result.GetDataValue() == null);
+            Assert.Null(result.GetDataValue());
             // dispose
-            startup.Cleanup(serviceProvider);
+            StartupAsync.Cleanup(serviceProvider);
         }
         [Fact, Priority(6)]
         public async Task DeleteManyCustomers()
         {
             // arrange
-            var serviceProvider = startup.Initialize();
+            var serviceProvider = StartupAsync.Initialize();
             var service = serviceProvider.GetService<CustomerServiceAsync>();
             // act
             var customers = await service.ListAsync().GetDataValueAsync();
             await service.RemoveAsync(customers);
             var result = await service.ListCountAsync();
             // assert
-            Assert.True(result.GetDataValue() == 0);
+            Assert.Equal(0, result.GetDataValue());
             // dispose
-            startup.Cleanup(serviceProvider);
+            StartupAsync.Cleanup(serviceProvider);
         }
         #endregion
     }

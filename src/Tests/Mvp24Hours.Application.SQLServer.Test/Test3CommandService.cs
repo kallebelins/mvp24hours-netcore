@@ -58,7 +58,7 @@ namespace Mvp24Hours.Application.SQLServer.Test
             }
             service.Add(customers);
             // assert
-            Assert.True(!customers.AnySafe(x => x.Id == 0));
+            Assert.False(customers.AnySafe(x => x.Id == 0));
             // dispose
             Startup.Cleanup(serviceProvider);
         }
@@ -74,7 +74,7 @@ namespace Mvp24Hours.Application.SQLServer.Test
             service.Modify(customer);
             customer = service.GetById(1).GetDataValue();
             // assert
-            Assert.True(customer?.Name == "Test Updated");
+            Assert.Equal("Test Updated", customer?.Name);
             // dispose
             Startup.Cleanup(serviceProvider);
         }
@@ -108,7 +108,7 @@ namespace Mvp24Hours.Application.SQLServer.Test
             service.RemoveById(customer.Id);
             var result = service.GetById(customer.Id);
             // assert
-            Assert.True(result.GetDataValue() == null);
+            Assert.Null(result.GetDataValue());
             // dispose
             Startup.Cleanup(serviceProvider);
         }
@@ -123,7 +123,7 @@ namespace Mvp24Hours.Application.SQLServer.Test
             service.Remove(customers);
             var result = service.ListCount();
             // assert
-            Assert.True(result.GetDataValue() == 0);
+            Assert.Equal(0, result.GetDataValue());
             // dispose
             Startup.Cleanup(serviceProvider);
         }

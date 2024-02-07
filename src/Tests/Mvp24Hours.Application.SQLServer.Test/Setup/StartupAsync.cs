@@ -22,9 +22,9 @@ using Mvp24Hours.Helpers;
 
 namespace Mvp24Hours.Application.SQLServer.Test.Setup
 {
-    public class StartupAsync
+    public static class StartupAsync
     {
-        public IServiceProvider Initialize(bool canLoadData = true)
+        public static IServiceProvider Initialize(bool canLoadData = true)
         {
             var serviceProvider = ConfigureServicesAsync();
 
@@ -40,7 +40,7 @@ namespace Mvp24Hours.Application.SQLServer.Test.Setup
             return serviceProvider;
         }
 
-        public void Cleanup(IServiceProvider serviceProvider)
+        public static void Cleanup(IServiceProvider serviceProvider)
         {
             // ensure database drop
             var db = serviceProvider?.GetService<DataContext>();
@@ -51,7 +51,7 @@ namespace Mvp24Hours.Application.SQLServer.Test.Setup
             }
         }
 
-        private IServiceProvider ConfigureServicesAsync()
+        private static ServiceProvider ConfigureServicesAsync()
         {
 #if InMemory
             var services = new ServiceCollection();
@@ -82,7 +82,7 @@ namespace Mvp24Hours.Application.SQLServer.Test.Setup
             return services.BuildServiceProvider();
         }
 
-        private async Task LoadDataAsync(IServiceProvider serviceProvider)
+        private static async Task LoadDataAsync(IServiceProvider serviceProvider)
         {
             var service = serviceProvider.GetService<CustomerServiceAsync>();
             List<Customer> customers = new();

@@ -22,7 +22,6 @@ namespace Mvp24Hours.Application.PostgreSql.Test
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Name)]
     public class Test1QueryService 
     {
-        private readonly Startup startup;
         private readonly IServiceProvider serviceProvider;
 
         #region [ Ctor ]
@@ -31,8 +30,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
         /// </summary>
         public Test1QueryService()
         {
-            startup = new Startup();
-            serviceProvider = startup.Initialize();
+            serviceProvider = Startup.Initialize();
         }
         #endregion
 
@@ -169,7 +167,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
             // act
             var result = service.GetById(1);
             // assert
-            Assert.True(result.GetDataValue() != null);
+            Assert.NotNull(result.GetDataValue());
         }
         [Fact, Priority(13)]
         public void GetFilterCustomerGetByIdNavigation()

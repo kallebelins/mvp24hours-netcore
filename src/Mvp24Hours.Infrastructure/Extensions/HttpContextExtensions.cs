@@ -34,7 +34,7 @@ namespace Mvp24Hours.Infrastructure.Extensions
                     ip = ip.Split(':')[0].Trim();
                 }
 
-                if (ip.Contains(","))
+                if (ip.Contains(','))
                 {
                     ip = ip.Split(',')[0].Trim();
                 }

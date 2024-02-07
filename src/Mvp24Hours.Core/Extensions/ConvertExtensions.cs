@@ -145,19 +145,18 @@ namespace Mvp24Hours.Extensions
         public static string GetSHA256Hash(this string str)
         {
             byte[] bytes = Encoding.UTF8.GetBytes(str.NullSafe());
-            using SHA256 hashstring = SHA256.Create();
-            byte[] hash = hashstring.ComputeHash(bytes);
+            byte[] hash = SHA256.HashData(bytes);
             return Convert.ToBase64String(hash);
         }
 
         public static string GetSHA512Hash(this string str)
         {
             byte[] bytes = Encoding.UTF8.GetBytes(str.NullSafe());
-            using SHA512 hashstring = SHA512.Create();
-            byte[] hash = hashstring.ComputeHash(bytes);
+            byte[] hash = SHA512.HashData(bytes);
             return Convert.ToBase64String(hash);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Info Code Smell", "S1133:Deprecated code should be removed", Justification = "Maintain library evolution reference.")]
         [Obsolete("Use the GetSHA512Hash method.")]
         public static string GetHash(string str)
         {

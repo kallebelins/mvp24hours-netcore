@@ -121,6 +121,7 @@ namespace Mvp24Hours.Infrastructure.RabbitMQ
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S3776:Cognitive Complexity of methods should not be too high", Justification = "Low complexity")]
         public virtual void Consume()
         {
             try

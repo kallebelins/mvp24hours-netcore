@@ -62,6 +62,7 @@ namespace Mvp24Hours.Infrastructure.Data.MongoDb
             return repositories[typeof(T)] as IRepository<T>;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Info Code Smell", "S1133:Deprecated code should be removed", Justification = "Maintain implementation reference standards.")]
         [Obsolete("MongoDb does not support IDbConnection. Use the database (IMongoDatabase) from context.")]
         public IDbConnection GetConnection()
         {

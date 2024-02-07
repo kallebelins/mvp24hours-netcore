@@ -21,11 +21,11 @@ using Mvp24Hours.Helpers;
 
 namespace Mvp24Hours.Application.PostgreSql.Test.Setup
 {
-    public class Startup
+    public static class Startup
     {
-        public IServiceProvider Initialize(bool canLoadData = true)
+        public static IServiceProvider Initialize(bool canLoadData = true)
         {
-            var serviceProvider = ConfigureServices();
+            var serviceProvider = ConfigureServices;
 
             // ensure database
             var db = serviceProvider.GetService<DataContext>();
@@ -50,13 +50,15 @@ namespace Mvp24Hours.Application.PostgreSql.Test.Setup
             }
         }
 
-        private static IServiceProvider ConfigureServices()
+        private static IServiceProvider ConfigureServices
         {
+            get
+            {
 #if InMemory
-            var services = new ServiceCollection();
-            services.AddDbContext<DataContext>(options =>
-                options
-                    .UseInMemoryDatabase(StringHelper.GenerateKey(10)));
+                var services = new ServiceCollection();
+                services.AddDbContext<DataContext>(options =>
+                    options
+                        .UseInMemoryDatabase(StringHelper.GenerateKey(10)));
 #else
             var services = new ServiceCollection()
                 .AddSingleton(ConfigurationHelper.AppSettings);
@@ -66,21 +68,22 @@ namespace Mvp24Hours.Application.PostgreSql.Test.Setup
                 options => options.SetPostgresVersion(new Version(9, 6)))
             );
 #endif
-            services.AddMvp24HoursDbContext<DataContext>();
-            services.AddMvp24HoursRepository(options: options =>
-            {
-                options.MaxQtyByQueryPage = 100;
-            });
+                services.AddMvp24HoursDbContext<DataContext>();
+                services.AddMvp24HoursRepository(options: options =>
+                {
+                    options.MaxQtyByQueryPage = 100;
+                });
 
-            // register my services
-            services.AddScoped<CustomerService, CustomerService>();
-            services.AddScoped<ContactService, ContactService>();
-            services.AddScoped<CustomerPagingService, CustomerPagingService>();
+                // register my services
+                services.AddScoped<CustomerService, CustomerService>();
+                services.AddScoped<ContactService, ContactService>();
+                services.AddScoped<CustomerPagingService, CustomerPagingService>();
 
-            return services.BuildServiceProvider();
+                return services.BuildServiceProvider();
+            }
         }
 
-        private void LoadData(IServiceProvider serviceProvider)
+        private static void LoadData(IServiceProvider serviceProvider)
         {
             var service = serviceProvider.GetService<CustomerService>();
             List<Customer> customers = new();

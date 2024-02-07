@@ -22,25 +22,12 @@ namespace Mvp24Hours.Application.PostgreSql.Test
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Name)]
     public class Test3CommandService
     {
-        private readonly Startup startup;
-
-        #region [ Ctor ]
-        /// <summary>
-        /// Initialize
-        /// </summary>
-        public Test3CommandService()
-        {
-            startup = new Startup();
-        }
-
-        #endregion
-
         #region [ Actions ]
         [Fact, Priority(1)]
         public void CreateCustomer()
         {
             // arrange
-            var serviceProvider = startup.Initialize(false);
+            var serviceProvider = Startup.Initialize(false);
             var service = serviceProvider.GetService<CustomerService>();
             // act
             var customer = new Customer
@@ -58,7 +45,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
         public void CreateManyCustomers()
         {
             // arrange
-            var serviceProvider = startup.Initialize(false);
+            var serviceProvider = Startup.Initialize(false);
             var service = serviceProvider.GetService<CustomerService>();
             // act
             List<Customer> customers = new();
@@ -80,7 +67,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
         public void UpdateCustomer()
         {
             // arrange
-            var serviceProvider = startup.Initialize();
+            var serviceProvider = Startup.Initialize();
             var service = serviceProvider.GetService<CustomerService>();
             // act
             var customer = service.GetById(1).GetDataValue();
@@ -96,7 +83,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
         public void UpdateManyCustomers()
         {
             // arrange
-            var serviceProvider = startup.Initialize();
+            var serviceProvider = Startup.Initialize();
             var service = serviceProvider.GetService<CustomerService>();
             // act
             var paging = new PagingCriteria(1, 0);
@@ -115,7 +102,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
         public void DeleteCustomer()
         {
             // arrange
-            var serviceProvider = startup.Initialize();
+            var serviceProvider = Startup.Initialize();
             var service = serviceProvider.GetService<CustomerService>();
             // act
             var customer = service.GetById(1).GetDataValue();
@@ -130,7 +117,7 @@ namespace Mvp24Hours.Application.PostgreSql.Test
         public void DeleteManyCustomers()
         {
             // arrange
-            var serviceProvider = startup.Initialize();
+            var serviceProvider = Startup.Initialize();
             var service = serviceProvider.GetService<CustomerService>();
             // act
             var customers = service.List().Data;

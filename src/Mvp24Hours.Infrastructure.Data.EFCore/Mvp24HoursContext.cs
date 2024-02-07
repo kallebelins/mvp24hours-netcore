@@ -90,6 +90,7 @@ namespace Mvp24Hours.Infrastructure.Data.EFCore
         /// <summary>
         /// Apply log rules
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S3776:Cognitive Complexity of methods should not be too high", Justification = "Low complexity")]
         protected void ApplyLogRules()
         {
             if (!CanApplyEntityLog)

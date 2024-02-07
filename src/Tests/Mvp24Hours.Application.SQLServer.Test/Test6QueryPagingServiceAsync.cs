@@ -22,7 +22,6 @@ namespace Mvp24Hours.Application.SQLServer.Test
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Name)]
     public class Test6QueryPagingServiceAsync
     {
-        private readonly StartupAsync startup;
         private readonly IServiceProvider serviceProvider;
 
         #region [ Ctor ]
@@ -31,8 +30,7 @@ namespace Mvp24Hours.Application.SQLServer.Test
         /// </summary>
         public Test6QueryPagingServiceAsync()
         {
-            startup = new StartupAsync();
-            serviceProvider = startup.Initialize();
+            serviceProvider = StartupAsync.Initialize();
         }
         #endregion
 
@@ -45,7 +43,7 @@ namespace Mvp24Hours.Application.SQLServer.Test
             // act
             var pagingResult = await service.ListWithPaginationAsync();
             // assert
-            Assert.True(pagingResult.Paging != null);
+            Assert.NotNull(pagingResult.Paging);
         }
         [Fact, Priority(5)]
         public async Task GetFilterCustomerListPaging()

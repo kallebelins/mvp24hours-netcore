@@ -23,7 +23,6 @@ namespace Mvp24Hours.Application.SQLServer.Test
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Name)]
     public class Test2QueryServiceAsync
     {
-        private readonly StartupAsync startup;
         private readonly IServiceProvider serviceProvider;
 
         #region [ Ctor ]
@@ -32,8 +31,7 @@ namespace Mvp24Hours.Application.SQLServer.Test
         /// </summary>
         public Test2QueryServiceAsync()
         {
-            startup = new StartupAsync();
-            serviceProvider = startup.Initialize();
+            serviceProvider = StartupAsync.Initialize();
         }
         #endregion
 
@@ -170,7 +168,7 @@ namespace Mvp24Hours.Application.SQLServer.Test
             // act
             var result = await service.GetByIdAsync(1);
             // assert
-            Assert.True(result.GetDataValue() != null);
+            Assert.NotNull(result.GetDataValue());
         }
         [Fact, Priority(13)]
         public async Task GetFilterCustomerGetByIdNavigation()

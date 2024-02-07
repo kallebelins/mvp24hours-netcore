@@ -51,7 +51,7 @@ namespace Mvp24Hours.Application.MySql.Test.Setup
             }
         }
 
-        private static IServiceProvider ConfigureServicesAsync()
+        private static ServiceProvider ConfigureServicesAsync()
         {
 #if InMemory
             var services = new ServiceCollection();

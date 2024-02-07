@@ -23,7 +23,7 @@ namespace Mvp24Hours.Application.SQLServer.Test.Support.Services
         {
             var paging = new PagingCriteria(3, 0);
 
-            var customers = Repository.GetBy(x => x.Contacts.Any(), paging);
+            var customers = Repository.GetBy(x => x.Contacts.Count != 0, paging);
 
             foreach (var customer in customers)
             {
@@ -36,7 +36,7 @@ namespace Mvp24Hours.Application.SQLServer.Test.Support.Services
         {
             var paging = new PagingCriteria(3, 0);
 
-            var customers = Repository.GetBy(x => x.Contacts.Any(), paging);
+            var customers = Repository.GetBy(x => x.Contacts.Count != 0, paging);
 
             foreach (var customer in customers)
             {

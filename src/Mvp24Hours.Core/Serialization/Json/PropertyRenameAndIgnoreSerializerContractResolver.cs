@@ -39,25 +39,27 @@ namespace Mvp24Hours.Core.Serialization.Json
 
         public void IgnoreProperty(Type type, params string[] jsonPropertyNames)
         {
-            if (!_ignores.ContainsKey(type))
+            if (!_ignores.TryGetValue(type, out HashSet<string> value))
             {
-                _ignores[type] = new HashSet<string>();
+                value = new HashSet<string>();
+                _ignores[type] = value;
             }
 
             foreach (var prop in jsonPropertyNames)
             {
-                _ignores[type].Add(prop);
+                value.Add(prop);
             }
         }
 
         public void RenameProperty(Type type, string propertyName, string newJsonPropertyName)
         {
-            if (!_renames.ContainsKey(type))
+            if (!_renames.TryGetValue(type, out Dictionary<string, string> value))
             {
-                _renames[type] = new Dictionary<string, string>();
+                value = new Dictionary<string, string>();
+                _renames[type] = value;
             }
 
-            _renames[type][propertyName] = newJsonPropertyName;
+            value[propertyName] = newJsonPropertyName;
         }
 
         protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
@@ -78,12 +80,12 @@ namespace Mvp24Hours.Core.Serialization.Json
 
         private bool IsIgnored(Type type, string jsonPropertyName)
         {
-            if (!_ignores.ContainsKey(type))
+            if (!_ignores.TryGetValue(type, out HashSet<string> value))
             {
                 return false;
             }
 
-            return _ignores[type].Contains(jsonPropertyName);
+            return value.Contains(jsonPropertyName);
         }
 
         private bool IsRenamed(Type type, string jsonPropertyName, out string newJsonPropertyName)
