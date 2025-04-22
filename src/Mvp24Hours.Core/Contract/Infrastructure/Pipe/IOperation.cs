@@ -16,6 +16,11 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
         void Execute(IPipelineMessage input);
 
         /// <summary>
+        /// Perform rollback when an exception is thrown or a error occured
+        /// </summary>        
+        void Rollback(IPipelineMessage input);
+
+        /// <summary>
         /// Indicates whether operation is mandatory (even with failure)
         /// </summary>
         public bool IsRequired { get; }

@@ -14,19 +14,31 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations
     public class OperationAction : IOperation
     {
         private readonly Action<IPipelineMessage> _action;
+        private readonly Action<IPipelineMessage> _rollbackAction;
         private readonly bool _isRequired;
 
         public virtual bool IsRequired => this._isRequired;
 
-        public OperationAction(Action<IPipelineMessage> action, bool isRequired = false)
+        public OperationAction(Action<IPipelineMessage> action, Action<IPipelineMessage> rollbackAction = default, bool isRequired = false)
         {
-            this._action = action;
-            this._isRequired = isRequired;
+            _action = action;
+            _rollbackAction = rollbackAction;
+            _isRequired = isRequired;
+        }
+
+        public OperationAction(Action<IPipelineMessage> action, bool isRequired)
+            : this(action, default, isRequired)
+        {
         }
 
         public virtual void Execute(IPipelineMessage input)
         {
-            this._action?.Invoke(input);
+            _action?.Invoke(input);
+        }
+
+        public virtual void Rollback(IPipelineMessage input)
+        {
+            this._rollbackAction?.Invoke(input);
         }
     }
 }

@@ -19,6 +19,10 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations
 
         #region [ Methods ]
         public abstract Task ExecuteAsync(IPipelineMessage input);
+        public virtual async Task RollbackAsync(IPipelineMessage input)
+        {
+            await Task.FromResult(true);
+        }
         #endregion
     }
 }
