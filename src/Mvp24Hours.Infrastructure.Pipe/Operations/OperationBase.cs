@@ -19,6 +19,7 @@ namespace Mvp24Hours.Infrastructure.Pipe.Operations
 
         #region [ Methods ]
         public abstract void Execute(IPipelineMessage input);
+        public virtual void Rollback(IPipelineMessage input) { }
         #endregion
     }
 }

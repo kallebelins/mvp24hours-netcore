@@ -40,6 +40,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
             }
 
             operations = new List<IOperation>();
+            executedOperations = new List<IOperation>();
 
             preCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, IOperation>>();
             postCustomInterceptors = new List<KeyValuePair<Func<IPipelineMessage, bool>, IOperation>>();
@@ -55,6 +56,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
         #region [ Fields / Properties ]
         private readonly IServiceProvider provider;
         private readonly IList<IOperation> operations;
+        private readonly IList<IOperation> executedOperations;
 
         private readonly IDictionary<PipelineInterceptorType, IList<IOperation>> dictionaryInterceptors;
         private readonly IList<KeyValuePair<Func<IPipelineMessage, bool>, IOperation>> preCustomInterceptors;
@@ -274,6 +276,7 @@ namespace Mvp24Hours.Infrastructure.Pipe
 
         public void Execute(IPipelineMessage input = null)
         {
+            executedOperations.Clear();
             TelemetryHelper.Execute(TelemetryLevels.Verbose, "pipe-pipeline-execute-start");
             try
             {
@@ -353,6 +356,10 @@ namespace Mvp24Hours.Infrastructure.Pipe
                               RunEventInterceptors(input, PipelineInterceptorType.Faulty, true);
                               RunOperationInterceptors(current, PipelineInterceptorType.Faulty, true);
                           }
+                          else
+                          {
+                              executedOperations.Add(operation);
+                          }
                       }
 
                       return current;
@@ -370,6 +377,11 @@ namespace Mvp24Hours.Infrastructure.Pipe
             {
                 RunEventInterceptors(input, PipelineInterceptorType.LastOperation);
                 RunOperationInterceptors(input, PipelineInterceptorType.LastOperation);
+            }
+
+            if (!onlyOperationDefault && input.IsFaulty && ForceRollbackOnFalure)
+            {
+                RunRollbackOperations(input);
             }
 
             return input;
@@ -459,6 +471,27 @@ namespace Mvp24Hours.Infrastructure.Pipe
                         Task.Factory.StartNew(() => handler(input, EventArgs.Empty));
                     }
                     finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "pipe-pipeline-execute-event-end", $"operation:{handler.GetType().Name}"); }
+                }
+            }
+        }
+        private void RunRollbackOperations(IPipelineMessage input)
+        {
+            if (executedOperations.AnySafe())
+            {
+                foreach (var executedOperation in executedOperations.Reverse<IOperation>())
+                {
+                    if (executedOperation == null)
+                    {
+                        continue;
+                    }
+
+                    TelemetryHelper.Execute(TelemetryLevels.Verbose, "pipe-pipeline-rollback-operation-start", "operation:" + executedOperation.GetType().Name);
+                    try
+                    {
+                        executedOperation.Rollback(input);
+                    }
+                    catch (Exception ex) { TelemetryHelper.Execute(TelemetryLevels.Error, "pipe-pipeline-rollback-failure", ex); }
+                    finally { TelemetryHelper.Execute(TelemetryLevels.Verbose, "pipe-pipeline-rollback-operation-end", "operation:" + executedOperation.GetType().Name); }
                 }
             }
         }
