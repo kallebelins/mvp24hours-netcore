@@ -650,6 +650,7 @@ namespace Mvp24Hours.Application.Pipe.Test
             // assert
             Assert.NotNull(exception);
             Assert.Equal("My Exception 123", exception.Message);
+            Assert.Equal(typeof(InvalidOperationException), exception.GetType());
         }
 
         [Fact, Priority(15)]
