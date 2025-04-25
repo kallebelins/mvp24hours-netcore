@@ -651,5 +651,31 @@ namespace Mvp24Hours.Application.Pipe.Test
             Assert.NotNull(exception);
             Assert.Equal("My Exception 123", exception.Message);
         }
+
+        [Fact, Priority(15)]
+        public async Task PipelineWithWithoutAllowPropagateException()
+        {
+            // arrange
+            var pipeline = new PipelineAsync(); //AllowPropagateException = false
+            var exception = default(Exception);
+
+            // act
+            pipeline.Add<RollbackOperationTestAsyncStep1>();
+            pipeline.Add<RollbackOperationTestAsyncStep2>();
+            pipeline.Add<RollbackOperationTestAsyncStep3>();
+
+            try
+            {
+                // operations
+                await pipeline.ExecuteAsync();
+            }
+            catch (Exception ex)
+            {
+                exception = ex;
+            }
+
+            // assert
+            Assert.Null(exception);
+        }
     }
 }
