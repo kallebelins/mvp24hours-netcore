@@ -14,19 +14,26 @@ namespace Mvp24Hours.Infrastructure.Pipe
     {
         #region [ Ctor ]
         protected PipelineBase()
-            : this(false, false)
+            : this(false, false, false)
         {
         }
 
         protected PipelineBase(bool isBreakOnFail, bool forceRollbackOnFalure)
+            : this(isBreakOnFail, forceRollbackOnFalure, false)
         {
-            this.IsBreakOnFail = isBreakOnFail;
-            this.ForceRollbackOnFalure = forceRollbackOnFalure;
+        }
+
+        protected PipelineBase(bool isBreakOnFail, bool forceRollbackOnFalure, bool allowPropagateException)
+        {
+            IsBreakOnFail = isBreakOnFail;
+            ForceRollbackOnFalure = forceRollbackOnFalure;
+            AllowPropagateException = allowPropagateException; 
         }
         #endregion
 
         #region [ Fields / Properties ]
         protected bool IsBreakOnFail { get; set; }
+        public bool AllowPropagateException { get; set; }
         public bool ForceRollbackOnFalure { get; set; }
         protected IPipelineMessage Message { get; set; }
         #endregion
