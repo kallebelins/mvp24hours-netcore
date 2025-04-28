@@ -23,6 +23,14 @@ namespace Mvp24Hours.Core.Contract.Infrastructure.Pipe
     public interface IPipelineAsync
     {
         /// <summary>
+        /// Force the pipeline to call rollback operations for each operations executed previously
+        /// </summary>
+        bool ForceRollbackOnFalure { get; set; }
+        /// <summary>
+        /// Force the pipeline to call rollback operations for each operations executed previously
+        /// </summary>
+        bool AllowPropagateException { get; set; }
+        /// <summary>
         /// Get message package
         /// </summary>
         /// <returns></returns>
