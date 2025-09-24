@@ -1,4 +1,7 @@
 # Welcome to the library Mvp24Hours
+
+> Archived: This project has been archived because a new version is available for .NET 8. Its content remains available as a technical and educational reference.
+
 Library for quick product building using: Relational database (SQL Server, PostgreSql, MySql); NoSql database (MongoDb); Key-value database (Redis); Message Broker (RabbitMQ); Pipeline (Pipe and Filters pattern); Documentation (Swagger); Mapping (AutoMapper); Logging (NLog); Patterns for data validation (FluentValidation and Data Annotations), notification (Notification pattern) and specifications (Specification pattern), unit of work, repository, among others.
 
 ## Learn more
